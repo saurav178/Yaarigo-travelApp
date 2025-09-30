@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* app/globals.css */
+/* app/globals.css */
+
+/* your existing global styles */
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -115,3 +120,5 @@ button {
 button:hover {
   background-color: #2563EB; /* Darker blue */
 }
+
+
