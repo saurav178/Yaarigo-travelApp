@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* app/globals.css */
+/* app/globals.css */
+
+/* your existing global styles */
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -24,3 +29,5 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
