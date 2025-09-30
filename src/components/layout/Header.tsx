@@ -7,12 +7,12 @@ const Header = () => {
         <div className="flex items-center justify-between">
           {/* Left side - Travio logo */}
           <div className="flex items-center px-1">
-            <Link href="/" className="text-4xl font-bold">
+            <Link href="/" className="text-4xl font-bold italic">
               Travio
             </Link>
           </div>
 
-          {/* Center - Navigation links */}
+          {/* Center - Navigation links 
           <nav className="flex-1 flex justify-center space-x-15">
             <Link href="/" className="text-lg hover:text-blue-200 hover:underline transition-colors">
               Explore
@@ -27,8 +27,9 @@ const Header = () => {
               Nearby Essentials
             </Link>
           </nav>
+          */}
 
-          {/* Right side - Search bar */}
+          {/* Right side - Search bar 
           <div className="flex items-center">
             <div className="relative">
               <input
@@ -42,6 +43,7 @@ const Header = () => {
               </svg>
             </div>
           </div>
+          */}
         </div>
       </div>
     </header>
