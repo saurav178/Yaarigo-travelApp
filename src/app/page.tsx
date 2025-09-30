@@ -4,8 +4,6 @@ import { useState } from "react";
 import LandingPage from "./landingpage/landingpage";
 import Login from "../components/Login";
 import Signup from "../components/Signup";
-import Trips from "./trips/trips";
-import ExploreTrips from "./trips/screens/ExploreTrips/ExploreTrips";
 
 export default function Page() {
   const [showLogin, setShowLogin] = useState(true);
@@ -20,7 +18,7 @@ export default function Page() {
         <LandingPage />
 
         {/* Sticky form overlay */}
-        <div className="absolute top-20 right-4 md:right-16 md:w-1/3 w-full z-50">
+         <div className="absolute top-20 right-4 md:right-16 md:w-1/3 w-full z-50">
           <div className="sticky top-20">
             {showLogin ? (
               <Login
@@ -41,9 +39,9 @@ export default function Page() {
         </div>
       </div>
        {/* Explore Trips section */}
-      <div className="px-4 md:px-16 py-10 bg-gray-900">
+      {/* <div className="px-4 md:px-16 py-10 bg-gray-900">
         <ExploreTrips />
-      </div>
+      </div> */}
     </div>
    
   );

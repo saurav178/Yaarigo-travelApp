@@ -7,23 +7,23 @@ const Header = () => {
         <div className="flex items-center justify-between">
           {/* Left side - Travio logo */}
           <div className="flex items-center px-1">
-            <Link href="/" className="text-4xl font-bold">
+            <Link href="/" className="text-4xl font-bold text-white">
               Travio
             </Link>
           </div>
 
           {/* Center - Navigation links */}
           <nav className="flex-1 flex justify-center space-x-15">
-            <Link href="/" className="text-lg hover:text-blue-200 hover:underline transition-colors">
+            <Link href="/" className="text-lg hover:text-blue-200 hover:underline transition-colors text-white">
               Explore
             </Link>
-            <Link href="/trips" className="text-lg hover:text-blue-200 hover:underline transition-colors">
+            <Link href="/trips" className="text-lg hover:text-blue-200 hover:underline transition-colors text-white">
               My Trips
             </Link>
-            <Link href="/community" className="text-lg hover:text-blue-200 hover:underline transition-colors">
+            <Link href="/community" className="text-lg hover:text-blue-200 hover:underline transition-colors text-white">
               Community
             </Link>
-            <Link href="/essentials" className="text-lg hover:text-blue-200 hover:underline transition-colors">
+            <Link href="/essentials" className="text-lg hover:text-blue-200 hover:underline transition-colors text-white">
               Nearby Essentials
             </Link>
           </nav>
@@ -49,3 +49,5 @@ const Header = () => {
 };
 
 export default Header;
+
+
