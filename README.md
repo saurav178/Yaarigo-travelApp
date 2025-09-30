@@ -1,4 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Travio - Travel Made Simple
+
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app). Travio is your ultimate travel companion for planning and managing trips.
+
+## Features
+
+- **Global Layout System**: Consistent navigation and layout across all pages
+- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
+- **Modern UI**: Clean and intuitive user interface with Tailwind CSS
+- **TypeScript**: Full TypeScript support for better development experience
+
+## Global Layout System
+
+The application uses a comprehensive global layout system that includes:
+
+- **Header**: Navigation bar with logo, search functionality, and user controls
+- **Navbar**: Primary navigation with main app sections
+- **Sidebar**: Collapsible sidebar with quick access to features
+- **Footer**: Links to important pages and social media
+
+### Layout Components
+
+All layout components are located in `src/components/layout/`:
+
+- `GlobalLayout.tsx` - Main layout wrapper
+- `Header.tsx` - Top navigation header
+- `Navbar.tsx` - Primary navigation bar
+- `Sidebar.tsx` - Collapsible sidebar
+- `Footer.tsx` - Footer with links and social media
 
 ## Getting Started
 
