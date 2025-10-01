@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-@import "tailwindcss";
+/* @import "tailwindcss"; */
 
 :root {
   --background: #ffffff;
@@ -189,6 +188,3 @@ div.modal {
   padding-top: 5rem;
   z-index: 50;
 }
-=======
-@import "tailwindcss";
->>>>>>> origin/feature/community-nearby-essential

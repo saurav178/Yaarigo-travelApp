@@ -51,14 +51,14 @@ export default function TripCard({ trip }) {
         className="rounded-lg object-cover w-full h-40"
       />
 
-      <h3 className="font-semibold text-lg">{trip.title}</h3>
+      <h3 className="font-semibold text-lg text-black">{trip.title}</h3>
       <p className="text-sm text-gray-600">{trip.description}</p>
 
       {/* Rating */}
       <RatingStars rating={trip.rating} />
 
       {/* Availability + Season */}
-      <div className="flex items-center justify-between mt-2">
+      <div className="flex items-center justify-between mt-2 text-black">
         <AvailabilityBadge status={trip.availability} />
         <SeasonTag season={trip.season} />
       </div>
