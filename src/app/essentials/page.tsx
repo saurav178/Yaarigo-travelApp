@@ -44,7 +44,7 @@
 import { useState } from "react";
 import SearchBar from "@/components/SearchBar";
 import FilterBar from "@/components/FilterBar";
-import MapView from "@/components/MapView";
+import MapView from "./MapView";
 
 const categories = [
   { name: "Stays", key: "stays" },
