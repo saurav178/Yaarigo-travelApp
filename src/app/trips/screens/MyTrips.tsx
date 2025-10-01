@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useState, useMemo } from "react";
@@ -24,7 +22,7 @@ export default function MyTrips() {
   }, [activeStatus, activeFilter]);
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="mx-auto p-6">
       {/* Heading + New Trip Button */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold">My Trips</h2>

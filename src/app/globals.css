@@ -176,3 +176,15 @@ button {
 button:hover {
   background-color: #2563EB; /* Darker blue */
 }
+
+
+div.modal {
+  position: fixed; /* sticky/absolute ki jagah */
+  inset: 0;
+  background: rgba(0,0,0,0.4); /* optional overlay */
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  padding-top: 5rem;
+  z-index: 50;
+}
