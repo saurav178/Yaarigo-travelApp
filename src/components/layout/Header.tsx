@@ -6,10 +6,13 @@ const Header = () => {
       <div className="w-full py-4 px-3">
         <div className="flex items-center justify-between">
           {/* Left side - Travio logo */}
+<<<<<<< HEAD
           <div className="flex items-center px-1">
             <Link href="/" className="text-4xl font-bold italic">
+=======
+          <div className="flex items-center px-1 text-4xl font-bold italic">
+>>>>>>> develop
               Travio
-            </Link>
           </div>
 
           {/* Center - Navigation links 
@@ -27,7 +30,11 @@ const Header = () => {
               Nearby Essentials
             </Link>
           </nav>
+<<<<<<< HEAD
           */}
+=======
+          */} 
+>>>>>>> develop
 
           {/* Right side - Search bar 
           <div className="flex items-center">
