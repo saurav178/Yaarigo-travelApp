@@ -1,23 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { createContext, useContext, useState } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 
-interface GlobalLayoutProps {
-  children: React.ReactNode;
+interface AuthContextType {
+  isLoggedIn: boolean;
+  setIsLoggedIn: (value: boolean) => void;
 }
 
-const GlobalLayout = ({ children }: GlobalLayoutProps) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-  return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-1 pt-[20px]">{children}</main>
-      <Footer />
-    </div>
-  );
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within GlobalLayout");
+  }
+  return context;
 };
 
-export default GlobalLayout;
+export default function GlobalLayout({ children }: { children: React.ReactNode }) {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  return (
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+      <Header />
+      {children}
+      <Footer />
+    </AuthContext.Provider>
+  );
+}

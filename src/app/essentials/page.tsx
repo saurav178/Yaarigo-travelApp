@@ -1,49 +1,8 @@
-// "use client";
-
-// import { useState } from "react";
-// import SearchBar from "@/components/SearchBar";
-// import FilterBar from "@/components/FilterBar";
-// import PlaceCard from "@/components/PlaceCard";
-// import MapView from "@/components/MapView";
-
-// const categories = [
-//   { name: "Restaurants", key: "restaurant" },
-//   { name: "ATMs", key: "atm" },
-//   { name: "Hotels", key: "hotel" },
-//   { name: "Hospitals", key: "hospital" },
-// ];
-
-// export default function EssentialsPage() {
-//   const [query, setQuery] = useState("");
-//   const [activeCategory, setActiveCategory] = useState<string | null>(null);
-
-//   return (
-//     <div className="p-6 max-w-5xl mx-auto">
-//       <SearchBar value={query} onChange={setQuery} />
-//       <MapView topQuery={""} onTopQueryChange={function (val: string): void {
-//         throw new Error("Function not implemented.");
-//       } } mapQuery={""} onMapQueryChange={function (val: string): void {
-//         throw new Error("Function not implemented.");
-//       } } />
-//       <FilterBar
-//         categories={categories}
-//         active={activeCategory}
-//         onSelect={setActiveCategory}
-//       />
-//       <div className="mt-6 space-y-4 w-[300px]">
-//         <PlaceCard name="Cozy Inn" address="0.5 miles" />
-//         <PlaceCard name="Delicious Bites" address="0.8 miles" />
-//         <PlaceCard name="Wellness Clinic" address="0.7 miles" />
-//       </div>
-//     </div>
-//   );
-// }
-
 "use client";
 
 import { useState } from "react";
-import SearchBar from "@/components/SearchBar";
-import FilterBar from "@/components/FilterBar";
+import SearchBar from "../../components/SearchBar";
+import FilterBar from "../../components/FilterBar";
 import MapView from "./MapView";
 
 const categories = [

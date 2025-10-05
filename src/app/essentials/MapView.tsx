@@ -2,7 +2,7 @@
 "use client";
 
 import { GoogleMap, LoadScript } from "@react-google-maps/api";
-import SearchBar from "@/components/SearchBar";
+import SearchBar from "../../components/SearchBar";
 
 const containerStyle = {
   width: "100%",
