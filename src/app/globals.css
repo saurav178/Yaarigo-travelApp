@@ -181,3 +181,15 @@ div.modal {
   padding-top: 5rem;
   z-index: 50;
 }
+
+/* this changes only for landing-pages */
+
+.landing-h1 {
+  font-size: 4rem;
+  font-weight: 700;
+}
+
+.landing-p {
+  font-size: 1.5rem;
+
+}
