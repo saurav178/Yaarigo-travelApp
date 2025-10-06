@@ -63,4 +63,18 @@ export const trips = [
     difficulty: "Easy",
     groupSize: "Small Group (Max 12)",
   },
+
+  {
+    id: 104,
+    brand: "HighTrail Adventure",
+    location: "Kerala, Kochi",
+    desc: "Discover Kerala’s backwaters and lush landscapes with houseboat rides, local cuisine, and cultural experiences.",
+    duration: "3 Nights / 4 Days",
+    cost: 18000,
+    type: "Backwater & Cultural Trip",
+    amenities: ["Houseboat Stay", "Local Cuisine", "Guided Tours", "Cultural Workshops"],
+    rating: 4.8,
+    difficulty: "Easy",
+    groupSize: "Small Group (Max 12)",
+  },
 ];
