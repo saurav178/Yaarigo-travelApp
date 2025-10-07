@@ -1,6 +1,10 @@
 import { CheckCircle, Clock, XCircle } from "lucide-react";
 
-export default function SeasonTag({ season }) {
+interface SeasonTagProps {
+  season: string;
+}
+
+export default function SeasonTag({ season }: SeasonTagProps) {
   const config = {
     "Best Time to Visit": {
       icon: <CheckCircle className="w-4 h-4 text-green-500" />,
@@ -20,7 +24,7 @@ export default function SeasonTag({ season }) {
 
   return (
     <span
-      className="flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-full bg-blue-50"
+      className="flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-full bg-blue-50 text-black"
       title={tooltip}
     >
       {icon}
