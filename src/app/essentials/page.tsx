@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import SearchBar from "../../components/SearchBar";
-import FilterBar from "../../components/FilterBar";
+import SearchBar from "./SearchBar";
+import FilterBar from "./FilterBar";
+import PlaceCard from "./PlaceCard";
 import MapView from "./MapView";
 
 const categories = [
