@@ -1,5 +1,3 @@
-
-
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { CheckCircle } from "lucide-react";
@@ -25,7 +23,7 @@ export default function NewTripForm({ onClose }: { onClose: () => void }) {
   const submitRef = useRef<HTMLButtonElement>(null);
   const summaryRef = useRef<HTMLDivElement>(null);
 
-  // Cascading data
+  // Options
   const regionOptions = ["Europe", "Asia"];
   const countryOptions: Record<string, string[]> = {
     Europe: ["France", "Germany", "Italy"],
@@ -41,14 +39,11 @@ export default function NewTripForm({ onClose }: { onClose: () => void }) {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setForm((prev) => {
       let updated = { ...prev, [name]: value };
-      // Reset dependent fields
       if (name === "region") {
         updated.country = "";
         updated.city = "";
@@ -58,7 +53,6 @@ export default function NewTripForm({ onClose }: { onClose: () => void }) {
       return updated;
     });
 
-    // Scroll to submit button when travelMode changes
     if (name === "travelMode" && submitRef.current) {
       submitRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
     }
@@ -66,7 +60,6 @@ export default function NewTripForm({ onClose }: { onClose: () => void }) {
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
-
     if (!form.city) newErrors.city = "City is required";
     if (!form.country) newErrors.country = "Country is required";
     if (!form.region) newErrors.region = "Region is required";
@@ -74,7 +67,6 @@ export default function NewTripForm({ onClose }: { onClose: () => void }) {
     if (!form.endDate) newErrors.endDate = "End date is required";
     if (!form.budget) newErrors.budget = "Budget is required";
     if (!form.travelMode) newErrors.travelMode = "Travel mode is required";
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -84,12 +76,10 @@ export default function NewTripForm({ onClose }: { onClose: () => void }) {
     if (validateForm()) {
       setSubmitted(true);
       setShowToast(true);
-
       setTimeout(() => setShowToast(false), 2000);
     }
   };
 
-  // Scroll to summary after submit
   useEffect(() => {
     if (submitted && summaryRef.current) {
       summaryRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -102,40 +92,42 @@ export default function NewTripForm({ onClose }: { onClose: () => void }) {
     "border border-gray-300 rounded-md px-3 py-2 text-sm w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none";
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
-      <div className="bg-white rounded-xl w-full max-w-2xl h-[85vh] relative shadow-lg flex flex-col">
+    <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+      <div className="bg-white rounded-xl w-full sm:w-[90%] md:w-[80%] lg:max-w-2xl h-[90vh] md:h-[85vh] relative shadow-lg flex flex-col">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-lg font-bold"
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-xl font-bold"
         >
           ✕
         </button>
 
         {/* Header */}
-        <div className="p-6 shrink-0">
-          <h2 className="text-xl font-semibold text-center text-blue-500">Create a New Trip</h2>
-          <p className="text-gray-500 text-center text-sm">
+        <div className="p-4 md:p-6 shrink-0">
+          <h2 className="text-lg md:text-xl font-semibold text-center text-blue-500">
+            Create a New Trip
+          </h2>
+          <p className="text-gray-500 text-center text-xs md:text-sm">
             Experience something new every moment
           </p>
         </div>
 
         {/* Scrollable Form */}
-        <div className="flex-1 overflow-y-auto px-6 pb-6">
+        <div className="flex-1 overflow-y-auto px-4 md:px-6 pb-6">
           <form className="space-y-5" onSubmit={handleSubmit}>
             {/* Destination */}
             <div>
               <label className="block text-sm font-medium text-blue-500 mb-1">
                 Destination <span className="text-red-700">*</span>
               </label>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {/* Region */}
                 <div>
                   <select
                     name="region"
                     value={form.region}
                     onChange={handleChange}
-                    className={`${selectClass} ${!form.region && "bg-white"}`}
+                    className={selectClass}
                   >
                     <option value="">Region</option>
                     {regionOptions.map((r) => (
@@ -155,9 +147,8 @@ export default function NewTripForm({ onClose }: { onClose: () => void }) {
                     name="country"
                     value={form.country}
                     onChange={handleChange}
-                    className={`${selectClass} ${!form.region ? "bg-gray-100 cursor-not-allowed" : "bg-white"
-                      }`}
                     disabled={!form.region}
+                    className={`${selectClass} ${!form.region && "bg-gray-100 cursor-not-allowed"}`}
                   >
                     <option value="">Country</option>
                     {form.region &&
@@ -178,9 +169,8 @@ export default function NewTripForm({ onClose }: { onClose: () => void }) {
                     name="city"
                     value={form.city}
                     onChange={handleChange}
-                    className={`${selectClass} ${!form.country ? "bg-gray-100 cursor-not-allowed" : "bg-white"
-                      }`}
                     disabled={!form.country}
+                    className={`${selectClass} ${!form.country && "bg-gray-100 cursor-not-allowed"}`}
                   >
                     <option value="">City</option>
                     {form.country &&
@@ -198,12 +188,11 @@ export default function NewTripForm({ onClose }: { onClose: () => void }) {
             </div>
 
             {/* Date */}
-
             <div>
               <label className="block text-sm font-medium text-blue-500 mb-1">
                 Date <span className="text-red-700">*</span>
               </label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs text-gray-500 mb-1">Start Date </label>
                   <input
@@ -233,9 +222,8 @@ export default function NewTripForm({ onClose }: { onClose: () => void }) {
               </div>
             </div>
 
-
             {/* Budget + Interests */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block text-sm font-medium text-blue-500 mb-1">
                   Estimated Budget <span className="text-red-700">*</span>
@@ -244,7 +232,7 @@ export default function NewTripForm({ onClose }: { onClose: () => void }) {
                   name="budget"
                   value={form.budget}
                   onChange={handleChange}
-                  className={`${selectClass} ${!form.budget ? "bg-gray-100" : "bg-white"}`}
+                  className={selectClass}
                 >
                   <option value="">Select Budget</option>
                   <option value="below-7000">Below 7,000</option>
@@ -272,7 +260,7 @@ export default function NewTripForm({ onClose }: { onClose: () => void }) {
             </div>
 
             {/* Travel Mode + Open to Partner */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block text-sm font-medium text-blue-500 mb-1">
                   Travel Mode <span className="text-red-700">*</span>
@@ -281,8 +269,7 @@ export default function NewTripForm({ onClose }: { onClose: () => void }) {
                   name="travelMode"
                   value={form.travelMode}
                   onChange={handleChange}
-                  className={`${selectClass} ${!form.travelMode ? "bg-gray-100" : "bg-white"
-                    }`}
+                  className={selectClass}
                 >
                   <option value="">Select Travel Mode</option>
                   <option value="Car">Car</option>
@@ -326,7 +313,7 @@ export default function NewTripForm({ onClose }: { onClose: () => void }) {
             </div>
 
             {/* Privacy */}
-            <div className="w-1/2">
+            <div className="sm:w-1/2">
               <label className="block text-sm font-medium text-blue-500 mb-1">
                 Privacy Setting <span className="text-red-700">*</span>
               </label>
@@ -355,10 +342,10 @@ export default function NewTripForm({ onClose }: { onClose: () => void }) {
           {/* Summary Section */}
           {submitted && (
             <div ref={summaryRef} className="mt-8">
-              <h3 className="text-xl font-semibold text-center text-blue-500 border-b pb-2">
+              <h3 className="text-lg md:text-xl font-semibold text-center text-blue-500 border-b pb-2">
                 Summary of Your Trip Details
               </h3>
-              <div className="mt-4 grid grid-cols-2 gap-3">
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="bg-white border rounded-lg shadow-sm p-2">
                   <p className="text-xs text-gray-500">Destination</p>
                   <p className="font-medium text-sm">
@@ -396,7 +383,7 @@ export default function NewTripForm({ onClose }: { onClose: () => void }) {
           )}
         </div>
 
-        {/* Toast Notification */}
+        {/* Toast */}
         {showToast && (
           <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-5 py-2 rounded-lg shadow-lg flex items-center gap-2 text-sm">
             <CheckCircle size={18} /> Form submitted successfully!

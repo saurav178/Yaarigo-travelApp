@@ -8,19 +8,26 @@ const heroImages = [
   "/images/slider-img/pexels-photo-01.jpeg",
 ];
 
+// const heroImages = [
+//   "/images/slider-img/img-01.webp",
+//   "/images/slider-img/img-10.jpeg",
+//   "/images/slider-img/img-11.jpeg",
+//   "/images/slider-img/img-13.jpeg",
+// ];
+
 
 
 const taglines = [
-  { title: "Community Traveler", subtitle: "Create Stories | Connect Peoples" },
   { title: "Welcome to Travio", subtitle: "Create Stories | Connect Peoples" },
-  { title: "Expolore with Adventure", subtitle: "Create Stories | Connect Peoples" },
-  { title: "Adventure Awaits", subtitle: "Create Stories | Connect Peoples" },
+  { title: "Cultural Tourism", subtitle: "Create Stories | Connect Peoples" },
+  { title: "Adventure Travel", subtitle: "Create Stories | Connect Peoples" },
+  { title: "Mountain Travel", subtitle: "Create Stories | Connect Peoples" },
 ];
 
 export default function LandingPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
-  const [fade, setFade] = useState(true);
+  const [, setFade] = useState(true);
   const intervalRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -91,29 +98,32 @@ export default function LandingPage() {
 
            {/* sm:text-4xl md:text-4xl  animate-fadeInUp leading-tight*/}
            
-          <h1 className="text-7xl font-extrabold italic mb-6">
+          <h1 className=" landing-h1 text-7xl font-extrabold  mb-6">
             {taglines[displayIndex].title}
           </h1>
-          <p className="text-xl  opacity-95  delay-100 sm:text-lg md:text-xl mb-6">
+          <p className=" landing-p text-xl  opacity-95  delay-100 sm:text-lg md:text-xl mb-6">
 
             {/* {taglines[displayIndex].subtitle} animate-fadeInUp */}
 
             Create Stories | Connect Peoples <br />
               Travel Safer | Fulfill Dreams
           </p>
-          <button className="px-5 py-2 rounded-full bg-blue-500 text-white font-bold text-lg
+          {/* <button className="px-5 py-2 rounded-full bg-blue-500 text-white font-bold text-lg
            hover:bg-blue-600 hover:scale-105 transition-all animate-fadeInUp delay-200">
             Explore With Travio
-          </button>
+          </button> */}
         </div>
 
-        <div className="absolute bottom-5 w-full flex justify-center gap-2 z-20">
+        <div className="absolute bottom-3 w-full flex justify-center gap-2 z-20">
           {heroImages.map((_, index) => (
             <div
               key={index}
               className={`w-3 h-3 rounded-full cursor-pointer transition-all ${displayIndex === index
-                ? "bg-blue-100"
-                : "bg-white/50 hover:scale-110"
+                ? "bg-white"
+                : "bg-transparent border-1"
+
+                //bg-white/50 hover:scale-110
+
                 }`}
 
               // onClick={() => handleDotClick(index)}
