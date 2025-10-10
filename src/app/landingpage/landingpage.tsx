@@ -92,8 +92,7 @@ export default function LandingPage() {
 
         <div
         // ${fade ? "opacity-100" : "opacity-0
-          className={`absolute z-20 text-white transition-opacity duration-500 "
-            } top-1/2 left-[8%] max-w-[45%] -translate-y-1/2 text-shadow`}
+          className={`absolute z-20 text-white transition-opacity duration-500 top-1/2 left-[8%] max-w-[45%] -translate-y-1/2 text-shadow`}
         >
 
            {/* sm:text-4xl md:text-4xl  animate-fadeInUp leading-tight*/}
