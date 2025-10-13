@@ -2,11 +2,23 @@
 
 import { useState } from "react";
 import LandingPage from "./landingpage/landingpage";
-import Login from "../components/login/login";
-import Signup from "../components/signup/signup";
+import Login from "../components/Login/Login";
+import Signup from "../components/Signup/Signup";
 import ProfileSetup from "../components/profileSetup/ProfileSetup";
 import ExploreTrips from "./trips/screens/ExploreTrips/ExploreTrips";
 import { useAuth } from "../components/layout/GlobalLayout";
+import MatchTravelUI from "./matchtravel-UI/page";
+
+type ProfileData = {
+  name: string;
+  dob: string;
+  gender: string;
+  travelStyle: string;
+  bio: string;
+  interests: string[];
+  languages: string[];
+  photo: string;
+};
 
 export default function Page() {
   const [showLogin, setShowLogin] = useState(true);
@@ -26,7 +38,7 @@ export default function Page() {
     setShowProfileSetup(true);
   };
 
-  const handleProfileSave = (profileData: any) => {
+  const handleProfileSave = (profileData: ProfileData) => {
     console.log("Profile saved:", profileData);
     setShowProfileSetup(false);
   };
@@ -74,6 +86,7 @@ export default function Page() {
               </div>
             </div>
           )}
+          
         </div>
       )}
     </div>
