@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-/* @import "tailwindcss"; */
-
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -176,7 +174,7 @@ button:hover {
 div.modal {
   position: fixed; /* sticky/absolute ki jagah */
   inset: 0;
-  background: rgba(244, 240, 240, 0.933); /* optional overlay */
+  background: rgba(0,0,0,0.4); /* optional overlay */
   display: flex;
   justify-content: center;
   align-items: start;

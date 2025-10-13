@@ -59,9 +59,9 @@ export const travellers: Traveller[] = [
   {
     id: 2,
     name: "David",
-    location: "Odisha, Bhubaneswar",
-    Destination: "Goa, India",
-    description: `Exploring Pin Parvati Valley with like-minded travellers.`,
+    location: "Punjab, Ludhiana",
+    Destination: "Delhi, India",
+    description: `I’m planning a trek to Pin Parvati Valley, starting from Delhi...`,
     image: getRandomImage("men"),
     verified: true,
     age: 30,
@@ -101,7 +101,7 @@ export const travellers: Traveller[] = [
   {
     id: 4,
     name: "Riya",
-    location: "Delhi, Connaught Place",
+    location: "Delhi, India Gate",
     Destination: "Shillong, Meghalaya",
     description: `Trekking lover! Planning to explore Northeast this year.`,
     image: getRandomImage("women"),
@@ -122,7 +122,7 @@ export const travellers: Traveller[] = [
   {
     id: 5,
     name: "Neha",
-    location: "Mumbai, Maharashtra",
+    location: "Mumbai, kanheri",
     Destination: "Jaipur, Rajasthan",
     description: `Interested in cultural trips and foodie trails.`,
     image: getRandomImage("women"),
@@ -143,7 +143,7 @@ export const travellers: Traveller[] = [
   {
     id: 6,
     name: "Arjun",
-    location: "Odisha, Bhubaneswar",
+    location: "Odisha, puri",
     Destination: "Rishikesh, Uttarakhand",
     description: `Weekend treks and adventure sports enthusiast.`,
     image: getRandomImage("men"),
@@ -164,7 +164,7 @@ export const travellers: Traveller[] = [
   {
     id: 7,
     name: "Sana",
-    location: "Bangalore, Karnataka",
+    location: "Bangalore",
     Destination: "Coorg, Karnataka",
     description: `Love coffee plantations and nature trails.`,
     image: getRandomImage("women"),
@@ -267,5 +267,4 @@ export const travellers: Traveller[] = [
     startDate: "2026-07-10",
     endDate: "2026-07-15",
   },
-
 ];
