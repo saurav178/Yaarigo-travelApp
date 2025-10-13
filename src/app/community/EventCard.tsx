@@ -23,9 +23,9 @@ const EventCard: FC<EventProps> = ({
       <Image
         src={image}
         alt={title}
-        width={320}
+        width={400}
         height={176}
-        className="w-[320px] h-44 object-cover"
+        className="w-[400px] h-44 object-cover"
       />
 
       {/* Content */}

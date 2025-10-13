@@ -7,7 +7,7 @@ interface Props {
 
 const SectionTitle: FC<Props> = ({ title, children }) => (
   <div className="flex justify-between items-center mb-6 pb-2">
-    <h2 className="text-xl font-bold">{title}</h2>
+    <h2 className="!text-[20px] font-bold">{title}</h2>
     {children}
   </div>
 );
