@@ -1,19 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import TravellerCard from "@/app/community/TravellerCard";
-import SectionTitle from "@/app/community/SectionTitle";
-import TripCard from "@/app/community/TripCard";
-import EventCard from "@/app/community/EventCard";
-import Dropdown from "@/app/community/Dropdown";
-import DropdownFilters from "@/app/community/DropdownFilters";
+import TravellerCard from "../../app/community/TravellerCard";
+import SectionTitle from "../../app/community/SectionTitle";
+import TripCard from "../../app/community/TripCard";
+import EventCard from "../../app/community/EventCard";
+import Dropdown from "../../app/community/Dropdown";
+import DropdownFilters from "../../app/community/DropdownFilters";
 
 import {
   travellers as travellersData,
   Traveller,
-} from "@/app/community/data/travellers";
-import { trips } from "@/app/community/data/trips";
-import { events } from "@/app/community/data/events";
+} from "../../app/community/data/travellers";
+import { trips } from "../../app/community/data/trips";
+import { events } from "../../app/community/data/events";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Filters {
@@ -98,22 +98,20 @@ export default function Home() {
   });
 
   return (
-    <main className="pt-24 px-8 py-10 max-w-8xl mx-auto bg-white">
+    <main className="pt-24 px-8 py-10 max-w-7xl mx-auto">
       <div className="mb-10">
-        <h1 className="!text-4xl md:!text-5xl font-bold text-[#3B82F6] tracking-wide leading-tight mt-4">
+        <h1 className="text-4xl md:text-5xl font-bold text-[#3B82F6] tracking-wide">
           Find your people, Plan your adventures
         </h1>
       </div>
 
       {/* Filters Dropdown */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 pb-2 space-y-3 md:space-y-0">
-        <h2 className="!text-[20px] font-semibold text-gray-800">
-          Connect with Fellow Travellers
-        </h2>
+        <h2 className="text-lg font-semibold">Connect with Fellow Travellers</h2>
 
         <Dropdown
           trigger={
-            <button className="px-4 py-2 rounded-lg bg-blue-400 text-white shadow-sm hover:bg-blue-600">
+            <button className="px-4 py-2 border rounded-lg bg-blue-400 text-white shadow-sm hover:bg-blue-600">
               Set as Preference
             </button>
           }

@@ -85,7 +85,7 @@ export default function ExploreTrips() {
   const uniqueDestinations = Array.from(new Set(exploreTrips.map((t) => t.destination)));
 
   return (
-    <div className="p-4 md:p-6 mt-10 relative">
+    <div className="p-4 md:p-6 mt-10 relative z-10">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6 relative">
         <h2 className="text-2xl font-bold text-blue-500"></h2>
 

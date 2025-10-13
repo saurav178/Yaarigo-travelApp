@@ -1,6 +1,15 @@
 "use client";
+
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void;
+  }
+}
+
 import { useState } from "react";
 import { FaTwitter, FaFacebookF, FaGoogle } from "react-icons/fa";
+import { toast } from "react-toastify"; // ✅ Toast import
+import "react-toastify/dist/ReactToastify.css";
 
 type Props = {
   onSignup: (fullName: string, email: string, password: string) => void;
@@ -20,8 +29,9 @@ export default function Signup({ onSignup, switchToLogin, error }: Props) {
     setLocalError("");
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     let hasError = false;
     const errors = { fullName: "", email: "", password: "" };
 
@@ -30,19 +40,36 @@ export default function Signup({ onSignup, switchToLogin, error }: Props) {
     if (!formData.password) { errors.password = "Password required"; hasError = true; }
 
     setFieldErrors(errors);
+    if (hasError) return;
 
-    if (!hasError) {
-      setLoading(true);
-      // Dummy email check
-      const existingDummyEmail = "test@travio.com";
-      setTimeout(() => {
-        if (formData.email === existingDummyEmail) {
-          setLocalError("Email already exists");
-        } else {
-          onSignup(formData.fullName, formData.email, formData.password);
-        }
-        setLoading(false);
-      }, 500);
+    setLoading(true);
+    try {
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error || "Signup failed");
+
+      // ✅ On success
+      onSignup(formData.fullName, formData.email, formData.password);
+      toast.success("Signup successful! Redirecting...");
+
+      // ✅ Analytics tracking (example)
+      if (typeof window !== "undefined" && window.gtag) {
+        window.gtag("event", "signup", {
+          method: "email",
+          user_email: formData.email,
+        });
+      }
+
+    } catch (err: any) {
+      setLocalError(err.message);
+      toast.error(err.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -50,8 +77,13 @@ export default function Signup({ onSignup, switchToLogin, error }: Props) {
     <div className="absolute top-20 right-10 md:right-20 w-full max-w-sm z-50">
       <div className="bg-white/80 backdrop-blur-md border border-white/50 p-6 rounded-2xl shadow-lg">
         <h1 className="text-2xl font-bold text-black mb-3 text-center">Sign up</h1>
-        <p className="text-black/70 mb-4 text-sm text-center">Join us today! It only takes a minute</p>
-        {(error || localError) && <p className="text-red-600 text-sm mb-3 text-center">{error || localError}</p>}
+        <p className="text-black/70 mb-4 text-sm text-center">
+          Join us today! It only takes a minute
+        </p>
+
+        {(error || localError) && (
+          <p className="text-red-600 text-sm mb-3 text-center">{error || localError}</p>
+        )}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
@@ -99,7 +131,10 @@ export default function Signup({ onSignup, switchToLogin, error }: Props) {
           </button>
         </form>
 
-        <p className="text-sm text-black text-center mt-4 cursor-pointer hover:text-blue-600" onClick={switchToLogin}>
+        <p
+          className="text-sm text-black text-center mt-4 cursor-pointer hover:text-blue-600"
+          onClick={switchToLogin}
+        >
           Already have an account? Log in
         </p>
 
@@ -113,6 +148,3 @@ export default function Signup({ onSignup, switchToLogin, error }: Props) {
     </div>
   );
 }
-
-
-
