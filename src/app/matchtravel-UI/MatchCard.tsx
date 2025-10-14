@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 interface Match {
   id: string;
   name: string;
+  age: number;
+  gender: string;
   profilePic: string;
   verified: boolean;
   interests: string[];
@@ -136,7 +138,13 @@ const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
               </svg>
             )}
           </h3>
-          <p className="text-sm text-gray-600 font-medium">{match.travelStyle}</p>
+          <p className="text-xs text-gray-600">
+            <svg className="w-4 h-4 inline mr-1 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+            </svg>
+            <span className="text-blue-600">{match.age}</span>,
+            <span className="ml-2 text-purple-600">{match.gender === 'Male' ? '♂' : '♀'} {match.gender}</span> - <span className="text-green-600">{match.travelStyle}</span>
+          </p>
         </div>
       </div>
       <div className="mb-4">
@@ -186,8 +194,8 @@ const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
       </div>
 
       {showChat && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-4 rounded-lg max-w-md w-full h-96 flex flex-col">
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 rounded-xl">
+          <div className="bg-white p-4 rounded-lg max-w-full w-full h-full flex flex-col">
             <h3 className="text-lg font-bold mb-2">Chat with {match.name}</h3>
             <div className="flex-1 overflow-y-auto mb-4">
               {messages.map((msg, index) => (
@@ -227,8 +235,8 @@ const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
       )}
 
       {showDialog && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-4 rounded-xl shadow-2xl max-w-sm w-full border border-gray-200" style={{ resize: 'both', overflow: 'auto', minWidth: '300px', minHeight: '400px' }}>
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 rounded-xl">
+          <div className="bg-white p-4 rounded-xl shadow-2xl max-w-full w-full h-full border border-gray-200">
             <h3 className="text-lg font-bold mb-3 text-center text-blue-600">Compatibility Breakdown</h3>
             <div className="grid grid-cols-2 gap-4 mb-3">
               {pieData.map((item, index) => (

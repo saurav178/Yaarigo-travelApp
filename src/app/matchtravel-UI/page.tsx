@@ -6,6 +6,8 @@ import MatchCard from './MatchCard';
 interface Match {
   id: string;
   name: string;
+  age: number;
+  gender: string;
   profilePic: string;
   verified: boolean;
   interests: string[];
@@ -21,6 +23,8 @@ const mockMatches: Match[] = [
   {
     id: '1',
     name: 'Alice Johnson',
+    age: 28,
+    gender: 'Female',
     profilePic: 'https://picsum.photos/150/150?random=1',
     verified: true,
     interests: ['Hiking', 'Photography'],
@@ -34,6 +38,8 @@ const mockMatches: Match[] = [
   {
     id: '2',
     name: 'Bob Smith',
+    age: 32,
+    gender: 'Male',
     profilePic: 'https://picsum.photos/150/150?random=2',
     verified: false,
     interests: ['Food', 'Culture'],
@@ -47,6 +53,8 @@ const mockMatches: Match[] = [
   {
     id: '3',
     name: 'Charlie Brown',
+    age: 25,
+    gender: 'Male',
     profilePic: 'https://picsum.photos/150/150?random=3',
     verified: true,
     interests: ['Beach', 'Relaxation'],
@@ -60,6 +68,8 @@ const mockMatches: Match[] = [
   {
     id: '4',
     name: 'Diana Prince',
+    age: 30,
+    gender: 'Female',
     profilePic: 'https://picsum.photos/150/150?random=4',
     verified: true,
     interests: ['History', 'Museums'],
@@ -73,6 +83,8 @@ const mockMatches: Match[] = [
   {
     id: '5',
     name: 'Ethan Hunt',
+    age: 35,
+    gender: 'Male',
     profilePic: 'https://picsum.photos/150/150?random=5',
     verified: false,
     interests: ['Adventure', 'Extreme Sports'],
@@ -86,6 +98,8 @@ const mockMatches: Match[] = [
   {
     id: '6',
     name: 'Fiona Green',
+    age: 27,
+    gender: 'Female',
     profilePic: 'https://picsum.photos/150/150?random=6',
     verified: true,
     interests: ['Nature', 'Wildlife'],
@@ -99,6 +113,8 @@ const mockMatches: Match[] = [
   {
     id: '7',
     name: 'George Lucas',
+    age: 40,
+    gender: 'Male',
     profilePic: 'https://picsum.photos/150/150?random=7',
     verified: false,
     interests: ['Movies', 'Technology'],
@@ -112,6 +128,8 @@ const mockMatches: Match[] = [
   {
     id: '8',
     name: 'Hannah Montana',
+    age: 26,
+    gender: 'Female',
     profilePic: 'https://picsum.photos/150/150?random=8',
     verified: true,
     interests: ['Music', 'Performing Arts'],
