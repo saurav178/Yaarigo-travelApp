@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import LandingPage from "./landingpage/landingpage";
+import LandingPage from "./landing-page/LandingPage";
+import Header from "../components/Header";
 import Login from "../components/Login/Login";
 import Signup from "../components/Signup/Signup";
 import ProfileSetup from "../components/profileSetup/ProfileSetup";
@@ -35,6 +36,9 @@ export default function Page() {
     <div className="relative min-h-screen bg-black text-white">
       {!isLoggedIn ? (
         <div className="relative h-screen overflow-hidden">
+          <LandingPage />
+
+          <Header />
           <LandingPage />
 
           <div className="absolute top-20 right-4 md:right-16 md:w-1/3 w-full z-50">
