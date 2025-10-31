@@ -13,7 +13,7 @@ export const recommendations: Rec[] = [
     price: "₹20k - ₹50k",
     days: 10,
     avatar: "/avatar3.jpg",
-    cover: "/cover3.jpg",
+    cover: "/searchpageimg/cover1.jpg",
   },
   {
     id: "2",
@@ -26,7 +26,7 @@ export const recommendations: Rec[] = [
     price: "₹9k - ₹25k",
     days: 7,
     avatar: "/avatar2.jpg",
-    cover: "/cover2.jpg",
+    cover: "/searchpageimg/cover1.jpg",
   },
   {
     id: "3",
@@ -39,7 +39,7 @@ export const recommendations: Rec[] = [
     price: "₹20k - ₹50k",
     days: 10,
     avatar: "/avatar3.jpg",
-    cover: "/cover3.jpg",
+    cover: "/searchpageimg/cover1.jpg",
   },
  {
     id: "4",
@@ -52,7 +52,7 @@ export const recommendations: Rec[] = [
     price: "₹9k - ₹25k",
     days: 7,
     avatar: "/avatar2.jpg",
-    cover: "/cover2.jpg",
+    cover: "/searchpageimg/cover1.jpg",
   },
   {
     id: "",
@@ -65,7 +65,7 @@ export const recommendations: Rec[] = [
     price: "₹11k",
     days: 5,
     avatar: "/avatar5.jpg",
-    cover: "/cover5.jpg",
+    cover: "/searchpageimg/cover1.jpg",
   },
   {
     id: "5",
@@ -78,6 +78,6 @@ export const recommendations: Rec[] = [
     price: "₹20k - ₹50k",
     days: 10,
     avatar: "/avatar3.jpg",
-    cover: "/cover3.jpg",
+    cover: "/searchpageimg/cover1.jpg",
   },
 ];

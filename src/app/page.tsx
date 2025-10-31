@@ -3,19 +3,19 @@
 import { useState } from "react";
 import LandingPage from "./landing-page/LandingPage";
 import Header from "../components/Header";
-import Login from "../components/Login/Login";
-import Signup from "../components/Signup/Signup";
-import ProfileSetup from "../components/profileSetup/ProfileSetup";
+// import Login from "../components/Login/Login";
+// import Signup from "../components/Signup/Signup";
+// import ProfileSetup from "../components/profileSetup/ProfileSetup";
 // import ExploreTrips from "./trips/screens/ExploreTrips/ExploreTrips";
-import { useAuth } from "../components/layout/GlobalLayout";
+// import { useAuth } from "../components/layout/GlobalLayout";
 
 export default function Page() {
-  const [showLogin, setShowLogin] = useState(true);
-  const [showProfileSetup, setShowProfileSetup] = useState(false);
-  const { isLoggedIn, setIsLoggedIn } = useAuth();
+  // const [showLogin, setShowLogin] = useState(true);
+  // const [showProfileSetup, setShowProfileSetup] = useState(false);
+  // const { isLoggedIn, setIsLoggedIn } = useAuth();
 
-  const switchToSignup = () => setShowLogin(false);
-  const switchToLogin = () => setShowLogin(true);
+  // const switchToSignup = () => setShowLogin(false);
+  // const switchToLogin = () => setShowLogin(true);
 
   // const handleLogin = (email: string, password: string) => {
   //   setIsLoggedIn(true);
@@ -34,7 +34,7 @@ export default function Page() {
 
   return (
     <div className="relative min-h-screen bg-black text-white">
-      {!isLoggedIn ? (
+      {/* {!isLoggedIn ? ( */}
         <div className="relative h-screen overflow-hidden">
           <LandingPage />
 
@@ -78,8 +78,8 @@ export default function Page() {
             //   </div>
             // </div>
           )} */}
-      //   </div>
-      // )}
+        </div>
+       {/* )} */}
     </div>
-  );
+  )
 }

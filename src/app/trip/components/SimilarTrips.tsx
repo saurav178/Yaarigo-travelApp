@@ -2,19 +2,19 @@
 
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import type { Similar } from "@/app/trip/types/types";
+import type { Similar } from "@/src/app/trip/types/types";
 
-import trips from "../../../public/searchpageimg/view_trips.png";
-import view from "../../../public/searchpageimg/view_profile.png";
-import join from "../../../public/searchpageimg/join_trips.png";
-import money from "../../../public/searchpageimg/currency.png";
-import calender from "../../../public/searchpageimg/calender.png";
-import line from "../../../public/searchpageimg/Line 1.png";
-import groups from "../../../public/searchpageimg/Group.png";
-import star from "../../../public/searchpageimg/rating.png";
+import trips from "../../../../public/searchpageimg/view_trips.png";
+import view from "../../../../public/searchpageimg/view_profile.png";
+import join from "../../../../public/searchpageimg/join_trips.png";
+import money from "../../../../public/searchpageimg/currency.png";
+import calender from "../../../../public/searchpageimg/calender.png";
+import line from "../../../../public/searchpageimg/Line 1.png";
+import groups from "../../../../public/searchpageimg/Group.png";
+import star from "../../../../public/searchpageimg/rating.png";
 // import tick from "../../../public/searchpageimg/tickmarks.png";
-import spot from "../../../public/searchpageimg/3spots.png";
-import verify from "../../../public/searchpageimg/Verfied Badge.png";
+import spot from "../../../../public/searchpageimg/3spots.png";
+import verify from "../../../../public/searchpageimg/Verfied Badge.png";
 // import level from "../../../public/searchpageimg/levelrating (1).png";
 
 export default function TripCard({

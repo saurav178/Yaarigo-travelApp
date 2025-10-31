@@ -6,9 +6,10 @@ import Image from "next/image";
 import type { Agency } from "@/src/app/trip/types/types";
 
 
-import star from "../../../public/searchpageimg/rating.png"
-import verify from "../../../public/searchpageimg/Verfied Badge.png"
-import level from "../../../public/searchpageimg/levelrating (1).png"
+import star from "../../../../public/searchpageimg/rating.png"
+import verify from "../../../../public/searchpageimg/Verfied Badge.png"
+import level from "../../../../public/searchpageimg/levelrating (1).png"
+// import {cover} from "../../../../public/searchpageimg/agency-cover.jpg"
 
 
 
@@ -30,7 +31,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
     <article className="w-full bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm transition hover:shadow-md">
       {/* Cover */}
       <div className="relative h-44 md:h-52">
-        <Image
+        <img
           src={cover}
           alt={`${name} cover`}
           fill
