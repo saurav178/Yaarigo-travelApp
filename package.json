@@ -6,24 +6,21 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "fake-api": "json-server --watch db.json --port 3000"
   },
   "dependencies": {
-    "@react-google-maps/api": "^2.20.7",
-    "lucide-react": "^0.544.0",
+    "json-server": "^1.0.0-beta.3",
+    "lucide-react": "^0.548.0",
     "next": "15.5.2",
     "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "react-easy-crop": "^5.5.2",
-    "react-hot-toast": "^2.6.0",
-    "react-icons": "^5.5.0",
-    "zod": "^4.1.11"
+    "react-dom": "19.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
-    "@types/react": "^19.1.15",
+    "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
