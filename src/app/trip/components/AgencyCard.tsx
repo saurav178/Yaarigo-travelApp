@@ -3,7 +3,7 @@
 
 import Image from "next/image";
 
-import type { Agency } from "@/app/trip/types/types";
+import type { Agency } from "@/src/app/trip/types/types";
 
 
 import star from "../../../public/searchpageimg/rating.png"

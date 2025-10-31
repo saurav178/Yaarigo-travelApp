@@ -1,5 +1,5 @@
 // data-sample 
-import type { Trip } from "@/app/trip/types/types";
+import type { Trip } from "@/src/app/trip/types/types";
 
 export const SAMPLE_DATA_01: Trip[] = [
   { id: "1", name: "Amit singh",age:26, location: "Goa, India", from: "Simla, Himachal Pradesh, India", tags: ["Beach","Photography"], match: 88, price: "₹15k - ₹50k", days: 4, avatar: "/avatar1.jpg", cover: "/cover1.jpg" },
