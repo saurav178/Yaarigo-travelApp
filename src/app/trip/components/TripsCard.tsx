@@ -2,7 +2,11 @@
 
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+<<<<<<< HEAD
 import type { Trip } from "@/app/trip/types/types";
+=======
+import type { Trip } from "@/src/app/trip/types/types";
+>>>>>>> 9ab3cab9e46d8de47f22e48df06327b965df6a5b
 
 import trips from "../../../public/searchpageimg/view_trips.png";
 import view from "../../../public/searchpageimg/view_profile.png";

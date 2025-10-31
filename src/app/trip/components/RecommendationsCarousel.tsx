@@ -2,8 +2,13 @@
 "use client";
 
 import { useState } from "react";
+<<<<<<< HEAD
 import TripCard from "@/app/trip/components/RecommendationsCards";
 import { recommendations } from "@/app/trip/data/recommendations";
+=======
+import TripCard from "@/src/app/trip/components/RecommendationsCards";
+import { recommendations } from "@/src/app/trip/data/recommendations";
+>>>>>>> 9ab3cab9e46d8de47f22e48df06327b965df6a5b
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function RecommendationsCarousel() {

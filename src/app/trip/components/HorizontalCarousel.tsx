@@ -30,6 +30,13 @@ export default function HorizontalCarousel<T>({ items, renderItem, visible = 3, 
     return () => window.removeEventListener("resize", measure);
   }, [visible, items.length]);
 
+<<<<<<< HEAD
+=======
+  // useEffect(() => {
+  //   setIndex((i) => Math.min(i, maxIndex));
+  // }, [maxIndex]);
+
+>>>>>>> 9ab3cab9e46d8de47f22e48df06327b965df6a5b
   const prev = () => setIndex((i) => Math.max(0, i - 1));
   const next = () => setIndex((i) => Math.min(maxIndex, i + 1));
   const goTo = (i: number) => setIndex(Math.max(0, Math.min(maxIndex, i)));

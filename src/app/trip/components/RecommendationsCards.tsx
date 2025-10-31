@@ -8,7 +8,11 @@ import {
  
 } from "lucide-react";
 
+<<<<<<< HEAD
 import type { Rec } from "@/app/trip/types/types";
+=======
+import type { Rec } from "@/src/app/trip/data/recommendations";
+>>>>>>> 9ab3cab9e46d8de47f22e48df06327b965df6a5b
 
 import trips from "../../../public/searchpageimg/view_trips.png";
 import view from "../../../public/searchpageimg/view_profile.png";
@@ -22,12 +26,16 @@ import star from "../../../public/searchpageimg/rating.png";
 import spot from "../../../public/searchpageimg/3spots.png";
 import verify from "../../../public/searchpageimg/Verfied Badge.png"
 
+<<<<<<< HEAD
 export default function TripCard({
    rec }: 
    { rec: Rec 
 
    }) 
    {
+=======
+export default function TripCard({ rec }: { rec: Rec }) {
+>>>>>>> 9ab3cab9e46d8de47f22e48df06327b965df6a5b
   const {
     name,
     age,

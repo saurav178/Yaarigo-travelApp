@@ -2,20 +2,20 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import TripCard from "@/app/trip/components/TripsCard";
-import HorizontalCarousel from "@/app/trip/components/HorizontalCarousel";
-import Filters from "@/app/trip/components/Filters";
-import type { Leader, Similar, Trip } from "@/app/trip/types/types";
+import TripCard from "@/src/app/trip/components/TripsCard";
+import HorizontalCarousel from "@/src/app/trip/components/HorizontalCarousel";
+import Filters from "@/src/app/trip/components/Filters";
+import type { Leader, Similar, Trip } from "@/src/app/trip/types/types";
 import { SAMPLE_DATA_01 } from "./data/bestmatch";
-import { AGENCIES } from "@/app/trip/data/agencies";
-import AgencyCarousel from "@/app/trip/components/AgencyCarousel";
-import RecommendationsCarousel from "@/app/trip/components/RecommendationsCarousel";
+import { AGENCIES } from "@/src/app/trip/data/agencies";
+import AgencyCarousel from "@/src/app/trip/components/AgencyCarousel";
+import RecommendationsCarousel from "@/src/app/trip/components/RecommendationsCarousel";
 import AIHeader from "./components/AIHeader";
 
 import { SAMPLE_DATA_02 } from "./data/similartrips";
 import { SAMPLE_DATA_03 } from "./data/leadertrips";
-import SimilarTrips from "@/app/trip/components/TripsCard";
-import LeaderTrips from "@/app/trip/components/TripsCard";
+import SimilarTrips from "@/src/app/trip/components/TripsCard";
+import LeaderTrips from "@/src/app/trip/components/TripsCard";
 
 export default function Page() {
   const [query, setQuery] = useState("Simla, Himachal Pradesh, India");

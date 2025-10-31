@@ -1,5 +1,4 @@
 // types- for best matches...
-
 export type Trip = {
   id: string;
   name: string;
