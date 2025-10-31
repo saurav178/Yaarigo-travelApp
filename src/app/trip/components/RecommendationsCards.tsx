@@ -8,7 +8,7 @@ import {
  
 } from "lucide-react";
 
-import type { Rec } from "@/app/trip/data/recommendations";
+import type { Rec } from "@/src/app/trip/data/recommendations";
 
 import trips from "../../../public/searchpageimg/view_trips.png";
 import view from "../../../public/searchpageimg/view_profile.png";
