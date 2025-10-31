@@ -8,12 +8,12 @@ export const AGENCIES = [
     tripsCount: 15,
     travelersCount: 500,
     years: 2,
-    tags: ["Adventure Travel", "Cultural Tours", "Sustainable Tours"],
+    tags: ["Adventure Travel", "Cultural Tours" ],
     avatar: "/cover1.jpg",
     cover: "/cover1.jpg",
   },
   {
-    id: "1",
+    id: "2",
     name: "Nomad Paths",
     description: "Affordable yet thrilling adventures around the globe.",
     rating: 4.0,
@@ -26,7 +26,7 @@ export const AGENCIES = [
     cover: "/cover4.jpg",
   },
   {
-    id: "1",
+    id: "3",
     name: "GoBeyond Tours",
     description: "Premium travel experiences with local experts.",
     rating: 4.5,
@@ -39,7 +39,7 @@ export const AGENCIES = [
     cover: "/cover2.jpg",
   },
   {
-    id: "1",
+    id: "4",
     name: "EcoTrail India",
     description: "Eco-friendly adventures and trekking experiences.",
     rating: 4.3,
@@ -52,7 +52,7 @@ export const AGENCIES = [
     cover: "/cover3.jpg",
   },
   {
-    id: "1",
+    id: "5",
     name: "Nomad Paths",
     description: "Affordable yet thrilling adventures around the globe.",
     rating: 4.0,

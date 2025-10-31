@@ -1,18 +1,5 @@
 // data-recommendations
-
-export type Rec = {
-  id: string;
-  name: string;
-  age?: number;
-  location: string;
-  from?: string;
-  tags?: string[];
-  match?: number;
-  price?: string;
-  days?: number;
-  avatar?: string;
-  cover?: string;
-};
+import type { Rec } from "@/app/trip/types/types";
 
 export const recommendations: Rec[] = [
   {
@@ -67,19 +54,19 @@ export const recommendations: Rec[] = [
     avatar: "/avatar2.jpg",
     cover: "/cover2.jpg",
   },
-  // {
-  //   id: "5",
-  //   name: "Nisha Kapoor",
-  //   age: 27,
-  //   location: "Pune, India",
-  //   from: "Goa, India",
-  //   tags: ["Foodie", "Culture"],
-  //   match: 88,
-  //   price: "₹11k",
-  //   days: 5,
-  //   avatar: "/avatar5.jpg",
-  //   cover: "/cover5.jpg",
-  // },
+  {
+    id: "",
+    name: "Nisha Kapoor",
+    age: 27,
+    location: "Pune, India",
+    from: "Goa, India",
+    tags: ["Foodie", "Culture"],
+    match: 88,
+    price: "₹11k",
+    days: 5,
+    avatar: "/avatar5.jpg",
+    cover: "/cover5.jpg",
+  },
   {
     id: "5",
     name: "leena Patel",

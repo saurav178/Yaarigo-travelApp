@@ -2,18 +2,20 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import TripCard from "@/src/app/trip/components/TripsCard";
-import HorizontalCarousel from "@/src/app/trip/components/HorizontalCarousel";
-import Filters from "@/src/app/trip/components/Filters";
-import type { Trip } from "@/src/app/trip/types/types";
-
+import TripCard from "@/app/trip/components/TripsCard";
+import HorizontalCarousel from "@/app/trip/components/HorizontalCarousel";
+import Filters from "@/app/trip/components/Filters";
+import type { Leader, Similar, Trip } from "@/app/trip/types/types";
 import { SAMPLE_DATA_01 } from "./data/bestmatch";
-
-import { AGENCIES } from "@/src/app/trip/data/agencies";
-import AgencyCarousel from "@/src/app/trip/components/AgencyCarousel";
-import RecommendationsCarousel from "@/src/app/trip/components/RecommendationsCarousel";
+import { AGENCIES } from "@/app/trip/data/agencies";
+import AgencyCarousel from "@/app/trip/components/AgencyCarousel";
+import RecommendationsCarousel from "@/app/trip/components/RecommendationsCarousel";
 import AIHeader from "./components/AIHeader";
 
+import { SAMPLE_DATA_02 } from "./data/similartrips";
+import { SAMPLE_DATA_03 } from "./data/leadertrips";
+import SimilarTrips from "@/app/trip/components/TripsCard";
+import LeaderTrips from "@/app/trip/components/TripsCard";
 
 export default function Page() {
   const [query, setQuery] = useState("Simla, Himachal Pradesh, India");
@@ -24,6 +26,9 @@ export default function Page() {
   // sample trips
   
   const trips = SAMPLE_DATA_01;
+  const trip1 = SAMPLE_DATA_02;
+  const trip2 = SAMPLE_DATA_03;
+
 
   const filtered = useMemo(() => {
     if (!query) return trips;
@@ -35,6 +40,28 @@ export default function Page() {
         (t.name ?? "").toLowerCase().includes(q)
     );
   }, [query, trips]);
+  
+   const filtered1 = useMemo(() => {
+    if (!query) return trip1;
+    const q = query.toLowerCase();
+    return trip1.filter(
+      (t) =>
+        (t.from ?? "").toLowerCase().includes(q) ||
+        (t.location ?? "").toLowerCase().includes(q) ||
+        (t.name ?? "").toLowerCase().includes(q)
+    );
+  }, [query, trip1]);
+
+   const filtered2 = useMemo(() => {
+    if (!query) return trip2;
+    const q = query.toLowerCase();
+    return trip2.filter(
+      (t) =>
+        (t.from ?? "").toLowerCase().includes(q) ||
+        (t.location ?? "").toLowerCase().includes(q) ||
+        (t.name ?? "").toLowerCase().includes(q)
+    );
+  }, [query, trip2]);
 
   return (
     <div className="min-h-screen p-6 md:p-10">
@@ -83,9 +110,9 @@ export default function Page() {
               Featured Trip Leaders
             </h3>
             <HorizontalCarousel
-              items={filtered}
+              items={filtered2}
               visible={3}
-              renderItem={(t) => <TripCard trip={t as Trip} compact />}
+              renderItem={(t) => <LeaderTrips trip={t as Leader} compact />}
             />
           </section>
           <main className="p-6 bg-gray-50 min-h-screen -mt-6">
@@ -104,9 +131,9 @@ export default function Page() {
           <section className="mb-8">
             <h3 className="text-lg font-semibold mb-12 -mt-10">Similar Trips</h3>
             <HorizontalCarousel
-              items={filtered}
+              items={filtered1}
               visible={3}
-              renderItem={(t) => <TripCard trip={t as Trip} compact />}
+              renderItem={(t) => <SimilarTrips trip={t as Similar} compact />}
             />
           </section>
         </main>
