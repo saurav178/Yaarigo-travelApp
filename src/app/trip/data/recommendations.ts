@@ -1,0 +1,96 @@
+// data-recommendations
+
+export type Rec = {
+  id: string;
+  name: string;
+  age?: number;
+  location: string;
+  from?: string;
+  tags?: string[];
+  match?: number;
+  price?: string;
+  days?: number;
+  avatar?: string;
+  cover?: string;
+};
+
+export const recommendations: Rec[] = [
+  {
+    id: "1",
+    name: "Amit singh",
+    age: 28,
+    location: "Ahmedabad, India",
+    from: "Nagpur, Maharashtra, India",
+    tags: ["Cultural", "Foodie"],
+    match: 95,
+    price: "₹20k - ₹50k",
+    days: 10,
+    avatar: "/avatar3.jpg",
+    cover: "/cover3.jpg",
+  },
+  {
+    id: "2",
+    name: "Amit singh",
+    age: 30,
+    location: "Mumbai, India",
+    from: "Kolkata, West Bengal, India",
+    tags: ["Trek", "Adventure"],
+    match: 82,
+    price: "₹9k - ₹25k",
+    days: 7,
+    avatar: "/avatar2.jpg",
+    cover: "/cover2.jpg",
+  },
+  {
+    id: "3",
+    name: "Amit kumar",
+    age: 28,
+    location: "Ahmedabad, India",
+    from: "Nagpur, Maharashtra, India",
+    tags: ["Cultural", "Foodie"],
+    match: 95,
+    price: "₹20k - ₹50k",
+    days: 10,
+    avatar: "/avatar3.jpg",
+    cover: "/cover3.jpg",
+  },
+ {
+    id: "4",
+    name: "Amit Verma",
+    age: 30,
+    location: "Mumbai, India",
+    from: "Kolkata, West Bengal, India",
+    tags: ["Trek", "Adventure"],
+    match: 82,
+    price: "₹9k - ₹25k",
+    days: 7,
+    avatar: "/avatar2.jpg",
+    cover: "/cover2.jpg",
+  },
+  // {
+  //   id: "5",
+  //   name: "Nisha Kapoor",
+  //   age: 27,
+  //   location: "Pune, India",
+  //   from: "Goa, India",
+  //   tags: ["Foodie", "Culture"],
+  //   match: 88,
+  //   price: "₹11k",
+  //   days: 5,
+  //   avatar: "/avatar5.jpg",
+  //   cover: "/cover5.jpg",
+  // },
+  {
+    id: "5",
+    name: "leena Patel",
+    age: 28,
+    location: "Ahmedabad, India",
+    from: "Nagpur, Maharashtra, India",
+    tags: ["Cultural", "Foodie"],
+    match: 95,
+    price: "₹20k - ₹50k",
+    days: 10,
+    avatar: "/avatar3.jpg",
+    cover: "/cover3.jpg",
+  },
+];
