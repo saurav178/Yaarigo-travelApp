@@ -1,0 +1,97 @@
+{
+"agency": [
+    {
+      "id": 1,
+      "name": "Wanderlust Adventures",
+      "location": "Bangkok, Thailand",
+      "heroImage" : "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=80",
+      "logo": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=180&q=80",
+      "badgeTags": ["Beach & Culture"],
+      "rating": "4.8 (203 reviews)",
+      "stats": {
+        "totalTrips": "450+",
+        "totalTravelers": "4450+",
+        "avgRating": "4.9"
+      },
+      "about": "Premium adventure travel experiences across Asia and Europe. We specialize in small group tours with authentic local experiences.",
+      "specialities": ["Adventure Tours", "Cultural Tours", "Sustainable Tourism", "Small Groups"],
+      "certifications": ["ISO 9001", "ASTA Verified"],
+      "contact": {
+        "responseTime": "< 2 Hours",
+        "phone": "+91 1234567890",
+        "email": "contact@wanderlust.com",
+        "website": "https://wanderlust.com"
+      },
+      "trustItems": ["Identity Verified", "Licensed Agency", "Background Checked", "Insurance Covered"],
+      "similarAgencies": [2, 3]
+    }
+  ],
+  "trips": [
+    {
+      "id": 1,
+      "agencyId": 1,
+      "status": "upcoming",
+      "title": "Bali, Indonesia",
+      "description": "Join us for an unforgettable adventure in Bali! Explore ancient temples, pristine beaches, and lush rice terraces. Perfect mix of relaxation and adventure.",
+      "image": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400&q=80",
+      "dates": "15/11/2025",
+      "pax": "12/16",
+      "duration": "10 days",
+      "price": "₹750",
+      "tags": ["Entertainment", "Unexplored", "Entertainment"],
+      "spotsLeft": 3
+    },
+    {
+      "id": 2,
+      "agencyId": 1,
+      "status": "upcoming",
+      "title": "Bangkok, Thailand",
+      "description": "Join us for a vibrant city experience in Bangkok — nightlife, food and culture.",
+      "image": "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=80",
+      "dates": "01/12/2025",
+      "pax": "8/12",
+      "duration": "5 days",
+      "price": "₹550",
+      "tags": ["City", "Food", "Culture"],
+      "spotsLeft": 4
+    }
+  ],
+  "similarAgencies": [
+    {
+      "id": 1,
+      "name": "Nomad Traveler",
+      "rating": "4.6",
+      "trust": "85%",
+      "image": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80",
+      "logo": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400&q=80",
+      "totalTrips": 12,
+      "description": "Explore breathtaking destinations with Nomad Traveler — your gateway to authentic travel experiences."
+    },
+    {
+      "id": 2,
+      "name": "Globe Wanderers",
+      "rating": "4.8",
+      "trust": "90%",
+      "image": "https://images.unsplash.com/photo-1563492065599-3520f775eeed?w=800&q=80",
+      "logo": "https://images.unsplash.com/photo-1563492065599-3520f775eeed?w=400&q=80",
+      "trips": 9,
+      "description": "Globe Wanderers offers premium travel packages with 24/7 support and trusted local guides."
+    }
+  ],
+  "sidebarAgencies": [
+    {
+      "id": 1,
+      "name": "Nomad Traveler",
+      "image": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=80&q=80",
+      "rating": 4.6,
+      "trust": "85%"
+    },
+    {
+      "id": 2,
+      "name": "Global Explorers",
+      "image": "https://images.unsplash.com/photo-1563492065599-3520f775eeed?w=80&q=80",
+      "rating": 4.8,
+      "trust": "90%"
+    }
+]
+}
