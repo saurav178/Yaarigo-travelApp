@@ -2,14 +2,7 @@
 "use client";
 
 import Image from "next/image";
-
-<<<<<<< HEAD
-import type { Agency } from "@/src/app/trip/types/types";
-=======
 import type { Agency } from "@/src/app/searchtrip/types/types";
->>>>>>> origin/develop
-
-
 import star from "../../../../public/searchpageimg/rating.png"
 import verify from "../../../../public/searchpageimg/Verfied Badge.png"
 import level from "../../../../public/searchpageimg/levelrating (1).png"
