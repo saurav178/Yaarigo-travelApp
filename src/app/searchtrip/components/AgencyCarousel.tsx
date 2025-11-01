@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import AgencyCard from "./AgencyCard";
-import type { Agency } from "@/src/app/trip/types/types";
+import type { Agency } from "@/src/app/searchtrip/types/types";
 
 export default function AgencyCarousel({ agencies }: { agencies: Agency[] }) {
   const [index, setIndex] = useState(0);

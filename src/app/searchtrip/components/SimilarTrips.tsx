@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import type { Similar } from "@/src/app/trip/types/types";
+import type { Similar } from "@/src/app/searchtrip/types/types";
 
 import trips from "../../../../public/searchpageimg/view_trips.png";
 import view from "../../../../public/searchpageimg/view_profile.png";

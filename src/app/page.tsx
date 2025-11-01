@@ -3,7 +3,7 @@
 // import { useState } from "react";
 import LandingPage from "./landing-page/LandingPage";
 import Header from "../components/Header";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 // import Login from "../components/Login/Login";
 // import Signup from "../components/Signup/Signup";
 // import ProfileSetup from "../components/profileSetup/ProfileSetup";
@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 // import { useAuth } from "../components/layout/GlobalLayout";
 
 export default function Page() {
-  const Router =useRouter();
+  // const Router =useRouter();
   // const [showLogin, setShowLogin] = useState(true);
   // const [showProfileSetup, setShowProfileSetup] = useState(false);
   // const { isLoggedIn, setIsLoggedIn } = useAuth();
@@ -39,9 +39,11 @@ export default function Page() {
       {/* {!isLoggedIn ? ( */}
         <div className="relative h-screen overflow-hidden">
           <LandingPage />
+          
 
           <Header />
           <LandingPage />
+          
 
           {/* <div className="absolute top-20 right-4 md:right-16 md:w-1/3 w-full z-50">
             <div className="sticky top-20">

@@ -1,6 +1,6 @@
 "use client";
 
-
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useState } from "react";
 import { ShieldCheck, Sparkles, Users } from "lucide-react";
@@ -60,8 +60,14 @@ export default function LandingPage() {
     },
   ];
 
+  const router = useRouter();
   const [activeStep, setActiveStep] = useState<number>(1);
   const [imageSrc, setImageSrc] = useState<string>(steps[0].image);
+
+  const handleGoToTrip = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault(); // prevents form reload
+    router.push("/searchtrip"); // navigates to /trip page
+  };
   
   return (
     <main className="flex flex-col">
@@ -160,7 +166,7 @@ export default function LandingPage() {
 
                 {/* Submit Button */}
                 <button
-                  
+                  onClick={handleGoToTrip}
                   className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-md shadow transition"
                 >
                   Find Trips →
