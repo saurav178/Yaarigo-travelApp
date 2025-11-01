@@ -2,11 +2,7 @@
 
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-<<<<<<< HEAD
-import type { Leader } from "@/src/app/trip/types/types";
-=======
 import type { Leader } from "@/src/app/searchtrip/types/types";
->>>>>>> origin/develop
 
 import trips from "../../../../public/searchpageimg/view_trips.png";
 import view from "../../../../public/searchpageimg/view_profile.png";

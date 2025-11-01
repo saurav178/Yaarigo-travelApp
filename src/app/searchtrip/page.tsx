@@ -64,7 +64,7 @@ export default function Page() {
   }, [query, trip2]);
 
   return (
-    <div className="min-h-screen p-6 md:p-10">
+    <div className="min-h-screen p-6 md:p-10 mt-11">
       <div className="max-w-7xl mx-auto grid grid-cols-12 gap-6">
         <aside className="col-span-12 lg:col-span-4 xl:col-span-3">
           <div className="sticky top-6">

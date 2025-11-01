@@ -11,7 +11,7 @@ import Header from "../components/Header";
 // import { useAuth } from "../components/layout/GlobalLayout";
 
 export default function Page() {
-  // const Router =useRouter();
+
   // const [showLogin, setShowLogin] = useState(true);
   // const [showProfileSetup, setShowProfileSetup] = useState(false);
   // const { isLoggedIn, setIsLoggedIn } = useAuth();
