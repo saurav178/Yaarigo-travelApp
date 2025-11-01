@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /* @import "tailwindcss"; */
 
 :root {
@@ -194,7 +193,6 @@ div.modal {
   font-size: 1.5rem;
 
 }
-=======
 @import "tailwindcss";
 
 @tailwind base;
@@ -205,4 +203,3 @@ html, body {
   margin: 0;
   padding: 0;
 }
->>>>>>> b73f53819699750158bc57acc668b8e0f0b87188

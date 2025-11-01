@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-<<<<<<< HEAD
 import "./globals.css";
-import GlobalLayout from "../components/layout/GlobalLayout";
-=======
-import "../styles/globals.css";
->>>>>>> b73f53819699750158bc57acc668b8e0f0b87188
+import Header from "../components/Header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Travio",
-  description: "Your ultimate travel companion for planning and managing trips",
+  description: "Find your perfect travel companions",
 };
 
 export default function RootLayout({
@@ -29,17 +25,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        style={{ margin: 0, fontFamily: "sans-serif", background: "#000" }}
-      >
-<<<<<<< HEAD
-        <GlobalLayout>{children}</GlobalLayout>
-=======
-        <div className="app-shell min-h-screen flex flex-col">
-          <main className="page-body flex-1">{children}</main>
-        </div>
->>>>>>> b73f53819699750158bc57acc668b8e0f0b87188
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {/* ✅ Header visible on every page */}
+        <Header /> 
+        {children}
       </body>
     </html>
   );
