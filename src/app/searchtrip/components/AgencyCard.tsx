@@ -3,7 +3,11 @@
 
 import Image from "next/image";
 
+<<<<<<< HEAD
 import type { Agency } from "@/src/app/trip/types/types";
+=======
+import type { Agency } from "@/src/app/searchtrip/types/types";
+>>>>>>> origin/develop
 
 
 import star from "../../../../public/searchpageimg/rating.png"
