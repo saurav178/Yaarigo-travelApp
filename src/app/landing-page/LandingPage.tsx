@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+
 import Image from "next/image";
 import { useState } from "react";
 import { ShieldCheck, Sparkles, Users } from "lucide-react";
@@ -62,8 +62,7 @@ export default function LandingPage() {
 
   const [activeStep, setActiveStep] = useState<number>(1);
   const [imageSrc, setImageSrc] = useState<string>(steps[0].image);
-  const Router = useRouter();
-
+  
   return (
     <main className="flex flex-col">
       {/* ================= Hero Section ================= */}
@@ -152,16 +151,16 @@ export default function LandingPage() {
                     name="date"
                     type="date"
                     className="w-full border rounded-md pl-10 pr-3 py-2.5 bg-white outline-none text-gray-700 text-sm
-      placeholder-gray-500
-      [&::-webkit-calendar-picker-indicator]:opacity-0
-      [&::-webkit-calendar-picker-indicator]:pointer-events-none"
+                           placeholder-gray-500
+                            [&::-webkit-calendar-picker-indicator]:opacity-0
+                             [&::-webkit-calendar-picker-indicator]:pointer-events-none"
                     placeholder="mm/dd/yyyy"
                   />
                 </div>
 
                 {/* Submit Button */}
-                <button 
-                  onAuxClick={()=>{Router.push("/trip")}}
+                <button
+                  
                   className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-md shadow transition"
                 >
                   Find Trips →

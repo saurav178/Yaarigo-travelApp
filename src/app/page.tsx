@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+// import { useState } from "react";
 import LandingPage from "./landing-page/LandingPage";
 import Header from "../components/Header";
+import { useRouter } from "next/navigation";
 // import Login from "../components/Login/Login";
 // import Signup from "../components/Signup/Signup";
 // import ProfileSetup from "../components/profileSetup/ProfileSetup";
@@ -10,6 +11,7 @@ import Header from "../components/Header";
 // import { useAuth } from "../components/layout/GlobalLayout";
 
 export default function Page() {
+  const Router =useRouter();
   // const [showLogin, setShowLogin] = useState(true);
   // const [showProfileSetup, setShowProfileSetup] = useState(false);
   // const { isLoggedIn, setIsLoggedIn } = useAuth();

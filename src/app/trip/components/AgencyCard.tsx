@@ -31,7 +31,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
     <article className="w-full bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm transition hover:shadow-md">
       {/* Cover */}
       <div className="relative h-44 md:h-52">
-        <img
+        <Image
           src={cover}
           alt={`${name} cover`}
           fill
