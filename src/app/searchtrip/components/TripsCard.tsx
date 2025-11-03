@@ -26,21 +26,12 @@ export default function TripCard({
   compact?: boolean;
 }) {
 
-<<<<<<< HEAD
-  const router = useRouter();
-  
-     const handleProfile = (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault(); // prevents form reload
-      router.push("/profile"); // navigates to /trip page
-    };
-=======
  const router = useRouter(); 
 
   const handleProfile = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // prevents form reload
     router.push("/profile"); // navigates to /trip page
   };
->>>>>>> feature/searchresults-trips
 
   const {
     name,
@@ -176,11 +167,7 @@ export default function TripCard({
             {/* ✅ Profile View Icon with same color tone */}
             <button 
             type="submit"
-<<<<<<< HEAD
-              onClick={handleProfile}
-=======
             onClick={handleProfile}
->>>>>>> feature/searchresults-trips
             className="w-full flex items-center justify-center gap-2 text-[#F76c6c] border border-rose-200 rounded-lg py-2 text-sm bg-white font-medium hover:bg-rose-50 transition-all duration-200">
               <Image src={view} alt="View Profile" className="" />
               View Profile
@@ -191,7 +178,6 @@ export default function TripCard({
               View Trip
             </button>
           </div>
-
           <div className="relative mt-3">
             <button className="w-full flex items-center justify-center gap-2 bg-[#F76c6c] text-white rounded-lg py-2 font-semibold hover:bg-[#EB5757] transition-all duration-200 shadow-sm hover:shadow-md">
               <Image src={join} alt="Join Trip" />
