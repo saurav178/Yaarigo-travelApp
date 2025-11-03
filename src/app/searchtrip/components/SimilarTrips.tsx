@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import type { Similar } from "@/src/app/searchtrip/types/types";
 
 import trips from "../../../../public/searchpageimg/view_trips.png";
@@ -30,8 +29,23 @@ export default function TripCard({
 
    const handleProfile = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // prevents form reload
+<<<<<<< HEAD
     router.push("/profile"); // navigates to /trip page
   };
+=======
+    // alert("clickme")
+    router.push("/profile"); // navigates to /trip page
+  };
+
+  // function handleProfile() {
+  //   return console.log("clicked me");
+
+  // }
+  // handleProfile()
+
+
+
+>>>>>>> feature/searchresults-trips
   const {
     name,
     age,
@@ -165,7 +179,11 @@ export default function TripCard({
           <div className="grid grid-cols-2 gap-3">
             {/* ✅ Profile View Icon with same color tone */}
             <button
+<<<<<<< HEAD
               type="submit"
+=======
+            type="submit"
+>>>>>>> feature/searchresults-trips
               onClick={handleProfile}
               className="w-full flex items-center justify-center gap-2 text-[#F76c6c] border border-rose-200 rounded-lg py-2 text-sm bg-white font-medium hover:bg-rose-50 transition-all duration-200"
             >

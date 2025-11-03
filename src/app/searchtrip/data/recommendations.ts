@@ -1,5 +1,5 @@
 // data-recommendations
-import type { Rec } from "@/src/app/trip/types/types";
+import type { Rec } from "@/src/app/searchtrip/types/types";
 
 export const recommendations: Rec[] = [
   {
