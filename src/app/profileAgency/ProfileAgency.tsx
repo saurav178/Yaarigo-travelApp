@@ -147,7 +147,10 @@ export default function TripAgency() {
                       <span className="text-white text-xs">Verified</span>
                     </div>
                     <div className="flex items-center gap-1 bg-emerald-500 px-2 py-0.5 rounded-2xl">
-                      <ShieldCheck className="w-3 h-3 text-white" />
+                      <ShieldCheck
+                        className="w-3 h-3 text-white fill-current stroke-none"
+                        style={{ fill: "white", stroke: "none" }}
+                      />
                       <span className="text-white text-xs">High Security</span>
                     </div>
                   </div>
@@ -337,7 +340,8 @@ export default function TripAgency() {
                         <div className="flex items-center gap-1 text-xs text-gray-500">
                           <Star className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
                           {similarAgencies[currentSlide].rating}
-                          <span className="ml-2 bg-emerald-400 px-2 py-[2px] rounded-full text-white text-[10px]">
+                          <span className="ml-2 inline-flex items-center gap-1 bg-emerald-400 px-2 py-[2px] rounded-full text-white text-[10px]">
+                            <ShieldCheck className="w-3 h-3 fill-current stroke-none" />
                             High
                           </span>
                         </div>
@@ -407,7 +411,10 @@ export default function TripAgency() {
             {agency.trustItems?.length > 0 && (
               <div className="bg-white rounded-lg shadow-sm p-5 border border-gray-200">
                 <h3 className="text-base font-bold mb-4 text-gray-900 flex items-center gap-2">
-                  <ShieldCheck className="w-5 h-5 text-emerald-500" />
+                  <ShieldCheck
+                    className="w-5 h-5 text-emerald-500 fill-current stroke-none"
+                    style={{ fill: "#10B981", stroke: "none" }}
+                  />
                   Trust and Safety
                 </h3>
                 <div className="space-y-2.5">
