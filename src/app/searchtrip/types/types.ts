@@ -60,6 +60,7 @@ export type Agency = {
   rating?: number; // e.g. 4.1
   trust?: "Verified" | "Moderate" | "Low";
   tripsCount?: number;
+  verified: true,
   travelersCount?: number;
   years?: number;
   tags?: string[];

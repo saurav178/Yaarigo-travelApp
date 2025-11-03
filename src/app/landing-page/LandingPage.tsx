@@ -564,7 +564,7 @@ export default function LandingPage() {
 
               {/* Review Text */}
               <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                "{review.text}"
+                {review.text}
               </p>
 
               {/* User Info */}

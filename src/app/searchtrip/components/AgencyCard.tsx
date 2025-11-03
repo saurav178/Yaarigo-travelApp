@@ -4,18 +4,34 @@
 import Image from "next/image";
 import type { Agency } from "@/src/app/searchtrip/types/types";
 import star from "../../../../public/searchpageimg/rating.png"
-import verify from "../../../../public/searchpageimg/Verfied Badge.png"
+// import verify from "../../../../public/searchpageimg/Verfied Badge.png"
 import level from "../../../../public/searchpageimg/levelrating (1).png"
 // import {cover} from "../../../../public/searchpageimg/agency-cover.jpg"
+import veritick from "../../../../public/searchpageimg/veritick.png"
+import { useRouter } from "next/navigation";
 
 
 
 export default function AgencyCard({ agency }: { agency: Agency }) {
-  const {
+  
+ 
+
+  const router = useRouter();
+
+   const handleProfileAgency = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault(); // prevents form reload
+    router.push("/profile"); // navigates to /trip page
+  };
+
+
+  const 
+
+  {
     name,
     description = "",
     rating = 4.1,
     // trust = "Moderate",
+   
     tripsCount = 15,
     travelersCount = 500,
     years = 2,
@@ -36,9 +52,14 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
         />
         <div className="absolute right-3 mt-2 px-3 py-1 rounded-full ">
           {/* {trust} */}
-          <Image src={verify} alt="alt"  />
+          {/* <Image src={verify} alt="alt"  /> */}
+          {agency.verified && (
+                  <div className="flex flex-row absolute top-3 right-3 bg-green-500 text-white text-xs font-semibold px-5 py-1 rounded-full shadow">
+                    <Image src={veritick} alt="verified" className="-ml-3"/>
+                    Verified
+                  </div>
+                )}
           
-
         </div>
       </div>
 
@@ -106,7 +127,10 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
         </div>
 
         <div className="flex gap-3 ">
-          <button className="flex-1 bg-[#F76C6C] text-white py-2 rounded-lg font-semibold hover:bg-[#EB5757] transition">
+          <button 
+          type="submit"
+          onClick={handleProfileAgency}
+          className="flex-1 bg-[#F76C6C] text-white py-2 rounded-lg font-semibold hover:bg-[#EB5757] transition">
             View Profile
           </button>
           <button className="px-4 py-2 border border-rose-200 rounded-lg text-[#F76C6C] font-semibold hover:bg-rose-50 transition">
