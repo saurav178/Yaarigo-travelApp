@@ -27,6 +27,11 @@ export default function TripCard({
   compact?: boolean;
 }) {
   const router = useRouter();
+
+   const handleProfile = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault(); // prevents form reload
+    router.push("/profile"); // navigates to /trip page
+  };
   const {
     name,
     age,
@@ -159,15 +164,17 @@ export default function TripCard({
         <div className="mt-3">
           <div className="grid grid-cols-2 gap-3">
             {/* ✅ Profile View Icon with same color tone */}
-            <Link
-              href="/profile"
+            <button
+              type="submit"
+              onClick={handleProfile}
               className="w-full flex items-center justify-center gap-2 text-[#F76c6c] border border-rose-200 rounded-lg py-2 text-sm bg-white font-medium hover:bg-rose-50 transition-all duration-200"
             >
               <Image src={view} alt="View Profile" className="" />
               View Profile
-            </Link>
+            </button>
 
-            <button className="w-full flex items-center justify-center gap-2 text-[#F76c6c] border border-rose-200 rounded-lg py-2 text-sm bg-white font-medium hover:bg-rose-50 transition-all duration-200">
+            <button 
+            className="w-full flex items-center justify-center gap-2 text-[#F76c6c] border border-rose-200 rounded-lg py-2 text-sm bg-white font-medium hover:bg-rose-50 transition-all duration-200">
               <Image src={trips} alt="View Trip" className="" />
               View Trip
             </button>
