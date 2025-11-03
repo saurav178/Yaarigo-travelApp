@@ -643,7 +643,7 @@ export default function LandingPage() {
           <div>
             <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
               {/* 🔴 Red circular background with icon */}
-              <div className="bg-[#C74343] rounded-full p-2 w-10 h-10 flex items-center justify-center border border-white/30">
+              <div className="bg-[#e05757] rounded-full p-2 w-10 h-10 flex items-center justify-center border border-white/30">
                 <Image
                   src="/images/aeroplane.png"
                   alt="Travio Icon"
