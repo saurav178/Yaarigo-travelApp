@@ -1,5 +1,5 @@
 // data-sample 
-import type { Similar } from "@/src/app/trip/types/types";
+import type { Similar } from "@/src/app/searchtrip/types/types";
 
 export const SAMPLE_DATA_02: Similar[] = [
   { id: "1", name: "Amit singh",age:10, location: "Goa, India", from: "Simla, Himachal Pradesh, India", tags: ["Beach","Photography"], match: 88, price: "₹15k - ₹50k", days: 4, avatar: "/avatar1.jpg", cover: "/searchpageimg/cover1.jpg" },

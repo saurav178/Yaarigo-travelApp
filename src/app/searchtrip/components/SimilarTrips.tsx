@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRouter } from "next/navigation";
+
 import type { Similar } from "@/src/app/searchtrip/types/types";
+
 
 import trips from "../../../../public/searchpageimg/view_trips.png";
 import view from "../../../../public/searchpageimg/view_profile.png";
@@ -25,16 +26,21 @@ export default function TripCard({
   trip: Similar;
   compact?: boolean;
 }) {
-  const router = useRouter();
+  
   const {
     name,
     age,
+    rating,
     location,
     price,
     tags = [],
     match = 88,
     cover = "/cover-placeholder.jpg",
   } = trip;
+
+  
+
+  
 
   return (
     <article
@@ -96,7 +102,7 @@ export default function TripCard({
             <div className="flex items-center gap-2 -mb-1  relative w-full">
               <div className="flex flex-center gap-1 bg-white/90 rounded-full px-2  py-1  w-full pl-2 pr-6">
                 <Image src={star} alt="rating" className="w-4 h-4 " />
-                <div className="text-xs font-semibold">4.1</div>
+                <div className="text-xs">{rating.toFixed(1)}</div>
               </div>
               <div className="flex items-center gap-1 text-white bg-emerald-500 rounded-full px-2 py-1 w-full pl-2 pr-5">
                 <Image src={groups} alt="group" className="" />
@@ -159,7 +165,7 @@ export default function TripCard({
           <div className="grid grid-cols-2 gap-3">
             {/* ✅ Profile View Icon with same color tone */}
             <button
-              onClick={() => router.push('/profile')}
+              
               className="w-full flex items-center justify-center gap-2 text-[#F76c6c] border border-rose-200 rounded-lg py-2 text-sm bg-white font-medium hover:bg-rose-50 transition-all duration-200"
             >
               <Image src={view} alt="View Profile" className="" />
