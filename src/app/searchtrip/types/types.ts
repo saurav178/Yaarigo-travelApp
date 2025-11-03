@@ -11,6 +11,7 @@ export type Trip = {
   days?: number;
   avatar?: string;
   cover?: string;
+  rating: number;
   
 };
 
@@ -28,6 +29,7 @@ export type Similar = {
   days?: number;
   avatar?: string;
   cover?: string;
+  rating: number;
   
 };
 
@@ -45,6 +47,7 @@ export type Leader = {
   days?: number;
   avatar?: string;
   cover?: string;
+  rating: number;
   
 };
 
@@ -83,4 +86,5 @@ export type Rec = {
   days?: number;
   avatar?: string;
   cover?: string;
+  rating: number;
 };

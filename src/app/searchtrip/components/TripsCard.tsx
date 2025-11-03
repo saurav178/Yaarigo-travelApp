@@ -38,6 +38,7 @@ export default function TripCard({
     age,
     location,
     price,
+    rating,
     tags = [],
     match = 88,
     cover = "/cover-placeholder.jpg",
@@ -101,10 +102,15 @@ export default function TripCard({
 
             {/* ✅ Rating & Match % in one row */}
             <div className="flex items-center gap-2 -mb-1  relative w-full">
-              <div className="flex flex-center gap-1 bg-white/90 rounded-full px-2  py-1  w-full pl-2 pr-6">
+              {/* <div className="flex flex-center gap-1 bg-white/90 rounded-full px-2  py-1  w-full pl-2 pr-6">
                 <Image src={star} alt="rating" className="w-4 h-4 " />
                 <div className="text-xs font-semibold">4.1</div>
-              </div>
+              </div> */}
+              <div className="flex items-center gap-1 bg-white/90 rounded-full px-2 py-1 w-full pl-2 pr-6">
+  <Image src={star} alt="rating" className="w-4 h-4" />
+  <div className="text-xs font-semibold">{rating?.toFixed(1) ?? "N/A"}</div>
+</div>
+
               <div className="flex items-center gap-1 text-white bg-emerald-500 rounded-full px-2 py-1 w-full pl-2 pr-5">
                 <Image src={groups} alt="group" className="" />
                 <div className="text-xs font-semibold ">{match}%</div>
