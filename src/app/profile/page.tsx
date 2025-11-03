@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { FaMapMarkerAlt, FaCheckCircle, FaCalendarAlt, FaUserFriends, FaCircle, FaRegCircle } from 'react-icons/fa';
 import { IoMdChatbubbles } from 'react-icons/io';
 import { MapPin, CalendarDays, Users } from "lucide-react";
@@ -215,40 +216,10 @@ const travelers = [
       "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=600&q=80",
     ],
   },
-  {
-    name: "Emma Watson",
-    age: 27,
-    location: "Bangalore, India",
-    from: "Pune, Maharashtra",
-    to: "Munnar, Kerala",
-    date: "Jan 10–18, 2026",
-    price: "₹10k – ₹35k",
-    tags: ["Hiking", "Nature", "Food", "Culture"],
-    match: 84,
-    spots: 1,
-    images: [
-      "https://images.unsplash.com/photo-1520813792240-56fc4a3765a7?w=600&q=80",
-      "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=600&q=80",
-    ],
-  },{
-    name: "Emma Watson",
-    age: 27,
-    location: "Bangalore, India",
-    from: "Pune, Maharashtra",
-    to: "Munnar, Kerala",
-    date: "Jan 10–18, 2026",
-    price: "₹10k – ₹35k",
-    tags: ["Hiking", "Nature", "Food", "Culture"],
-    match: 84,
-    spots: 1,
-    images: [
-      "https://images.unsplash.com/photo-1520813792240-56fc4a3765a7?w=600&q=80",
-      "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=600&q=80",
-    ],
-  },
 ];
 
 export default function ProfilePage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState('Upcoming Trips');
   const [currentImage, setCurrentImage] = useState(
     new Array(travelers.length).fill(0)
@@ -294,7 +265,7 @@ export default function ProfilePage() {
             fill
             className="object-cover"
           />
-          <button className="absolute top-4 left-4 text-white bg-black/40 px-3 py-1 rounded-md hover:bg-black/60 transition z-10">
+          <button onClick={() => router.back()} className="absolute top-4 left-4 text-white bg-black/40 px-3 py-1 rounded-md hover:bg-black/60 transition z-10">
             ← Back
           </button>
 
@@ -367,7 +338,7 @@ export default function ProfilePage() {
             Wildlife photographer and nature lover. Eco-conscious traveler.
           </p>
 
-          <h4 className="font-semibold mt-2 mb-4 flex items-center gap-1"><Image src="/globe.svg" alt="Languages" width={16} height={16} className="[filter:brightness(0)]" /> Languages</h4>
+          <h4 className="font-semibold mt-2 mb-4 flex items-center gap-1"><Image src="/language.png" alt="Languages" width={16} height={16} className="[filter:brightness(0)]" /> Languages</h4>
           <div className="flex flex-wrap gap-2">
             {['English', 'Spanish', 'Ukrainian'].map((lang) => (
               <span
