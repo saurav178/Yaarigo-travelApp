@@ -64,7 +64,7 @@ export default function LandingPage() {
   const [imageSrc, setImageSrc] = useState<string>(steps[0].image);
   const router = useRouter();
 
-   const handleGoToTrip = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleGoToTrip = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // prevents form reload
     router.push("/searchtrip"); // navigates to /trip page
   };
@@ -345,7 +345,7 @@ export default function LandingPage() {
           ].map((feature, i) => (
             <div
               key={i}
-              className="p-8 bg-white rounded-2xl shadow-md hover:shadow-lg transition duration-300"
+              className="p-8 bg-white rounded-2xl shadow-md transform transition-all duration-300 hover:scale-[1.03] hover:shadow-xl"
             >
               <div
                 className={`inline-flex items-center justify-center p-4 rounded-2xl shadow-md ${feature.iconBg}`}
