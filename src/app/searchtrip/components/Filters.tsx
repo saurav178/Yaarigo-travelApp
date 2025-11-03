@@ -26,6 +26,7 @@ export default function Filters({
   setBudget: (n: number) => void;
 }) {
   // local state (only applied to parent when user clicks Apply)
+  
   const [localQuery, setLocalQuery] = useState(query);
   const [localAge, setLocalAge] = useState(age);
   const [localDuration, setLocalDuration] = useState(duration);

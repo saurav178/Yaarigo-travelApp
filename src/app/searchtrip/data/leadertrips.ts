@@ -1,5 +1,5 @@
 // data-sample 
-import type { Leader } from "@/src/app/trip/types/types";
+import type { Leader } from "@/src/app/searchtrip/types/types";
 
 export const SAMPLE_DATA_03: Leader[] = [
   { id: "1", name: "Amit singh",age:12, location: "Goa, India", from: "Simla, Himachal Pradesh, India", tags: ["Beach","Photography"], match: 88, price: "₹15k - ₹50k", days: 4, avatar: "/avatar1.jpg", cover: "/searchpageimg/cover1.jpg" },

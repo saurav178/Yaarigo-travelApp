@@ -64,7 +64,7 @@ export default function LandingPage() {
   const [imageSrc, setImageSrc] = useState<string>(steps[0].image);
   const router = useRouter();
 
-   const handleGoToTrip = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleGoToTrip = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // prevents form reload
     router.push("/searchtrip"); // navigates to /trip page
   };
@@ -345,7 +345,7 @@ export default function LandingPage() {
           ].map((feature, i) => (
             <div
               key={i}
-              className="p-8 bg-white rounded-2xl shadow-md hover:shadow-lg transition duration-300"
+              className="p-8 bg-white rounded-2xl shadow-md transform transition-all duration-300 hover:scale-[1.03] hover:shadow-xl"
             >
               <div
                 className={`inline-flex items-center justify-center p-4 rounded-2xl shadow-md ${feature.iconBg}`}
@@ -564,7 +564,7 @@ export default function LandingPage() {
 
               {/* Review Text */}
               <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                "{review.text}"
+                {review.text}
               </p>
 
               {/* User Info */}
@@ -643,7 +643,7 @@ export default function LandingPage() {
           <div>
             <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
               {/* 🔴 Red circular background with icon */}
-              <div className="bg-[#C74343] rounded-full p-2 w-10 h-10 flex items-center justify-center border border-white/30">
+              <div className="bg-[#e05757] rounded-full p-2 w-10 h-10 flex items-center justify-center border border-white/30">
                 <Image
                   src="/images/aeroplane.png"
                   alt="Travio Icon"
