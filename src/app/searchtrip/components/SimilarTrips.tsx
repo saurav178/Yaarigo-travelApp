@@ -29,8 +29,23 @@ export default function TripCard({
 
    const handleProfile = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // prevents form reload
+<<<<<<< HEAD
     router.push("/profile"); // navigates to /trip page
   };
+=======
+    // alert("clickme")
+    router.push("/profile"); // navigates to /trip page
+  };
+
+  // function handleProfile() {
+  //   return console.log("clicked me");
+
+  // }
+  // handleProfile()
+
+
+
+>>>>>>> ce7c48e787084ebeede2bc5811ac6b436e0e872f
   const {
     name,
     age,
@@ -164,7 +179,11 @@ export default function TripCard({
           <div className="grid grid-cols-2 gap-3">
             {/* ✅ Profile View Icon with same color tone */}
             <button
+<<<<<<< HEAD
               type="submit"
+=======
+            type="submit"
+>>>>>>> ce7c48e787084ebeede2bc5811ac6b436e0e872f
               onClick={handleProfile}
               className="w-full flex items-center justify-center gap-2 text-[#F76c6c] border border-rose-200 rounded-lg py-2 text-sm bg-white font-medium hover:bg-rose-50 transition-all duration-200"
             >
