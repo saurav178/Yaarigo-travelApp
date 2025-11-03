@@ -321,6 +321,7 @@ export default function LandingPage() {
           Experience travel like never before with features designed for modern
           explorers
         </p>
+        
 
         <div className="mt-12 grid gap-8 md:grid-cols-3 max-w-6xl mx-auto px-6">
           {[
