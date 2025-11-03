@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import type { Similar } from "@/src/app/searchtrip/types/types";
 
 import trips from "../../../../public/searchpageimg/view_trips.png";
@@ -158,13 +159,13 @@ export default function TripCard({
         <div className="mt-3">
           <div className="grid grid-cols-2 gap-3">
             {/* ✅ Profile View Icon with same color tone */}
-            <button
-              onClick={() => router.push('/profile')}
+            <Link
+              href="/profile"
               className="w-full flex items-center justify-center gap-2 text-[#F76c6c] border border-rose-200 rounded-lg py-2 text-sm bg-white font-medium hover:bg-rose-50 transition-all duration-200"
             >
               <Image src={view} alt="View Profile" className="" />
               View Profile
-            </button>
+            </Link>
 
             <button className="w-full flex items-center justify-center gap-2 text-[#F76c6c] border border-rose-200 rounded-lg py-2 text-sm bg-white font-medium hover:bg-rose-50 transition-all duration-200">
               <Image src={trips} alt="View Trip" className="" />
