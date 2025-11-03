@@ -20,7 +20,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
 
    const handleProfileAgency = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // prevents form reload
-    router.push("/profile"); // navigates to /trip page
+    router.push("/profileAgency"); // navigates to /trip page
   };
 
 
