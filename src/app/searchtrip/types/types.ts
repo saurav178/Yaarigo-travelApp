@@ -20,7 +20,6 @@ export type Similar = {
   id: string;
   name: string;
   age?: number;
-  rating: number;
   location?: string;
   from?: string;
   price?: string;
