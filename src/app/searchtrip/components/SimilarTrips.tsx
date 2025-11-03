@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import type { Similar } from "@/src/app/searchtrip/types/types";
 
 import trips from "../../../../public/searchpageimg/view_trips.png";
@@ -25,13 +25,13 @@ export default function TripCard({
   trip: Similar;
   compact?: boolean;
 }) {
-  // const router = useRouter();
+  const router = useRouter();
 
-  //  const handleProfile = (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   e.preventDefault(); // prevents form reload
-  //   alert("clickme")
-  //   // router.push("/profile"); // navigates to /trip page
-  // };
+   const handleProfile = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault(); // prevents form reload
+    // alert("clickme")
+    router.push("/profile"); // navigates to /trip page
+  };
 
   // function handleProfile() {
   //   return console.log("clicked me");
@@ -175,7 +175,7 @@ export default function TripCard({
             {/* ✅ Profile View Icon with same color tone */}
             <button
             type="submit"
-              onClick={()=>{alert("clicked me")}}
+              onClick={handleProfile}
               className="w-full flex items-center justify-center gap-2 text-[#F76c6c] border border-rose-200 rounded-lg py-2 text-sm bg-white font-medium hover:bg-rose-50 transition-all duration-200"
             >
               <Image src={view} alt="View Profile" className="" />
