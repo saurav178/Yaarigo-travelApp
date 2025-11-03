@@ -5,6 +5,7 @@ export type Trip = {
   age?: number;
   location?: string;
   from?: string;
+  to?: string;
   price?: string;
   tags?: string[];
   match?: number;
@@ -23,6 +24,7 @@ export type Similar = {
   age?: number;
   location?: string;
   from?: string;
+  to?: string;
   price?: string;
   tags?: string[];
   match?: number;
@@ -41,6 +43,7 @@ export type Leader = {
   age?: number;
   location?: string;
   from?: string;
+  to?: string;
   price?: string;
   tags?: string[];
   match?: number;
