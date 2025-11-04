@@ -258,8 +258,232 @@ export default function Filters({
           className="mt-4 w-full bg-[#F76c6c] text-white py-2 rounded-lg font-semibold hover:bg-[#EB5757] transition"
         >
           Apply Filter
-        </button>
+        </button> 
       </div>
     </div>
   );
 }
+
+// "use client";
+
+// import { useEffect, useState } from "react";
+// import { Search, Mic, X } from "lucide-react";
+// import { useRouter } from "next/navigation";
+
+// export default function Filters({
+//   query,
+//   setQuery,
+//   age,
+//   setAge,
+//   duration,
+//   setDuration,
+//   budget,
+//   setBudget,
+// }: {
+//   query: string;
+//   setQuery: (v: string) => void;
+//   age: number;
+//   setAge: (n: number) => void;
+//   duration: number;
+//   setDuration: (n: number) => void;
+//   budget: number;
+//   setBudget: (n: number) => void;
+// }) {
+//   // Local states
+//   const [localQuery, setLocalQuery] = useState(query);
+//   const [localAge, setLocalAge] = useState(age);
+//   const [localDuration, setLocalDuration] = useState(duration);
+//   const [localBudget, setLocalBudget] = useState(budget);
+//   const [inputLang, setInputLang] = useState("");
+//   const [languages, setLanguages] = useState<string[]>(["English", "Spanish"]);
+
+//   const router = useRouter();
+
+//   // Sync parent values
+//   useEffect(() => setLocalQuery(query), [query]);
+//   useEffect(() => setLocalAge(age), [age]);
+//   useEffect(() => setLocalDuration(duration), [duration]);
+//   useEffect(() => setLocalBudget(budget), [budget]);
+
+//   // Reset local filters
+//   const handleClearAll = () => {
+//     setLocalQuery("");
+//     setLocalAge(18);
+//     setLocalDuration(5);
+//     setLocalBudget(15000);
+//     setLanguages(["English"]);
+//     setInputLang("");
+//     // also reset parent instantly
+//     setQuery("");
+//     setAge(18);
+//     setDuration(5);
+//     setBudget(15000);
+//   };
+
+//   const handleApply = () => {
+//     setQuery(localQuery);
+//     setAge(localAge);
+//     setDuration(localDuration);
+//     setBudget(localBudget);
+//   };
+
+//   const startVoice = () => {
+//     alert("Voice search (demo)");
+//   };
+
+//   const addLang = () => {
+//     const v = inputLang.trim();
+//     if (!v) return;
+//     if (!languages.includes(v)) setLanguages((s) => [...s, v]);
+//     setInputLang("");
+//   };
+
+//   const removeLang = (l: string) => setLanguages((s) => s.filter((x) => x !== l));
+
+//   return (
+//     <div className="bg-white p-5 rounded-xl shadow w-full max-w-md mx-auto">
+//       {/* Header */}
+//       <div className="flex items-center gap-3">
+//         <button
+//           className="text-sm text-gray-600 hover:text-gray-800 transition"
+//           onClick={() => {
+//             router.push("/");
+//           }}
+//         >
+//           ← Back
+//         </button>
+//         <button
+//           onClick={handleClearAll}
+//           className="ml-auto text-sm text-[#f76c6c] hover:underline"
+//         >
+//           Clear all filters
+//         </button>
+//       </div>
+
+//       {/* Destination */}
+//       <div className="mt-4">
+//         <div className="relative">
+//           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+//           <input
+//             value={localQuery}
+//             onChange={(e) => setLocalQuery(e.target.value)}
+//             placeholder="Destination typing..."
+//             className="w-full pl-9 pr-10 py-2 rounded-md border text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#EB5757]"
+//           />
+//           <button
+//             type="button"
+//             onClick={() => startVoice()}
+//             className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#EB5757]"
+//           >
+//             <Mic className="w-4 h-4" />
+//           </button>
+//         </div>
+
+//         <div className="flex flex-wrap gap-2 mt-3">
+//           {["Locals", "Nearby", "Starting point"].map((tag) => (
+//             <button
+//               key={tag}
+//               onClick={() => setLocalQuery(tag)}
+//               className="px-3 py-1 bg-rose-50 text-[#F76c6c] rounded-full text-sm hover:bg-rose-100"
+//             >
+//               {tag}
+//             </button>
+//           ))}
+//         </div>
+//       </div>
+
+//       {/* Languages */}
+//       <div className="mt-5">
+//         <label className="block text-xs font-medium text-gray-500 mb-2">Language</label>
+//         <div className="relative">
+//           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+//           <input
+//             value={inputLang}
+//             onChange={(e) => setInputLang(e.target.value)}
+//             onKeyDown={(e) => e.key === "Enter" && addLang()}
+//             placeholder="Language typing..."
+//             className="w-full pl-9 pr-20 py-2 rounded-md border text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#EB5757]"
+//           />
+//           <button
+//             onClick={addLang}
+//             className="absolute right-3 top-1/2 -translate-y-1/2 text-[#EB5757] text-sm font-medium hover:underline"
+//           >
+//             Add
+//           </button>
+//         </div>
+//         <div className="mt-3 flex flex-wrap gap-2">
+//           {languages.map((l) => (
+//             <div
+//               key={l}
+//               className="flex items-center gap-2 bg-rose-50 text-[#F76c6c] px-3 py-1 rounded-full text-sm font-medium"
+//             >
+//               <span>{l}</span>
+//               <button onClick={() => removeLang(l)}>
+//                 <X className="w-3 h-3" />
+//               </button>
+//             </div>
+//           ))}
+//         </div>
+//       </div>
+
+//       {/* Duration */}
+//       <div className="mt-5">
+//         <label className="block text-xs font-medium text-gray-500 mb-2">
+//           Duration (days)
+//         </label>
+//         <input
+//           type="range"
+//           min={1}
+//           max={50}
+//           value={localDuration}
+//           onChange={(e) => setLocalDuration(Number(e.target.value))}
+//           className="w-full accent-[#EB5757]"
+//         />
+//         <div className="text-xs text-gray-500 mt-1">{localDuration} days</div>
+//       </div>
+
+//       {/* Age */}
+//       <div className="mt-5">
+//         <label className="block text-xs font-medium text-gray-500 mb-2">
+//           Age Range
+//         </label>
+//         <input
+//           type="range"
+//           min={12}
+//           max={50}
+//           value={localAge}
+//           onChange={(e) => setLocalAge(Number(e.target.value))}
+//           className="w-full accent-[#EB5757]"
+//         />
+//         <div className="text-xs text-gray-500 mt-1">{localAge} Years</div>
+//       </div>
+
+//       {/* Budget */}
+//       <div className="mt-5">
+//         <label className="block text-xs font-medium text-gray-500 mb-2">
+//           Budget (₹)
+//         </label>
+//         <input
+//           type="range"
+//           min={0}
+//           max={200000}
+//           step={500}
+//           value={localBudget}
+//           onChange={(e) => setLocalBudget(Number(e.target.value))}
+//           className="w-full accent-[#EB5757]"
+//         />
+//         <div className="text-xs text-gray-500 mt-1">
+//           ₹{localBudget.toLocaleString()}
+//         </div>
+//       </div>
+
+//       {/* Apply */}
+//       <button
+//         onClick={handleApply}
+//         className="mt-6 w-full bg-[#F76c6c] text-white py-2 rounded-lg font-semibold hover:bg-[#EB5757] transition"
+//       >
+//         Apply Filter
+//       </button>
+//     </div>
+//   );
+// }
