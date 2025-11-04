@@ -2,7 +2,7 @@
 import type { Similar } from "@/src/app/searchtrip/types/types";
 
 export const SAMPLE_DATA_02: Similar[] = [
-  { id: "1", name: "Amit singh",age:10, location: "Goa, India", from: "Simla, Himachal Pradesh, India", tags: ["Beach","Photography"], match: 88, price: "₹15k - ₹50k", days: 4, avatar: "/avatar1.jpg", cover: "/searchpageimg/cover1.jpg" },
+  { id: "1", name: "Amit singh",age:10, location: "Goa, India", from: "Simla, Himachal Pradesh, India", tags: ["Beach","Photography" ,"Adventure"], match: 88, price: "₹15k - ₹50k", days: 4, avatar: "/avatar1.jpg", cover: "/searchpageimg/cover1.jpg" },
   { id: "2", name: "Amit singh",age:20, location: "Mumbai, India", from: "Simla, Himachal Pradesh, India", tags: ["Trek","Adventure"], match: 82, price: "₹9k - ₹25k", days: 7, avatar: "/avatar2.jpg", cover: "/searchpageimg/cover1.jpg" },
   { id: "3", name: "Ram singh",age:30, location: "Ahmedabad, India", from: "Simla, Himachal Pradesh, India", tags: ["Cultural","Foodie"], match: 95, price: "₹20k - ₹50k", days: 10, avatar: "/avatar3.jpg", cover: "/searchpageimg/cover1.jpg" },
   { id: "4", name: "Amit singh",age:40, location: "Mumbai, India", from: "Simla, Himachal Pradesh, India", tags: ["Trek","Adventure"], match: 82, price: "₹9k - ₹25k", days: 7, avatar: "/avatar2.jpg", cover: "/searchpageimg/cover1.jpg" },
