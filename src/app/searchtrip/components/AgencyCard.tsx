@@ -105,10 +105,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
                 {agency.trust ?? "Unknown"}
               </div>
 
-              
-
-
-              {/* {agency.trust && (
+               {/* {agency.trust && (
                   <div className="flex flex-row  bg-green-500 text-white text-xs font-semibold px-5 py-1 rounded-full shadow">
                     <Image src={veritick} alt="verified" className="-ml-3"/>
                   </div>

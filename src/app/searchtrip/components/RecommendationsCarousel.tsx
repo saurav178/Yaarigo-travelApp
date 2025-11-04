@@ -1,4 +1,5 @@
-// src/components/RecommendationsCarousel.tsx
+//RecommendationsCarousel.tsx
+
 "use client";
 
 import { useState } from "react";
