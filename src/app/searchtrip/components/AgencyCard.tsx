@@ -1,37 +1,29 @@
-
 "use client";
 
 import Image from "next/image";
 import type { Agency } from "@/src/app/searchtrip/types/types";
-import star from "../../../../public/searchpageimg/rating.png"
+import star from "../../../../public/searchpageimg/rating.png";
 // import verify from "../../../../public/searchpageimg/Verfied Badge.png"
-import level from "../../../../public/searchpageimg/levelrating (1).png"
+// import level from "../../../../public/searchpageimg/levelrating (1).png"
 // import {cover} from "../../../../public/searchpageimg/agency-cover.jpg"
-import veritick from "../../../../public/searchpageimg/veritick.png"
+import veritick from "../../../../public/searchpageimg/veritick.png";
+import tick from "../../../../public/searchpageimg/Group.png";
 import { useRouter } from "next/navigation";
 
-
-
 export default function AgencyCard({ agency }: { agency: Agency }) {
-  
- 
-
   const router = useRouter();
 
-   const handleProfileAgency = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleProfileAgency = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // prevents form reload
     router.push("/profileAgency"); // navigates to /trip page
   };
 
-
-  const 
-
-  {
+  const trust = agency.trust === "Verified" ? "High" : agency.trust;
+  const {
     name,
     description = "",
     rating = 4.1,
-    // trust = "Moderate",
-   
+
     tripsCount = 15,
     travelersCount = 500,
     years = 2,
@@ -54,12 +46,11 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
           {/* {trust} */}
           {/* <Image src={verify} alt="alt"  /> */}
           {agency.verified && (
-                  <div className="flex flex-row absolute top-3 right-3 bg-green-500 text-white text-xs font-semibold px-5 py-1 rounded-full shadow">
-                    <Image src={veritick} alt="verified" className="-ml-3"/>
-                    Verified
-                  </div>
-                )}
-          
+            <div className="flex flex-row absolute top-3 right-3 bg-green-500 text-white text-xs font-semibold px-5 py-1 rounded-full shadow">
+              <Image src={veritick} alt="verified" className="-ml-3 mr-1" />
+              Verified
+            </div>
+          )}
         </div>
       </div>
 
@@ -81,16 +72,49 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
             </div>
             <div className="flex flex-row gap-3 w-full mt-1">
               <div className="flex ">
-                <Image src={star} alt="alt" className="h-4 w-4 mr-1"  />
+                <Image src={star} alt="alt" className="h-4 w-4 mr-1" />
                 <div className="text-xs">{rating.toFixed(1)}</div>
               </div>
-               <div className="text-xs  text-amber-800 px-2 py-0.5 rounded-full font-medium ">
-              {/* {trust} */}
-              <Image src={level} alt="alt" className="-mt-1 " />
+
+              <div
+                className={`flex flex-row items-center px-1 rounded-full text-white -mt-1
+    ${
+      trust === "High"
+        ? "bg-green-500"
+        : agency.trust === "Moderate"
+        ? "bg-orange-500"
+        : agency.trust === "Low"
+        ? "bg-[#F76C6C]"
+        : "bg-gray-300"
+    }`}
+              >
+                <Image
+                  src={tick}
+                  alt="tick"
+                  className={`w-3 h-3 mr-1
+      ${
+        trust === "High"
+          ? "bg-green-400"
+          : agency.trust === "Moderate"
+          ? "bg-orange-400"
+          : agency.trust === "Low"
+          ? "bg-red-400"
+          : "bg-gray-200"
+      }`}
+                />
+                {agency.trust ?? "Unknown"}
+              </div>
+
+              
+
+
+              {/* {agency.trust && (
+                  <div className="flex flex-row  bg-green-500 text-white text-xs font-semibold px-5 py-1 rounded-full shadow">
+                    <Image src={veritick} alt="verified" className="-ml-3"/>
+                  </div>
+                )} */}
 
             </div>
-            </div>
-            
           </div>
         </div>
 
@@ -127,10 +151,11 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
         </div>
 
         <div className="flex gap-3 ">
-          <button 
-          type="submit"
-          onClick={handleProfileAgency}
-          className="flex-1 bg-[#F76C6C] text-white py-2 rounded-lg font-semibold hover:bg-[#EB5757] transition">
+          <button
+            type="submit"
+            onClick={handleProfileAgency}
+            className="flex-1 bg-[#F76C6C] text-white py-2 rounded-lg font-semibold hover:bg-[#EB5757] transition"
+          >
             View Profile
           </button>
           <button className="px-4 py-2 border border-rose-200 rounded-lg text-[#F76C6C] font-semibold hover:bg-rose-50 transition">
