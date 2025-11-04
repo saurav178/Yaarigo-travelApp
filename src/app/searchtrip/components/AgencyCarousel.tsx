@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -38,9 +37,8 @@ export default function AgencyCarousel({ agencies }: { agencies: Agency[] }) {
             >
               {/* Hover effect on card */}
               <div className="transition-all duration-500 transform rounded-xl group-hover:-translate-y-2 group-hover:shadow-lg group-hover:shadow-[#eb575740]">
-  <AgencyCard agency={agency} />
-</div>
-
+                <AgencyCard agency={agency} />
+              </div>
             </div>
           ))}
         </div>

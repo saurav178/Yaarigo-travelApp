@@ -14,6 +14,7 @@ export const recommendations: Rec[] = [
     days: 10,
     avatar: "/avatar3.jpg",
     cover: "/searchpageimg/cover1.jpg",
+    rating:4.1,
   },
   {
     id: "2",
@@ -27,6 +28,7 @@ export const recommendations: Rec[] = [
     days: 7,
     avatar: "/avatar2.jpg",
     cover: "/searchpageimg/cover1.jpg",
+    rating:4.2,
   },
   {
     id: "3",
@@ -40,6 +42,7 @@ export const recommendations: Rec[] = [
     days: 10,
     avatar: "/avatar3.jpg",
     cover: "/searchpageimg/cover1.jpg",
+    rating:4.3,
   },
  {
     id: "4",
@@ -53,6 +56,7 @@ export const recommendations: Rec[] = [
     days: 7,
     avatar: "/avatar2.jpg",
     cover: "/searchpageimg/cover1.jpg",
+    rating:4.4,
   },
   {
     id: "",
@@ -66,6 +70,7 @@ export const recommendations: Rec[] = [
     days: 5,
     avatar: "/avatar5.jpg",
     cover: "/searchpageimg/cover1.jpg",
+    rating:4.5,
   },
   {
     id: "5",
@@ -79,5 +84,6 @@ export const recommendations: Rec[] = [
     days: 10,
     avatar: "/avatar3.jpg",
     cover: "/searchpageimg/cover1.jpg",
+    rating:4.6,
   },
 ];
