@@ -1,33 +1,14 @@
-// types- for best matches...
-// export type Trip = {
-//   id: string;
-//   name: string;
-//   age?: number;
-//   // maxAge?:number;
-//   location?: string;
-//   from?: string;
-//   to?: string;
-//   price?: string;
-//   tags?: string[];
-//   match?: number;
-//   days?: number;
-//   avatar?: string;
-//   cover?: string;
-//   rating: number;
-  
-// };
 
 export type Trip = {
   id: string;
   name: string;
-  age?: number;           // leader/owner age
+  age?: number;           
   location?: string;
-  days? : number;
   from?: string;
   to?: string;
-  price?: string | number;         // numeric price in INR (single-number for filtering)
+  price?: string | number;         
   rating?: number;
-  duration?: string | number;     // days
+  duration?: string | number;     
   tags?: string[];
   match?: number;
   cover?: string;
@@ -75,30 +56,6 @@ export type Leader = {
 
 
 
-// types for agency---------
-
-// export type Agency = {
-//   id: string;
-//   name: string;
-//   tagline?: string;
-//   description?: string;
-//   rating?: number; // e.g. 4.1
-//   trust?: "Verified" | "Moderate" | "Low";
-//   tripsCount?: number;
-//   verified: true,
-//   travelersCount?: number;
-//   years?: number;
-//   tags?: string[];
-//   avatar?: string; // small square
-//   cover?: string;  // wide cover image
-//   agencies:[];
-// };
-
-
-// src/app/searchtrip/types/types.ts
-// ...other types you already have above
-
-// Remove or replace any existing `Agency` type with the following:
 export type Agency = {
   id: string;
   name: string;
@@ -113,7 +70,7 @@ export type Agency = {
   tags?: string[];
   avatar?: string;
   cover?: string;
-  // any other optional fields your data might include
+  
   [key: string]: unknown;
 };
 
