@@ -23,9 +23,9 @@ export default function TripAgency() {
     const fetchData = async () => {
       try {
         const [agencyRes, tripsRes, similarRes] = await Promise.all([
-          fetch("/api/agency"),
-          fetch("/api/trips?agencyId=1"),
-          fetch("/api/similarAgencies"),
+          fetch("http://localhost:4000/agency"),
+          fetch("http://localhost:4000/trips?agencyId=1"),
+          fetch("http://localhost:4000/similarAgencies"),
         ]);
 
         if (!agencyRes.ok || !tripsRes.ok || !similarRes.ok)
