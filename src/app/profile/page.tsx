@@ -2,10 +2,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { FaMapMarkerAlt, FaCheckCircle, FaCalendarAlt, FaUserFriends, FaCircle, FaRegCircle } from 'react-icons/fa';
-import { IoMdChatbubbles } from 'react-icons/io';
-import { MapPin, CalendarDays, Users } from "lucide-react";
-import { FaChevronLeft, FaChevronRight, FaRupeeSign, FaUser, FaStar } from "react-icons/fa";
+import { FaMapMarkerAlt, FaCheckCircle, FaCircle, FaRegCircle, FaChevronLeft, FaChevronRight, FaRupeeSign, FaStar, FaRoute, FaCalendarAlt, FaWallet, FaUsers } from 'react-icons/fa';
 
 interface Message {
   id: number;
@@ -348,7 +345,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pt-16">
       {/* Cover and Profile Container */}
       <div className="relative">
         {/* Cover Image Section */}
@@ -392,20 +389,21 @@ export default function ProfilePage() {
             </p>
 
             {/* Stats */}
-            <div className="flex gap-10 mt-4 justify-center text-center">
-              <div>
+            <div className="grid grid-cols-3 gap-4 mt-4 text-center">
+              <div className="bg-gray-200 p-3">
                 <p className="text-lg font-semibold">{followersCount}</p>
                 <p className="text-gray-500 text-sm">Followers</p>
               </div>
-              <div>
+              <div className="bg-gray-200 p-3">
                 <p className="text-lg font-semibold">567</p>
                 <p className="text-gray-500 text-sm">Following</p>
               </div>
-              <div>
+              <div className="bg-gray-200 p-3">
                 <p className="text-lg font-semibold">15</p>
                 <p className="text-gray-500 text-sm">Trips Completed</p>
               </div>
             </div>
+
           </div>
 
           {/* Buttons */}
@@ -1010,7 +1008,7 @@ export default function ProfilePage() {
           Featured Travel Agency
         </h2>
 
-        <div className="grid grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {tripLeaders.slice(1).map((trip, index) => (
             <div
               key={index}
@@ -1025,7 +1023,7 @@ export default function ProfilePage() {
                 />
 
                 {/* Verified Badge */}
-                
+
                 {trip.verified && (
                   <div className="absolute top-3 right-3 bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
                     Verified
@@ -1095,7 +1093,7 @@ export default function ProfilePage() {
 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {trip.tags.slice(0, 3).map((tag, i) => (
+                  {trip.tags.slice(0, 2).map((tag, i) => (
                     <span
                       key={i}
                       className="bg-red-50 text-red-500 text-xs font-medium px-3 py-1 rounded-full"
@@ -1103,7 +1101,7 @@ export default function ProfilePage() {
                       {tag}
                     </span>
                   ))}
-                  {trip.tags.length > 3 && (
+                  {trip.tags.length > 2 && (
                     <span className="text-red-500 text-xs font-bold">...</span>
                   )}
                 </div>
