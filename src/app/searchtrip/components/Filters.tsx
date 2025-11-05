@@ -258,7 +258,7 @@ export default function Filters({
           className="mt-4 w-full bg-[#F76c6c] text-white py-2 rounded-lg font-semibold hover:bg-[#EB5757] transition"
         >
           Apply Filter
-        </button>
+        </button> 
       </div>
     </div>
   );

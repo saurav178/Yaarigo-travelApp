@@ -7,6 +7,14 @@ import { IoMdChatbubbles } from 'react-icons/io';
 import { MapPin, CalendarDays, Users } from "lucide-react";
 import { FaChevronLeft, FaChevronRight, FaRupeeSign, FaUser, FaStar } from "react-icons/fa";
 
+interface Message {
+  id: number;
+  message: string;
+  timestamp: string;
+  sender: string;
+  userId: string;
+}
+
 const user = {
   rating: "4.1",
   reviews: 410,
@@ -57,7 +65,6 @@ const upcomingTrips = [
     image: "https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=180&q=80",
     avatars: ["https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80", "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80", "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80"],
   },
-
   {
     id: 3,
     title: "Northern Lights in Iceland",
@@ -66,6 +73,24 @@ const upcomingTrips = [
     travelers: 4,
     image: "https://images.unsplash.com/photo-1539635278303-d4002c07eae3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=180&q=80",
     avatars: ["https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80", "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80", "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80", "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80"],
+  },
+  {
+    id: 4,
+    title: "Swiss Alps Hiking Expedition",
+    location: "Zurich, Switzerland",
+    date: "Feb 5 - Feb 12, 2026",
+    travelers: 4,
+    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=180&q=80",
+    avatars: ["https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80", "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80", "https://images.unsplash.com/photo-1527980965255-d3b416303d12?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80", "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80"],
+  },
+  {
+    id: 5,
+    title: "Paris Romantic Getaway",
+    location: "Paris, France",
+    date: "Mar 10 - Mar 17, 2026",
+    travelers: 2,
+    image: "https://images.unsplash.com/photo-1502602898536-47ad22581b52?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=180&q=80",
+    avatars: ["https://images.unsplash.com/photo-1520813792240-56fc4a3765a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80", "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80"],
   },
 ];
 
@@ -96,6 +121,24 @@ const pastTrips = [
     travelers: 4,
     image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=180&q=80",
     avatars: ["https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80", "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80", "https://images.unsplash.com/photo-1527980965255-d3b416303d12?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80", "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80"],
+  },
+  {
+    id: 5,
+    title: "Northern Lights in Iceland",
+    location: "Reykjavik, Iceland",
+    date: "Feb 10 - Feb 17, 2025",
+    travelers: 3,
+    image: "https://images.unsplash.com/photo-1539635278303-d4002c07eae3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=180&q=80",
+    avatars: ["https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80", "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80", "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80"],
+  },
+  {
+    id: 6,
+    title: "Paris Romantic Getaway",
+    location: "Paris, France",
+    date: "Mar 5 - Mar 12, 2025",
+    travelers: 2,
+    image: "https://images.unsplash.com/photo-1502602898536-47ad22581b52?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=180&q=80",
+    avatars: ["https://images.unsplash.com/photo-1520813792240-56fc4a3765a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80", "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80"],
   },
 ];
 
@@ -227,6 +270,57 @@ export default function ProfilePage() {
   const [imageIndexes, setImageIndexes] = useState(
     new Array(tripLeaders.length).fill(0)
   );
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followersCount, setFollowersCount] = useState(1234);
+
+  const handleSendMessage = async () => {
+    if (!newMessage.trim()) return;
+
+    setIsLoading(true);
+    const userMessage = {
+      id: Date.now(),
+      message: newMessage,
+      timestamp: new Date().toISOString(),
+      sender: 'user',
+      userId: 'current-user'
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setNewMessage('');
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: newMessage,
+          userId: 'current-user'
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setMessages(prev => [...prev, data.response]);
+      }
+    } catch (error) {
+      console.error('Failed to send message:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
 
   const handleNext = (index:number, total:number) => {
     const updated = [...currentImage];
@@ -300,7 +394,7 @@ export default function ProfilePage() {
             {/* Stats */}
             <div className="flex gap-10 mt-4 justify-center text-center">
               <div>
-                <p className="text-lg font-semibold">1234</p>
+                <p className="text-lg font-semibold">{followersCount}</p>
                 <p className="text-gray-500 text-sm">Followers</p>
               </div>
               <div>
@@ -316,11 +410,25 @@ export default function ProfilePage() {
 
           {/* Buttons */}
           <div className="flex gap-2 mr-4">
-            <button className="flex items-center justify-center gap-2 bg-red-500 text-white px-5 py-2 rounded-md hover:bg-red-600 hover:scale-105 transition-all duration-200">
+            <button onClick={() => setIsChatOpen(true)} className="flex items-center justify-center gap-2 bg-red-500 text-white px-5 py-2 rounded-md hover:bg-red-600 hover:scale-105 transition-all duration-200">
               <Image src="/chat-icon.png" alt="Chat" width={20} height={20} className="filter invert" /> Chat
             </button>
-            <button className="flex items-center justify-center gap-2 bg-red-500 text-white px-5 py-2 rounded-md hover:bg-red-600 hover:scale-105 transition-all duration-200">
-              <Image src="/join-trip.png" alt="Join Trip" width={20} height={20} className="filter invert" />  Follow
+            <button
+              onClick={() => {
+                const newFollowing = !isFollowing;
+                setIsFollowing(newFollowing);
+                setFollowersCount(prev => newFollowing ? prev + 1 : prev - 1);
+              }}
+              className={`flex items-center justify-center gap-2 px-5 py-2 rounded-md hover:scale-105 transition-all duration-200 ${
+                isFollowing
+                  ? 'bg-green-500 text-white hover:bg-green-600'
+                  : 'bg-red-500 text-white hover:bg-red-600'
+              }`}
+            >
+              {!isFollowing && (
+                <Image src="/join-trip.png" alt="Follow" width={20} height={20} className="filter invert" />
+              )}
+              {isFollowing ? 'Following' : 'Follow'}
             </button>
             <button className="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-md hover:scale-105 transition-all duration-200">
               <Image src="/view-trip.png" alt="View Trip" width={20} height={20} className="filter invert" /> Join Trip
@@ -481,8 +589,7 @@ export default function ProfilePage() {
 
             {activeTab === "Upcoming Trips" && (
               <section className="w-full max-w-5xl mx-auto mt-10 px-4">
-                
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 max-h-[800px] overflow-y-scroll">
                   {upcomingTrips.map((trip) => (
                     <div
                       key={trip.id}
@@ -490,11 +597,9 @@ export default function ProfilePage() {
                     >
                       {/* Trip Image */}
                       <div className="w-full md:w-1/3">
-                        <Image
+                        <img
                           src={trip.image}
                           alt={trip.title}
-                          width={300}
-                          height={180}
                           className="rounded-lg object-cover w-full h-[180px]"
                         />
                       </div>
@@ -559,7 +664,7 @@ export default function ProfilePage() {
                 
 
                 {/* Scrollable Container */}
-                <div className="flex flex-col gap-5 max-h-[600px] overflow-y-auto pr-2 scroll-smooth hide-scrollbar">
+                <div className="flex flex-col gap-5 max-h-[600px] overflow-y-auto pr-2 scroll-smooth">
                   {pastTrips.map((trip, index) => (
                     <div
                       key={trip.id}
@@ -617,17 +722,6 @@ export default function ProfilePage() {
                     </div>
                   ))}
                 </div>
-
-                {/* Scrollbar hide krne ke liye */}
-                <style jsx>{`
-                  .hide-scrollbar::-webkit-scrollbar {
-                    display: none;
-                  }
-                  .hide-scrollbar {
-                    -ms-overflow-style: none; /* IE and Edge */
-                    scrollbar-width: none; /* Firefox */
-                  }
-                `}</style>
               </section>
             )}
 
@@ -748,7 +842,7 @@ export default function ProfilePage() {
 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-2 mb-3">
-                  {t.tags.map((tag, i) => (
+                  {t.tags.slice(0, 3).map((tag, i) => (
                     <span
                       key={i}
                       className="bg-red-50 text-red-500 text-xs font-medium px-3 py-1 rounded-full"
@@ -756,6 +850,9 @@ export default function ProfilePage() {
                       {tag}
                     </span>
                   ))}
+                  {t.tags.length > 3 && (
+                    <span className="text-red-500 text-xs font-bold">...</span>
+                  )}
                 </div>
 
                 {/* Buttons */}
@@ -874,17 +971,20 @@ export default function ProfilePage() {
 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-2 mb-3">
-                  {t.tags.map((tag, i) => (
-                    <span
-                      key={i}
-                      className="bg-red-50 text-red-500 text-xs font-medium px-3 py-1 rounded-full"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+      {t.tags.slice(0, 3).map((tag, i) => (
+        <span
+          key={i}
+          className="bg-red-50 text-red-500 text-xs font-medium px-3 py-1 rounded-full"
+        >
+          {tag}
+        </span>
+      ))}
+      {t.tags.length > 3 && (
+        <span className="text-red-500 text-xs font-bold">...</span>
+      )}
+    </div>
 
-                {/* Buttons */}
+    {/* Buttons */}
                 <div className="flex gap-2 mb-3">
                   <button className="flex items-center justify-center gap-2 flex-1 border border-red-400 text-red-500 text-sm font-medium py-1.5 rounded-md hover:bg-red-50 hover:scale-105 transition-all duration-200">
                     <Image src="/view-profile.png" alt="View Profile" width={20} height={20} className="[filter:invert(0%)_sepia(100%)_saturate(7500%)_hue-rotate(0deg)_brightness(100%)_contrast(100%)]" /> View Profile
@@ -995,7 +1095,7 @@ export default function ProfilePage() {
 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {trip.tags.map((tag, i) => (
+                  {trip.tags.slice(0, 3).map((tag, i) => (
                     <span
                       key={i}
                       className="bg-red-50 text-red-500 text-xs font-medium px-3 py-1 rounded-full"
@@ -1003,6 +1103,9 @@ export default function ProfilePage() {
                       {tag}
                     </span>
                   ))}
+                  {trip.tags.length > 3 && (
+                    <span className="text-red-500 text-xs font-bold">...</span>
+                  )}
                 </div>
 
                 {/* Buttons */}
@@ -1019,6 +1122,63 @@ export default function ProfilePage() {
           ))}
         </div>
       </section>
+
+      {/* Chat Window Side Panel */}
+      <div className={`fixed top-0 right-0 h-full w-80 bg-white shadow-lg transform transition-transform duration-300 z-50 ${isChatOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        {/* Chat Header */}
+        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+          <h3 className="text-lg font-semibold">Chat with Jane Cooper</h3>
+          <button
+            onClick={() => setIsChatOpen(false)}
+            className="text-gray-500 hover:text-gray-700 text-xl"
+          >
+            ×
+          </button>
+        </div>
+
+        {/* Messages Area */}
+        <div className="flex-1 p-4 overflow-y-auto bg-gray-50">
+          {messages.length === 0 ? (
+            <div className="text-center text-gray-500 text-sm">
+              Start a conversation with Jane Cooper
+            </div>
+          ) : (
+            messages.map((msg) => (
+              <div key={msg.id} className={`mb-3 ${msg.sender === 'user' ? 'text-right' : 'text-left'}`}>
+                <div className={`inline-block px-3 py-2 rounded-lg max-w-xs ${msg.sender === 'user' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-800'}`}>
+                  {msg.message}
+                </div>
+                <div className="text-xs text-gray-400 mt-1">
+                  {new Date(msg.timestamp).toLocaleTimeString()}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Message Input */}
+        <div className="p-4 border-t border-gray-200">
+          <div className="flex gap-2">
+            <input
+              key="chat-input"
+              type="text"
+              placeholder="Type a message..."
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              onKeyPress={handleKeyPress}
+              disabled={isLoading}
+            />
+            <button
+              onClick={handleSendMessage}
+              disabled={isLoading || !newMessage.trim()}
+              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+            >
+              {isLoading ? 'Sending...' : 'Send'}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

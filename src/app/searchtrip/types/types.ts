@@ -1,17 +1,17 @@
-// types- for best matches...
+
 export type Trip = {
   id: string;
   name: string;
-  age?: number;
+  age?: number;           
   location?: string;
   from?: string;
-  price?: string;
+  to?: string;
+  price?: string | number;         
+  rating?: number;
+  duration?: string | number;     
   tags?: string[];
   match?: number;
-  days?: number;
-  avatar?: string;
   cover?: string;
-  
 };
 
 // types- for similar trips
@@ -20,14 +20,17 @@ export type Similar = {
   id: string;
   name: string;
   age?: number;
+  // maxAge?:number;
   location?: string;
   from?: string;
-  price?: string;
+  to?: string;
+  price?: string | number;
   tags?: string[];
   match?: number;
-  days?: number;
+  days?: string | number;
   avatar?: string;
   cover?: string;
+  rating: number;
   
 };
 
@@ -37,36 +40,38 @@ export type Leader = {
   id: string;
   name: string;
   age?: number;
+  // maxAge?:number;
   location?: string;
   from?: string;
-  price?: string;
+  to?: string;
+  price?: string | number;
   tags?: string[];
   match?: number;
-  days?: number;
+  days?: string | number;
   avatar?: string;
   cover?: string;
+  rating: number;
   
 };
 
 
 
-// types for agency---------
-
 export type Agency = {
   id: string;
   name: string;
-  tagline?: string;
+  // fields commonly used in your data (make optional if absent)
   description?: string;
-  rating?: number; // e.g. 4.1
-  trust?: "Verified" | "Moderate" | "Low";
+  rating?: number;
+  trust?: string;
+  verified?: boolean;
   tripsCount?: number;
-  verified: true,
   travelersCount?: number;
   years?: number;
   tags?: string[];
-  avatar?: string; // small square
-  cover?: string;  // wide cover image
-  agencies:[];
+  avatar?: string;
+  cover?: string;
+  
+  [key: string]: unknown;
 };
 
 // data-recommendations
@@ -75,12 +80,14 @@ export type Rec = {
   id: string;
   name: string;
   age?: number;
+  // maxAge?:number;
   location: string;
   from?: string;
   tags?: string[];
   match?: number;
-  price?: string;
-  days?: number;
+  price?: string | number;
+  days?: string | number;
   avatar?: string;
   cover?: string;
+  rating: number;
 };

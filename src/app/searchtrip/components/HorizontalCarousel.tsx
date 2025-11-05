@@ -1,6 +1,5 @@
 // HorizontalCarousel- for trip cards.
 
-// "use client";
 
 import { useRef, useState, useEffect, RefObject } from "react";
 

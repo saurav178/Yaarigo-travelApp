@@ -25,8 +25,7 @@ export default function TripCard({
   trip: Trip;
   compact?: boolean;
 }) {
-
- const router = useRouter(); 
+  const router = useRouter();
 
   const handleProfile = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // prevents form reload
@@ -37,7 +36,11 @@ export default function TripCard({
     name,
     age,
     location,
+    from,
+    to,
     price,
+    rating,
+    // days,
     tags = [],
     match = 88,
     cover = "/cover-placeholder.jpg",
@@ -91,7 +94,7 @@ export default function TripCard({
               <div className="text-sm font-medium ">{name}</div>
               {age && <span className="text-xl font-semibold">,{age}</span>}
               {/* <Image src={tick} alt="verified" className="w-4 h-4" /> */}
-              <Image src={verify} alt="alt"  className="w-14 mb-1" />
+              <Image src={verify} alt="alt" className="w-14 mb-1" />
             </div>
 
             {/* ✅ Location below */}
@@ -101,10 +104,14 @@ export default function TripCard({
 
             {/* ✅ Rating & Match % in one row */}
             <div className="flex items-center gap-2 -mb-1  relative w-full">
-              <div className="flex flex-center gap-1 bg-white/90 rounded-full px-2  py-1  w-full pl-2 pr-6">
-                <Image src={star} alt="rating" className="w-4 h-4 " />
-                <div className="text-xs font-semibold">4.1</div>
+             
+              <div className="flex items-center gap-1 bg-white/90 rounded-full px-2 py-1 w-full pl-2 pr-6">
+                <Image src={star} alt="rating" className="w-4 h-4" />
+                <div className="text-xs font-semibold">
+                  {rating?.toFixed(1) ?? "N/A"}
+                </div>
               </div>
+
               <div className="flex items-center gap-1 text-white bg-emerald-500 rounded-full px-2 py-1 w-full pl-2 pr-5">
                 <Image src={groups} alt="group" className="" />
                 <div className="text-xs font-semibold ">{match}%</div>
@@ -117,11 +124,12 @@ export default function TripCard({
       {/* Card bottom content */}
       <div className="px-2 py-3 flex flex-col h-[calc(100%-11rem)]">
         {/* Locations */}
+        
         <div className="flex items-center gap-3 text-xs text-gray-600">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full border border-gray-400" />
             <span className="text-xs text-gray-600">
-              Kolkata, West Bengal, India
+              {from ?? "Location not available"}
             </span>
           </div>
         </div>
@@ -133,7 +141,7 @@ export default function TripCard({
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-black" />
           <span className="text-xs text-gray-600">
-            Simla, Himachal Pradesh, India
+            {to ?? "Location not available"}
           </span>
         </div>
 
@@ -142,6 +150,7 @@ export default function TripCard({
           <Image src={calender} alt="alt" />
           <div className="text-xs text-gray-700 font-medium">
             Nov 15-25, 2025
+            {/* {days} */}
           </div>
           <Image src={money} alt="alt" className="ml-6" />
           <div className="ml-auto text-xs text-gray-700 font-medium">
@@ -165,10 +174,11 @@ export default function TripCard({
         <div className="mt-3">
           <div className="grid grid-cols-2 gap-3">
             {/* ✅ Profile View Icon with same color tone */}
-            <button 
-            type="submit"
-            onClick={handleProfile}
-            className="w-full flex items-center justify-center gap-2 text-[#F76c6c] border border-rose-200 rounded-lg py-2 text-sm bg-white font-medium hover:bg-rose-50 transition-all duration-200">
+            <button
+              type="submit"
+              onClick={handleProfile}
+              className="w-full flex items-center justify-center gap-2 text-[#F76c6c] border border-rose-200 rounded-lg py-2 text-sm bg-white font-medium hover:bg-rose-50 transition-all duration-200"
+            >
               <Image src={view} alt="View Profile" className="" />
               View Profile
             </button>
