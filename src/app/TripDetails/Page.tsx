@@ -1,5 +1,5 @@
 import TripDetailsPage from "./TripDetailsPage";
-import TripDetails from "./TripDetails";
+import TripDetails from "../triphighlight/TripDetails";
 
 export default function Page() {
   return (
