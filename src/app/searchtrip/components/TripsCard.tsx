@@ -29,7 +29,12 @@ export default function TripCard({
 
   const handleProfile = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // prevents form reload
-    router.push("/profile"); // navigates to /trip page
+    router.push("/profile"); // navigates to /profile page
+  };
+
+  const handleViewTrip = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault(); // prevents form reload
+    router.push("/TripViewDetails"); // navigates to /TripViewDetails page
   };
 
   const {
@@ -183,7 +188,11 @@ export default function TripCard({
               View Profile
             </button>
 
-            <button className="w-full flex items-center justify-center gap-2 text-[#F76c6c] border border-rose-200 rounded-lg py-2 text-sm bg-white font-medium hover:bg-rose-50 transition-all duration-200">
+            <button
+              type="button"
+              onClick={handleViewTrip}
+              className="w-full flex items-center justify-center gap-2 text-[#F76c6c] border border-rose-200 rounded-lg py-2 text-sm bg-white font-medium hover:bg-rose-50 transition-all duration-200"
+            >
               <Image src={trips} alt="View Trip" className="" />
               View Trip
             </button>
