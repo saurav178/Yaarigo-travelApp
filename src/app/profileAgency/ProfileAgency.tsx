@@ -284,6 +284,7 @@ export default function TripAgency() {
             </div>
 
             {/* ✅ Similar Agencies (updated as you wanted) */}
+            
             {similarAgencies.length > 0 && (
               <div className="space-y-3">
                 <h2 className="text-xl font-bold text-gray-900">
