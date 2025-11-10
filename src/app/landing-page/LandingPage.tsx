@@ -17,6 +17,8 @@ type Step = {
   image: string;
 };
 
+import { ROUTES } from "@/src/routes";
+
 export default function LandingPage() {
   const features = [
     {
@@ -66,7 +68,7 @@ export default function LandingPage() {
 
   const handleGoToTrip = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // prevents form reload
-    router.push("/searchtrip"); // navigates to /trip page
+    router.push(ROUTES.SEARCH_TRIP); // navigates to /trip page
   };
 
   return (
@@ -140,9 +142,13 @@ export default function LandingPage() {
                   </label>
                   <div
                     className="absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                    onClick={() =>
-                      document.getElementById("date")?.showPicker()
-                    }
+                    onClick={() => {
+                      // document.getElementById("date")?.showPicker()
+                      const inputEl = document.getElementById(
+                        "date"
+                      ) as HTMLInputElement | null;
+                      inputEl?.showPicker?.();
+                    }}
                   >
                     <Image
                       src="/images/calendar.png"
@@ -546,9 +552,10 @@ export default function LandingPage() {
               </div>
 
               {/* Stars */}
+
               <div className="flex mb-3">
                 {Array(5)
-                  .fill()
+                  .fill(null)
                   .map((_, idx) => (
                     <svg
                       key={idx}

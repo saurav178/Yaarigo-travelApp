@@ -18,6 +18,8 @@ import spot from "../../../../public/searchpageimg/3spots.png";
 import verify from "../../../../public/searchpageimg/Verfied Badge.png";
 // import level from "../../../public/searchpageimg/levelrating (1).png";
 
+import { ROUTES } from "@/src/routes";
+
 export default function TripCard({
   trip,
   compact = false,
@@ -29,12 +31,12 @@ export default function TripCard({
 
   const handleProfile = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // prevents form reload
-    router.push("/profile"); // navigates to /profile page
+    router.push(ROUTES.PROFILE); // navigates to /profile page
   };
 
   const handleViewTrip = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // prevents form reload
-    router.push("/TripViewDetails"); // navigates to /TripViewDetails page
+    router.push(ROUTES.TRIP_DETAILS); // navigates to /TripViewDetails page
   };
 
   const {
