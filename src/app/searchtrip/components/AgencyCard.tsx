@@ -10,12 +10,14 @@ import veritick from "../../../../public/searchpageimg/veritick.png";
 import tick from "../../../../public/searchpageimg/Group.png";
 import { useRouter } from "next/navigation";
 
+import { ROUTES } from "@/src/routes";
+
 export default function AgencyCard({ agency }: { agency: Agency }) {
   const router = useRouter();
 
   const handleProfileAgency = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // prevents form reload
-    router.push("/profileAgency"); // navigates to /trip page
+    router.push(ROUTES.PROFILE_AGENCY); // navigates to /trip page
   };
 
   const trust = agency.trust === "Verified" ? "High" : agency.trust;
