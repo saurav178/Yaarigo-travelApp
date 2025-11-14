@@ -4,7 +4,7 @@ import { upcomingTrips } from "../data/profileData";
 
 export default function UpcomingTripsTab() {
   return (
-    <section className="w-full max-w-5xl mx-auto mt-10 px-4">
+    <section className="w-full max-w-5xl mx-auto mt-4 px-4">
       <div className="flex flex-col gap-6 max-h-[800px] overflow-y-scroll">
         {upcomingTrips.map((trip) => (
           <div
