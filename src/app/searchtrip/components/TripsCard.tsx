@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
+import { useMemo } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Trip } from "@/src/app/searchtrip/types/types";
 import { useRouter } from "next/navigation";
@@ -26,6 +28,8 @@ export default function TripCard({
   compact?: boolean;
 }) {
   const router = useRouter();
+
+  const searchParams = useSearchParams(); // params use
 
   const handleProfile = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // prevents form reload
@@ -109,7 +113,6 @@ export default function TripCard({
 
             {/* ✅ Rating & Match % in one row */}
             <div className="flex items-center gap-2 -mb-1  relative w-full">
-             
               <div className="flex items-center gap-1 bg-white/90 rounded-full px-2 py-1 w-full pl-2 pr-6">
                 <Image src={star} alt="rating" className="w-4 h-4" />
                 <div className="text-xs font-semibold">
@@ -129,7 +132,7 @@ export default function TripCard({
       {/* Card bottom content */}
       <div className="px-2 py-3 flex flex-col h-[calc(100%-11rem)]">
         {/* Locations */}
-        
+
         <div className="flex items-center gap-3 text-xs text-gray-600">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full border border-gray-400" />
