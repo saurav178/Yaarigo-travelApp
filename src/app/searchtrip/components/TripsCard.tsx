@@ -1,12 +1,10 @@
 "use client";
-
+ 
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
-import { useMemo } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Trip } from "@/src/app/searchtrip/types/types";
 import { useRouter } from "next/navigation";
-
+ 
 import trips from "../../../../public/searchpageimg/view_trips.png";
 import view from "../../../../public/searchpageimg/view_profile.png";
 import join from "../../../../public/searchpageimg/join_trips.png";
@@ -19,9 +17,9 @@ import star from "../../../../public/searchpageimg/rating.png";
 import spot from "../../../../public/searchpageimg/3spots.png";
 import verify from "../../../../public/searchpageimg/Verfied Badge.png";
 // import level from "../../../public/searchpageimg/levelrating (1).png";
-
+ 
 import { ROUTES } from "@/src/routes";
-
+ 
 export default function TripCard({
   trip,
   compact = false,
@@ -30,19 +28,17 @@ export default function TripCard({
   compact?: boolean;
 }) {
   const router = useRouter();
-
-  const searchParams = useSearchParams(); // params use
-
+ 
   const handleProfile = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // prevents form reload
     router.push(ROUTES.PROFILE); // navigates to /profile page
   };
-
+ 
   const handleViewTrip = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // prevents form reload
     router.push(ROUTES.TRIP_DETAILS); // navigates to /TripViewDetails page
   };
-
+ 
   const {
     name,
     age,
@@ -56,7 +52,7 @@ export default function TripCard({
     match = 88,
     cover = "/cover-placeholder.jpg",
   } = trip;
-
+ 
   return (
     <article
       className={`w-full rounded-2xl overflow-hidden border border-gray-100 bg-white shadow-md transition-transform hover:-translate-y-1 ${
@@ -72,7 +68,7 @@ export default function TripCard({
           priority
         />
         <div className="absolute inset-0 from-transparent to-black/30" />
-
+ 
         {/* Arrows */}
         <button
           aria-label="Prev"
@@ -86,17 +82,17 @@ export default function TripCard({
         >
           <ChevronRight className="w-4 h-4" />
         </button>
-
+ 
         {/* Match badge */}
         <div className="absolute left-3 top-3 px-3 py-1 rounded-full bg-emerald-500 text-white text-xs font-semibold shadow-sm">
           {match}% Match
         </div>
-
+ 
         {/* Spots left */}
         <div className="absolute right-3 top-3 px-3 py-1 rounded-full bg-[#F76c6c] text-white text-xs font-medium shadow-sm flex items-center gap-2">
           <Image src={spot} alt="alt" />3 spots left
         </div>
-
+ 
         {/* Bottom overlay info */}
         <div className="absolute left-0 right-0 bottom-0 px-4 pb-4 pt-4 w-full">
           <div className="flex items-end justify-between w-full">
@@ -107,21 +103,22 @@ export default function TripCard({
               {/* <Image src={tick} alt="verified" className="w-4 h-4" /> */}
               <Image src={verify} alt="alt" className="w-14 mb-1" />
             </div>
-
+ 
             {/* ✅ Location below */}
             <div className="text-xs text-white/90 drop-shadow-sm w-full  flex justify-start items-center text-left -ml-27">
               {location}
             </div>
-
+ 
             {/* ✅ Rating & Match % in one row */}
             <div className="flex items-center gap-2 -mb-1  relative w-full">
+             
               <div className="flex items-center gap-1 bg-white/90 rounded-full px-2 py-1 w-full pl-2 pr-6">
                 <Image src={star} alt="rating" className="w-4 h-4" />
                 <div className="text-xs font-semibold">
                   {rating?.toFixed(1) ?? "N/A"}
                 </div>
               </div>
-
+ 
               <div className="flex items-center gap-1 text-white bg-emerald-500 rounded-full px-2 py-1 w-full pl-2 pr-5">
                 <Image src={groups} alt="group" className="" />
                 <div className="text-xs font-semibold ">{match}%</div>
@@ -130,11 +127,11 @@ export default function TripCard({
           </div>
         </div>
       </div>
-
+ 
       {/* Card bottom content */}
       <div className="px-2 py-3 flex flex-col h-[calc(100%-11rem)]">
         {/* Locations */}
-
+       
         <div className="flex items-center gap-3 text-xs text-gray-600">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full border border-gray-400" />
@@ -143,18 +140,18 @@ export default function TripCard({
             </span>
           </div>
         </div>
-
+ 
         <div>
           <Image src={line} alt="alt" className="h-2 ml-[5px]" />
         </div>
-
+ 
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-black" />
           <span className="text-xs text-gray-600">
             {to ?? "Location not available"}
           </span>
         </div>
-
+ 
         {/* Date & price */}
         <div className="mt-3 flex items-center gap-3 text-xs text-gray-600">
           <Image src={calender} alt="alt" />
@@ -167,7 +164,7 @@ export default function TripCard({
             {price ?? "₹15k - ₹50k"}
           </div>
         </div>
-
+ 
         {/* Tags */}
         <div className="mt-3 flex flex-wrap gap-2">
           {(tags.length ? tags : ["Beach", "Photography"]).map((t) => (
@@ -179,7 +176,7 @@ export default function TripCard({
             </span>
           ))}
         </div>
-
+ 
         {/* Buttons */}
         <div className="mt-3">
           <div className="grid grid-cols-2 gap-3">
@@ -192,7 +189,7 @@ export default function TripCard({
               <Image src={view} alt="View Profile" className="" />
               View Profile
             </button>
-
+ 
             <button
               type="button"
               onClick={handleViewTrip}
@@ -213,3 +210,4 @@ export default function TripCard({
     </article>
   );
 }
+ 
