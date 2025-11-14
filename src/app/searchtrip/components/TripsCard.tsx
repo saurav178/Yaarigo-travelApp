@@ -1,215 +1,338 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
-import { useMemo } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import type { Trip } from "@/src/app/searchtrip/types/types";
-import { useRouter } from "next/navigation";
+import Trip from "../../../../public/searchpageimg/view_trips.png";
+import Profile from "../../../../public/searchpageimg/view_profile.png";
+import Join from "../../../../public/searchpageimg/join_trips.png";
+// import Rating from "../../../../public/searchpageimg/Ratinghigh.png"
 
-import trips from "../../../../public/searchpageimg/view_trips.png";
-import view from "../../../../public/searchpageimg/view_profile.png";
-import join from "../../../../public/searchpageimg/join_trips.png";
-import money from "../../../../public/searchpageimg/currency.png";
-import calender from "../../../../public/searchpageimg/calender.png";
-import line from "../../../../public/searchpageimg/Line 1.png";
-import groups from "../../../../public/searchpageimg/Group.png";
-import star from "../../../../public/searchpageimg/rating.png";
-// import tick from "../../../public/searchpageimg/tickmarks.png";
-import spot from "../../../../public/searchpageimg/3spots.png";
-import verify from "../../../../public/searchpageimg/Verfied Badge.png";
-// import level from "../../../public/searchpageimg/levelrating (1).png";
+import {
+  FaMapMarkerAlt,
+  FaCalendarAlt,
+  FaCheckCircle,
+  FaHeart,
+  FaShieldAlt,
+  FaFlag,
+  FaExclamationTriangle,
+  FaWallet,
+} from "react-icons/fa";
+import { PiMedalDuotone } from "react-icons/pi";
+import { GoDotFill } from "react-icons/go";
 
-import { ROUTES } from "@/src/routes";
+const TRIPS_DEMO = [
+  {
+    id: 1,
+    title: "Weekend Hiking Adventure in the Alps",
+    description:
+      "Looking for 2-3 people to join me for an amazing hiking experience! We'll explore beautiful trails and camp under the stars.",
+    tags: ["Hiking", "Culture", "Adventure"],
+    from: "Kolkata, West Bengal",
+    to: "Simla, Himachal Pradesh",
+    travelersNeeded: 3,
+    price: "₹1,500 / person (shared costs)",
+    date: "Dec 15–25, 2025",
+    spotsLeft: 2,
 
-export default function TripCard({
-  trip,
-  compact = false,
-}: {
-  trip: Trip;
-  compact?: boolean;
-}) {
-  const router = useRouter();
+    host: {
+      name: "Sarah Johnson",
+      age: 18,
+      verified: true,
+      location: "Goa, India",
+      rating: 4.0,
+      match: 90,
+      safeScore: 90,
+      category: "Travel Enthusiast",
+    },
+    image:
+      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&q=80",
+  },
+  {
+    id: 2,
+    title: "Desert Safari Escape in Rajasthan",
+    description:
+      "Join us for a thrilling desert safari experience in Jaisalmer! Camel rides, star gazing, and camping in golden dunes await.",
+    tags: ["Adventure", "Camping", "Culture"],
+    from: "Ahmedabad, Gujarat",
+    to: "mumbai,india",
+    travelersNeeded: 4,
+    price: "₹20,000 / person (shared costs)",
+    date: "Jan 10–30, 2026",
+    spotsLeft: 1,
+    host: {
+      name: "Ravi Patel",
+      age: 30,
+      verified: true,
+      location: "Surat, India",
+      rating: 3.0,
+      match: 50,
+      safeScore: 50,
+      category: "Travel Enthusiast",
+    },
+    image:
+      "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=400&q=80",
+  },
+  {
+    id: 3,
+    title: "Coastal Yoga & Meditation Retreat",
+    description:
+      "Relax and rejuvenate by the beach with guided meditation, yoga sessions, and peaceful sunsets.",
+    tags: ["Wellness", "Beach", "Relaxation"],
+    from: "Mumbai, India",
+    to: "Gokarna, Karnataka",
+    travelersNeeded: 5,
+    price: "₹1,800 / person (shared costs)",
+    date: "Feb 5–9, 2026",
+    spotsLeft: 3,
+    host: {
+      name: "Ananya Verma",
+      age: 30,
+      verified: true,
+      location: "Bangalore, India",
+      rating: 4.7,
+      match: 90,
+      safeScore: 45,
+      category: "Travel Enthusiast",
+    },
+    image:
+      "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&q=80",
+  },
+];
 
-  const searchParams = useSearchParams(); // params use
+export default function TripCardList() {
+  const [likedTrips, setLikedTrips] = useState<number[]>([]);
 
-  const handleProfile = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault(); // prevents form reload
-    router.push(ROUTES.PROFILE); // navigates to /profile page
+  const toggleLike = (id: number) => {
+    setLikedTrips((prev) =>
+      prev.includes(id) ? prev.filter((tid) => tid !== id) : [...prev, id]
+    );
   };
 
-  const handleViewTrip = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault(); // prevents form reload
-    router.push(ROUTES.TRIP_DETAILS); // navigates to /TripViewDetails page
+  const getInitials = (name: string) =>
+    name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase();
+
+  const getCategoryStyle = (category: string) => {
+    switch (category) {
+      case "Travel Enthusiast":
+        return {
+          bg: "bg-blue-100 text-blue-800 border-blue-300",
+          avatarBg: "bg-blue-500 text-white",
+        };
+      case "Featured Trip Leader":
+        return {
+          bg: "bg-yellow-100 text-yellow-800 border-yellow-300",
+          avatarBg: "bg-yellow-500 text-white",
+        };
+      case "Trip Agency":
+        return {
+          bg: "bg-orange-100 text-orange-800 border-orange-300",
+          avatarBg: "bg-orange-500 text-white",
+        };
+      default:
+        return {
+          bg: "bg-gray-100 text-gray-800 border-gray-300",
+          avatarBg: "bg-gray-500 text-white",
+        };
+    }
   };
 
-  const {
-    name,
-    age,
-    location,
-    from,
-    to,
-    price,
-    rating,
-    // days,
-    tags = [],
-    match = 88,
-    cover = "/cover-placeholder.jpg",
-  } = trip;
+  const getSafeScoreStyle = (score: number) => {
+    if (score < 50)
+      return "bg-red-100 text-red-700 border border-red-300 px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
+    if (score < 75)
+      return "bg-yellow-100 text-yellow-800 border border-yellow-300 px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
+    return "bg-green-100 text-green-700 border border-green-300 px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
+  };
 
   return (
-    <article
-      className={`w-full rounded-2xl overflow-hidden border border-gray-100 bg-white shadow-md transition-transform hover:-translate-y-1 ${
-        compact ? "p-3" : "p-4"
-      }`}
-    >
-      <div className="relative h-44 rounded-lg overflow-hidden w-full">
-        <Image
-          src={cover}
-          alt={`${name} cover`}
-          fill
-          className="object-cover filter blur-sm scale-105"
-          priority
-        />
-        <div className="absolute inset-0 from-transparent to-black/30" />
+    <main className="w-[945px] flex flex-col items-center  space-y-6">
+      {TRIPS_DEMO.map((trip) => {
+        const catStyle = getCategoryStyle(trip.host.category);
 
-        {/* Arrows */}
-        <button
-          aria-label="Prev"
-          className="absolute left-2 top-1/2 -translate-y-1/2 z-20 rounded-full bg-black/40 p-1 text-white hover:bg-black/60"
-        >
-          <ChevronLeft className="w-4 h-4" />
-        </button>
-        <button
-          aria-label="Next"
-          className="absolute right-2 top-1/2 -translate-y-1/2 z-20 rounded-full bg-black/40 p-1 text-white hover:bg-black/60"
-        >
-          <ChevronRight className="w-4 h-4" />
-        </button>
+        return (
+          <div
+            key={trip.id}
+            className="flex justify-center w-full bg-gray-50 py-4"
+          >
+            {/* Each card has its own container now */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden w-[954px] h-[349px]">
+              {/* Left Image */}
+              <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
+                <img
+                  src={trip.image}
+                  alt={trip.title}
+                  className="w-full h-full object-cover"
+                />
 
-        {/* Match badge */}
-        <div className="absolute left-3 top-3 px-3 py-1 rounded-full bg-emerald-500 text-white text-xs font-semibold shadow-sm">
-          {match}% Match
-        </div>
+                {/* Match Badge */}
+                <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
+                  {trip.host.match}% Match
+                </div>
 
-        {/* Spots left */}
-        <div className="absolute right-3 top-3 px-3 py-1 rounded-full bg-[#F76c6c] text-white text-xs font-medium shadow-sm flex items-center gap-2">
-          <Image src={spot} alt="alt" />3 spots left
-        </div>
+                {/* Like Button */}
+                <button
+                  onClick={() => toggleLike(trip.id)}
+                  className={`absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full transition ${
+                    likedTrips.includes(trip.id)
+                      ? "text-rose-500"
+                      : "text-white"
+                  }`}
+                >
+                  <FaHeart size={18} />
+                </button>
+              </div>
 
-        {/* Bottom overlay info */}
-        <div className="absolute left-0 right-0 bottom-0 px-4 pb-4 pt-4 w-full">
-          <div className="flex items-end justify-between w-full">
-            {/* ✅ Name, Age & Tick in one row (no wrapping, no scroll) */}
-            <div className="flex items-center gap-2 text-white pb-0 w-fit whitespace-nowrap mb-5">
-              <div className="text-sm font-medium ">{name}</div>
-              {age && <span className="text-xl font-semibold">,{age}</span>}
-              {/* <Image src={tick} alt="verified" className="w-4 h-4" /> */}
-              <Image src={verify} alt="alt" className="w-14 mb-1" />
-            </div>
+              {/* Right Content */}
+              <div className="flex-1 p-4">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h2 className="text-lg font-semibold text-gray-900 leading-tight mb-2">
+                      {trip.title}
+                    </h2>
+                    <p className="text-gray-600 text-sm mt-1 line-clamp-2 mb-1">
+                      {trip.description}
+                    </p>
+                  </div>
 
-            {/* ✅ Location below */}
-            <div className="text-xs text-white/90 drop-shadow-sm w-full  flex justify-start items-center text-left -ml-27">
-              {location}
-            </div>
+                  <div className="flex items-center gap-1 mb-1">
+                    <span className="flex gap-2 items-center bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
+                      <FaExclamationTriangle /> {trip.spotsLeft} spots left
+                    </span>
+                  </div>
+                </div>
 
-            {/* ✅ Rating & Match % in one row */}
-            <div className="flex items-center gap-2 -mb-1  relative w-full">
-              <div className="flex items-center gap-1 bg-white/90 rounded-full px-2 py-1 w-full pl-2 pr-6">
-                <Image src={star} alt="rating" className="w-4 h-4" />
-                <div className="text-xs font-semibold">
-                  {rating?.toFixed(1) ?? "N/A"}
+                {/* Tags */}
+                <div className="flex flex-wrap gap-2 mt-2 mb-2">
+                  {trip.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="bg-gray-100 text-gray-700 text-xs font-medium px-2 py-0.5 rounded-md"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Trip Info */}
+                <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600 mt-3 mb-2">
+                  <div className="flex items-center gap-1">
+                    <GoDotFill className="text-black" /> {trip.from}
+                  </div>
+                  <span className="text-gray-400">→</span>
+                  <div className="flex items-center gap-1">
+                    <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-16 mt-1 text-sm text-gray-600 mb-2">
+                  <div className="flex items-center gap-2">
+                    <FaCalendarAlt className="text-gray-400" />
+                    <div>{trip.date}</div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <FaWallet />
+                    <div>{trip.price}</div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 mt-2 text-sm text-gray-600">
+                  <FaFlag /> <span>30 Trips Completed</span>
+                </div>
+
+                <hr className="my-3 mt-10" />
+
+                {/* Host Info */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3 relative">
+                    <div
+                      className={`relative w-12 h-12 flex items-center justify-center rounded-full font-semibold text-sm border ${catStyle.avatarBg}`}
+                    >
+                      {getInitials(trip.host.name)}
+
+                      {trip.host.category !== "Travel Enthusiast" && (
+                        <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow">
+                          <PiMedalDuotone
+                            className={`${
+                              trip.host.category === "Featured Trip Leader"
+                                ? "text-yellow-500"
+                                : "text-orange-500"
+                            }`}
+                            size={12}
+                          />
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">
+                        {trip.host.name}, {trip.host.age}{" "}
+                        {trip.host.verified && (
+                          <FaCheckCircle className="inline text-sky-500 ml-1" />
+                        )}
+                      </p>
+
+                      <div className="flex items-center gap-2 mt-1">
+                        <div
+                          className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-md font-medium ${catStyle.bg}`}
+                        >
+                          {trip.host.category}
+                        </div>
+                        <span
+                          className={getSafeScoreStyle(trip.host.safeScore)}
+                        >
+                          <FaShieldAlt /> {trip.host.safeScore}% Safe
+                        </span>
+                      </div>
+
+                      <p className="text-xs text-gray-600 mt-1">
+                        {trip.host.location} • ⭐ {trip.host.rating}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button className="bg-[#1D4350] text-white text-xs px-4 py-2 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-28">
+                      <Image
+                        src={Trip}
+                        alt="View Trip Icon"
+                        width={10}
+                        height={10}
+                        className="mr-1 filter brightness-0 invert"
+                      />{" "}
+                      View Trip
+                    </button>
+                    <button className="bg-[#1D4350] text-white text-xs px-4 py-2 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-28">
+                      <Image
+                        src={Join}
+                        alt="Join Trip Icon"
+                        width={20}
+                        height={20}
+                        className="mr-1 filter brightness-0 invert"
+                      />{" "}
+                      Join Trip
+                    </button>
+                    <button className="bg-[#1D4350] text-white text-xs px-4 py-2 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-28">
+                      <Image
+                        src={Profile}
+                        alt="View Profile Icon"
+                        width={12}
+                        height={12}
+                        className="mr-1 filter brightness-0 invert"
+                      />{" "}
+                      View Profile
+                    </button>
+                  </div>
                 </div>
               </div>
-
-              <div className="flex items-center gap-1 text-white bg-emerald-500 rounded-full px-2 py-1 w-full pl-2 pr-5">
-                <Image src={groups} alt="group" className="" />
-                <div className="text-xs font-semibold ">{match}%</div>
-              </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Card bottom content */}
-      <div className="px-2 py-3 flex flex-col h-[calc(100%-11rem)]">
-        {/* Locations */}
-
-        <div className="flex items-center gap-3 text-xs text-gray-600">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full border border-gray-400" />
-            <span className="text-xs text-gray-600">
-              {from ?? "Location not available"}
-            </span>
-          </div>
-        </div>
-
-        <div>
-          <Image src={line} alt="alt" className="h-2 ml-[5px]" />
-        </div>
-
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-black" />
-          <span className="text-xs text-gray-600">
-            {to ?? "Location not available"}
-          </span>
-        </div>
-
-        {/* Date & price */}
-        <div className="mt-3 flex items-center gap-3 text-xs text-gray-600">
-          <Image src={calender} alt="alt" />
-          <div className="text-xs text-gray-700 font-medium">
-            Nov 15-25, 2025
-            {/* {days} */}
-          </div>
-          <Image src={money} alt="alt" className="ml-6" />
-          <div className="ml-auto text-xs text-gray-700 font-medium">
-            {price ?? "₹15k - ₹50k"}
-          </div>
-        </div>
-
-        {/* Tags */}
-        <div className="mt-3 flex flex-wrap gap-2">
-          {(tags.length ? tags : ["Beach", "Photography"]).map((t) => (
-            <span
-              key={t}
-              className="text-xs bg-rose-50 text-[#f76c6c] px-3 py-1 rounded-full"
-            >
-              {t}
-            </span>
-          ))}
-        </div>
-
-        {/* Buttons */}
-        <div className="mt-3">
-          <div className="grid grid-cols-2 gap-3">
-            {/* ✅ Profile View Icon with same color tone */}
-            <button
-              type="submit"
-              onClick={handleProfile}
-              className="w-full flex items-center justify-center gap-2 text-[#F76c6c] border border-rose-200 rounded-lg py-2 text-sm bg-white font-medium hover:bg-rose-50 transition-all duration-200"
-            >
-              <Image src={view} alt="View Profile" className="" />
-              View Profile
-            </button>
-
-            <button
-              type="button"
-              onClick={handleViewTrip}
-              className="w-full flex items-center justify-center gap-2 text-[#F76c6c] border border-rose-200 rounded-lg py-2 text-sm bg-white font-medium hover:bg-rose-50 transition-all duration-200"
-            >
-              <Image src={trips} alt="View Trip" className="" />
-              View Trip
-            </button>
-          </div>
-          <div className="relative mt-3">
-            <button className="w-full flex items-center justify-center gap-2 bg-[#F76c6c] text-white rounded-lg py-2 font-semibold hover:bg-[#EB5757] transition-all duration-200 shadow-sm hover:shadow-md">
-              <Image src={join} alt="Join Trip" />
-              Join Trip
-            </button>
-          </div>
-        </div>
-      </div>
-    </article>
+        );
+      })}
+    </main>
   );
 }

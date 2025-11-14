@@ -2,12 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "../components/Header";
-import Footer from "../components/Footer"; // <-- Add this
-import GlobalLayout from "./components/layout/GlobalLayout";
-import { AuthProvider } from "../context/AuthContext";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
+import Footer from "../components/Footer"; 
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,27 +21,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Header />
-        
-        {/* Page Content */}
         {children}
-
-        {/* ✅ Footer always shows at the bottom on every page */}
-        <Footer />
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        style={{ margin: 0, fontFamily: "sans-serif", background: "#000" }}
-      >
-        <AuthProvider>
-        <GlobalLayout>{children}</GlobalLayout>
-        <ToastContainer position="top-right" autoClose={3000} /> 
-        </AuthProvider>
+        <Footer /> {/* ← Footer is now correctly added */}
       </body>
     </html>
   );
