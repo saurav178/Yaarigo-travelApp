@@ -1,5 +1,5 @@
 import { FaFacebookF, FaTwitter, FaLink } from "react-icons/fa";
-
+ 
 const ShareThisTrip = () => {
   return (
     <div className="border rounded-xl p-5 bg-white shadow-sm">
@@ -16,12 +16,14 @@ const ShareThisTrip = () => {
             <FaLink />
           </button>
         </div>
-        <button className="px-4 py-1 border rounded-lg text-sm font-medium hover:bg-gray-100">
-          Copy
-        </button>
+    <button className="px-4 py-1 border rounded-lg text-sm font-medium bg-[#121212] text-white hover:bg-[#2a2a2a]">
+  Copy
+</button>
       </div>
     </div>
   );
 };
-
+ 
 export default ShareThisTrip;
+ 
+ 
