@@ -118,7 +118,7 @@ export default function ProfileHeader({
           <div className="flex items-center justify-center ml-0">
             <h2 className="text-2xl font-semibold flex items-center gap-2">
               Jane Cooper
-              <span className="bg-emerald-500 text-white text-xs px-2 py-1 rounded-md flex items-center gap-1">
+              <span className="bg-emerald-500 text-white text-xs px-2 py-1 rounded-full  flex items-center gap-1">
                 <Image
                   src="/ic_baseline-check-circle-outline.png"
                   alt="Verified"
@@ -145,9 +145,9 @@ export default function ProfileHeader({
               }}
             />
             4.1 (410 reviews){" "}
-            <span className="font-medium bg-green-100 text-green-700 rounded-sm px-2 py-1 inline-flex items-center ml-4">
+            <span className="font-medium bg-green-100 text-green-700 rounded-full px-2 py-1 inline-flex items-center ml-4">
               <FaShieldAlt className="text-green-600 mr-1" size={16} />
-              88% Safe 
+              88% Safe
             </span>
           </div>
 

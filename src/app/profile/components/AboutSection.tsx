@@ -22,7 +22,7 @@ export default function AboutSection() {
         />{" "}
         Languages
       </h4>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 ">
         {["English", "Spanish", "Ukrainian"].map((lang) => (
           <span
             key={lang}
@@ -33,7 +33,7 @@ export default function AboutSection() {
         ))}
       </div>
 
-      <h4 className=" mt-2 mb-1"> Travel Style</h4>
+      <h4 className=" mt-6 mb-1"> Travel Style</h4>
       <div className="flex flex-wrap gap-2">
         {["Adventure", "Cultural", "Budget-friendly"].map((style) => (
           <span
@@ -45,7 +45,7 @@ export default function AboutSection() {
         ))}
       </div>
 
-      <h4 className=" mt-2 mb-1"> Interests</h4>
+      <h4 className=" mt-6 mb-1"> Interests</h4>
       <div className="flex flex-wrap gap-2">
         {["Hiking", "Photography", "Local cuisine"].map((interest) => (
           <span
