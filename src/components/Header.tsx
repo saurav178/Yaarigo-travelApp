@@ -10,62 +10,64 @@ export default function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50); // change color after scrolling 50px
+      setIsScrolled(window.scrollY > 50);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Detect if we're on the landing/hero page (adjust path if needed)
   const isHeroPage = pathname === "/" || pathname === "/landing-page";
 
   return (
     <header
       className={`w-full fixed top-0 z-50 transition-all duration-300 ${
         isHeroPage && !isScrolled
-          ? "bg-transparent text-white"
-          : "bg-white text-gray-800 shadow-sm border-b border-gray-100"
+          ? "bg-gradient-to-b from-black/40 to-transparent text-white"
+          : "bg-white text-gray-800 shadow-md border-b border-gray-100"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo */}
         <Link
           href="/"
-          className={`text-xl font-bold ${
-            isHeroPage && !isScrolled ? "text-white" : "text-red-500"
+          className={`text-xl font-bold tracking-tight ${
+            isHeroPage && !isScrolled
+              ? "text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]"
+              : "text-[#1D4350]"
           }`}
         >
           Travio.
         </Link>
 
-        {/* Nav Links */}
+        {/* Navigation */}
         <nav
-          className={`hidden md:flex items-center space-x-18 text-sm ${
-            isHeroPage && !isScrolled ? "text-white" : "text-gray-800"
+          className={`hidden md:flex items-center space-x-24 text-sm font-medium ${
+            isHeroPage && !isScrolled
+              ? "text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]"
+              : "text-gray-800"
           }`}
         >
-          <Link href="/my-trips" className="hover:text-red-500">
-            My Trips
+          <Link href="/my-trips" className="hover:text-red-500 transition">
+            About Us
           </Link>
-          <Link href="/explore" className="hover:text-red-500">
+          <Link href="/explore" className="hover:text-red-500 transition">
             Explore Trips
           </Link>
-          <Link href="/nearby" className="hover:text-red-500">
+          {/* <Link href="/nearby" className="hover:text-red-500 transition">
             Nearby Essentials
-          </Link>
-          <Link href="/community" className="hover:text-red-500">
-            Community
+          </Link> */}
+          <Link href="/community" className="hover:text-red-500 transition">
+            How it Works
           </Link>
         </nav>
 
         {/* Login Button */}
         <Link
           href="/login"
-          className={`text-sm px-4 py-2 rounded-full shadow transition ${
+          className={`text-sm px-4 py-2 rounded-full shadow-md transition font-semibold ${
             isHeroPage && !isScrolled
-              ? "bg-white text-red-500 hover:bg-gray-100"
-              : "bg-red-500 hover:bg-red-600 text-white"
+              ? "bg-white text-[#0073B9] hover:bg-gray-100"
+              : "bg-[#1D4350] hover:bg-[#1DA69B] text-white"
           }`}
         >
           Log In
