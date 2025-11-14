@@ -67,7 +67,7 @@ export default function Header() {
           className={`text-sm px-4 py-2 rounded-full shadow-md transition font-semibold ${
             isHeroPage && !isScrolled
               ? "bg-white text-[#0073B9] hover:bg-gray-100"
-              : "bg-[#1D4350] hover:bg-[#0073B9] text-white"
+              : "bg-[#1D4350] hover:bg-[#1DA69B] text-white"
           }`}
         >
           Log In
