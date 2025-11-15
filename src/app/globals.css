@@ -25,7 +25,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-<<<<<<< HEAD
+/* Animations */
 @keyframes slide-up {
   0% {
     opacity: 0;
@@ -41,7 +41,7 @@ body {
   animation: slide-up 0.3s ease-out;
 }
 
-/* Layout specific styles */
+/* Layout styles */
 .layout-container {
   min-height: 100vh;
   display: flex;
@@ -53,7 +53,7 @@ body {
   display: flex;
 }
 
-/* Responsive utilities */
+/* Mobile overlay */
 .mobile-menu-overlay {
   position: fixed;
   top: 0;
@@ -64,7 +64,7 @@ body {
   z-index: 40;
 }
 
-/* Custom scrollbar */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -82,13 +82,13 @@ body {
   background: #a8a8a8;
 }
 
-/* Focus styles for accessibility */
+/* Accessibility */
 .focus-visible:focus-visible {
   outline: 2px solid #2563eb;
   outline-offset: 2px;
 }
 
-/* Animation utilities */
+/* Smooth transitions */
 .transition-smooth {
   transition: all 0.3s ease-in-out;
 }
@@ -100,24 +100,24 @@ body {
   }
 }
 
-
+/* Buttons */
 button {
   background-color: #3B82F6;
   color: #0f0f0f;
   padding: 0.5rem 1rem;
-  border-radius: 0.375rem; /* rounded-md */
+  border-radius: 0.375rem;
   font-weight: 500;
   transition: background-color 0.2s ease;
 }
 button:hover {
-  background-color: #2563EB; /* Darker blue */
+  background-color: #2563EB;
 }
 
-
+/* Modal */
 div.modal {
-  position: fixed; /* sticky/absolute ki jagah */
+  position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4); /* optional overlay */
+  background: rgba(0,0,0,0.4);
   display: flex;
   justify-content: center;
   align-items: start;
@@ -125,8 +125,7 @@ div.modal {
   z-index: 50;
 }
 
-/* this changes only for landing-pages */
-
+/* Landing page styles */
 .landing-h1 {
   font-size: 4rem;
   font-weight: 700;
@@ -134,7 +133,4 @@ div.modal {
 
 .landing-p {
   font-size: 1.5rem;
-
 }
-=======
->>>>>>> parent of 661db21 (Merge branch 'develop' of https://github.com/cepialabs/travio-fe into feature/New_Trip_Details)
