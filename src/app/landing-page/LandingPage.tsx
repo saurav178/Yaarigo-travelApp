@@ -11,7 +11,7 @@ type Step = {
   image: string;
 };
 
-import { ROUTES } from "@/src/routes";
+import { ROUTES } from "@/routes";
 
 export default function LandingPage() {
   const features = [

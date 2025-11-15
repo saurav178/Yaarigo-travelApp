@@ -191,9 +191,11 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80">
                 {/* Left Image */}
                 <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
-                  <Image
+                  <img
                     src={trip.image}
                     alt={trip.title}
+                    // width={0}
+                    // height={0}
                     className="w-full h-full object-cover"
                   />
 
@@ -345,13 +347,17 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                         />{" "}
                         Join Trip
                       </button>
-                      <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
+                      <button 
+                      //  type="button"
+                      //   onClick={handleGoToTrip}
+                      className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
                         <Image
                           src={Profile}
                           alt="View Profile Icon"
                           width={12}
                           height={12}
                           className="mr-1 filter brightness-0 invert"
+                         
                         />{" "}
                         View Profile
                       </button>

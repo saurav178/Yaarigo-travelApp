@@ -109,6 +109,8 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
         <img
           src={agency.image} // Using 'image' from your trip data
           alt={agency.title}
+          // width={0}
+          // height={0}
           className="w-full h-full object-cover"
         />
 
