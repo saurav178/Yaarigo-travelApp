@@ -1,15 +1,10 @@
 
-// components/AgencyCarousel
-
 "use client";
 
-// Make sure the import path to AgencyCard is correct relative to this file
+import AgencyCard, { Agency } from "./AgencyCard";
 
-import AgencyCard, { Agency } from "./AgencyCard"; // Import both the component and the type
-
-// Sample data for agencies, now matching your 'trip' object structure
-
-const AGENCIES_DEMO: Agency[] = [
+// Sample data for agencies
+export const AGENCIES_DEMO: Agency[] = [
   {
     id: 1,
     title: "Weekend Hiking Adventure in the Alps",
@@ -137,14 +132,20 @@ const AGENCIES_DEMO: Agency[] = [
   },
 ];
 
-export default function AgencyCarousel() {
+type AgencyCarouselProps = {
+  agencies?: Agency[];
+};
+
+export default function AgencyCarousel({
+  agencies = AGENCIES_DEMO,
+}: AgencyCarouselProps) {
   return (
-    <div className="w-full max-w-7xl mx-auto">
-      <div className="flex flex-col items-center gap-8">
-        {AGENCIES_DEMO.map((agency) => (
+    <main className="flex flex-col items-center w-[949px] min-h-screen flex-1">
+      <div className="w-[99%] max-w-5xl flex flex-col gap-6">
+        {agencies.map((agency) => (
           <section
             key={agency.id}
-            className="w-full flex justify-center px-4"
+            className="w-full flex justify-center"
             aria-labelledby={`agency-${agency.id}-heading`}
           >
             <div className="w-full max-w-3xl">
@@ -153,6 +154,6 @@ export default function AgencyCarousel() {
           </section>
         ))}
       </div>
-    </div>
+    </main>
   );
 }

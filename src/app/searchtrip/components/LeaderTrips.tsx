@@ -1,11 +1,11 @@
+
 "use client";
 
 import { useState } from "react";
 import Image from "next/image";
-import Trip from "../../../../public/searchpageimg/view_trips.png";
+import TripImg from "../../../../public/searchpageimg/view_trips.png";
 import Profile from "../../../../public/searchpageimg/view_profile.png";
 import Join from "../../../../public/searchpageimg/join_trips.png";
-// import Rating from "../../../../public/searchpageimg/Ratinghigh.png"
 import {
   FaMapMarkerAlt,
   FaCalendarAlt,
@@ -19,7 +19,31 @@ import {
 import { PiMedalDuotone } from "react-icons/pi";
 import { GoDotFill } from "react-icons/go";
 
-const LEADERS_DEMO = [
+export type Leader = {
+  id: number;
+  title: string;
+  description: string;
+  tags: string[];
+  from: string;
+  to: string;
+  travelersNeeded: number;
+  price: string;
+  date: string;
+  spotsLeft: number;
+  host: {
+    name: string;
+    age: number;
+    verified: boolean;
+    location: string;
+    rating: number;
+    match: number;
+    safeScore: number;
+    category: string;
+  };
+  image: string;
+};
+
+export const LEADERS_DEMO: Leader[] = [
   {
     id: 1,
     title: "Weekend Hiking Adventure in the Alps",
@@ -97,7 +121,12 @@ const LEADERS_DEMO = [
   },
 ];
 
-export default function TripCardList() {
+type LeaderTripsProps = {
+  leaders?: Leader[];
+  compact?: boolean;
+};
+
+export default function LeaderTrips({ leaders = LEADERS_DEMO }: LeaderTripsProps) {
   const [likedTrips, setLikedTrips] = useState<number[]>([]);
 
   const toggleLike = (id: number) => {
@@ -143,13 +172,13 @@ export default function TripCardList() {
       return "bg-red-100 text-red-700 border border-red-300 px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
     if (score < 75)
       return "bg-yellow-100 text-yellow-800 border border-yellow-300 px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
-    return "bg-green-100 text-green-700 border border-green-300 px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
+    return "bg-green-100 text-green-700 border-green-300 border px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
   };
 
   return (
-    <main className=" flex flex-col items-center w-[950px]  min-h-screen flex-1">
+    <main className="flex flex-col items-center w-[949px] min-h-screen flex-1">
       <div className="w-[99%] max-w-5xl flex flex-col gap-6">
-        {LEADERS_DEMO.map((trip) => {
+        {leaders.map((trip) => {
           const catStyle = getCategoryStyle(trip.host.category);
 
           return (
@@ -158,7 +187,6 @@ export default function TripCardList() {
               className="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80"
             >
               {/* Left Image */}
-
               <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
                 <img
                   src={trip.image}
@@ -245,7 +273,7 @@ export default function TripCardList() {
 
                 <hr className="my-3 mt-6" />
 
-                {/* Host Info heere */}
+                {/* Host Info here */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3 relative">
                     {/* Host Initials Avatar */}
@@ -254,7 +282,7 @@ export default function TripCardList() {
                     >
                       {getInitials(trip.host.name)}
 
-                      {/* Badge only for  some categories he */}
+                      {/* Badge only for some categories */}
                       {trip.host.category !== "Travel Enthusiast" && (
                         <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow">
                           <PiMedalDuotone
@@ -283,9 +311,7 @@ export default function TripCardList() {
                         >
                           {trip.host.category}
                         </div>
-                        <span
-                          className={getSafeScoreStyle(trip.host.safeScore)}
-                        >
+                        <span className={getSafeScoreStyle(trip.host.safeScore)}>
                           <FaShieldAlt /> {trip.host.safeScore}% Safe
                         </span>
                       </div>
@@ -299,7 +325,7 @@ export default function TripCardList() {
                   <div className="flex gap-1 ">
                     <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
                       <Image
-                        src={Trip}
+                        src={TripImg}
                         alt="View Trip Icon"
                         width={10}
                         height={10}

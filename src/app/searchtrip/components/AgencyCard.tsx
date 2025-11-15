@@ -102,9 +102,10 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
 
   return (
     // Changed fixed width/height to responsive max-width, min-height
-    <div className=" bg-white rounded-xl shadow-sm h-80 flex flex-col sm:flex-row   ">
+    
+    <div className=" bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 -ml-20 w-[949px] ">
       {/* Left Image Section */}
-      <div className="relative flex shrink-0 w-full sm:w-64 md:w-72  sm:h-auto rounded-bl-md">
+      <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
         <img
           src={agency.image} // Using 'image' from your trip data
           alt={agency.title}
@@ -197,7 +198,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
             </span>
           </div>
 
-          <hr className="my-3 mt-6" />
+          <hr className="my-3 mt-5" />
         </div>
 
         {/* Host Info & Actions */}
@@ -233,7 +234,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
               </p>
               <div className="flex items-center gap-2 mt-1">
                 <div
-                  className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-md font-medium ${catStyle.bg}`}
+                  className={`flex items-center  text-xs px-2 py-0.5 rounded-md font-medium ${catStyle.bg}`}
                 >
                   {agency.host.category}
                 </div>
@@ -248,7 +249,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
           </div>
 
           <div className="flex gap-2">
-            <button className="bg-[#1D4350] text-white text-xs px- py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-28">
+            <button className="bg-[#1D4350] text-white text-xs px- py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-26">
               <Image
                 src={Trip}
                 alt="View Trip Icon"
@@ -282,5 +283,6 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
         </div>
       </div>
     </div>
+   
   );
 }

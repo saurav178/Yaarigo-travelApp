@@ -1,3 +1,6 @@
+
+
+
 export type Trip = {
   id: number;
   title: string;
@@ -10,6 +13,13 @@ export type Trip = {
   date: string;
   spotsLeft: number;
   compact: boolean;
+  minAge?: number;
+  maxAge?: number;
+  durationDays?: number;
+  budget?: number;
+  interest?: string;
+  tripType?: string;
+  foodPref?: string;
   host: {
     name: string;
     age: number;
@@ -35,6 +45,13 @@ export type Leader = {
   date: string;
   spotsLeft: number;
   compact: boolean;
+  minAge?: number;
+  maxAge?: number;
+  durationDays?: number;
+  budget?: number;
+  interest?: string;
+  tripType?: string;
+  foodPref?: string;
   host: {
     name: string;
     age: number;
@@ -59,6 +76,13 @@ export type Agency = {
   price: string;
   date: string;
   spotsLeft: number;
+  minAge?: number;
+  maxAge?: number;
+  durationDays?: number;
+  budget?: number;
+  interest?: string;
+  tripType?: string;
+  foodPref?: string;
   host: {
     name: string;
     age: number;
