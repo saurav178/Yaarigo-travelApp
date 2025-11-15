@@ -1,24 +1,14 @@
-
 // searchtrip/ main-page
 
 "use client";
 
 import { useMemo, useState } from "react";
+import Similar from "./components/Similar";
 import { Flame } from "lucide-react";
-import TripCard, {
-  TRIPS_DEMO,
-  Trip,
-} from "./components/TripsCard";
-import LeaderTrips, {
-  LEADERS_DEMO,
-  Leader,
-} from "./components/LeaderTrips";
-import AgencyCarousel, {
-  AGENCIES_DEMO,
-} from "./components/AgencyCarousel";
-import Filters, {
-  FilterPayload,
-} from "./components/Filters";
+import TripCard, { TRIPS_DEMO, Trip } from "./components/TripsCard";
+import LeaderTrips, { LEADERS_DEMO, Leader } from "./components/LeaderTrips";
+import AgencyCarousel, { AGENCIES_DEMO } from "./components/AgencyCarousel";
+import Filters, { FilterPayload } from "./components/Filters";
 import type { Agency } from "./components/AgencyCard";
 
 type ActiveFilter = "all" | "best" | "agency" | "leader";
@@ -88,7 +78,15 @@ export default function Page() {
 
       return true;
     });
-  }, [query, hasAppliedFilters, minRating, minSafeScore, age, budget, duration]);
+  }, [
+    query,
+    hasAppliedFilters,
+    minRating,
+    minSafeScore,
+    age,
+    budget,
+    duration,
+  ]);
 
   /* ------- FILTERED LEADERS ------- */
   const filteredLeaders: Leader[] = useMemo(() => {
@@ -275,6 +273,7 @@ export default function Page() {
           )}
 
           {/* Featured Travel Agencies */}
+
           {(activeFilter === "all" || activeFilter === "agency") && (
             <section className="mb-8">
               <h3 className="text-lg font-semibold mb-4">
@@ -289,6 +288,11 @@ export default function Page() {
               )}
             </section>
           )}
+          {/* Similar Trips */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Similar Trips</h3>
+            <Similar />
+          </div>
         </main>
       </div>
     </div>
