@@ -1,81 +1,190 @@
+
 "use client";
 
-import { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import AgencyCard from "./AgencyCard";
-import type { Agency } from "@/src/app/searchtrip/types/types";
+import AgencyCard, { Agency } from "./AgencyCard";
 
-export default function AgencyCarousel({ agencies }: { agencies: Agency[] }) {
-  const [index, setIndex] = useState(0);
-  const visible = 2; // two cards visible at once
-  const maxIndex = Math.max(0, agencies.length - visible);
+// Sample data for agencies
+export const AGENCIES_DEMO: Agency[] = [
+  {
+    id: 1,
+    title: "Wanderlust Adventures",
+    description:
+      "Discover extraordinary travel experiences with us! We specialize in curated adventure tours across breathtaking destinations. From mountain expeditions to cultural immersions, our expert guides ensure every journey is unforgettable.",
+     tags: ["Adventure Travel", "Cultural Tours", "Sustainable Travel"],
+    from: "Kolkata, West Bengal",
+    to: "Simla, Himachal Pradesh",
+    travelersNeeded: 3,
+    verified: true,
+    price: "₹1,500 / person (shared costs)",
+    date: "Dec 15–17, 2025",
+    spotsLeft: 2,
+    stats: {
+    travelersEnrolled: "500+",
+    tripsCompleted: "150+",
+    yearsInBusiness: "8+",
+  },
+    host: {
+      name: "Sarah Johnson",
+      age: 26,
+      verified: true,
+      location: "Goa, India",
+      rating: 4.8,
+      match: 92,
+      safeScore: 88,
+      category: "Featured Trip Agency",
+    },
+    image:
+      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&q=80",
+  },
+  {
+    id: 2,
+    title: "Nomadic Escapes",
+    description:
+      "Join us for a thrilling desert safari experience in Jaisalmer! Camel rides, star gazing, and camping in golden dunes await.Join us for a thrilling desert safari experience in Jaisalmer! Camel rides, star gazing, and camping in golden dunes await.",
+    tags: ["Backpacking", "Local Culture", "Food Tours"],
+    from: "Ahmedabad, Gujarat",
+    to: "Jaisalmer, Rajasthan",
+    travelersNeeded: 4,
+    verified: true,
+    price: "₹2,000 / person (shared costs)",
+    date: "Jan 10–12, 2026",
+    spotsLeft: 1,
+    stats: {
+    travelersEnrolled: "500+",
+    tripsCompleted: "150+",
+    yearsInBusiness: "8+",
+  },
+    host: {
+      name: "Ravi Patel",
+      age: 29,
+      verified: true,
+      location: "Surat, India",
+      rating: 4.9,
+      match: 88,
+      safeScore: 72,
+      category: "Featured Trip Agency",
+    },
+    image:
+      "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=400&q=80",
+  },
+  {
+    id: 3,
+    title: "Coastal Voyages",
+    description:
+      "Relax and rejuvenate by the beach with guided meditation, yoga sessions, and peaceful sunsets.Join us for a thrilling desert safari experience in Jaisalmer! Camel rides, star gazing, and camping in golden dunes await.",
+    tags: ["Mountaineering", "Trekking", "Adventure Sports"],
+    from: "Mumbai, India",
+    to: "Gokarna, Karnataka",
+    verified: true,
+    travelersNeeded: 5,
+    price: "₹1,800 / person (shared costs)",
+    date: "Feb 5–9, 2026",
+    spotsLeft: 3,
+    stats: {
+    travelersEnrolled: "500+",
+    tripsCompleted: "150+",
+    yearsInBusiness: "8+",
+  },
+    host: {
+      name: "Ananya Verma",
+      age: 30,
+      verified: true,
+      location: "Bangalore, India",
+      rating: 4.7,
+      match: 90,
+      safeScore: 45,
+      category: "Featured Trip Agency",
+    },
+    image:
+      "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&q=80",
+  },
+  {
+    id: 4,
+    title: "Historical City Walk in Delhi",
+    description:
+      "Discover the rich history of Delhi with a guided walk through ancient monuments and bustling markets.Join us for a thrilling desert safari experience in Jaisalmer! Camel rides, star gazing, and camping in golden dunes await.",
+    tags: ["Cruise Trips", "Beach Escapes", "Luxury Travel"],
+    from: "Chennai, Tamil Nadu",
+    to: "Delhi, Delhi",
+    travelersNeeded: 4,
+    verified: true,
+    price: "₹1,200 / person (shared costs)",
+    date: "Apr 1-3, 2026",
+    spotsLeft: 2,
+    stats: {
+    travelersEnrolled: "500+",
+    tripsCompleted: "150+",
+    yearsInBusiness: "8+",
+  },
+    host: {
+      name: "Akash Sharma",
+      age: 32,
+      verified: true,
+      location: "Delhi, India",
+      rating: 4.6,
+      match: 85,
+      safeScore: 78,
+      category: "Featured Trip Agency",
+    },
+    image:
+      "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=400&q=80",
+  },
+  {
+    id: 5,
+    title: "Wildlife Safari in Ranthambore",
+    description:
+      "Experience thrilling jeep safaris to spot tigers and other wildlife in Ranthambore National Park.Join us for a thrilling desert safari experience in Jaisalmer! Camel rides, star gazing, and camping in golden dunes await.",
+    tags: ["Historical Tours", "Art & Heritage", "Cultural Immersion"],
+    from: "Jaipur, Rajasthan",
+    to: "Ranthambore, Rajasthan",
+    travelersNeeded: 6,
+    verified: true,
+    price: "₹3,000 / person (shared costs)",
+    date: "May 10-14, 2026",
+    spotsLeft: 4,
+    stats: {
+    travelersEnrolled: "500+",
+    tripsCompleted: "150+",
+    yearsInBusiness: "8+",
+  },
+    host: {
+      name: "Priya Singh",
+      age: 28,
+      verified: true,
+      location: "Jaipur, India",
+      rating: 4.9,
+      match: 95,
+      safeScore: 90,
+      category: "Featured Trip Agency",
+    },
+    image:
+      "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&q=80",
+  },
+];
 
-  const prev = () => setIndex((i) => Math.max(0, i - 1));
-  const next = () => setIndex((i) => Math.min(maxIndex, i + 1));
 
-  const cardPercent = 100 / visible; // each card width = 50%
-  const translatePercent = index * cardPercent;
+type AgencyCarouselProps = {
+  agencies?: Agency[];
+};
 
+export default function AgencyCarousel({
+  agencies = AGENCIES_DEMO,
+}: AgencyCarouselProps) {
   return (
-    <section className="relative w-full">
-      {/* Heading */}
-      <h3 className="text-lg font-semibold mb-4">Featured Travel Agencies</h3>
-
-      {/* Slider Container */}
-      <div className="overflow-hidden px-4 relative">
-        <div
-          className="flex transition-transform duration-500 ease-in-out"
-          style={{
-            transform: `translateX(-${translatePercent}%)`,
-          }}
-        >
-          {agencies.map((agency) => (
-            <div
-              key={agency.id}
-              style={{ flex: `0 0 ${cardPercent}%` }}
-              className="px-4 box-border group"
-            >
-              {/* Hover effect on card */}
-              <div className="transition-all duration-500 transform rounded-xl group-hover:-translate-y-2 group-hover:shadow-lg group-hover:shadow-[#eb575740]">
-                <AgencyCard agency={agency} />
-              </div>
+    <main className="flex flex-col items-center w-[949px] min-h-screen flex-1">
+      <div className="w-[99%] max-w-5xl flex flex-col gap-6">
+        {agencies.map((agency) => (
+          <section
+            key={agency.id}
+            className="w-full flex justify-center"
+            aria-labelledby={`agency-${agency.id}-heading`}
+          >
+            <div className="w-full max-w-3xl">
+              <AgencyCard agency={agency} />
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Navigation Buttons */}
-      <button
-        onClick={prev}
-        disabled={index === 0}
-        aria-label="Previous"
-        className="absolute left-0 top-1/2 -translate-y-1/2 bg-white border p-2 rounded-full shadow hover:bg-gray-50 disabled:opacity-40 transition"
-      >
-        <ChevronLeft className="w-5 h-5 text-gray-600" />
-      </button>
-
-      <button
-        onClick={next}
-        disabled={index >= maxIndex}
-        aria-label="Next"
-        className="absolute right-0 top-1/2 -translate-y-1/2 bg-white border p-2 rounded-full shadow hover:bg-gray-50 disabled:opacity-40 transition"
-      >
-        <ChevronRight className="w-5 h-5 text-gray-600" />
-      </button>
-
-      {/* Dots */}
-      <div className="flex justify-center mt-4 space-x-2">
-        {Array.from({ length: maxIndex + 1 }).map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setIndex(i)}
-            aria-label={`Go to slide ${i + 1}`}
-            className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-              i === index ? "bg-[#EB5757] scale-110" : "bg-gray-300"
-            }`}
-          />
+          </section>
         ))}
       </div>
-    </section>
+    </main>
   );
 }

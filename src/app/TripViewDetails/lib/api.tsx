@@ -1,4 +1,3 @@
-// lib/api.ts
 export const fetchData = async (url: string) => {
   try {
     const res = await fetch(url);
