@@ -102,7 +102,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
 
   return (
     // Changed fixed width/height to responsive max-width, min-height
-    <div className=" bg-white rounded-xl shadow-sm h-80 flex flex-col sm:flex-row overflow-hidden   ">
+    <div className=" bg-white rounded-xl shadow-sm h-80 flex flex-col sm:flex-row   ">
       {/* Left Image Section */}
       <div className="relative flex shrink-0 w-full sm:w-64 md:w-72  sm:h-auto rounded-bl-md">
         <img

@@ -45,7 +45,7 @@ const TRIPS_DEMO = [
       category: "Travel Enthusiast",
     },
     image:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&q=80",
+      "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=400&q=80",
   },
   {
     id: 2,
@@ -70,7 +70,7 @@ const TRIPS_DEMO = [
       category: "Travel Enthusiast",
     },
     image:
-      "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=400&q=80",
+      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&q=80",
   },
   {
     id: 3,
@@ -149,7 +149,7 @@ export default function TripCardList() {
   };
 
   return (
-    <main className="w-[945px] flex flex-col items-center  space-y-6">
+    <main className="w-[945px] flex flex-col items-center  space-y-6 min-h-screen flex-1">
       {TRIPS_DEMO.map((trip) => {
         const catStyle = getCategoryStyle(trip.host.category);
 

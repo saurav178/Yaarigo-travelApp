@@ -34,7 +34,7 @@ export default function Page() {
     }`;
 
   return (
-    <div className="min-h-screen p-6 md:p-10 mt-11">
+    <div className="min-h-screen p-6 md:p-10 mt-11 ">
       <div className="max-w-7xl mx-auto grid grid-cols-12 gap-6">
         {/* Filters Panel */}
         <aside className="col-span-12 lg:col-span-4 xl:col-span-3">
@@ -57,7 +57,7 @@ export default function Page() {
         </aside>
 
         {/* Main Content */}
-        <main className="col-span-12 lg:col-span-8 xl:col-span-9">
+        <main className="col-span-12 lg:col-span-8 xl:col-span-9 min-h-screen flex-1">
           {/* Filter Chips */}
           <div className="flex items-center gap-3 mb-6">
             <div className="flex items-center gap-2 bg-orange-50 text-orange-700 px-3 py-1 rounded-full font-medium w-fit">
@@ -103,8 +103,8 @@ export default function Page() {
 
           {/* Best Match Trips */}
           {(activeFilter === "all" || activeFilter === "enthusiast") && (
-            <section className="">
-              <h3 className="text-lg font-semibold mb-4">Best Match</h3>
+            <section className="min-h-screen flex-1">
+              <h3 className="text-lg font-semibold mb-4 ">Best Match</h3>
               <TripCard compact={false} />{" "}
               {/* TripCard internally handles its demo data */}
             </section>
@@ -112,8 +112,8 @@ export default function Page() {
 
           {/* Featured Trip Leaders */}
           {(activeFilter === "all" || activeFilter === "leader") && (
-            <section className="mb-6 ">
-              <h3 className="text-lg font-semibold  mb-8">
+            <section className="mb-6 min-h-screen flex-1">
+              <h3 className="text-lg font-semibold  mb-8 ">
                 Featured Trip Leaders
               </h3>
               <LeaderTrips compact={false} />

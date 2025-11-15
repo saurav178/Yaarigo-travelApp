@@ -147,7 +147,7 @@ export default function TripCardList() {
   };
 
   return (
-    <main className=" flex flex-col items-center w-[950px]  ">
+    <main className=" flex flex-col items-center w-[950px]  min-h-screen flex-1">
       <div className="w-[99%] max-w-5xl flex flex-col gap-6">
         {LEADERS_DEMO.map((trip) => {
           const catStyle = getCategoryStyle(trip.host.category);
