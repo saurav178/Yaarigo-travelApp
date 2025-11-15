@@ -8,7 +8,7 @@ import { ImUsers } from "react-icons/im";
 import Image from "next/image";
 import Trip from "../../../../public/searchpageimg/view_trips.png";
 import Profile from "../../../../public/searchpageimg/view_profile.png";
-import Join from "../../../../public/searchpageimg/join_trips.png";
+// import Join from "../../../../public/searchpageimg/join_trips.png";
 // import Rating from "../../../../public/searchpageimg/Ratinghigh.png"
 import {
   // FaMapMarkerAlt,
@@ -31,6 +31,7 @@ export interface Agency {
   description: string;
   tags: string[];
   from: string;
+  verified: true,
   to: string;
   travelersNeeded: number; // You might display this
   price: string;
@@ -108,9 +109,9 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
   const catStyle = getCategoryStyle(agency.host.category); // Use host's category for styling
 
   return (
-    // Changed fixed width/height to responsive max-width, min-height
+  
 
-    <div className=" bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 -ml-20 w-[949px] ">
+    <div className=" bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 -ml-22 w-[949px] ">
       {/* Left Image Section */}
       <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
         <img
@@ -122,11 +123,23 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
         />
 
         {/* Match Badge (top-left) - from host.match */}
-        <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
+        {/* <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
           {agency.host.match}% Match
-        </div>
+       
+         
+        
+
+        {/* Verified badge */}
+
+        {agency.verified && (
+          <span className="absolute top-3 left-3 bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+            Verified
+          </span>
+        )}
+   
 
         {/* Like Button (top-right) */}
+
         <button
           onClick={toggleLike}
           aria-pressed={liked}
@@ -262,8 +275,8 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
             </div>
           </div>
 
-          <div className="flex gap-5">
-            <button className="bg-[#1D4350] text-white text-xs px- py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-26">
+          <div className="flex items-start gap-5 ">
+            <button className="bg-[#1D4350] text-white text-xs  px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-35">
               <Image
                 src={Trip}
                 alt="View Trip Icon"
@@ -283,7 +296,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
               />{" "}
               Join Trip
             </button> */}
-            <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
+            <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-35">
               <Image
                 src={Profile}
                 alt="View Profile Icon"

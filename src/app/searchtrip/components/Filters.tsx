@@ -289,13 +289,13 @@ export default function Filters({
               setQuery(v); // live filtering for search
             }}
             placeholder="Destination typing..."
-            className="w-full pl-9 pr-10 py-2 rounded-md border text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#EB5757]"
+            className="w-full pl-9 pr-10 py-2 rounded-md border text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1D4350]"
           />
           <button
             type="button"
             onClick={startVoice}
             aria-label="Voice Search"
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#EB5757] transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1D4350] transition-colors"
           >
             <Mic className="w-4 h-4" />
           </button>
@@ -334,7 +334,7 @@ export default function Filters({
               onChange={(e) => setInputLang(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && addLang()}
               placeholder="Language typing..."
-              className="w-full pl-9 pr-20 py-2 rounded-md border text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#EB5757]"
+              className="w-full pl-9 pr-20 py-2 rounded-md border text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1D4350]"
             />
             <button
               onClick={addLang}
