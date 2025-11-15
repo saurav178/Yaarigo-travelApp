@@ -83,6 +83,11 @@ export type Agency = {
   interest?: string;
   tripType?: string;
   foodPref?: string;
+  stats: {
+    travelersEnrolled: string;  // "500+"
+    tripsCompleted: string;     // "150+"
+    yearsInBusiness: string;    // "8+"
+  };
   host: {
     name: string;
     age: number;

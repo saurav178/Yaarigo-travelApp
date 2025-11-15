@@ -3,23 +3,25 @@
 "use client";
 
 import { useState } from "react";
+import { FcBusiness } from "react-icons/fc";
+import { ImUsers } from "react-icons/im";
 import Image from "next/image";
 import Trip from "../../../../public/searchpageimg/view_trips.png";
 import Profile from "../../../../public/searchpageimg/view_profile.png";
 import Join from "../../../../public/searchpageimg/join_trips.png";
 // import Rating from "../../../../public/searchpageimg/Ratinghigh.png"
 import {
-  FaMapMarkerAlt,
-  FaCalendarAlt, // Reverted to CalendarAlt for trip date
+  // FaMapMarkerAlt,
+  // FaCalendarAlt, // Reverted to CalendarAlt for trip date
   FaCheckCircle,
   FaHeart,
   FaShieldAlt,
   FaFlag,
   FaExclamationTriangle, // For spots left
-  FaWallet, // For price
+  // FaWallet, // For price
 } from "react-icons/fa";
 import { PiMedalDuotone } from "react-icons/pi";
-import { GoDotFill } from "react-icons/go";
+// import { GoDotFill } from "react-icons/go";
 
 // Define the type for an Agency object, which now matches your 'trip' structure
 export interface Agency {
@@ -34,6 +36,11 @@ export interface Agency {
   price: string;
   date: string; // This is the trip date
   spotsLeft: number;
+  stats: {
+    travelersEnrolled: string; // "500+"
+    tripsCompleted: string; // "150+"
+    yearsInBusiness: string; // "8+"
+  };
   host: {
     // This is the agency/host information
     name: string;
@@ -102,7 +109,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
 
   return (
     // Changed fixed width/height to responsive max-width, min-height
-    
+
     <div className=" bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 -ml-20 w-[949px] ">
       {/* Left Image Section */}
       <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
@@ -169,35 +176,40 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
             ))}
           </div>
 
-          {/* Trip Info (from, to, date, price) */}
-          <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600 mt-2 mb-2">
-            <div className="flex items-center gap-1">
-              <GoDotFill className="text-black" /> {agency.from}
-            </div>
-            <span className="text-gray-400">→</span>
-            <div className="flex items-center gap-1">
-              <FaMapMarkerAlt className="text-gray-400" /> {agency.to}
-            </div>
-          </div>
-
-          <div className="flex items-center gap-x-8 gap-y-1 mt-1 text-sm text-gray-600 mb-2 ">
-            <div className="flex items-center gap-2">
-              <FaCalendarAlt className="text-gray-400 " />
-              <div>{agency.date}</div>
+          <div className=" flex-wrap gap-8 text-sm text-gray-700 mb-4 ">
+            <div className="flex items-center gap-3 mt-3">
+              {/* <span>👥</span> */}
+              {/* <span className="text-white">👥</span> */}
+              <ImUsers />
+              <span>
+                <strong>{agency.stats.travelersEnrolled}</strong> travelers
+                enrolled
+              </span>
             </div>
 
-            <div className="flex items-center gap-2 ml-8">
-              <FaWallet className="text-gray-400" />
-              <div>{agency.price}</div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 mt-1 text-sm text-gray-600">
+            {/* <div className="flex items-center gap-2 mt-1 text-sm text-gray-600">
             <FaFlag className="text-gray-400" />{" "}
             <span>
-              {/* You might put host's trips completed here, if available */}30
+              30+
               Trips Completed
             </span>
+          </div> */}
+            <div className="flex items-center gap-2 mt-2">
+              <FaFlag className="text-gray-400" />{" "}
+              <span>
+                <strong>{agency.stats.tripsCompleted}</strong> trips completed
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2 mt-2">
+              {/* <span>⭐</span> */}
+              {/* <span className="text-white">⭐</span> */}
+              <FcBusiness />
+              <span>
+                <strong>{agency.stats.yearsInBusiness}</strong> years in
+                business
+              </span>
+            </div>
           </div>
 
           <hr className="my-3 mt-5" />
@@ -250,7 +262,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
             </div>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-5">
             <button className="bg-[#1D4350] text-white text-xs px- py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-26">
               <Image
                 src={Trip}
@@ -259,9 +271,9 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
                 height={10}
                 className="mr-1 filter brightness-0 invert"
               />{" "}
-              View Trip
+              Browse Trips
             </button>
-            <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
+            {/* <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
               <Image
                 src={Join}
                 alt="Join Trip Icon"
@@ -270,7 +282,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
                 className="mr-1 filter brightness-0 invert"
               />{" "}
               Join Trip
-            </button>
+            </button> */}
             <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
               <Image
                 src={Profile}
@@ -285,6 +297,5 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
         </div>
       </div>
     </div>
-   
   );
 }

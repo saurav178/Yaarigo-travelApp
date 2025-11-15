@@ -3,6 +3,8 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/routes";
 import Image from "next/image";
 import TripImg from "../../../../public/searchpageimg/view_trips.png";
 import Profile from "../../../../public/searchpageimg/view_profile.png";
@@ -168,6 +170,21 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
     }
   };
 
+  const router = useRouter();
+
+const handleViewTrip = ()=> {
+  router.push(ROUTES.TRIP_DETAILS);
+};
+
+const handleJoinTrip = () => {
+  router.push(ROUTES.JOIN_TRIP);
+};
+
+const handleViewProfile = () => {
+  router.push(ROUTES.USER_PROFILE);
+};
+
+
   const getSafeScoreStyle = (score: number) => {
     if (score < 50)
       return "bg-red-100 text-red-700 border border-red-300 px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
@@ -327,7 +344,9 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                     </div>
 
                     <div className="flex gap-2">
-                      <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
+                      <button 
+                      onClick={() => handleViewTrip}
+                      className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
                         <Image
                           src={TripImg}
                           alt="View Trip Icon"
@@ -337,7 +356,9 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                         />{" "}
                         View Trip
                       </button>
-                      <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
+                      <button 
+                      onClick={() => handleJoinTrip}
+                      className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
                         <Image
                           src={Join}
                           alt="Join Trip Icon"
@@ -350,6 +371,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                       <button 
                       //  type="button"
                       //   onClick={handleGoToTrip}
+                      onClick={() => handleViewProfile}
                       className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
                         <Image
                           src={Profile}
