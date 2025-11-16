@@ -100,7 +100,7 @@ export const LEADERS_DEMO: Leader[] = [
       category: "Featured Trip Leader",
     },
     image:
-      "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=400&q=80",
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     id: 3,
