@@ -17,9 +17,10 @@ export type Trip = {
   maxAge?: number;
   durationDays?: number;
   budget?: number;
-  interest?: string;
-  tripType?: string;
-  foodPref?: string;
+   interests : string[];
+  tripTypes : string[];
+  foodPreference : string[];
+
   host: {
     name: string;
     age: number;

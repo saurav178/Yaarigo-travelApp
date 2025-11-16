@@ -1,3 +1,5 @@
+
+
 "use client";
 
 import { useState } from "react";
@@ -29,6 +31,9 @@ export type SimilarTrip = {
   price: string;
   date: string;
   spotsLeft: number;
+  interest: string[];
+  tripType: string[];
+  foodPref: string[];
   host: {
     name: string;
     age: number;
@@ -49,20 +54,23 @@ export const SIMILAR_TRIPS_DEMO: SimilarTrip[] = [
     description:
       "Join us for an unforgettable beach vacation! Relax by the turquoise waters, enjoy local seafood, and snorkel among vibrant coral reefs.",
     tags: ["Beach", "Luxury", "Relaxation"],
-    from: "Delhi, India",
+    from: "Agra, India",
     to: "Maldives",
     travelersNeeded: 2,
     price: "₹45,000 / person",
     date: "Feb 1–5, 2026",
     spotsLeft: 2,
+    interest: ["Culture", "Beaches"],
+    tripType: ["Solo", "Family"],
+    foodPref: ["vegan", "Halal"],
     host: {
       name: "Priya Sharma",
-      age: 27,
+      age: 17,
       verified: true,
       location: "Mumbai, India",
-      rating: 4.9,
-      match: 95,
-      safeScore: 92,
+      rating: 3.6,
+      match: 50,
+      safeScore: 50,
       category: "Travel Enthusiast",
     },
     image:
@@ -74,20 +82,23 @@ export const SIMILAR_TRIPS_DEMO: SimilarTrip[] = [
     description:
       "An adventurous 10-day trip through the majestic Himalayan trails — perfect for thrill seekers and nature lovers.",
     tags: ["Adventure", "Mountains", "Trekking"],
-    from: "Manali, Himachal Pradesh",
+    from: "Patna , Bihar",
     to: "Leh, Ladakh",
     travelersNeeded: 5,
-    price: "₹25,000 / person",
-    date: "Mar 10–20, 2026",
+    price: "₹30,000 / person",
+    date: "Mar 10–30, 2026",
     spotsLeft: 1,
+    interest: ["Culture", "wildlife"],
+    tripType: ["Solo", "Family"],
+    foodPref: ["vegan", "Halal"],
     host: {
       name: "Aarav Singh",
-      age: 29,
+      age: 19,
       verified: true,
       location: "Delhi, India",
-      rating: 4.7,
-      match: 88,
-      safeScore: 80,
+      rating: 3.0,
+      match: 70,
+      safeScore: 70,
       category: "Travel Enthusiast",
     },
     image:
@@ -99,20 +110,23 @@ export const SIMILAR_TRIPS_DEMO: SimilarTrip[] = [
     description:
       "Explore the ancient temples, tea houses, and cherry blossoms of Japan’s most serene city — Kyoto.",
     tags: ["Culture", "History", "Asia"],
-    from: "Bangalore, India",
+    from: "Uttar Pradesh, India",
     to: "Kyoto, Japan",
     travelersNeeded: 4,
-    price: "₹70,000 / person",
-    date: "Apr 2–8, 2026",
+    price: "₹25,000 / person",
+    date: "Apr 2–15, 2026",
     spotsLeft: 3,
+    interest: ["Culture", "Beaches"],
+    tripType: ["Solo", "Family"],
+    foodPref: ["vegan", "Halal"],
     host: {
       name: "Neha Mehta",
-      age: 25,
+      age: 20,
       verified: true,
       location: "Bangalore, India",
-      rating: 4.8,
-      match: 92,
-      safeScore: 89,
+      rating: 3.5,
+      match: 60,
+      safeScore: 60,
       category: "Travel Enthusiast",
     },
     image:
@@ -125,12 +139,16 @@ type SimilarProps = {
   compact?: boolean;
 };
 
-export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
+export default function Similar({
+  trips = SIMILAR_TRIPS_DEMO,
+}: SimilarProps) {
   const [likedTrips, setLikedTrips] = useState<number[]>([]);
 
   const toggleLike = (id: number) => {
     setLikedTrips((prev) =>
-      prev.includes(id) ? prev.filter((tid) => tid !== id) : [...prev, id]
+      prev.includes(id)
+        ? prev.filter((tid) => tid !== id)
+        : [...prev, id]
     );
   };
 
@@ -175,8 +193,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
   };
 
   return (
-    <main className="flex flex-col items-center w-[949px] min-h-screen flex-1">
-      {/* Reduced gap a bit for tighter spacing */}
+    <main className="flex flex-col items-center w-[949px] flex-1">
       <div className="w-[99%] max-w-5xl flex flex-col gap-3">
         {trips.map((trip) => {
           const catStyle = getCategoryStyle(trip.host.category);
@@ -227,7 +244,8 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
 
                     <div className="flex items-center gap-1 mb-1">
                       <span className="flex gap-2 items-center bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
-                        <FaExclamationTriangle /> {trip.spotsLeft} spots left
+                        <FaExclamationTriangle />{" "}
+                        {trip.spotsLeft} spots left
                       </span>
                     </div>
                   </div>
@@ -247,11 +265,13 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
                   {/* Trip Info */}
                   <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600 mt-2 mb-2">
                     <div className="flex items-center gap-1">
-                      <GoDotFill className="text-black" /> {trip.from}
+                      <GoDotFill className="text-black" />{" "}
+                      {trip.from}
                     </div>
                     <span className="text-gray-400">→</span>
                     <div className="flex items-center gap-1">
-                      <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
+                      <FaMapMarkerAlt className="text-gray-400" />{" "}
+                      {trip.to}
                     </div>
                   </div>
 
@@ -268,7 +288,8 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
                   </div>
 
                   <div className="flex items-center gap-2 mt-1 text-sm text-gray-600">
-                    <FaFlag /> <span>25 Trips Completed</span>
+                    <FaFlag />{" "}
+                    <span>25 Trips Completed</span>
                   </div>
 
                   <hr className="my-3 mt-6" />
@@ -281,11 +302,13 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
                       >
                         {getInitials(trip.host.name)}
 
-                        {trip.host.category !== "Travel Enthusiast" && (
+                        {trip.host.category !==
+                          "Travel Enthusiast" && (
                           <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow">
                             <PiMedalDuotone
                               className={`${
-                                trip.host.category === "Featured Trip Leader"
+                                trip.host.category ===
+                                "Featured Trip Leader"
                                   ? "text-yellow-500"
                                   : "text-orange-500"
                               }`}
@@ -310,14 +333,18 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
                             {trip.host.category}
                           </div>
                           <span
-                            className={getSafeScoreStyle(trip.host.safeScore)}
+                            className={getSafeScoreStyle(
+                              trip.host.safeScore
+                            )}
                           >
-                            <FaShieldAlt /> {trip.host.safeScore}% Safe
+                            <FaShieldAlt />{" "}
+                            {trip.host.safeScore}% Safe
                           </span>
                         </div>
 
                         <p className="text-xs text-gray-600 mt-1">
-                          {trip.host.location} • ⭐ {trip.host.rating}
+                          {trip.host.location} • ⭐{" "}
+                          {trip.host.rating}
                         </p>
                       </div>
                     </div>
