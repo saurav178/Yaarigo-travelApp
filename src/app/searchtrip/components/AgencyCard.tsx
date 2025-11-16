@@ -5,6 +5,8 @@
 import { useState } from "react";
 import { FcBusiness } from "react-icons/fc";
 import { ImUsers } from "react-icons/im";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/lib/routes";
 import Image from "next/image";
 import Trip from "../../../../public/searchpageimg/view_trips.png";
 import Profile from "../../../../public/searchpageimg/view_profile.png";
@@ -31,7 +33,7 @@ export interface Agency {
   description: string;
   tags: string[];
   from: string;
-  verified: true,
+  verified: true;
   to: string;
   travelersNeeded: number; // You might display this
   price: string;
@@ -108,9 +110,13 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
 
   const catStyle = getCategoryStyle(agency.host.category); // Use host's category for styling
 
-  return (
-  
+  const router = useRouter();
 
+  const handleJoinTrip = () => {
+      router.push(ROUTES.VIEW_PROFILE);
+    };
+
+  return (
     <div className=" bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80  w-[949px] ">
       {/* Left Image Section */}
       <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
@@ -120,9 +126,8 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
           width={400}
           height={400}
           className="w-full h-full object-cover"
+        />
 
-        />  
-        
         {/* Verified badge */}
 
         {agency.verified && (
@@ -130,7 +135,6 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
             Verified
           </span>
         )}
-   
 
         {/* Like Button (top-right) */}
 
@@ -245,17 +249,17 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
                 </div>
               )} */}
               {agency.host.category !== "Travel Enthusiast" && (
-                                    <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow">
-                                      <PiMedalDuotone
-                                        className={`${
-                                          agency.host.category === "Featured Trip Leader"
-                                            ? "text-yellow-500"
-                                            : "text-orange-500"
-                                        }`}
-                                        size={12}
-                                      />
-                                    </div>
-                                  )}
+                <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow">
+                  <PiMedalDuotone
+                    className={`${
+                      agency.host.category === "Featured Trip Leader"
+                        ? "text-yellow-500"
+                        : "text-orange-500"
+                    }`}
+                    size={12}
+                  />
+                </div>
+              )}
             </div>
 
             <div className="flex flex-col">
@@ -302,7 +306,9 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
               />{" "}
               Join Trip
             </button> */}
-            <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-35">
+            <button 
+             onClick={handleJoinTrip}
+            className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-35">
               <Image
                 src={Profile}
                 alt="View Profile Icon"

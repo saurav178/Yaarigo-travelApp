@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ROUTES } from "@/routes";
+import { ROUTES } from "@/lib/routes";
 import Image from "next/image";
 import TripImg from "../../../../public/searchpageimg/view_trips.png";
 import Profile from "../../../../public/searchpageimg/view_profile.png";
@@ -74,7 +74,7 @@ export const TRIPS_DEMO: Trip[] = [
       category: "Travel Enthusiast",
     },
     image:
-      "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=400&q=80",
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     id: 2,
@@ -185,9 +185,9 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
     router.push(ROUTES.TRIP_DETAILS);
   };
 
-  const handleJoinTrip = () => {
-    router.push(ROUTES.JOIN_TRIP);
-  };
+  // const handleJoinTrip = () => {
+  //   router.push(ROUTES.JOIN_TRIP);
+  // };
 
   const handleViewProfile = () => {
     router.push(ROUTES.USER_PROFILE);
@@ -367,7 +367,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                       View Trip
                     </button>
                     <button
-                      onClick={handleJoinTrip}
+                     
                       className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
                     >
                       <Image

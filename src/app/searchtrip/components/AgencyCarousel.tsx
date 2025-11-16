@@ -35,7 +35,7 @@ export const AGENCIES_DEMO: Agency[] = [
       category: "Featured Trip Agency",
     },
     image:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&q=80",
+      "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=400&q=80",
   },
   {
     id: 2,
@@ -66,7 +66,7 @@ export const AGENCIES_DEMO: Agency[] = [
       category: "Featured Trip Agency",
     },
     image:
-      "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=400&q=80",
+      "https://images.unsplash.com/photo-1512100356356-de1b84283e18?q=80&w=475&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     id: 3,
@@ -97,7 +97,7 @@ export const AGENCIES_DEMO: Agency[] = [
       category: "Featured Trip Agency",
     },
     image:
-      "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&q=80",
+      "https://images.unsplash.com/photo-1553342385-111fd6bc6ab3?q=80&w=435&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     id: 4,
@@ -159,7 +159,7 @@ export const AGENCIES_DEMO: Agency[] = [
       category: "Featured Trip Agency",
     },
     image:
-      "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&q=80",
+      "https://images.unsplash.com/photo-1553342385-111fd6bc6ab3?q=80&w=435&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
 ];
 
