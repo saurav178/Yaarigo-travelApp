@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import AgencyCard, { Agency } from "./AgencyCard";
@@ -10,7 +11,7 @@ export const AGENCIES_DEMO: Agency[] = [
     title: "Wanderlust Adventures",
     description:
       "Discover extraordinary travel experiences with us! We specialize in curated adventure tours across breathtaking destinations. From mountain expeditions to cultural immersions, our expert guides ensure every journey is unforgettable.",
-     tags: ["Adventure Travel", "Cultural Tours", "Sustainable Travel"],
+    tags: ["Adventure Travel", "Cultural Tours", "Sustainable Travel"],
     from: "Kolkata, West Bengal",
     to: "Simla, Himachal Pradesh",
     travelersNeeded: 3,
@@ -19,10 +20,10 @@ export const AGENCIES_DEMO: Agency[] = [
     date: "Dec 15–17, 2025",
     spotsLeft: 2,
     stats: {
-    travelersEnrolled: "500+",
-    tripsCompleted: "150+",
-    yearsInBusiness: "8+",
-  },
+      travelersEnrolled: "500+",
+      tripsCompleted: "150+",
+      yearsInBusiness: "8+",
+    },
     host: {
       name: "Sarah Johnson",
       age: 26,
@@ -50,10 +51,10 @@ export const AGENCIES_DEMO: Agency[] = [
     date: "Jan 10–12, 2026",
     spotsLeft: 1,
     stats: {
-    travelersEnrolled: "500+",
-    tripsCompleted: "150+",
-    yearsInBusiness: "8+",
-  },
+      travelersEnrolled: "500+",
+      tripsCompleted: "150+",
+      yearsInBusiness: "8+",
+    },
     host: {
       name: "Ravi Patel",
       age: 29,
@@ -81,10 +82,10 @@ export const AGENCIES_DEMO: Agency[] = [
     date: "Feb 5–9, 2026",
     spotsLeft: 3,
     stats: {
-    travelersEnrolled: "500+",
-    tripsCompleted: "150+",
-    yearsInBusiness: "8+",
-  },
+      travelersEnrolled: "500+",
+      tripsCompleted: "150+",
+      yearsInBusiness: "8+",
+    },
     host: {
       name: "Ananya Verma",
       age: 30,
@@ -112,10 +113,10 @@ export const AGENCIES_DEMO: Agency[] = [
     date: "Apr 1-3, 2026",
     spotsLeft: 2,
     stats: {
-    travelersEnrolled: "500+",
-    tripsCompleted: "150+",
-    yearsInBusiness: "8+",
-  },
+      travelersEnrolled: "500+",
+      tripsCompleted: "150+",
+      yearsInBusiness: "8+",
+    },
     host: {
       name: "Akash Sharma",
       age: 32,
@@ -143,10 +144,10 @@ export const AGENCIES_DEMO: Agency[] = [
     date: "May 10-14, 2026",
     spotsLeft: 4,
     stats: {
-    travelersEnrolled: "500+",
-    tripsCompleted: "150+",
-    yearsInBusiness: "8+",
-  },
+      travelersEnrolled: "500+",
+      tripsCompleted: "150+",
+      yearsInBusiness: "8+",
+    },
     host: {
       name: "Priya Singh",
       age: 28,
@@ -162,7 +163,6 @@ export const AGENCIES_DEMO: Agency[] = [
   },
 ];
 
-
 type AgencyCarouselProps = {
   agencies?: Agency[];
 };
@@ -171,20 +171,17 @@ export default function AgencyCarousel({
   agencies = AGENCIES_DEMO,
 }: AgencyCarouselProps) {
   return (
-    <main className="flex flex-col items-center w-[949px] min-h-screen flex-1">
-      <div className="w-[99%] max-w-5xl flex flex-col gap-6">
-        {agencies.map((agency) => (
-          <section
-            key={agency.id}
-            className="w-full flex justify-center"
-            aria-labelledby={`agency-${agency.id}-heading`}
-          >
-            <div className="w-full max-w-3xl">
-              <AgencyCard agency={agency} />
-            </div>
-          </section>
-        ))}
-      </div>
-    </main>
+    // ✅ no min-h-screen, no fixed width, just a vertical stack
+    <div className="flex flex-col gap-3 w-full">
+      {agencies.map((agency) => (
+        <div
+          key={agency.id}
+          className="w-full"
+          aria-labelledby={`agency-${agency.id}-heading`}
+        >
+          <AgencyCard agency={agency} />
+        </div>
+      ))}
+    </div>
   );
 }

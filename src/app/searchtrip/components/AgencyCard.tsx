@@ -111,24 +111,18 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
   return (
   
 
-    <div className=" bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 -ml-22 w-[949px] ">
+    <div className=" bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80  w-[949px] ">
       {/* Left Image Section */}
       <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
-        <img
+        <Image
           src={agency.image} // Using 'image' from your trip data
           alt={agency.title}
-          // width={0}
-          // height={0}
+          width={400}
+          height={400}
           className="w-full h-full object-cover"
-        />
 
-        {/* Match Badge (top-left) - from host.match */}
-        {/* <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
-          {agency.host.match}% Match
-       
-         
+        />  
         
-
         {/* Verified badge */}
 
         {agency.verified && (
@@ -238,7 +232,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
               {getInitials(agency.host.name)}
 
               {/* Badge for non-enthusiast categories */}
-              {agency.host.category !== "Travel Enthusiast" && (
+              {/* {agency.host.category !== "Travel Enthusiast" && (
                 <div className="absolute -bottom-1 -right-1 bg-white rounded-full  shadow">
                   <PiMedalDuotone
                     className={`${
@@ -249,7 +243,19 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
                     size={12}
                   />
                 </div>
-              )}
+              )} */}
+              {agency.host.category !== "Travel Enthusiast" && (
+                                    <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow">
+                                      <PiMedalDuotone
+                                        className={`${
+                                          agency.host.category === "Featured Trip Leader"
+                                            ? "text-yellow-500"
+                                            : "text-orange-500"
+                                        }`}
+                                        size={12}
+                                      />
+                                    </div>
+                                  )}
             </div>
 
             <div className="flex flex-col">

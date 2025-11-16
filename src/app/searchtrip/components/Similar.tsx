@@ -29,6 +29,9 @@ export type SimilarTrip = {
   price: string;
   date: string;
   spotsLeft: number;
+  interest: string[];
+  tripType: string[];
+  foodPref: string[];
   host: {
     name: string;
     age: number;
@@ -49,20 +52,23 @@ export const SIMILAR_TRIPS_DEMO: SimilarTrip[] = [
     description:
       "Join us for an unforgettable beach vacation! Relax by the turquoise waters, enjoy local seafood, and snorkel among vibrant coral reefs.",
     tags: ["Beach", "Luxury", "Relaxation"],
-    from: "Delhi, India",
+    from: "Kolkata, West Bengal",
     to: "Maldives",
     travelersNeeded: 2,
     price: "₹45,000 / person",
     date: "Feb 1–5, 2026",
     spotsLeft: 2,
+    interest: ["Culture", "Beaches"],
+    tripType: ["Solo", "Family"],
+    foodPref: ["vegan", "Halal"],
     host: {
       name: "Priya Sharma",
-      age: 27,
+      age: 17,
       verified: true,
       location: "Mumbai, India",
-      rating: 4.9,
-      match: 95,
-      safeScore: 92,
+      rating: 3.6,
+      match: 50,
+      safeScore: 50,
       category: "Travel Enthusiast",
     },
     image:
@@ -74,20 +80,23 @@ export const SIMILAR_TRIPS_DEMO: SimilarTrip[] = [
     description:
       "An adventurous 10-day trip through the majestic Himalayan trails — perfect for thrill seekers and nature lovers.",
     tags: ["Adventure", "Mountains", "Trekking"],
-    from: "Manali, Himachal Pradesh",
+    from: "Patna , Bihar",
     to: "Leh, Ladakh",
     travelersNeeded: 5,
-    price: "₹25,000 / person",
-    date: "Mar 10–20, 2026",
+    price: "₹30,000 / person",
+    date: "Mar 10–30, 2026",
     spotsLeft: 1,
+    interest: ["Culture", "wildlife"],
+    tripType: ["Solo", "Family"],
+    foodPref: ["vegan", "Halal"],
     host: {
       name: "Aarav Singh",
-      age: 29,
+      age: 19,
       verified: true,
       location: "Delhi, India",
-      rating: 4.7,
-      match: 88,
-      safeScore: 80,
+      rating: 3.0,
+      match: 70,
+      safeScore: 70,
       category: "Travel Enthusiast",
     },
     image:
@@ -99,20 +108,23 @@ export const SIMILAR_TRIPS_DEMO: SimilarTrip[] = [
     description:
       "Explore the ancient temples, tea houses, and cherry blossoms of Japan’s most serene city — Kyoto.",
     tags: ["Culture", "History", "Asia"],
-    from: "Bangalore, India",
+    from: "Uttar Pradesh, India",
     to: "Kyoto, Japan",
     travelersNeeded: 4,
-    price: "₹70,000 / person",
-    date: "Apr 2–8, 2026",
+    price: "₹25,000 / person",
+    date: "Apr 2–15, 2026",
     spotsLeft: 3,
+    interest: ["Culture", "Beaches"],
+    tripType: ["Solo", "Family"],
+    foodPref: ["vegan", "Halal"],
     host: {
       name: "Neha Mehta",
-      age: 25,
+      age: 20,
       verified: true,
       location: "Bangalore, India",
-      rating: 4.8,
-      match: 92,
-      safeScore: 89,
+      rating: 3.5,
+      match: 60,
+      safeScore: 60,
       category: "Travel Enthusiast",
     },
     image:
@@ -175,8 +187,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
   };
 
   return (
-    <main className="flex flex-col items-center w-[949px] min-h-screen flex-1">
-      {/* Reduced gap a bit for tighter spacing */}
+    <main className="flex flex-col items-center w-[949px] flex-1">
       <div className="w-[99%] max-w-5xl flex flex-col gap-3">
         {trips.map((trip) => {
           const catStyle = getCategoryStyle(trip.host.category);
@@ -189,10 +200,18 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80">
                 {/* Left Image */}
                 <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
-                  <img
+                  {/* <img
                     src={trip.image}
                     alt={trip.title}
                     className="w-full h-full object-cover"
+                  /> */}
+                  <Image
+                    src={trip.image}
+                    alt={trip.title}
+                    width={400}
+                    height={300}
+                    className="w-full h-full object-cover"
+                    unoptimized={false}
                   />
 
                   {/* Match Badge */}

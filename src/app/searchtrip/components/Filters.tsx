@@ -1,4 +1,5 @@
-// components/Filters.tsx
+
+// Filters
 
 "use client";
 
@@ -16,9 +17,9 @@ export type FilterPayload = {
   minSafeScore: number;
   matchPercent: number;
   scorePercent: number;
-  interest: string;
-  tripType: string;
-  foodPref: string;
+  interest: string; // still string, will be "Hiking, Beaches"
+  tripType: string; // same
+  foodPref: string; // same
 };
 
 type Props = {
@@ -49,7 +50,7 @@ type Props = {
   setScorePercent?: (n: number) => void;
 
   // optional chips
-  interest?: string;
+  interest?: string; // comma separated string from parent (e.g., "Hiking, Beaches")
   setInterest?: (s: string) => void;
 
   tripType?: string;
@@ -108,9 +109,10 @@ export default function Filters({
     scorePercent ?? 0
   );
 
-  const [localInterest, setLocalInterest] = useState<string>(interest ?? "All");
-  const [localTripType, setLocalTripType] = useState<string>(tripType ?? "All");
-  const [localFoodPref, setLocalFoodPref] = useState<string>(foodPref ?? "All");
+  // 🔄 NEW: multi-select local state as arrays
+  const [localInterest, setLocalInterest] = useState<string[]>([]);
+  const [localTripType, setLocalTripType] = useState<string[]>([]);
+  const [localFoodPref, setLocalFoodPref] = useState<string[]>([]);
 
   // language pills (purely visual, not used in filter logic)
   const [inputLang, setInputLang] = useState<string>("");
@@ -124,18 +126,80 @@ export default function Filters({
   const [tripTypeOpen, setTripTypeOpen] = useState<boolean>(true);
   const [foodPrefOpen, setFoodPrefOpen] = useState<boolean>(true);
 
+  const ratingOptions = [4, 3, 2, 0] as const;
+  const percentOptions = [90, 80, 70, 60, 50, 0] as const;
+
+  const interestOptions = [
+    "+ Hiking",
+    "+ Beaches",
+    "+ Culture",
+    "+ Wildlife",
+    "+ Nightlife",
+    "+ All",
+  ] as const;
+  const tripTypeOptions = [
+    "+ Solo",
+    "+ Couple",
+    "+ Family",
+    "+ Group",
+    "+ All",
+  ] as const;
+  const foodPrefOptions = [
+    "+ Vegetarian",
+    "+ Non-Veg",
+    "+ Vegan",
+    "+ Halal",
+    "+ All",
+  ] as const;
+
+  const ALL_INTEREST = "+ All";
+  const ALL_TRIP = "+ All";
+  const ALL_FOOD = "+ All";
+
+  // helper to parse a comma-separated string from parent into array
+  const parseMulti = (value: string | undefined, allLabel: string): string[] => {
+    if (!value) return [];
+    const trimmed = value.trim();
+    if (!trimmed || trimmed === "All" || trimmed === allLabel) {
+      return [];
+    }
+    return trimmed
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+  };
+
   // sync local if parent changes from outside
   useEffect(() => setLocalQuery(query), [query]);
   useEffect(() => setLocalAge(age), [age]);
   useEffect(() => setLocalDuration(duration), [duration]);
   useEffect(() => setLocalBudget(budget), [budget]);
   useEffect(() => setLocalMinRating(minRating ?? 0), [minRating]);
-  useEffect(() => setLocalMinSafeScore(minSafeScore ?? 0), [minSafeScore]);
-  useEffect(() => setLocalMatchPercent(matchPercent ?? 0), [matchPercent]);
-  useEffect(() => setLocalScorePercent(scorePercent ?? 0), [scorePercent]);
-  useEffect(() => setLocalInterest(interest ?? "All"), [interest]);
-  useEffect(() => setLocalTripType(tripType ?? "All"), [tripType]);
-  useEffect(() => setLocalFoodPref(foodPref ?? "All"), [foodPref]);
+  useEffect(
+    () => setLocalMinSafeScore(minSafeScore ?? 0),
+    [minSafeScore]
+  );
+  useEffect(
+    () => setLocalMatchPercent(matchPercent ?? 0),
+    [matchPercent]
+  );
+  useEffect(
+    () => setLocalScorePercent(scorePercent ?? 0),
+    [scorePercent]
+  );
+
+  // 🔄 sync multi-select from parent strings
+  useEffect(() => {
+    setLocalInterest(parseMulti(interest, ALL_INTEREST));
+  }, [interest]);
+
+  useEffect(() => {
+    setLocalTripType(parseMulti(tripType, ALL_TRIP));
+  }, [tripType]);
+
+  useEffect(() => {
+    setLocalFoodPref(parseMulti(foodPref, ALL_FOOD));
+  }, [foodPref]);
 
   // helpers
   const addLang = () => {
@@ -154,6 +218,41 @@ export default function Filters({
     alert("Voice search demo — replace with real voice input if needed.");
   };
 
+  // 🔁 toggle helpers for chips
+  const toggleFromList = (
+    prev: string[],
+    opt: string,
+    allLabel: string
+  ): string[] => {
+    // Special: All
+    if (opt === allLabel) {
+      const isAllOnly = prev.length === 0 || (prev.length === 1 && prev[0] === allLabel);
+      // if only All or nothing -> clear
+      if (isAllOnly) return [];
+      // else -> All only
+      return [allLabel];
+    }
+
+    // Normal option: remove All if present
+    let next = prev.filter((x) => x !== allLabel);
+
+    if (next.includes(opt)) {
+      // unselect
+      next = next.filter((x) => x !== opt);
+    } else {
+      // select
+      next = [...next, opt];
+    }
+
+    return next;
+  };
+
+  const buildMultiString = (values: string[]): string => {
+    // if nothing selected, treat as "All"
+    if (!values.length) return "All";
+    return values.join(", ");
+  };
+
   const buildPayload = (): FilterPayload => ({
     query: localQuery,
     age: localAge,
@@ -163,26 +262,30 @@ export default function Filters({
     minSafeScore: localMinSafeScore,
     matchPercent: localMatchPercent,
     scorePercent: localScorePercent,
-    interest: localInterest,
-    tripType: localTripType,
-    foodPref: localFoodPref,
+    // ⬇ convert arrays to strings before sending
+    interest: buildMultiString(localInterest),
+    tripType: buildMultiString(localTripType),
+    foodPref: buildMultiString(localFoodPref),
   });
 
   // APPLY: push all local values to parent
   const handleApply = () => {
-    setQuery(localQuery);
-    setAge(localAge);
-    setDuration(localDuration);
-    setBudget(localBudget);
-    setMinRating(localMinRating);
-    setMinSafeScore(localMinSafeScore);
-    setMatchPercent?.(localMatchPercent);
-    setScorePercent?.(localScorePercent);
-    setInterest?.(localInterest);
-    setTripType?.(localTripType);
-    setFoodPref?.(localFoodPref);
+    const payload = buildPayload();
 
-    onApply?.(buildPayload());
+    setQuery(payload.query);
+    setAge(payload.age);
+    setDuration(payload.duration);
+    setBudget(payload.budget);
+    setMinRating(payload.minRating);
+    setMinSafeScore(payload.minSafeScore);
+    setMatchPercent?.(payload.matchPercent);
+    setScorePercent?.(payload.scorePercent);
+
+    setInterest?.(payload.interest);
+    setTripType?.(payload.tripType);
+    setFoodPref?.(payload.foodPref);
+
+    onApply?.(payload);
   };
 
   // CLEAR: reset everything
@@ -210,9 +313,9 @@ export default function Filters({
     setLocalMinSafeScore(cleared.minSafeScore);
     setLocalMatchPercent(cleared.matchPercent);
     setLocalScorePercent(cleared.scorePercent);
-    setLocalInterest(cleared.interest);
-    setLocalTripType(cleared.tripType);
-    setLocalFoodPref(cleared.foodPref);
+    setLocalInterest([]); // none => All
+    setLocalTripType([]);
+    setLocalFoodPref([]);
     setLanguages(["English"]);
     setInputLang("");
 
@@ -232,32 +335,6 @@ export default function Filters({
     onClear?.();
     onApply?.(cleared);
   };
-
-  const ratingOptions = [4, 3, 2, 0] as const;
-  const percentOptions = [90, 80, 70, 60, 50, 0] as const;
-
-  const interestOptions = [
-    "+ Hiking",
-    "+ Beaches",
-    "+ Culture",
-    "+ Wildlife",
-    "+ Nightlife",
-    "+ All",
-  ] as const;
-  const tripTypeOptions = [
-    "+ Solo",
-    "+ Couple",
-    "+ Family",
-    "+ Group",
-    "+ All",
-  ] as const;
-  const foodPrefOptions = [
-    "+ Vegetarian",
-    "+ Non-Veg",
-    "+ Vegan",
-    "+ Halal",
-    "+ All",
-  ] as const;
 
   return (
     <div className="bg-white p-5 rounded-xl shadow w-full max-w-md mx-auto">
@@ -311,7 +388,6 @@ export default function Filters({
             <button
               key={tag.label}
               onClick={() => {
-                // show label in input, but filter using real location value
                 setLocalQuery(tag.label);
                 setQuery(tag.queryKey);
               }}
@@ -505,11 +581,15 @@ export default function Filters({
           {interestOpen && (
             <div className="grid grid-cols-2 gap-2 mt-3">
               {interestOptions.map((opt) => {
-                const isActive = localInterest === opt;
+                const isActive = localInterest.includes(opt);
                 return (
                   <button
                     key={opt}
-                    onClick={() => setLocalInterest(opt)}
+                    onClick={() =>
+                      setLocalInterest((prev) =>
+                        toggleFromList(prev, opt, ALL_INTEREST)
+                      )
+                    }
                     className={`text-sm py-2 px-3 rounded-xl w-full transition ${
                       isActive
                         ? "bg-[#E8F1F1] text-[#1D4350]"
@@ -541,11 +621,15 @@ export default function Filters({
           {tripTypeOpen && (
             <div className="grid grid-cols-2 gap-2 mt-3">
               {tripTypeOptions.map((opt) => {
-                const isActive = localTripType === opt;
+                const isActive = localTripType.includes(opt);
                 return (
                   <button
                     key={opt}
-                    onClick={() => setLocalTripType(opt)}
+                    onClick={() =>
+                      setLocalTripType((prev) =>
+                        toggleFromList(prev, opt, ALL_TRIP)
+                      )
+                    }
                     className={`text-sm py-2 px-3 rounded-xl w-full transition ${
                       isActive
                         ? "bg-[#E8F1F1] text-[#0A4D4A]"
@@ -577,11 +661,15 @@ export default function Filters({
           {foodPrefOpen && (
             <div className="grid grid-cols-2 gap-2 mt-3">
               {foodPrefOptions.map((opt) => {
-                const isActive = localFoodPref === opt;
+                const isActive = localFoodPref.includes(opt);
                 return (
                   <button
                     key={opt}
-                    onClick={() => setLocalFoodPref(opt)}
+                    onClick={() =>
+                      setLocalFoodPref((prev) =>
+                        toggleFromList(prev, opt, ALL_FOOD)
+                      )
+                    }
                     className={`text-sm py-2 px-3 rounded-xl w-full transition ${
                       isActive
                         ? "bg-[#E8F1F1] text-[#0A4D4A]"
