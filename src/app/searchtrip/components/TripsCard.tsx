@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -146,9 +145,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
 
   const toggleLike = (id: number) => {
     setLikedTrips((prev) =>
-      prev.includes(id)
-        ? prev.filter((tid) => tid !== id)
-        : [...prev, id]
+      prev.includes(id) ? prev.filter((tid) => tid !== id) : [...prev, id]
     );
   };
 
@@ -214,10 +211,18 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 w-[949px]">
               {/* Left Image */}
               <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
-                <img
+                {/* <img
                   src={trip.image}
                   alt={trip.title}
                   className="w-full h-full object-cover"
+                /> */}
+                <Image
+                  src={trip.image}
+                  alt={trip.title}
+                  width={400}
+                  height={300}
+                  className="w-full h-full object-cover"
+                  unoptimized={false}
                 />
 
                 {/* Match Badge */}

@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useState } from "react";
@@ -54,7 +52,7 @@ export const SIMILAR_TRIPS_DEMO: SimilarTrip[] = [
     description:
       "Join us for an unforgettable beach vacation! Relax by the turquoise waters, enjoy local seafood, and snorkel among vibrant coral reefs.",
     tags: ["Beach", "Luxury", "Relaxation"],
-    from: "Agra, India",
+    from: "Kolkata, West Bengal",
     to: "Maldives",
     travelersNeeded: 2,
     price: "₹45,000 / person",
@@ -139,16 +137,12 @@ type SimilarProps = {
   compact?: boolean;
 };
 
-export default function Similar({
-  trips = SIMILAR_TRIPS_DEMO,
-}: SimilarProps) {
+export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
   const [likedTrips, setLikedTrips] = useState<number[]>([]);
 
   const toggleLike = (id: number) => {
     setLikedTrips((prev) =>
-      prev.includes(id)
-        ? prev.filter((tid) => tid !== id)
-        : [...prev, id]
+      prev.includes(id) ? prev.filter((tid) => tid !== id) : [...prev, id]
     );
   };
 
@@ -206,10 +200,18 @@ export default function Similar({
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80">
                 {/* Left Image */}
                 <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
-                  <img
+                  {/* <img
                     src={trip.image}
                     alt={trip.title}
                     className="w-full h-full object-cover"
+                  /> */}
+                  <Image
+                    src={trip.image}
+                    alt={trip.title}
+                    width={400}
+                    height={300}
+                    className="w-full h-full object-cover"
+                    unoptimized={false}
                   />
 
                   {/* Match Badge */}
@@ -244,8 +246,7 @@ export default function Similar({
 
                     <div className="flex items-center gap-1 mb-1">
                       <span className="flex gap-2 items-center bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
-                        <FaExclamationTriangle />{" "}
-                        {trip.spotsLeft} spots left
+                        <FaExclamationTriangle /> {trip.spotsLeft} spots left
                       </span>
                     </div>
                   </div>
@@ -265,13 +266,11 @@ export default function Similar({
                   {/* Trip Info */}
                   <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600 mt-2 mb-2">
                     <div className="flex items-center gap-1">
-                      <GoDotFill className="text-black" />{" "}
-                      {trip.from}
+                      <GoDotFill className="text-black" /> {trip.from}
                     </div>
                     <span className="text-gray-400">→</span>
                     <div className="flex items-center gap-1">
-                      <FaMapMarkerAlt className="text-gray-400" />{" "}
-                      {trip.to}
+                      <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
                     </div>
                   </div>
 
@@ -288,8 +287,7 @@ export default function Similar({
                   </div>
 
                   <div className="flex items-center gap-2 mt-1 text-sm text-gray-600">
-                    <FaFlag />{" "}
-                    <span>25 Trips Completed</span>
+                    <FaFlag /> <span>25 Trips Completed</span>
                   </div>
 
                   <hr className="my-3 mt-6" />
@@ -302,13 +300,11 @@ export default function Similar({
                       >
                         {getInitials(trip.host.name)}
 
-                        {trip.host.category !==
-                          "Travel Enthusiast" && (
+                        {trip.host.category !== "Travel Enthusiast" && (
                           <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow">
                             <PiMedalDuotone
                               className={`${
-                                trip.host.category ===
-                                "Featured Trip Leader"
+                                trip.host.category === "Featured Trip Leader"
                                   ? "text-yellow-500"
                                   : "text-orange-500"
                               }`}
@@ -333,18 +329,14 @@ export default function Similar({
                             {trip.host.category}
                           </div>
                           <span
-                            className={getSafeScoreStyle(
-                              trip.host.safeScore
-                            )}
+                            className={getSafeScoreStyle(trip.host.safeScore)}
                           >
-                            <FaShieldAlt />{" "}
-                            {trip.host.safeScore}% Safe
+                            <FaShieldAlt /> {trip.host.safeScore}% Safe
                           </span>
                         </div>
 
                         <p className="text-xs text-gray-600 mt-1">
-                          {trip.host.location} • ⭐{" "}
-                          {trip.host.rating}
+                          {trip.host.location} • ⭐ {trip.host.rating}
                         </p>
                       </div>
                     </div>

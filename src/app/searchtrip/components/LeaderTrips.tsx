@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -145,9 +144,7 @@ export default function LeaderTrips({
 
   const toggleLike = (id: number) => {
     setLikedTrips((prev) =>
-      prev.includes(id)
-        ? prev.filter((tid) => tid !== id)
-        : [...prev, id]
+      prev.includes(id) ? prev.filter((tid) => tid !== id) : [...prev, id]
     );
   };
 
@@ -204,10 +201,19 @@ export default function LeaderTrips({
           >
             {/* Left Image */}
             <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
-              <img
+              {/* <Image
                 src={trip.image}
                 alt={trip.title}
                 className="w-full h-full object-cover"
+
+              /> */}
+              <Image
+                src={trip.image}
+                alt={trip.title}
+                width={400} 
+                height={300} 
+                className="w-full h-full object-cover"
+                unoptimized={false} 
               />
 
               {/* Match Badge (top-left) */}
@@ -219,9 +225,7 @@ export default function LeaderTrips({
               <button
                 onClick={() => toggleLike(trip.id)}
                 className={`absolute top-3 right-3 w-8 h-8 flex cursor-pointer items-center justify-center rounded-full transition ${
-                  likedTrips.includes(trip.id)
-                    ? "text-rose-500"
-                    : "text-white"
+                  likedTrips.includes(trip.id) ? "text-rose-500" : "text-white"
                 }`}
               >
                 <FaHeart size={18} />
@@ -243,8 +247,7 @@ export default function LeaderTrips({
                 {/* Warning + Spots left */}
                 <div className="flex items-center gap-1">
                   <span className="flex gap-2 items-center bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
-                    <FaExclamationTriangle /> {trip.spotsLeft} spots
-                    left
+                    <FaExclamationTriangle /> {trip.spotsLeft} spots left
                   </span>
                 </div>
               </div>
@@ -268,8 +271,7 @@ export default function LeaderTrips({
                 </div>
                 <span className="text-gray-400">→</span>
                 <div className="flex items-center gap-1">
-                  <FaMapMarkerAlt className="text-gray-400" />{" "}
-                  {trip.to}
+                  <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
                 </div>
               </div>
 
@@ -305,8 +307,7 @@ export default function LeaderTrips({
                       <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow">
                         <PiMedalDuotone
                           className={`${
-                            trip.host.category ===
-                            "Featured Trip Leader"
+                            trip.host.category === "Featured Trip Leader"
                               ? "text-yellow-500"
                               : "text-orange-500"
                           }`}
@@ -330,11 +331,7 @@ export default function LeaderTrips({
                       >
                         {trip.host.category}
                       </div>
-                      <span
-                        className={getSafeScoreStyle(
-                          trip.host.safeScore
-                        )}
-                      >
+                      <span className={getSafeScoreStyle(trip.host.safeScore)}>
                         <FaShieldAlt /> {trip.host.safeScore}% Safe
                       </span>
                     </div>
