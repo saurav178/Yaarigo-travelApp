@@ -5,6 +5,7 @@ import Image from "next/image";
 import TripImg from "../../../../public/searchpageimg/view_trips.png";
 import Profile from "../../../../public/searchpageimg/view_profile.png";
 import Join from "../../../../public/searchpageimg/join_trips.png";
+import dots from "../../../../public/searchpageimg/Line 1.png"
 import {
   FaMapMarkerAlt,
   FaCalendarAlt,
@@ -252,7 +253,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
                   </div>
 
                   {/* Tags */}
-                  <div className="flex flex-wrap gap-2 mt-2 mb-2">
+                  <div className="flex flex-wrap gap-2  mb-2">
                     {trip.tags.map((tag) => (
                       <span
                         key={tag}
@@ -264,7 +265,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
                   </div>
 
                   {/* Trip Info */}
-                  <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600 mt-2 mb-2">
+                  {/* <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600 mt-2 mb-2">
                     <div className="flex items-center gap-1">
                       <GoDotFill className="text-black" /> {trip.from}
                     </div>
@@ -272,7 +273,18 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
                     <div className="flex items-center gap-1">
                       <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
                     </div>
-                  </div>
+                  </div> */}
+                  <div className=" flex-wrap items-center gap-2 text-sm text-gray-600 mt-2 mb-2">
+                                                  <div className="flex items-center gap-1">
+                                                    <GoDotFill className="text-black" /> {trip.from}
+                                                  </div>
+                                                    <Image src={dots} alt="dots" className="ml-1.5 -mt-3" height={0} width={0}/>
+                                                  {/* <div className="mx-1 text-xs text-gray-400">•</div> */}
+                                
+                                                  <div className="flex items-center gap-1">
+                                                    <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
+                                                  </div>
+                                                </div>
 
                   <div className="flex items-center gap-16 mt-1 text-sm text-gray-600 mb-2">
                     <div className="flex items-center gap-2">
@@ -290,7 +302,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
                     <FaFlag /> <span>25 Trips Completed</span>
                   </div>
 
-                  <hr className="my-3 mt-6" />
+                  <hr className="my-3 mt-2" />
 
                   {/* Host Info */}
                   <div className="flex items-center justify-between">
