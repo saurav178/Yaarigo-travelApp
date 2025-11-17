@@ -381,7 +381,7 @@ export default function Filters({
         </div>
 
         {/* Quick tags */}
-        <div className="flex flex-wrap gap-2 mt-2">
+        <div className="flex flex-wrap gap-2 mt-2 cursor-pointer">
           {[
             { label: "Locals", queryKey: "Kolkata" },
             { label: "Nearby", queryKey: "Mumbai" },
@@ -393,7 +393,7 @@ export default function Filters({
                 setLocalQuery(tag.label);
                 setQuery(tag.queryKey);
               }}
-              className="px-3 py-1 text-sm text-gray-600 rounded-full transition"
+              className="px-3 py-1 text-sm text-gray-600 rounded-full transition cursor-pointer"
             >
               {tag.label}
             </button>
@@ -633,7 +633,7 @@ export default function Filters({
                         toggleFromList(prev, opt, ALL_TRIP)
                       )
                     }
-                    className={`text-sm py-2 px-3 rounded-xl w-full transition ${
+                    className={`text-sm py-2 px-3 cursor-pointer rounded-xl w-full transition ${
                       isActive
                         ? "bg-[#E8F1F1] text-[#0A4D4A]"
                         : "bg-transparent text-gray-700"
@@ -677,7 +677,7 @@ export default function Filters({
                         toggleFromList(prev, opt, ALL_FOOD)
                       )
                     }
-                    className={`text-sm py-2 px-3 rounded-xl w-full transition ${
+                    className={`text-sm py-2 px-3 cursor-pointer rounded-xl w-full transition ${
                       isActive
                         ? "bg-[#E8F1F1] text-[#0A4D4A]"
                         : "bg-transparent text-gray-700"
