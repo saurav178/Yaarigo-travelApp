@@ -237,7 +237,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                   <FaFlag /> <span>30 Trips Completed</span>
                 </div>
 
-                <hr className="my-3" />
+                <hr className="my-3 mt-2"  />
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -269,13 +269,18 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                   </div>
 
                   <div className="flex gap-2">
-                    <button onClick={() => router.push(`/trip/${trip.id}`)} className="bg-[#1D4350] text-white text-xs px-3 py-2 rounded-md hover:bg-[#163935] flex items-center">
+                    <button 
+                    onClick={() => router.push(`/trip/${trip.id}`)} 
+                    className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
                       <Image src={TripImg} alt="View Trip Icon" width={14} height={14} className="mr-2 filter brightness-0 invert" /> View Trip
                     </button>
-                    <button onClick={() => router.push(`/trip/${trip.id}/join`)} className="bg-[#1D4350] text-white text-xs px-3 py-2 rounded-md hover:bg-[#163935] flex items-center">
+                    <button 
+                    onClick={() => router.push(`/trip/${trip.id}/join`)} 
+                    className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
                       <Image src={Join} alt="Join Trip Icon" width={16} height={16} className="mr-2 filter brightness-0 invert" /> Join Trip
                     </button>
-                    <button onClick={() => router.push(`/profile/${trip.host.name.replace(/\s+/g, "-").toLowerCase()}`)} className="bg-[#1D4350] text-white text-xs px-3 py-2 rounded-md hover:bg-[#163935] flex items-center">
+                    <button 
+                    onClick={() => router.push(`/profile/${trip.host.name.replace(/\s+/g, "-").toLowerCase()}`)} className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
                       <Image src={Profile} alt="View Profile Icon" width={14} height={14} className="mr-2 filter brightness-0 invert" /> View Profile
                     </button>
                   </div>
