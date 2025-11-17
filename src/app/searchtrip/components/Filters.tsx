@@ -381,7 +381,7 @@ export default function Filters({
         </div>
 
         {/* Quick tags */}
-        <div className="flex flex-wrap gap-2 mt-2 cursor-pointer">
+        <div className="flex flex-wrap gap-2 mt-2 cursor-pointer ">
           {[
             { label: "Locals", queryKey: "Kolkata" },
             { label: "Nearby", queryKey: "Mumbai" },
@@ -393,7 +393,7 @@ export default function Filters({
                 setLocalQuery(tag.label);
                 setQuery(tag.queryKey);
               }}
-              className="px-3 py-1 text-sm text-gray-600 rounded-full transition cursor-pointer"
+              className="px-3 py-1 text-sm text-white rounded-full transition  cursor-pointer bg-[#1D4350] "
             >
               {tag.label}
             </button>
