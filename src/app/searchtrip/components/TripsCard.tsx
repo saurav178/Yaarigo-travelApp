@@ -159,14 +159,14 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
   };
 
   return (
-    <main className="w-full">
+    <main className="flex flex-col items-center w-[949px] flex-1">
       <div className="w-full max-w-5xl mx-auto flex flex-col gap-4">
         {trips.map((trip) => {
           const catStyle = getCategoryStyle(trip.host.category);
           return (
             <article key={trip.id} className="bg-white  shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 w-[949px]">
               {/* Image */}
-              <div className="relative w-full md:w-64 h-52 md:h-auto shrink-0">
+              <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
                 {/* <img src={trip.image} alt={trip.title} className="w-full h-full object-cover" /> */}
                 <Image
                                     src={trip.image}
@@ -197,6 +197,18 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                   </div>
                 </div>
 
+                {/* Tags */}
+              <div className="flex flex-wrap gap-2 mt-1 mb-1">
+                {trip.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="bg-gray-100 text-gray-700 text-xs font-medium px-2 py-0.5 rounded-md"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
                   <div className=" flex-wrap items-center gap-3 text-sm text-gray-600 ">
                                                       <div className="flex items-center gap-1">
                                                         <GoDotFill className="text-black" /> {trip.from}
@@ -219,17 +231,17 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                   </div>
                 </div> */}
 
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-sm text-gray-600 mt-2 mb-2">
-                  <div className="flex items-center gap-2">
-                    <FaCalendarAlt className="text-gray-400" />
-                    <div>{trip.date}</div>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <FaWallet />
-                    <div>{trip.price}</div>
-                  </div>
-                </div>
+                <div className="flex items-center gap-16 mt-1 text-sm text-gray-600 mb-1">
+                                <div className="flex items-center gap-2">
+                                  <FaCalendarAlt className="text-gray-400" />
+                                  <div>{trip.date}</div>
+                                </div>
+                
+                                <div className="flex items-center gap-2 ">
+                                  <FaWallet />
+                                  <div>{trip.price}</div>
+                                </div>
+                              </div>
 
                 <div className="flex items-center gap-2 mt-1 text-sm text-gray-600 mb-2">
                   <FaFlag /> <span>30 Trips Completed</span>
@@ -267,13 +279,18 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                   </div>
 
                   <div className="flex gap-2">
-                    <button onClick={() => router.push(`/trip/${trip.id}`)} className="bg-[#1D4350] text-white text-xs px-3 py-2 rounded-md hover:bg-[#163935] flex items-center">
+                    <button 
+                    onClick={() => router.push(`/trip/${trip.id}`)} 
+                    className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
                       <Image src={TripImg} alt="View Trip Icon" width={14} height={14} className="mr-2 filter brightness-0 invert" /> View Trip
                     </button>
-                    <button onClick={() => router.push(`/trip/${trip.id}/join`)} className="bg-[#1D4350] text-white text-xs px-3 py-2 rounded-md hover:bg-[#163935] flex items-center">
+                    <button 
+                    onClick={() => router.push(`/trip/${trip.id}/join`)} 
+                    className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
                       <Image src={Join} alt="Join Trip Icon" width={16} height={16} className="mr-2 filter brightness-0 invert" /> Join Trip
                     </button>
-                    <button onClick={() => router.push(`/profile/${trip.host.name.replace(/\s+/g, "-").toLowerCase()}`)} className="bg-[#1D4350] text-white text-xs px-3 py-2 rounded-md hover:bg-[#163935] flex items-center">
+                    <button onClick={() => router.push(`/profile/${trip.host.name.replace(/\s+/g, "-").toLowerCase()}`)} 
+                    className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
                       <Image src={Profile} alt="View Profile Icon" width={14} height={14} className="mr-2 filter brightness-0 invert" /> View Profile
                     </button>
                   </div>
