@@ -278,7 +278,7 @@ export default function Filters({
   };
 
   return (
-    <div className="bg-white p-5 rounded-xl shadow w-full max-w-md mx-auto max-h-[90vh] flex flex-col">
+    <div className="bg-white  rounded-xl shadow w-full max-w-md mx-auto max-h-[90vh] flex flex-col">
       <div className="flex items-center gap-3">
         <button className="text-sm text-gray-600 hover:text-gray-800 transition" onClick={() => router.push("/")}>
           ← Back
@@ -362,11 +362,11 @@ export default function Filters({
           {ratingOpen && (
             <div className="flex items-center gap-2">
               {[1, 2, 3, 4, 5].map((n) => (
-                <button key={n} onClick={() => onStarClick(n)} aria-label={`${n} star${n > 1 ? "s" : ""}`} className="focus:outline-none">
+                <button key={n} onClick={() => onStarClick(n)} aria-label={`${n} star${n > 1 ? "s" : ""}`} className="focus:outline-none cursor-pointer">
                   <FaStar className={`w-5 h-5 transition-colors ${n <= localMinRating ? "text-[#1D4350]" : "text-gray-300"}`} />
                 </button>
               ))}
-              <button onClick={() => setLocalMinRating(0)} className="ml-3 text-xs text-gray-600 underline" type="button">Any</button>
+              <button onClick={() => setLocalMinRating(0)} className="ml-3 text-xs text-gray-600 underline cursor-pointer" type="button">Any</button>
             </div>
           )}
         </div>

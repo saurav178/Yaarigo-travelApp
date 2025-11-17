@@ -132,12 +132,12 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
     setLikedTrips((prev) => (prev.includes(id) ? prev.filter((tid) => tid !== id) : [...prev, id]));
   };
 
-  const getInitials = (name: string) =>
-    name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase();
+  // const getInitials = (name: string) =>
+  //   name
+  //     .split(" ")
+  //     .map((n) => n[0])
+  //     .join("")
+  //     .toUpperCase();
 
   const getCategoryStyle = (category: string) => {
     switch (category) {
