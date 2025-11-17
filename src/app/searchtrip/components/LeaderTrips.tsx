@@ -5,6 +5,7 @@ import Image from "next/image";
 import TripImg from "../../../../public/searchpageimg/view_trips.png";
 import Profile from "../../../../public/searchpageimg/view_profile.png";
 import Join from "../../../../public/searchpageimg/join_trips.png";
+import dots from "../../../../public/searchpageimg/Line 1.png";
 import {
   FaMapMarkerAlt,
   FaCalendarAlt,
@@ -210,10 +211,10 @@ export default function LeaderTrips({
               <Image
                 src={trip.image}
                 alt={trip.title}
-                width={400} 
-                height={300} 
+                width={400}
+                height={300}
                 className="w-full h-full object-cover"
-                unoptimized={false} 
+                unoptimized={false}
               />
 
               {/* Match Badge (top-left) */}
@@ -239,7 +240,7 @@ export default function LeaderTrips({
                   <h2 className="text-lg font-semibold text-gray-900 leading-tight mb-2">
                     {trip.title}
                   </h2>
-                  <p className="text-gray-600 text-sm mt-1 line-clamp-2 mb-1">
+                  <p className="text-gray-600 text-sm  line-clamp-2 mb-1">
                     {trip.description}
                   </p>
                 </div>
@@ -253,7 +254,7 @@ export default function LeaderTrips({
               </div>
 
               {/* Tags */}
-              <div className="flex flex-wrap gap-2 mt-2 mb-1">
+              <div className="flex flex-wrap gap-2 mt-1 mb-1">
                 {trip.tags.map((tag) => (
                   <span
                     key={tag}
@@ -265,7 +266,7 @@ export default function LeaderTrips({
               </div>
 
               {/* Trip Info */}
-              <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600 mt-2 mb-2">
+              {/* <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600 mt-2 mb-2">
                 <div className="flex items-center gap-1">
                   <GoDotFill className="text-black" /> {trip.from}
                 </div>
@@ -273,7 +274,19 @@ export default function LeaderTrips({
                 <div className="flex items-center gap-1">
                   <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
                 </div>
-              </div>
+              </div> */}
+
+             <div className=" flex-wrap items-center gap-3 text-sm text-gray-600 mt-1 mb-2">
+                               <div className="flex items-center gap-1">
+                                 <GoDotFill className="text-black" /> {trip.from}
+                               </div>
+                               {/* <span className="text-gray-400">→</span> */}
+                               <Image src={dots} alt="dot" className="ml-1.5 -mt-3" width={0} height={0}/>
+                               <div className="flex items-center gap-1">
+                                 <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
+                               </div>
+                             </div>
+             
 
               <div className="flex items-center gap-16 mt-1 text-sm text-gray-600 mb-1">
                 <div className="flex items-center gap-2">
@@ -291,7 +304,7 @@ export default function LeaderTrips({
                 <FaFlag /> <span>30 Trips Completed</span>
               </div>
 
-              <hr className="my-3 mt-6" />
+              <hr className="my-3 mt-3" />
 
               {/* Host Info here */}
               <div className="flex items-center justify-between">
