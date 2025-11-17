@@ -117,7 +117,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
     };
 
   return (
-    <div className=" bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80  w-[949px] ">
+    <div className=" bg-white  shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80  w-[949px] ">
       {/* Left Image Section */}
       <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
         <Image

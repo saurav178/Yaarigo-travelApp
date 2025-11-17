@@ -197,7 +197,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
               key={trip.id}
               className="flex justify-center w-full bg-gray-50 py-2"
             >
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80">
+              <div className="bg-white  shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80">
                 {/* Left Image */}
                 <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
                   {/* <img
