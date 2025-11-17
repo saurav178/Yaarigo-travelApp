@@ -1,4 +1,4 @@
- "use client";
+"use client";
 
 import { useState } from "react";
 import Image from "next/image";
@@ -276,17 +276,22 @@ export default function LeaderTrips({
                 </div>
               </div> */}
 
-             <div className=" flex-wrap items-center gap-3 text-sm text-gray-600 mt-1 mb-2">
-                               <div className="flex items-center gap-1">
-                                 <GoDotFill className="text-black" /> {trip.from}
-                               </div>
-                               {/* <span className="text-gray-400">→</span> */}
-                               <Image src={dots} alt="dot" className="ml-1.5 -mt-3" width={0} height={0}/>
-                               <div className="flex items-center gap-1">
-                                 <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
-                               </div>
-                             </div>
-             
+              <div className=" flex-wrap items-center gap-3 text-sm text-gray-600 mt-1 mb-2">
+                <div className="flex items-center gap-1">
+                  <GoDotFill className="text-black" /> {trip.from}
+                </div>
+                {/* <span className="text-gray-400">→</span> */}
+                <Image
+                  src={dots}
+                  alt="dot"
+                  className="ml-1.5 -mt-3"
+                  width={0}
+                  height={0}
+                />
+                <div className="flex items-center gap-1">
+                  <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
+                </div>
+              </div>
 
               <div className="flex items-center gap-16 mt-1 text-sm text-gray-600 mb-1">
                 <div className="flex items-center gap-2">
