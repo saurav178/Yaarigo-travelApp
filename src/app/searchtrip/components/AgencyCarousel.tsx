@@ -1,6 +1,6 @@
 
 
-"use client";
+// "use client";
 
 import AgencyCard, { Agency } from "./AgencyCard";
 
@@ -185,3 +185,4 @@ export default function AgencyCarousel({
     </div>
   );
 }
+

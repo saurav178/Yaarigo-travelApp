@@ -159,16 +159,17 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
   };
 
   return (
-    <main className=" w-[949px]">
+    <main className="w-full">
       <div className="w-full max-w-5xl mx-auto flex flex-col gap-4">
         {trips.map((trip) => {
           const catStyle = getCategoryStyle(trip.host.category);
           return (
+
             <article key={trip.id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col md:flex-row h-77">
               {/* Image */}
               <div className="relative w-full md:w-64 h-52 md:h-auto shrink-0">
-                {/* <img src={trip.image} alt={trip.title} className="w-full h-full object-cover" /> */}
-                 <Image
+                <Image
+
                                     src={trip.image}
                                     alt={trip.title}
                                     width={400}
@@ -197,47 +198,45 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                   </div>
                 </div>
 
-                 {/* Tags */}
-                  <div className="flex flex-wrap gap-2  mb-2">
-                    {trip.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="bg-gray-100 text-gray-700 text-xs font-medium px-2 py-0.5 rounded-md"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                  <div className=" flex-wrap items-center gap-3 text-sm text-gray-600 ">
+                                                      <div className="flex items-center gap-1">
+                                                        <GoDotFill className="text-black" /> {trip.from}
+                                                      </div>
+                                                      {/* <span className="text-gray-400">→</span> */}
+                                                      <Image src={dots} alt="dot" className="ml-1.5 -mt-3" width={0} height={0}/>
+                                                      <div className="flex items-center gap-1">
+                                                        <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
+                                                      </div>
+                                                    </div>
+                {/* <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600 mt-2 mb-2">
+                  <div className="flex items-center gap-1">
+                    <GoDotFill className="text-black" /> {trip.from}
                   </div>
 
-                <div className=" flex-wrap items-center gap-2 text-sm text-gray-600 mt-2 mb-2">
-                                                                  <div className="flex items-center gap-1">
-                                                                    <GoDotFill className="text-black" /> {trip.from}
-                                                                  </div>
-                                                                    <Image src={dots} alt="dots" className="ml-1.5 -mt-3" height={0} width={0}/>
-                                                                  {/* <div className="mx-1 text-xs text-gray-400">•</div> */}
-                                                
-                                                                  <div className="flex items-center gap-1">
-                                                                    <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
-                                                                  </div>
-                                                                </div>
+                  <div className="mx-1 text-xs text-gray-400">•</div>
 
-                <div className="flex items-center gap-16 mt-1 text-sm text-gray-600 mb-2">
-                                    <div className="flex items-center gap-2">
-                                      <FaCalendarAlt className="text-gray-400" />
-                                      <div>{trip.date}</div>
-                                    </div>
-                
-                                    <div className="flex items-center gap-2">
-                                      <FaWallet />
-                                      <div>{trip.price}</div>
-                                    </div>
-                                  </div>
+                  <div className="flex items-center gap-1">
+                    <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
+                  </div>
+                </div> */}
+
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-sm text-gray-600 mt-2 mb-2">
+                  <div className="flex items-center gap-2">
+                    <FaCalendarAlt className="text-gray-400" />
+                    <div>{trip.date}</div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <FaWallet />
+                    <div>{trip.price}</div>
+                  </div>
+                </div>
 
                 <div className="flex items-center gap-2 mt-1 text-sm text-gray-600 mb-2">
                   <FaFlag /> <span>30 Trips Completed</span>
                 </div>
 
-                <hr className="my-3 mt-2"  />
+                <hr className="my-3" />
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -269,18 +268,16 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                   </div>
 
                   <div className="flex gap-2">
-                    <button 
-                    onClick={() => router.push(`/trip/${trip.id}`)} 
+                    <button onClick={() => router.push(`/trip/${trip.id}`)} 
                     className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
                       <Image src={TripImg} alt="View Trip Icon" width={14} height={14} className="mr-2 filter brightness-0 invert" /> View Trip
                     </button>
-                    <button 
-                    onClick={() => router.push(`/trip/${trip.id}/join`)} 
+                    <button onClick={() => router.push(`/trip/${trip.id}/join`)} 
                     className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
                       <Image src={Join} alt="Join Trip Icon" width={16} height={16} className="mr-2 filter brightness-0 invert" /> Join Trip
                     </button>
-                    <button 
-                    onClick={() => router.push(`/profile/${trip.host.name.replace(/\s+/g, "-").toLowerCase()}`)} className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
+                    <button onClick={() => router.push(`/profile/${trip.host.name.replace(/\s+/g, "-").toLowerCase()}`)} 
+                    className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
                       <Image src={Profile} alt="View Profile Icon" width={14} height={14} className="mr-2 filter brightness-0 invert" /> View Profile
                     </button>
                   </div>
