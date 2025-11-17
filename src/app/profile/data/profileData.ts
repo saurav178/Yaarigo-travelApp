@@ -171,12 +171,36 @@ export const pastTrips = [
 ];
 
 export const travelPhotos = [
-  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=100",
-  "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=100",
-  "https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=100",
-  "https://images.unsplash.com/photo-1587595431973-160d0d94add1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=100",
-  "https://images.unsplash.com/photo-1539635278303-d4002c07eae3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=100",
-  "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=100",
+  {
+    url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=100",
+    location: "Swiss Alps, Switzerland 🏔️",
+    caption: "Conquered the peaks of the Swiss Alps during an unforgettable hiking adventure. The crisp mountain air and panoramic views were pure bliss. ⛰️"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=100",
+    location: "Tokyo, Japan 🗼",
+    caption: "Lost in the neon glow of Tokyo's bustling streets, where ancient temples meet futuristic skyscrapers. A night to remember! 🌃"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=100",
+    location: "Bali, Indonesia 🏖️",
+    caption: "Sun-kissed beaches and swaying palms in Bali – the perfect escape for relaxation and tropical vibes. 🌴"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1587595431973-160d0d94add1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=100",
+    location: "Santorini, Greece 🏛️",
+    caption: "Watched the sun dip below the horizon over Santorini's iconic white cliffs and blue-domed churches. Magical! 🌅"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1539635278303-d4002c07eae3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=100",
+    location: "Reykjavik, Iceland ❄️",
+    caption: "Chased the elusive Northern Lights across Iceland's frozen landscapes. A surreal dance of colors in the night sky. 🌌"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=100",
+    location: "Paris, France 🗼",
+    caption: "Romantic evening walk along the Seine, with the Eiffel Tower lighting up the Parisian skyline. Love was in the air! 💕"
+  },
 ];
 
 export const tripLeaders = [
