@@ -10,12 +10,12 @@ interface AgencyCardProps {
 
 export default function AgencyCard({ image, name, rating = 4.5, trips = 5 }: AgencyCardProps) {
   return (
-    <div className="flex items-center gap-3 p-3 bg-gray-100 rounded-lg hover:shadow-sm transition-shadow duration-200 cursor-pointer">
+    <div className="flex items-center gap-3 p-3 bg-gray-100 hover:shadow-sm transition-shadow duration-200 cursor-pointer">
       {/* Image */}
       <img
         src={image}
         alt={name}
-        className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
+        className="w-12 h-12 object-cover flex-shrink-0"
       />
 
       {/* Content */}

@@ -41,13 +41,14 @@ export default function TravelPhotos({ photos }: TravelPhotosProps) {
       {/* Photo Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
         {photos.map((photo, i) => (
-          <img
-            key={i}
-            src={photo}
-            alt={`Travel photo ${i + 1}`}
-            className="w-full h-40 object-cover rounded-md cursor-pointer transform transition duration-300 hover:scale-105 shadow-sm hover:shadow-lg"
-            onClick={() => setSelectedIndex(i)}
-          />
+          <div key={i} className="overflow-hidden h-40">
+            <img
+              src={photo}
+              alt={`Travel photo ${i + 1}`}
+              className="w-full h-full object-cover border border-gray-200 cursor-pointer transform transition duration-300 hover:scale-105"
+              onClick={() => setSelectedIndex(i)}
+            />
+          </div>
         ))}
       </div>
 

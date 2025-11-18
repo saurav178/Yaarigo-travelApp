@@ -23,7 +23,7 @@ export default function SimilarAgencies({ agencies }: any) {
     })) ?? fallbackAgencies;
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-5 border border-black">
+    <div className="bg-white shadow-sm hover:shadow-xl transition-shadow duration-300 p-5 w-full max-w-md ml-10">
       <h3 className="text-base font-bold mb-4 text-gray-900">Similar Agencies</h3>
       <div className="max-h-[300px] overflow-y-auto space-y-3 pr-2">
         {displayAgencies.map((agency: any, i: number) => (
