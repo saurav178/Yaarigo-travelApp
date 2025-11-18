@@ -41,6 +41,17 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
   const [likedTrips, setLikedTrips] = useState<number[]>([]);
   const router = useRouter();
 
+  const handleViewTrips = () => {
+    
+    router.push(ROUTES.TRIP_DETAILS); 
+  };
+
+  const handleViewProfile = () => {
+    
+    router.push(ROUTES.USER_PROFILE); 
+  };
+
+
 
   const toggleLike = (id: number) => {
     setLikedTrips((prev) =>
@@ -256,7 +267,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
 
                   <div className="flex gap-2">
                     <button
-                      onClick={() => router.push(`/trip/${trip.id}`)}
+                      onClick={handleViewTrips}
                       className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
                     >
                       <Image
@@ -269,7 +280,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                       View Trip
                     </button>
                     <button
-                      // onClick={() => router.push()}
+                      
                       className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
                     >
                       <Image
@@ -282,13 +293,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                       Join Trip
                     </button>
                     <button
-                      onClick={() =>
-                        router.push(
-                          `/profile/${trip.host.name
-                            .replace(/\s+/g, "-")
-                            .toLowerCase()}`
-                        )
-                      }
+                      onClick={handleViewProfile}
                       className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
                     >
                       <Image
