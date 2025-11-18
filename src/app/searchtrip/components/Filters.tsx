@@ -1,5 +1,4 @@
 
-
 // Filters
 
 
@@ -10,19 +9,7 @@ import { Search, Mic, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FaChevronDown, FaStar } from "react-icons/fa";
 
-export type FilterPayload = {
-  query: string;
-  age: number;
-  duration: number;
-  budget: number;
-  minRating: number;
-  minSafeScore: number;
-  matchPercent: number;
-  scorePercent: number;
-  interest: string;
-  tripType: string;
-  foodPref: string;
-};
+import type { FilterPayload } from "../types/types";
 
 type Props = {
   query: string;
@@ -85,15 +72,9 @@ export default function Filters({
   const [localBudget, setLocalBudget] = useState<number>(budget);
 
   const [localMinRating, setLocalMinRating] = useState<number>(minRating ?? 0);
-  const [localMinSafeScore, setLocalMinSafeScore] = useState<number>(
-    minSafeScore ?? 0
-  );
-  const [localMatchPercent, setLocalMatchPercent] = useState<number>(
-    matchPercent ?? 0
-  );
-  const [localScorePercent, setLocalScorePercent] = useState<number>(
-    scorePercent ?? 0
-  );
+  const [localMinSafeScore, setLocalMinSafeScore] = useState<number>(minSafeScore ?? 0);
+  const [localMatchPercent, setLocalMatchPercent] = useState<number>(matchPercent ?? 0);
+  const [localScorePercent, setLocalScorePercent] = useState<number>(scorePercent ?? 0);
 
   const [likesInput, setLikesInput] = useState<string>("");
   const [likes, setLikes] = useState<string[]>([]);
@@ -279,8 +260,8 @@ export default function Filters({
   };
 
   return (
-    <div className="bg-white p-5 rounded-xl shadow w-full max-w-md mx-auto max-h-[90vh] flex flex-col">
-      <div className="flex items-center gap-3">
+    <div className="bg-white rounded-xl shadow w-full max-w-md mx-auto max-h-[90vh] flex flex-col -ml-2">
+      <div className="flex items-center gap-3 p-3">
         <button className="text-sm text-gray-600 hover:text-gray-800 transition" onClick={() => router.push("/")}>
           ← Back
         </button>
@@ -289,7 +270,7 @@ export default function Filters({
         </button>
       </div>
 
-      <div className="mt-4 space-y-4 overflow-y-auto pr-1 flex-1">
+      <div className="mt-1 space-y-4 overflow-y-auto pr-1 flex-1 p-3">
         {/* Search */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -309,7 +290,7 @@ export default function Filters({
         </div>
 
         {/* Quick tags */}
-        <div className="flex flex-wrap gap-2 mt-2 cursor-pointer ">
+        <div className="flex flex-wrap gap-2 mt-2 cursor-pointer">
           {[{ label: "Locals", queryKey: "Kolkata" }, { label: "Nearby", queryKey: "Mumbai" }, { label: "Starting point", queryKey: "Ahmedabad" }].map((tag) => (
             <button key={tag.label} onClick={() => { setLocalQuery(tag.label); setQuery(tag.queryKey); }} className="px-3 py-1 text-sm text-white rounded-full transition cursor-pointer bg-[#1D4350]">
               {tag.label}
@@ -353,7 +334,7 @@ export default function Filters({
           </div>
         </div>
 
-        {/* Rating (stars) */}
+        {/* Rating */}
         <div className="mb-3">
           <button onClick={() => setRatingOpen((o) => !o)} aria-expanded={ratingOpen} className="w-full flex items-center justify-between text-xs font-medium text-gray-700 mb-2">
             <span>Rating</span>
@@ -362,12 +343,12 @@ export default function Filters({
 
           {ratingOpen && (
             <div className="flex items-center gap-2">
-              {[1, 2, 3, 4, 5].map((n) => (
-                <button key={n} onClick={() => onStarClick(n)} aria-label={`${n} star${n > 1 ? "s" : ""}`} className="focus:outline-none">
-                  <FaStar className={`w-5 h-5 transition-colors ${n <= localMinRating ? "text-[#1D4350]" : "text-gray-300"}`} />
+              {[1,2,3,4,5].map((n) => (
+                <button key={n} onClick={() => onStarClick(n)} aria-label={`${n} star`} className="focus:outline-none cursor-pointer">
+                  <FaStar className={`w-5 h-5 transition-colors ${n <= localMinRating ? "text-yellow-500" : "text-gray-300"}`} />
                 </button>
               ))}
-              <button onClick={() => setLocalMinRating(0)} className="ml-3 text-xs text-gray-600 underline" type="button">Any</button>
+              <button onClick={() => setLocalMinRating(0)} className="ml-3 text-xs text-gray-600 underline cursor-pointer">Any</button>
             </div>
           )}
         </div>
@@ -416,24 +397,47 @@ export default function Filters({
 
         {/* Trip Type */}
         <div className="mb-3">
-          <button onClick={() => setTripTypeOpen((o) => !o)} aria-expanded={tripTypeOpen} className="w-full flex items-center justify-between text-xs font-medium text-gray-700">
-            <span>Trip Type</span>
-            <FaChevronDown className={`transition-transform duration-300 ${tripTypeOpen ? "rotate-180" : "rotate-0"}`} />
+  <button
+    onClick={() => setTripTypeOpen((o) => !o)}
+    aria-expanded={tripTypeOpen}
+    className="w-full flex items-center justify-between text-xs font-medium text-gray-700"
+  >
+    <span>Trip Type</span>
+    <FaChevronDown
+      className={`transition-transform duration-300 ${
+        tripTypeOpen ? "rotate-180" : "rotate-0"
+      }`}
+    />
+  </button>
+
+  {tripTypeOpen && (
+    <div className="grid grid-cols-2 gap-5 mt-3">
+      {tripTypeOptions.map((opt) => {
+        const allSelected = isAllSelected(localTripType, ALL_TRIP);
+        const isActive =
+          opt === ALL_TRIP ? allSelected : localTripType.includes(opt);
+
+        return (
+          <button
+            key={opt}
+            onClick={() =>
+              setLocalTripType((prev) => toggleFromList(prev, opt, ALL_TRIP))
+            }
+            className={`text-sm py-2 px-2 cursor-pointer   transition 
+              ${
+                isActive
+                  ? "bg-[#1D4350] text-white"
+                  : "bg-transparent text-gray-700"
+              }`}
+          >
+            {opt}
           </button>
-          {tripTypeOpen && (
-            <div className="grid grid-cols-2 gap-2 mt-3">
-              {tripTypeOptions.map((opt) => {
-                const allSelected = isAllSelected(localTripType, ALL_TRIP);
-                const isActive = opt === ALL_TRIP ? allSelected : localTripType.includes(opt);
-                return (
-                  <button key={opt} onClick={() => setLocalTripType((prev) => toggleFromList(prev, opt, ALL_TRIP))} className={`text-sm py-2 px-3 cursor-pointer rounded-xl w-full transition ${isActive ? "bg-[#E8F1F1] text-[#0A4D4A]" : "bg-transparent text-gray-700"}`}>
-                    {opt}
-                  </button>
-                );
-              })}
-            </div>
-          )}
-        </div>
+        );
+      })}
+    </div>
+  )}
+</div>
+
 
         {/* Food Preference */}
         <div className="mb-3">
@@ -442,12 +446,12 @@ export default function Filters({
             <FaChevronDown className={`transition-transform duration-300 ${foodPrefOpen ? "rotate-180" : "rotate-0"}`} />
           </button>
           {foodPrefOpen && (
-            <div className="grid grid-cols-2 gap-2 mt-3">
+            <div className="grid grid-cols-2 gap-5  mt-2">
               {foodPrefOptions.map((opt) => {
                 const allSelected = isAllSelected(localFoodPref, ALL_FOOD);
                 const isActive = opt === ALL_FOOD ? allSelected : localFoodPref.includes(opt);
                 return (
-                  <button key={opt} onClick={() => setLocalFoodPref((prev) => toggleFromList(prev, opt, ALL_FOOD))} className={`text-sm py-2 px-3 cursor-pointer rounded-xl w-full transition ${isActive ? "bg-[#E8F1F1] text-[#0A4D4A]" : "bg-transparent text-gray-700"}`}>
+                  <button key={opt} onClick={() => setLocalFoodPref((prev) => toggleFromList(prev, opt, ALL_FOOD))} className={`text-sm py-2  cursor-pointer  w-full transition ${isActive ? "bg-[#1D4350] text-white" : "bg-transparent text-gray-700"}`}>
                     {opt}
                   </button>
                 );
@@ -476,7 +480,7 @@ export default function Filters({
         </div>
       </div>
 
-      <button onClick={handleApply} className="mt-4 w-full bg-[#1D4350] text-white py-2 rounded-lg font-semibold hover:bg-[#163935] transition">
+      <button onClick={handleApply} className="mt-4 m-3 w-auto md:w-full bg-[#1D4350] text-white py-2 px-3  font-semibold hover:bg-[#163935] transition">
         Apply Filter
       </button>
     </div>

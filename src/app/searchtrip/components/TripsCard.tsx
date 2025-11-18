@@ -1,4 +1,4 @@
-// TripsCard
+// TripCard
 
 "use client";
 
@@ -8,8 +8,12 @@ import TripImg from "../../../../public/searchpageimg/view_trips.png";
 import Profile from "../../../../public/searchpageimg/view_profile.png";
 import Join from "../../../../public/searchpageimg/join_trips.png";
 import dots from "../../../../public/searchpageimg/Line 1.png";
+// import { MdVerifiedUser } from "react-icons/md";
+// import { FaCalendarAlt } from "react-icons/fa";
+
 import {
-  FaMapMarkerAlt,
+  // FaMapMarkerAlt,
+  FaUser,
   FaCalendarAlt,
   FaCheckCircle,
   FaShieldAlt,
@@ -22,107 +26,8 @@ import { PiMedalDuotone } from "react-icons/pi";
 import { GoDotFill } from "react-icons/go";
 import { useRouter } from "next/navigation";
 
-export type Trip = {
-  id: number;
-  title: string;
-  description: string;
-  tags: string[];
-  from: string;
-  to: string;
-  travelersNeeded: number;
-  price: string;
-  date: string;
-  spotsLeft: number;
-  host: {
-    name: string;
-    age: number;
-    verified: boolean;
-    location: string;
-    rating: number;
-    match: number;
-    safeScore: number;
-    category: string;
-  };
-  image: string;
-};
-
-export const TRIPS_DEMO: Trip[] = [
-  {
-    id: 1,
-    title: "Weekend Hiking Adventure in the Alps",
-    description:
-      "Looking for 2-3 people to join me for an amazing hiking experience! We'll explore beautiful trails and camp under the stars.",
-    tags: ["Hiking", "Culture", "Adventure"],
-    from: "Kolkata, West Bengal",
-    to: "Simla, Himachal Pradesh",
-    travelersNeeded: 3,
-    price: "₹1,500 / person (shared costs)",
-    date: "Dec 15–25, 2025",
-    spotsLeft: 2,
-    host: {
-      name: "Sarah Johnson",
-      age: 18,
-      verified: true,
-      location: "Goa, India",
-      rating: 4.0,
-      match: 90,
-      safeScore: 90,
-      category: "Travel Enthusiast",
-    },
-    image:
-      "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=800&q=80",
-  },
-  {
-    id: 2,
-    title: "Desert Safari Escape in Rajasthan",
-    description:
-      "Join us for a thrilling desert safari experience in Jaisalmer! Camel rides, star gazing, and camping in golden dunes await.",
-    tags: ["Adventure", "Camping", "Culture"],
-    from: "Ahmedabad, Gujarat",
-    to: "Mumbai, India",
-    travelersNeeded: 4,
-    price: "₹20,000 / person (shared costs)",
-    date: "Jan 10–30, 2026",
-    spotsLeft: 1,
-    host: {
-      name: "Ravi Patel",
-      age: 30,
-      verified: true,
-      location: "Surat, India",
-      rating: 3.0,
-      match: 50,
-      safeScore: 50,
-      category: "Travel Enthusiast",
-    },
-    image:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80",
-  },
-  {
-    id: 3,
-    title: "Coastal Yoga & Meditation Retreat",
-    description:
-      "Relax and rejuvenate by the beach with guided meditation, yoga sessions, and peaceful sunsets.",
-    tags: ["Wellness", "Beach", "Relaxation"],
-    from: "Mumbai, India",
-    to: "Gokarna, Karnataka",
-    travelersNeeded: 5,
-    price: "₹1,800 / person (shared costs)",
-    date: "Feb 5–9, 2026",
-    spotsLeft: 3,
-    host: {
-      name: "Ananya Verma",
-      age: 30,
-      verified: true,
-      location: "Bangalore, India",
-      rating: 4.7,
-      match: 90,
-      safeScore: 45,
-      category: "Travel Enthusiast",
-    },
-    image:
-      "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&q=80",
-  },
-];
+import type { Trip } from "../types/types";
+import { TRIPS_DEMO } from "../data/data";
 
 type TripCardProps = {
   trips?: Trip[];
@@ -139,13 +44,6 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
     );
   };
 
-  const getInitials = (name: string) =>
-    name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase();
-
   const getCategoryStyle = (category: string) => {
     switch (category) {
       case "Travel Enthusiast":
@@ -159,6 +57,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
           avatarBg: "bg-yellow-500 text-white",
         };
       case "Trip Agency":
+      case "Featured Trip Agency":
         return {
           bg: "bg-orange-100 text-orange-800 border-orange-300",
           avatarBg: "bg-orange-500 text-white",
@@ -187,7 +86,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
           return (
             <article
               key={trip.id}
-              className="bg-white  shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80"
+              className="bg-white  shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 w-[949px]"
             >
               {/* Image */}
               <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
@@ -199,9 +98,9 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                   className="w-full h-full object-cover"
                   unoptimized={false}
                 />
-                <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
+                {/* <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
                   {trip.host.match}% Match
-                </div>
+                </div> */}
                 <button
                   onClick={() => toggleLike(trip.id)}
                   className={`absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full transition ${
@@ -217,7 +116,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
               {/* Content */}
               <div className="p-4 flex-1">
                 <div className="flex justify-between items-start">
-                  <div className="">
+                  <div>
                     <h2 className="text-lg font-semibold text-gray-900 leading-tight mb-1">
                       {trip.title}
                     </h2>
@@ -226,18 +125,25 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-1">
-                    <span className="flex gap-2 items-center bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
+                  <div className="flex items-center gap-2">
+                    <span className="flex items-center gap-1 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow">
+                      <span className="font-bold">{trip.host.match}%</span>{" "}
+                      Match
+                    </span>
+
+                    <span className="flex items-center gap-1 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
                       <FaExclamationTriangle /> {trip.spotsLeft} spots left
                     </span>
                   </div>
                 </div>
+
                 {/* Tags */}
-                <div className="flex flex-wrap gap-2 mt-1 mb-1">
+                
+                <div className="flex flex-wrap gap-2 mt-2 mb-3">
                   {trip.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="bg-gray-100 text-gray-700 text-xs font-medium px-2 py-0.5 rounded-md"
+                      className="bg-blue-100 text-blue-500 text-xs font-medium px-2 py-0.5 rounded-md"
                     >
                       {tag}
                     </span>
@@ -246,35 +152,25 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
 
                 <div className=" flex-wrap items-center gap-3 text-sm text-gray-600 ">
                   <div className="flex items-center gap-1">
-                    <GoDotFill className="text-black" /> {trip.from}
+                    <span className="w-3 h-3 rounded-full bg-white border-2 border-gray-400 inline-block mr-1"></span>{" "}
+                    {trip.from}
                   </div>
-                  {/* <span className="text-gray-400">→</span> */}
                   <Image
                     src={dots}
                     alt="dot"
-                    className="ml-1.5 -mt-3"
+                    className="ml-1.5 -mt-1"
                     width={0}
                     height={0}
                   />
-                  <div className="flex items-center gap-1">
-                    <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
+                  <div className="flex items-center -mt-2 -ml-1.5  ">
+                    <GoDotFill className="text-black text-lg w-6 h-6 mr-1" />
+                    {trip.to}
                   </div>
                 </div>
-                {/* <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600 mt-2 mb-2">
-                  <div className="flex items-center gap-1">
-                    <GoDotFill className="text-black" /> {trip.from}
-                  </div>
-
-                  <div className="mx-1 text-xs text-gray-400">•</div>
-
-                  <div className="flex items-center gap-1">
-                    <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
-                  </div>
-                </div> */}
-
+                
                 <div className="flex items-center gap-16 mt-1 text-sm text-gray-600 mb-1">
                   <div className="flex items-center gap-2">
-                    <FaCalendarAlt className="text-gray-400" />
+                    <FaCalendarAlt className="text-gray-600" />
                     <div>{trip.date}</div>
                   </div>
 
@@ -282,18 +178,20 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                     <FaWallet />
                     <div>{trip.price}</div>
                   </div>
-                </div>
 
-                <div className="flex items-center gap-2 mt-1 text-sm text-gray-600 mb-2">
+                  <div className="flex items-center gap-2 mt-1 text-sm text-gray-600 mb-1">
                   <FaFlag /> <span>30 Trips Completed</span>
                 </div>
+                </div>
+
+                
 
                 <hr className="my-3" />
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div
-                      className={`relative w-12 h-12 flex items-center justify-center rounded-full font-semibold text-sm border ${catStyle.avatarBg}`}
+                      className={`relative w-15 h-15 -ml-1 flex items-center justify-center text-2xl rounded-full font-semibold  border ${catStyle.avatarBg}`}
                     >
                       {trip.host.name
                         .split(" ")
@@ -316,36 +214,46 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                     </div>
 
                     <div>
-                      <p className="text-sm font-semibold text-gray-900">
+                      <p className="text-md font-semibold text-gray-900 flex">
                         {trip.host.name}, {trip.host.age}{" "}
                         {trip.host.verified && (
-                          <FaCheckCircle className="inline text-sky-500 ml-1" />
+                          
+                            <FaCheckCircle className="inline text-green-500 ml-1 w-5 h-5" />
+                         
                         )}
                       </p>
 
-                      <div className="flex items-center gap-2 mt-1">
-                        <div
-                          className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-md font-medium ${catStyle.bg}`}
-                        >
-                          {trip.host.category}
-                        </div>
-                        <span
-                          className={getSafeScoreStyle(trip.host.safeScore)}
-                        >
-                          <FaShieldAlt /> {trip.host.safeScore}% Safe
-                        </span>
+                      <div className="flex gap-2">
+                        <p className="text-xs text-gray-600 mt-1">
+                          {trip.host.location} • ⭐ {trip.host.rating}
+                        </p>{" "}
+                        
                       </div>
 
-                      <p className="text-xs text-gray-600 mt-1">
-                        {trip.host.location} • ⭐ {trip.host.rating}
-                      </p>
+                      <div className="flex items-center gap-2 mt-1 -ml-0.5">
+                        <div
+                          className={`flex items-center gap-1 text-xs px-1  py-0.5 rounded-md font-medium ${catStyle.bg}`}
+                        >
+                          <FaUser/>
+                          {trip.host.category}
+                        </div>
+                        <div className="">
+                          <span
+                            className={getSafeScoreStyle(trip.host.safeScore)}
+                          >
+                            <FaShieldAlt /> {trip.host.safeScore}% Safe
+                          </span>
+                        </div>
+                      </div>
+
+                      
                     </div>
                   </div>
 
                   <div className="flex gap-2">
                     <button
                       onClick={() => router.push(`/trip/${trip.id}`)}
-                      className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
+                      className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
                     >
                       <Image
                         src={TripImg}
@@ -357,8 +265,8 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                       View Trip
                     </button>
                     <button
-                      onClick={() => router.push(`/trip/${trip.id}/join`)}
-                      className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
+                      // onClick={() => router.push()}
+                      className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
                     >
                       <Image
                         src={Join}
@@ -377,7 +285,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                             .toLowerCase()}`
                         )
                       }
-                      className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
+                      className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
                     >
                       <Image
                         src={Profile}
