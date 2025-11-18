@@ -115,7 +115,7 @@ export default function ProfileHeader({
         {/* Info */}
         <div className="flex-1 mt-0 text-center ml-0 mr-86">
 
-          <div className="flex items-center justify-center ml-0">
+          <div className="flex items-center justify-center ml-0 mr-50">
             <h2 className="text-2xl font-semibold flex items-center gap-2">
               Jane Cooper
               <span className="bg-emerald-500 text-white text-xs px-2 py-1 rounded-full  flex items-center gap-1">
@@ -132,7 +132,7 @@ export default function ProfileHeader({
           <p className="text-gray-600 flex items-center ml-94 gap-1 mt-1">
             <FaMapMarkerAlt className="text-black" /> Kiev, Ukraine
           </p>
-          <div className="text-sm text-gray-500 mt-1 ml-0 mr-12">
+          <div className="text-sm text-gray-500 mt-1 ml-0 mr-60">
             <Image
               src="/star-icon.png"
               alt="Star"
