@@ -396,24 +396,47 @@ export default function Filters({
 
         {/* Trip Type */}
         <div className="mb-3">
-          <button onClick={() => setTripTypeOpen((o) => !o)} aria-expanded={tripTypeOpen} className="w-full flex items-center justify-between text-xs font-medium text-gray-700">
-            <span>Trip Type</span>
-            <FaChevronDown className={`transition-transform duration-300 ${tripTypeOpen ? "rotate-180" : "rotate-0"}`} />
+  <button
+    onClick={() => setTripTypeOpen((o) => !o)}
+    aria-expanded={tripTypeOpen}
+    className="w-full flex items-center justify-between text-xs font-medium text-gray-700"
+  >
+    <span>Trip Type</span>
+    <FaChevronDown
+      className={`transition-transform duration-300 ${
+        tripTypeOpen ? "rotate-180" : "rotate-0"
+      }`}
+    />
+  </button>
+
+  {tripTypeOpen && (
+    <div className="grid grid-cols-2 gap-2 mt-3">
+      {tripTypeOptions.map((opt) => {
+        const allSelected = isAllSelected(localTripType, ALL_TRIP);
+        const isActive =
+          opt === ALL_TRIP ? allSelected : localTripType.includes(opt);
+
+        return (
+          <button
+            key={opt}
+            onClick={() =>
+              setLocalTripType((prev) => toggleFromList(prev, opt, ALL_TRIP))
+            }
+            className={`text-sm py-2 px-3 cursor-pointer rounded-xl w-full transition 
+              ${
+                isActive
+                  ? "bg-[#0A4D4A] text-white"
+                  : "bg-transparent text-gray-700"
+              }`}
+          >
+            {opt}
           </button>
-          {tripTypeOpen && (
-            <div className="grid grid-cols-2 gap-2 mt-3">
-              {tripTypeOptions.map((opt) => {
-                const allSelected = isAllSelected(localTripType, ALL_TRIP);
-                const isActive = opt === ALL_TRIP ? allSelected : localTripType.includes(opt);
-                return (
-                  <button key={opt} onClick={() => setLocalTripType((prev) => toggleFromList(prev, opt, ALL_TRIP))} className={`text-sm py-2 px-3 cursor-pointer rounded-xl w-full transition ${isActive ? "bg-[#E8F1F1] text-[#0A4D4A]" : "bg-transparent text-gray-700"}`}>
-                    {opt}
-                  </button>
-                );
-              })}
-            </div>
-          )}
-        </div>
+        );
+      })}
+    </div>
+  )}
+</div>
+
 
         {/* Food Preference */}
         <div className="mb-3">
@@ -427,7 +450,7 @@ export default function Filters({
                 const allSelected = isAllSelected(localFoodPref, ALL_FOOD);
                 const isActive = opt === ALL_FOOD ? allSelected : localFoodPref.includes(opt);
                 return (
-                  <button key={opt} onClick={() => setLocalFoodPref((prev) => toggleFromList(prev, opt, ALL_FOOD))} className={`text-sm py-2 px-3 cursor-pointer rounded-xl w-full transition ${isActive ? "bg-[#E8F1F1] text-[#0A4D4A]" : "bg-transparent text-gray-700"}`}>
+                  <button key={opt} onClick={() => setLocalFoodPref((prev) => toggleFromList(prev, opt, ALL_FOOD))} className={`text-sm py-2 px-3 cursor-pointer rounded-xl w-full transition ${isActive ? "bg-[#0A4D4A] text-white" : "bg-transparent text-gray-700"}`}>
                     {opt}
                   </button>
                 );
