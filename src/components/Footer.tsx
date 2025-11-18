@@ -35,7 +35,7 @@ export default function Footer() {
               placeholder="Enter your email"
               className="px-4 py-2 rounded-xl bg-white text-gray-800 w-64 outline-none placeholder:text-gray-600"
             />
-            <button className="bg-white text-[#f36b6b] font-medium px-4 py-2 rounded-lg hover:bg-gray-100 transition">
+            <button className="bg-white text-[#f36b6b] font-medium px-4 py-2 rounded-lg hover:bg-gray-100 transition cursor-pointer">
               Subscribe
             </button>
           </div>
@@ -80,46 +80,78 @@ export default function Footer() {
         </div>
 
         {/* Product */}
-        <div>
+        <div className="md:pl-12 text-left md:ml-auto">
           <h4 className="font-semibold mb-3">Product</h4>
           <ul className="space-y-2 text-white/80">
-            <li><a>Features</a></li>
-            <li><a>How It Works</a></li>
-            <li><a>AI Tools</a></li>
-            <li><a>Pricing</a></li>
+            <li>
+              <a>Features</a>
+            </li>
+            <li>
+              <a>How It Works</a>
+            </li>
+            <li>
+              <a>AI Tools</a>
+            </li>
+            <li>
+              <a>Pricing</a>
+            </li>
           </ul>
         </div>
 
         {/* Company */}
-        <div>
+        <div className="md:pl-12 text-left md:ml-auto">
           <h4 className="font-semibold mb-3">Company</h4>
           <ul className="space-y-2 text-white/80">
-            <li><a>About Us</a></li>
-            <li><a>Careers</a></li>
-            <li><a>Blog</a></li>
-            <li><a>Press</a></li>
+            <li>
+              <a>About Us</a>
+            </li>
+            <li>
+              <a>Careers</a>
+            </li>
+            <li>
+              <a>Blog</a>
+            </li>
+            <li>
+              <a>Press</a>
+            </li>
           </ul>
         </div>
 
         {/* Support */}
-        <div>
+        <div className="md:pl-12 text-left md:ml-auto">
           <h4 className="font-semibold mb-3">Support</h4>
           <ul className="space-y-2 text-white/80">
-            <li><a>Help Center</a></li>
-            <li><a>Safety</a></li>
-            <li><a>Community Guidelines</a></li>
-            <li><a>Contact</a></li>
+            <li>
+              <a>Help Center</a>
+            </li>
+            <li>
+              <a>Safety</a>
+            </li>
+            <li>
+              <a>Community Guidelines</a>
+            </li>
+            <li>
+              <a>Contact</a>
+            </li>
           </ul>
         </div>
 
         {/* Legal */}
-        <div>
+        <div className="md:pl-12 text-left md:ml-auto">
           <h4 className="font-semibold mb-3">Legal</h4>
           <ul className="space-y-2 text-white/80">
-            <li><a>Privacy Policy</a></li>
-            <li><a>Terms of Service</a></li>
-            <li><a>Cookie Policy</a></li>
-            <li><a>Licenses</a></li>
+            <li>
+              <a>Privacy Policy</a>
+            </li>
+            <li>
+              <a>Terms of Service</a>
+            </li>
+            <li>
+              <a>Cookie Policy</a>
+            </li>
+            <li>
+              <a>Licenses</a>
+            </li>
           </ul>
         </div>
       </div>

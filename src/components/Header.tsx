@@ -47,16 +47,16 @@ export default function Header() {
               : "text-gray-800"
           }`}
         >
-          <Link href="/my-trips" className="hover:text-red-500 transition">
+          <Link href="/my-trips" className="hover:text-[#1DA69B] transition">
             About Us
           </Link>
-          <Link href="/explore" className="hover:text-red-500 transition">
+          <Link href="/explore" className="hover:text-[#1DA69B] transition">
             Explore Trips
           </Link>
           {/* <Link href="/nearby" className="hover:text-red-500 transition">
             Nearby Essentials
           </Link> */}
-          <Link href="/community" className="hover:text-red-500 transition">
+          <Link href="/community" className="hover:text-[#1DA69B] transition">
             How it Works
           </Link>
         </nav>

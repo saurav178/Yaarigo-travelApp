@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ShieldCheck, Sparkles, Users } from "lucide-react";
 
@@ -62,6 +62,32 @@ export default function LandingPage() {
 
   const [location, setLocation] = useState("");
   const [date, setDate] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
+  const titleRef = useRef(null);
+
+  //when we scroll on the particular section then the under line appear
+  //   useEffect(() => {
+  //   const observer = new IntersectionObserver(
+  //     ([entry]) => {
+  //       if (entry.isIntersecting) {
+  //         setIsVisible(true);
+  //       } else {
+  //         setIsVisible(false);
+  //       }
+  //     },
+  //     { threshold: 0.3 }
+  //   );
+
+  //   if (titleRef.current) {
+  //     observer.observe(titleRef.current);
+  //   }
+
+  //   return () => {
+  //     if (titleRef.current) {
+  //       observer.unobserve(titleRef.current);
+  //     }
+  //   };
+  // }, []);
 
   const handleGoToTrip = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -111,7 +137,7 @@ export default function LandingPage() {
 
             {/* Search card */}
             <div className="mt-10 flex justify-center">
-              <div className="bg-white/75 backdrop-blur-md rounded-lg p-3 shadow-2xl flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <div className="bg-white/75 backdrop-blur-md p-3 shadow-2xl flex flex-col sm:flex-row gap-3 sm:gap-4">
                 {/* Location Input */}
                 <div className="flex-1 min-w-[200px]">
                   <label htmlFor="location" className="sr-only">
@@ -149,7 +175,7 @@ export default function LandingPage() {
                 </div>
 
                 {/* Date Input */}
-                <div className="sm:w-44 relative">
+                <div className="flex-1 min-w-[200px] relative">
                   <label htmlFor="date" className="sr-only">
                     Date
                   </label>
@@ -191,7 +217,7 @@ export default function LandingPage() {
                 <button
                   type="button"
                   onClick={handleGoToTrip}
-                  className="bg-[#1D4350] hover:bg-[#006DA3] text-white font-semibold px-6 py-2.5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                  className="bg-[#1D4350] hover:bg-[#006DA3] text-white font-semibold px-6 py-2.5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 cursor-pointer"
                 >
                   Find Trips →
                 </button>
@@ -207,28 +233,41 @@ export default function LandingPage() {
       </section>
 
       {/* ================= Key Features Section ================= */}
-      <section className="py-12 bg-white">
-        <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-10">
+      <section
+        className="py-12 bg-white"
+        onMouseEnter={() => setIsVisible(true)}
+        onMouseLeave={() => setIsVisible(false)}
+      >
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <h2 className="relative inline-block text-2xl md:text-3xl font-bold text-center text-gray-900 mb-10">
             Key Features
+            <span
+              className={`absolute bottom-[-8px] left-1/2 h-[4px] transition-all duration-700 ease-out rounded-full ${
+                isVisible ? "w-[150%]" : "w-0"
+              }`}
+              style={{
+                backgroundImage: "linear-gradient(to right, #06b6d4, #1D4350)",
+                transform: "translateX(-50%)",
+              }}
+            ></span>
           </h2>
 
           <div className="grid md:grid-cols-2 gap-10 items-center">
             {/* Left side - Features */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-6 text-left">
               {/* Feature 1 */}
-              <div className="flex items-start gap-6 group">
-                <div className="flex-shrink-0 -mt-6 transition-transform duration-300 group-hover:scale-140">
+              <div className="flex items-start gap-4 group">
+                <div className="flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
                   <Image
                     src="/images/tripplanner2.png"
                     alt="AI Trip Planner Icon"
-                    width={70}
-                    height={70}
-                    className="object-contain red-icon"
+                    width={60}
+                    height={60}
+                    className="object-contain"
                   />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-800">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-1">
                     AI Trip Planner
                   </h3>
                   <p className="text-gray-600 text-sm leading-relaxed">
@@ -239,18 +278,18 @@ export default function LandingPage() {
               </div>
 
               {/* Feature 2 */}
-              <div className="flex items-start gap-6 group">
-                <div className="flex-shrink-0 -mt-6 transition-transform duration-300 group-hover:scale-140">
+              <div className="flex items-start gap-4 group">
+                <div className="flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
                   <Image
                     src="/images/travelmatching2.png"
                     alt="Travel Matching Icon"
-                    width={70}
-                    height={70}
-                    className="object-contain text-red-500"
+                    width={60}
+                    height={60}
+                    className="object-contain"
                   />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-800">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-1">
                     Travel Matching
                   </h3>
                   <p className="text-gray-600 text-sm leading-relaxed">
@@ -261,18 +300,18 @@ export default function LandingPage() {
               </div>
 
               {/* Feature 3 */}
-              <div className="flex items-start gap-6 group">
-                <div className="flex-shrink-0 -mt-6 transition-transform duration-300 group-hover:scale-140">
+              <div className="flex items-start gap-4 group">
+                <div className="flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
                   <Image
                     src="/images/safety2.png"
                     alt="Safety Icon"
-                    width={70}
-                    height={70}
-                    className="object-contain text-red-500"
+                    width={60}
+                    height={60}
+                    className="object-contain"
                   />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-800">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-1">
                     Safety & Trust
                   </h3>
                   <p className="text-gray-600 text-sm leading-relaxed">
@@ -283,18 +322,18 @@ export default function LandingPage() {
               </div>
 
               {/* Feature 4 */}
-              <div className="flex items-start gap-6 group">
-                <div className="flex-shrink-0 -mt-6 transition-transform duration-300 group-hover:scale-140">
+              <div className="flex items-start gap-4 group">
+                <div className="flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
                   <Image
                     src="/images/social2.png"
                     alt="Social Discovery Icon"
-                    width={70}
-                    height={70}
-                    className="object-contain text-red-500"
+                    width={60}
+                    height={60}
+                    className="object-contain"
                   />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-800">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-1">
                     Social Discovery
                   </h3>
                   <p className="text-gray-600 text-sm leading-relaxed">
@@ -344,62 +383,31 @@ export default function LandingPage() {
       </section>
 
       {/* ================= Why Choose Travio Section ================= */}
-      {/* <section className="py-20 bg-white text-center">
-        <h2 className="text-3xl md:text-3xl font-bold text-gray-900">
-          Why Choose Travio?
-        </h2>
-        <p className="text-gray-500 mt-3">
-          Experience travel like never before with features designed for modern
-          explorers
-        </p>
 
-        <div className="mt-12 grid gap-8 md:grid-cols-3 max-w-6xl mx-auto px-6">
-          {[
-            {
-              iconBg: "bg-blue-400",
-              title: "Connect Authentically",
-              desc: "Meet verified travelers who share your interests, travel style, and destinations. Build meaningful connections before you go.",
-              icon: <Users className="w-6 h-6 text-white" />,
-            },
-            {
-              iconBg: "bg-blue-400",
-              title: "AI-Powered Matching",
-              desc: "Our smart algorithm matches you with compatible travel companions based on your preferences, personality, and travel goals.",
-              icon: <Sparkles className="w-6 h-6 text-white" />,
-            },
-            {
-              iconBg: "bg-blue-400",
-              title: "Travel Safely",
-              desc: "Verified profiles, secure messaging, and safety features ensure you can focus on the adventure, not the worries.",
-              icon: <ShieldCheck className="w-6 h-6 text-white" />,
-            },
-          ].map((feature, i) => (
-            <div
-              key={i}
-              className="p-8 bg-white rounded-2xl shadow-md transform transition-all duration-300 hover:scale-[1.03] hover:shadow-xl"
-            >
-              <div
-                className={`inline-flex items-center justify-center p-4 rounded-2xl shadow-md ${feature.iconBg}`}
-              >
-                {feature.icon}
-              </div>
-              <h3 className="mt-6 text-lg font-semibold text-gray-900">
-                {feature.title}
-              </h3>
-              <p className="mt-3 text-gray-500 text-sm leading-relaxed">
-                {feature.desc}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section> */}
-
-      <section className="py-20 bg-white">
+      <section
+        className="py-20 bg-white"
+        onMouseEnter={() => setIsVisible(true)}
+        onMouseLeave={() => setIsVisible(false)}
+      >
         <div className="text-center mb-12 px-6">
-          <h2 className="text-3xl md:text-3xl font-bold text-gray-900 mb-4">
-            Why Choose Travio?
+          <h2
+            ref={titleRef}
+            id="howItWorksTitle"
+            className="text-3xl md:text-3xl font-bold text-gray-900 inline-block relative cursor-default"
+          >
+            Why Choose Travio
+            <span
+              className={`absolute bottom-[-8px] left-1/2 h-[4px] transition-all duration-700 ease-out rounded-full ${
+                isVisible ? "w-[150%]" : "w-0"
+              }`}
+              style={{
+                backgroundImage: "linear-gradient(to right, #06b6d4, #1D4350)",
+                transform: "translateX(-50%)",
+              }}
+            ></span>
           </h2>
-          <p className="text-gray-600 text-lg mt-3 max-w-2xl mx-auto">
+
+          <p className="text-gray-600 text-lg mt-6 max-w-2xl mx-auto">
             Experience travel like never before with features designed for
             modern explorers
           </p>
@@ -487,15 +495,33 @@ export default function LandingPage() {
       </section>
 
       {/* =========================How it Works================================== */}
-
-      <section className="py-20 bg-indigo-50">
+      <section
+        className="py-20 bg-indigo-50"
+        onMouseEnter={() => setIsVisible(true)}
+        onMouseLeave={() => setIsVisible(false)}
+      >
         <div className="max-w-6xl mx-auto px-6">
           {/* Centered Heading */}
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-3xl font-bold text-gray-900 mb-1">
+            <h2
+              ref={titleRef}
+              id="howItWorksTitle"
+              className="text-3xl md:text-3xl font-bold text-gray-900 inline-block relative cursor-default"
+            >
               How it works
+              <span
+                className={`absolute bottom-[-8px] left-1/2 h-[4px] transition-all duration-700 ease-out rounded-full ${
+                  isVisible ? "w-[150%]" : "w-0"
+                }`}
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to right, #06b6d4, #1D4350)",
+                  transform: "translateX(-50%)",
+                }}
+              ></span>
             </h2>
-            <p className="text-gray-500 max-w-2xl mx-auto">
+
+            <p className="text-gray-500 max-w-2xl mx-auto mt-6">
               Experience travel like never before with features designed for
               modern explorers.
             </p>
@@ -503,23 +529,21 @@ export default function LandingPage() {
 
           <div className="grid md:grid-cols-2 gap-12 items-start relative">
             {/* Left Image */}
-            <div className="flex justify-center">
-              <Image
-                src={imageSrc}
-                alt="How it works"
-                width={350}
-                height={350}
-                className="object-cover shadow-md transition-all duration-500 
-             rounded-tl-[100px] rounded-br-[100px] rounded-tr-none rounded-bl-none"
-              />
+            <div className="flex justify-center -mt-5">
+              <div className="relative overflow-hidden rounded-tl-[100px] rounded-br-[100px] shadow-md w-[350px] h-[450px]">
+                <Image
+                  src={imageSrc}
+                  alt="How it works"
+                  fill
+                  className="object-cover transition-transform duration-500 hover:scale-110"
+                />
+              </div>
             </div>
 
             {/* Right Steps with Progress Bar */}
             <div className="relative mt-6 md:mt-12">
-              {/* Vertical line (progress track) */}
               <div className="absolute left-4 top-0 h-full w-1 bg-gray-300 rounded-full" />
 
-              {/* Filled progress */}
               <div
                 className="absolute left-3.5 w-2 h-18 bg-gradient-to-tr from-[#0073B9] to-[#1B3F72] rounded-full transition-all duration-500"
                 style={{
@@ -528,7 +552,6 @@ export default function LandingPage() {
                 }}
               />
 
-              {/* Steps */}
               <div className="flex flex-col gap-8 ml-10 relative">
                 {steps.map(({ step, title, image }) => (
                   <button
@@ -539,7 +562,6 @@ export default function LandingPage() {
                     }}
                     className="flex items-start gap-4 text-left group"
                   >
-                    {/* Step Number Circle */}
                     <div
                       className={`w-8 h-8 flex items-center justify-center rounded-full border-2 transition-all duration-300 ${
                         activeStep >= step
@@ -550,7 +572,6 @@ export default function LandingPage() {
                       {step}
                     </div>
 
-                    {/* Step Content */}
                     <div>
                       <h3
                         className={`text-lg font-semibold ${
@@ -572,79 +593,81 @@ export default function LandingPage() {
       </section>
 
       {/* ================= Safety & Trust Section ================= */}
-<section className="bg-white py-20 px-6 md:px-16 group">
-  <div className="text-center mb-10">
-    <h2 className="text-3xl md:text-3xl font-bold text-gray-900 inline-block relative cursor-default">
-      Safety & Trust
+      <section className="bg-white py-20 px-6 md:px-16 group">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl md:text-3xl font-bold text-gray-900 inline-block relative cursor-default">
+            Safety & Trust
+            {/* Animated underline */}
+            <span
+              className="absolute bottom-[-8px] left-1/2 h-[4px] w-0 group-hover:w-[150%] transition-all duration-500 ease-out rounded-full"
+              style={{
+                backgroundImage: "linear-gradient(to right, #06b6d4, #1D4350)",
+                transform: "translateX(-50%)",
+              }}
+            ></span>
+          </h2>
 
-      {/* Animated underline */}
-      <span
-        className="absolute bottom-[-8px] left-1/2 h-[4px] w-0 group-hover:w-[150%] transition-all duration-500 ease-out rounded-full"
-        style={{
-          backgroundImage: "linear-gradient(to right, #06b6d4, #1D4350)",
-          transform: "translateX(-50%)",
-        }}
-      ></span>
-    </h2>
-
-    <p className="text-gray-500 mt-2 text-sm md:text-base">
-      Experience travel like never before with features designed for
-      modern explorers.
-    </p>
-  </div>
-
-  <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
-    {/* Left: Icon Grid */}
-    <div className="grid grid-cols-2 gap-10 flex-1">
-      {features.map((feature, index) => (
-        <div
-          key={index}
-          className="flex flex-col items-center text-center space-y-3 group"
-        >
-          <div
-            className={`flex items-center justify-center w-20 h-20 rounded-full ${feature.bgColor} shadow-sm transition-all duration-300 group-hover:scale-110`}
-            style={{
-              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow =
-                "0 25px 50px -12px rgba(0, 255, 255, 0.6), 0 15px 30px -10px rgba(59, 130, 246, 0.7), 0 10px 20px -5px rgba(6, 182, 212, 0.5)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow =
-                "0 4px 6px -1px rgba(0, 0, 0, 0.1)";
-            }}
-          >
-            <Image
-              src={feature.image}
-              alt={feature.title}
-              width={40}
-              height={40}
-              className="object-contain"
-            />
-          </div>
-          <p className="text-gray-700 text-sm md:text-base font-medium leading-tight">
-            {feature.title}
+          <p className="text-gray-500 mt-2 text-sm md:text-base">
+            Experience travel like never before with features designed for
+            modern explorers.
           </p>
         </div>
-      ))}
-    </div>
 
-    {/* Right: Main image */}
-    <div className="flex-1 flex justify-center">
-      <img
-        src="/images/safety-trust1.png"
-        alt="Safety and Trust"
-        className="w-[360px] h-[400px] object-cover shadow-md rounded-tl-[100px] rounded-br-[100px] transition-transform duration-300 hover:scale-105"
-      />
-    </div>
-  </div>
-</section>
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+          {/* Left: Icon Grid */}
+          <div className="grid grid-cols-2 gap-10 flex-1">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="flex flex-col items-center text-center space-y-3 group"
+              >
+                <div
+                  className={`flex items-center justify-center w-20 h-20 rounded-full ${feature.bgColor} shadow-sm transition-all duration-300 group-hover:scale-110`}
+                  style={{
+                    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.boxShadow =
+                      "0 25px 50px -12px rgba(0, 255, 255, 0.6), 0 15px 30px -10px rgba(59, 130, 246, 0.7), 0 10px 20px -5px rgba(6, 182, 212, 0.5)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow =
+                      "0 4px 6px -1px rgba(0, 0, 0, 0.1)";
+                  }}
+                >
+                  <Image
+                    src={feature.image}
+                    alt={feature.title}
+                    width={40}
+                    height={40}
+                    className="object-contain"
+                  />
+                </div>
+                <p className="text-gray-700 text-sm md:text-base font-medium leading-tight">
+                  {feature.title}
+                </p>
+              </div>
+            ))}
+          </div>
 
+          {/* Right: Main image */}
+          <div className="w-[360px] h-[400px] rounded-tl-[100px] rounded-br-[100px] overflow-hidden shadow-md">
+            <img
+              src="/images/safety-trust1.png"
+              alt="Safety and Trust"
+              className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+            />
+          </div>
+        </div>
+      </section>
 
       {/* ================= Join Our Global Community Section ================= */}
 
-      <section className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-20 px-4 md:px-12 relative overflow-hidden">
+      <section
+        className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-20 px-4 md:px-12 relative overflow-hidden"
+        onMouseEnter={() => setIsVisible(true)}
+        onMouseLeave={() => setIsVisible(false)}
+      >
         {/* Decorative background elements */}
         <div className="absolute top-0 left-0 w-64 h-64 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
         <div className="absolute top-0 right-0 w-64 h-64 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
@@ -655,6 +678,16 @@ export default function LandingPage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-3xl font-bold text-gray-900 mb-4">
               Join Our Global Community
+              <span
+                className={`absolute bottom-[-8px] left-1/2 h-[4px] transition-all duration-700 ease-out rounded-full ${
+                  isVisible ? "w-[150%]" : "w-0"
+                }`}
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to right, #06b6d4, #1D4350)",
+                  transform: "translateX(-50%)",
+                }}
+              ></span>
             </h2>
             <p className="text-gray-500 mt-2 text-sm md:text-base">
               Hear from travelers who've found their perfect travel companions
@@ -696,7 +729,7 @@ export default function LandingPage() {
               <div key={i} className="group relative overflow-hidden">
                 {/* Card with gradient border effect - Changed to cyan to #1D4350 */}
                 <div
-                  className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"
                   style={{
                     backgroundImage:
                       "linear-gradient(to bottom right, cyan, #1D4350)",
@@ -704,7 +737,7 @@ export default function LandingPage() {
                 ></div>
 
                 {/* Reduced padding from p-8 to p-5 */}
-                <div className="relative bg-white rounded-3xl p-5 shadow-lg hover:shadow-2xl transition-all duration-500 m-0.5">
+                <div className="relative bg-white p-5 shadow-lg hover:shadow-2xl transition-all duration-500 m-0.5">
                   {/* Gradient top bar - Changed to solid #1D4350 */}
                   <div
                     className="absolute top-0 left-0 right-0 h-1.5 rounded-t-3xl"
@@ -781,8 +814,8 @@ export default function LandingPage() {
           </div>
 
           {/* Stats Section */}
-          <div className="max-w-5xl mx-auto">
-            <div className="rounded-3xl shadow-xl p-6 md:p-12 -mt-8">
+          <div className="max-w-6xl mx-auto mt-16">
+            <div className="shadow-xl p-4 md:p-6 -mt-4">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12">
                 {[
                   {
