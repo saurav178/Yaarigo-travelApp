@@ -4,10 +4,10 @@ import Image from "next/image";
 export default function AboutSection() {
   return (
     <div
-      className="w-full md:w-96 md:self-start bg-white shadow-lg rounded-2xl p-4"
+      className="w-full md:w-96 md:self-start bg-white shadow-lg  p-4"
       style={{ boxShadow: "4px 0 8px rgba(0,0,0,0.1)" }}
     >
-      <h3 className="text-lg  mb-1">About</h3>
+      <h3 className="text-lg mb-1 bg-gray-200 px-2 py-1 w-full">About</h3>
       <p className="text-gray-600 text-sm">
         Wildlife photographer and nature lover. Eco-conscious traveler.
       </p>

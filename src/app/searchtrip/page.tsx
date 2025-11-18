@@ -1,14 +1,16 @@
 
+
 // searchtrip/ main-page
 
 "use client";
 
 import { useMemo, useState } from "react";
+import Similar, {
+  SIMILAR_TRIPS_DEMO,
+  SimilarTrip,
+} from "./components/Similar";
 import { Flame } from "lucide-react";
-import TripCard, {
-  TRIPS_DEMO,
-  Trip,
-} from "./components/TripsCard";
+import TripCard, { TRIPS_DEMO, Trip } from "./components/TripsCard";
 import LeaderTrips, {
   LEADERS_DEMO,
   Leader,
@@ -16,12 +18,24 @@ import LeaderTrips, {
 import AgencyCarousel, {
   AGENCIES_DEMO,
 } from "./components/AgencyCarousel";
-import Filters, {
-  FilterPayload,
-} from "./components/Filters";
+import Filters, { FilterPayload } from "./components/Filters";
 import type { Agency } from "./components/AgencyCard";
 
 type ActiveFilter = "all" | "best" | "agency" | "leader";
+
+// convert chip string like "+ Beaches, + Culture" → ["beaches","culture"]
+const normalizeChipsToValues = (value: string): string[] => {
+  if (!value || value === "All") return [];
+  return value
+    .split(",")
+    .map((s) =>
+      s
+        .trim()
+        .replace(/^\+ /, "") // remove leading "+ "
+        .toLowerCase()
+    )
+    .filter(Boolean);
+};
 
 export default function Page() {
   // Filter states (controlled by Filters component)
@@ -32,11 +46,17 @@ export default function Page() {
   const [minRating, setMinRating] = useState(0);
   const [minSafeScore, setMinSafeScore] = useState(0);
 
+  // from Interests / Trip type / Food preference chips
+  const [interest, setInterest] = useState<string>("All");
+  const [tripType, setTripType] = useState<string>("All");
+  const [foodPref, setFoodPref] = useState<string>("All");
+
   // Has the user clicked "Apply Filter" yet?
   const [hasAppliedFilters, setHasAppliedFilters] = useState(false);
 
   // Top row chips
-  const [activeFilter, setActiveFilter] = useState<ActiveFilter>("all");
+  const [activeFilter, setActiveFilter] =
+    useState<ActiveFilter>("all");
 
   // helper for price parsing (from string like "₹1,500 / person...")
   const parsePrice = (price: string): number => {
@@ -72,7 +92,8 @@ export default function Page() {
       if (minRating > 0 && trip.host.rating < minRating) return false;
 
       // safe score
-      if (minSafeScore > 0 && trip.host.safeScore < minSafeScore) return false;
+      if (minSafeScore > 0 && trip.host.safeScore < minSafeScore)
+        return false;
 
       // age slider (simple: keep hosts within ±5 years)
       if (Math.abs(trip.host.age - age) > 5) return false;
@@ -86,9 +107,20 @@ export default function Page() {
         return false;
       }
 
+      // if your Trip type also has interest/tripType/foodPref,
+      // you can add the same logic as SimilarTrip here.
+
       return true;
     });
-  }, [query, hasAppliedFilters, minRating, minSafeScore, age, budget, duration]);
+  }, [
+    query,
+    hasAppliedFilters,
+    minRating,
+    minSafeScore,
+    age,
+    budget,
+    duration,
+  ]);
 
   /* ------- FILTERED LEADERS ------- */
   const filteredLeaders: Leader[] = useMemo(() => {
@@ -154,15 +186,103 @@ export default function Page() {
     });
   }, [query, hasAppliedFilters, minRating, minSafeScore, budget]);
 
+  /* ------- FILTERED SIMILAR TRIPS ------- */
+  const filteredSimilarTrips: SimilarTrip[] = useMemo(() => {
+    let base = SIMILAR_TRIPS_DEMO;
+
+    // SEARCH always active (title / from / to)
+    if (query.trim()) {
+      const q = query.toLowerCase();
+      base = base.filter((trip) => {
+        const inTitle = trip.title.toLowerCase().includes(q);
+        const inFrom = trip.from.toLowerCase().includes(q);
+        const inTo = trip.to.toLowerCase().includes(q);
+        return inTitle || inFrom || inTo;
+      });
+    }
+
+    if (!hasAppliedFilters) {
+      // only search filter applied
+      return base;
+    }
+
+    const interestValues = normalizeChipsToValues(interest);
+    const tripTypeValues = normalizeChipsToValues(tripType);
+    const foodValues = normalizeChipsToValues(foodPref);
+
+    return base.filter((trip) => {
+      // ⭐ rating
+      if (minRating > 0 && trip.host.rating < minRating) return false;
+
+      // 🛡 safe score
+      if (minSafeScore > 0 && trip.host.safeScore < minSafeScore)
+        return false;
+
+      // 👤 age
+      if (Math.abs(trip.host.age - age) > 5) return false;
+
+      // 💰 budget
+      const numericPrice = parsePrice(trip.price);
+      if (budget > 0 && numericPrice > budget) return false;
+
+      // ❤️ Interest filter
+      if (interestValues.length) {
+        const tripInterests = (trip.interest ?? []).map((i) =>
+          i.toLowerCase()
+        );
+        const hasAnyInterest = interestValues.some((v) =>
+          tripInterests.includes(v)
+        );
+        if (!hasAnyInterest) return false;
+      }
+
+      // 👥 Trip type filter
+      if (tripTypeValues.length) {
+        const tripTypes = (trip.tripType ?? []).map((t) =>
+          t.toLowerCase()
+        );
+        const hasAnyType = tripTypeValues.some((v) =>
+          tripTypes.includes(v)
+        );
+        if (!hasAnyType) return false;
+      }
+
+      // 🍽 Food preference filter
+      if (foodValues.length) {
+        const tripFoods = (trip.foodPref ?? []).map((f) =>
+          f.toLowerCase()
+        );
+        const hasAnyFood = foodValues.some((v) =>
+          tripFoods.includes(v)
+        );
+        if (!hasAnyFood) return false;
+      }
+
+      return true;
+    });
+  }, [
+    query,
+    hasAppliedFilters,
+    minRating,
+    minSafeScore,
+    age,
+    budget,
+    interest,
+    tripType,
+    foodPref,
+  ]);
+
   // When user presses "Apply Filter" button in Filters
   const handleApplyFilters = (payload: FilterPayload) => {
     console.log("Filters applied: ", payload);
     setHasAppliedFilters(true);
+    // setters already called inside Filters (setQuery, setAge, setInterest, etc.)
   };
 
   // When "Clear all filters" is pressed in Filters
   const handleClearFilters = () => {
     setHasAppliedFilters(false);
+    // Filters will also reset states via setters it has
   };
 
   // Chip style helper
@@ -170,7 +290,7 @@ export default function Page() {
     `px-3 py-1.5 rounded-full text-sm font-medium border transition
      ${
        activeFilter === type
-         ? "bg-[#0A4D4A] text-white border-[#0A4D4A]"
+         ? "bg-[#1D4350] text-white border-[#0A4D4A]"
          : "bg-white text-gray-700 border-gray-200 hover:shadow-sm"
      }`;
 
@@ -193,6 +313,12 @@ export default function Page() {
               setMinRating={setMinRating}
               minSafeScore={minSafeScore}
               setMinSafeScore={setMinSafeScore}
+              interest={interest}
+              setInterest={setInterest}
+              tripType={tripType}
+              setTripType={setTripType}
+              foodPref={foodPref}
+              setFoodPref={setFoodPref}
               onApply={handleApplyFilters}
               onClear={handleClearFilters}
             />
@@ -245,49 +371,46 @@ export default function Page() {
           </div>
 
           {/* Best Match */}
-          {(activeFilter === "all" || activeFilter === "best") && (
-            <section className="mb-8">
-              <h3 className="text-lg font-semibold mb-4">Best Match</h3>
-              {filteredTrips.length === 0 ? (
-                <p className="text-sm text-gray-500">
-                  No trips found for selected filters.
-                </p>
-              ) : (
+          {(activeFilter === "all" || activeFilter === "best") &&
+            filteredTrips.length > 0 && (
+              <section className="mb-8">
+                <h3 className="text-lg font-semibold mb-4">
+                  Best Match
+                </h3>
                 <TripCard trips={filteredTrips} />
-              )}
-            </section>
-          )}
+              </section>
+            )}
 
           {/* Featured Trip Leaders */}
-          {(activeFilter === "all" || activeFilter === "leader") && (
-            <section className="mb-8">
-              <h3 className="text-lg font-semibold mb-4">
-                Featured Trip Leaders
-              </h3>
-              {filteredLeaders.length === 0 ? (
-                <p className="text-sm text-gray-500">
-                  No leaders found for selected filters.
-                </p>
-              ) : (
+          {(activeFilter === "all" || activeFilter === "leader") &&
+            filteredLeaders.length > 0 && (
+              <section className="mb-8">
+                <h3 className="text-lg font-semibold mb-4">
+                  Featured Trip Leaders
+                </h3>
                 <LeaderTrips leaders={filteredLeaders} />
-              )}
-            </section>
-          )}
+              </section>
+            )}
 
           {/* Featured Travel Agencies */}
-          {(activeFilter === "all" || activeFilter === "agency") && (
-            <section className="mb-8">
-              <h3 className="text-lg font-semibold mb-4">
-                Featured Travel Agencies
-              </h3>
-              {filteredAgencies.length === 0 ? (
-                <p className="text-sm text-gray-500">
-                  No agencies found for selected filters.
-                </p>
-              ) : (
+          {(activeFilter === "all" || activeFilter === "agency") &&
+            filteredAgencies.length > 0 && (
+              <section className="mb-8">
+                <h3 className="text-lg font-semibold mb-4">
+                  Featured Travel Agencies
+                </h3>
                 <AgencyCarousel agencies={filteredAgencies} />
-              )}
-            </section>
+              </section>
+            )}
+
+          {/* Similar Trips */}
+          {filteredSimilarTrips.length > 0 && (
+            <div>
+              <h3 className="text-lg font-semibold mb-4">
+                Similar Trips
+              </h3>
+              <Similar trips={filteredSimilarTrips} />
+            </div>
           )}
         </main>
       </div>
