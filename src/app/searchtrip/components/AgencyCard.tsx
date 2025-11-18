@@ -230,7 +230,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
           </div>
 
           <div className="flex items-start gap-5 ">
-            <button className="bg-[#1D4350] text-white text-xs  px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-35">
+            <button className="bg-[#1D4350] text-white text-xs  px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-35">
               <Image
                 src={Trip}
                 alt="View Trip Icon"
@@ -243,7 +243,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
 
             <button
               onClick={handleJoinTrip}
-              className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-35"
+              className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-35"
             >
               <Image
                 src={Profile}

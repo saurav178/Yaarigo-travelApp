@@ -9,6 +9,7 @@ import Profile from "../../../../public/searchpageimg/view_profile.png";
 import Join from "../../../../public/searchpageimg/join_trips.png";
 import dots from "../../../../public/searchpageimg/Line 1.png";
 // import { MdVerifiedUser } from "react-icons/md";
+// import { FaCalendarAlt } from "react-icons/fa";
 
 import {
   // FaMapMarkerAlt,
@@ -191,7 +192,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                 
                 <div className="flex items-center gap-16 mt-1 text-sm text-gray-600 mb-1">
                   <div className="flex items-center gap-2">
-                    <FaCalendarAlt className="text-gray-400" />
+                    <FaCalendarAlt className="text-gray-600" />
                     <div>{trip.date}</div>
                   </div>
 
@@ -238,9 +239,9 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                       <p className="text-md font-semibold text-gray-900 flex">
                         {trip.host.name}, {trip.host.age}{" "}
                         {trip.host.verified && (
-                          <div className="">
+                          
                             <FaCheckCircle className="inline text-green-500 ml-1 w-5 h-5" />
-                          </div>
+                         
                         )}
                       </p>
 
@@ -274,7 +275,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                   <div className="flex gap-2">
                     <button
                       onClick={() => router.push(`/trip/${trip.id}`)}
-                      className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
+                      className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
                     >
                       <Image
                         src={TripImg}
@@ -286,8 +287,8 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                       View Trip
                     </button>
                     <button
-                      onClick={() => router.push(`/trip/${trip.id}/join`)}
-                      className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
+                      // onClick={() => router.push()}
+                      className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
                     >
                       <Image
                         src={Join}
@@ -306,7 +307,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                             .toLowerCase()}`
                         )
                       }
-                      className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
+                      className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
                     >
                       <Image
                         src={Profile}

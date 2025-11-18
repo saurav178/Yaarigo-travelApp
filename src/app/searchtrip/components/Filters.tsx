@@ -344,7 +344,7 @@ export default function Filters({
             <div className="flex items-center gap-2">
               {[1,2,3,4,5].map((n) => (
                 <button key={n} onClick={() => onStarClick(n)} aria-label={`${n} star`} className="focus:outline-none cursor-pointer">
-                  <FaStar className={`w-5 h-5 transition-colors ${n <= localMinRating ? "text-[#1D4350]" : "text-gray-300"}`} />
+                  <FaStar className={`w-5 h-5 transition-colors ${n <= localMinRating ? "text-yellow-500" : "text-gray-300"}`} />
                 </button>
               ))}
               <button onClick={() => setLocalMinRating(0)} className="ml-3 text-xs text-gray-600 underline cursor-pointer">Any</button>
@@ -410,7 +410,7 @@ export default function Filters({
   </button>
 
   {tripTypeOpen && (
-    <div className="grid grid-cols-2 gap-2 mt-3">
+    <div className="grid grid-cols-2 gap-5 mt-3">
       {tripTypeOptions.map((opt) => {
         const allSelected = isAllSelected(localTripType, ALL_TRIP);
         const isActive =
@@ -422,10 +422,10 @@ export default function Filters({
             onClick={() =>
               setLocalTripType((prev) => toggleFromList(prev, opt, ALL_TRIP))
             }
-            className={`text-sm py-2 px-3 cursor-pointer rounded-xl w-full transition 
+            className={`text-sm py-2 px-2 cursor-pointer   transition 
               ${
                 isActive
-                  ? "bg-[#0A4D4A] text-white"
+                  ? "bg-[#1D4350] text-white"
                   : "bg-transparent text-gray-700"
               }`}
           >
@@ -445,12 +445,12 @@ export default function Filters({
             <FaChevronDown className={`transition-transform duration-300 ${foodPrefOpen ? "rotate-180" : "rotate-0"}`} />
           </button>
           {foodPrefOpen && (
-            <div className="grid grid-cols-2 gap-2 mt-3">
+            <div className="grid grid-cols-2 gap-5  mt-2">
               {foodPrefOptions.map((opt) => {
                 const allSelected = isAllSelected(localFoodPref, ALL_FOOD);
                 const isActive = opt === ALL_FOOD ? allSelected : localFoodPref.includes(opt);
                 return (
-                  <button key={opt} onClick={() => setLocalFoodPref((prev) => toggleFromList(prev, opt, ALL_FOOD))} className={`text-sm py-2 px-3 cursor-pointer rounded-xl w-full transition ${isActive ? "bg-[#0A4D4A] text-white" : "bg-transparent text-gray-700"}`}>
+                  <button key={opt} onClick={() => setLocalFoodPref((prev) => toggleFromList(prev, opt, ALL_FOOD))} className={`text-sm py-2  cursor-pointer  w-full transition ${isActive ? "bg-[#1D4350] text-white" : "bg-transparent text-gray-700"}`}>
                     {opt}
                   </button>
                 );
@@ -479,7 +479,7 @@ export default function Filters({
         </div>
       </div>
 
-      <button onClick={handleApply} className="mt-4 m-3 w-auto md:w-full bg-[#1D4350] text-white py-2 px-3 rounded-lg font-semibold hover:bg-[#163935] transition">
+      <button onClick={handleApply} className="mt-4 m-3 w-auto md:w-full bg-[#1D4350] text-white py-2 px-3  font-semibold hover:bg-[#163935] transition">
         Apply Filter
       </button>
     </div>

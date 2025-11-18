@@ -228,7 +228,7 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                 </div>
 
                 <div className="flex gap-2">
-                  <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
+                  <button className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
                     <Image
                       src={TripImg}
                       alt="View Trip Icon"
@@ -238,7 +238,7 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                     />{" "}
                     View Trip
                   </button>
-                  <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
+                  <button className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
                     <Image
                       src={Join}
                       alt="Join Trip Icon"
@@ -248,7 +248,7 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                     />{" "}
                     Join Trip
                   </button>
-                  <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
+                  <button className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
                     <Image
                       src={Profile}
                       alt="View Profile Icon"
