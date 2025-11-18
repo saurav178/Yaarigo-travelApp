@@ -19,7 +19,7 @@ const TripHighlights = () => {
   }, []);
  
   return (
-    <div className="border rounded-xl p-5 bg-white shadow-sm">
+<div className="rounded-lg p-6 bg-white w-full shadow-lg hover:shadow-2xl transition-all duration-300">
       <h2 className="text-lg font-semibold mb-3">Trip Highlights</h2>
       <div className="flex flex-wrap gap-4">
         {highlights.map((item, i) => (

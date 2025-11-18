@@ -1,6 +1,6 @@
 const SafetyInformation = () => {
   return (
-    <div className="border rounded-xl p-5 bg-green-100 border-green-200">
+<div className="rounded-lg p-6 bg-green w-full shadow-lg hover:shadow-2xl transition-all duration-300">
       <div className="flex items-center gap-3">
         <img
           src="/icon/mingcute_safety-certificate-fill.png"
