@@ -558,7 +558,7 @@ export default function Filters({
           <button
             onClick={() => setTripTypeOpen((o) => !o)}
             aria-expanded={tripTypeOpen}
-            className="w-full flex items-center justify-between text-xs font-medium text-gray-700"
+            className=" w-full flex items-center justify-between text-xs font-medium text-gray-700"
           >
             <span>Trip Type</span>
             <FaChevronDown
