@@ -8,8 +8,11 @@ import TripImg from "../../../../public/searchpageimg/view_trips.png";
 import Profile from "../../../../public/searchpageimg/view_profile.png";
 import Join from "../../../../public/searchpageimg/join_trips.png";
 import dots from "../../../../public/searchpageimg/Line 1.png";
+// import { MdVerifiedUser } from "react-icons/md";
+
 import {
   // FaMapMarkerAlt,
+  FaUser,
   FaCalendarAlt,
   FaCheckCircle,
   FaShieldAlt,
@@ -112,7 +115,6 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
               {/* Content */}
               <div className="p-4 flex-1">
                 <div className="flex justify-between items-start">
-                 
                   <div>
                     <h2 className="text-lg font-semibold text-gray-900 leading-tight mb-1">
                       {trip.title}
@@ -122,18 +124,14 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                     </p>
                   </div>
 
-                 
                   <div className="flex items-center gap-2">
-                
-                    <span className="flex items-center gap-1 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
-                      <FaExclamationTriangle /> {trip.spotsLeft} spots left
-                    </span>
-
-                    
-                    
                     <span className="flex items-center gap-1 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow">
                       <span className="font-bold">{trip.host.match}%</span>{" "}
                       Match
+                    </span>
+
+                    <span className="flex items-center gap-1 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
+                      <FaExclamationTriangle /> {trip.spotsLeft} spots left
                     </span>
                   </div>
                 </div>
@@ -162,11 +160,11 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                 </div> */}
 
                 {/* Tags */}
-                <div className="flex flex-wrap gap-2 mt-1 mb-1">
+                <div className="flex flex-wrap gap-2 mt-2 mb-3">
                   {trip.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="bg-gray-100 text-gray-700 text-xs font-medium px-2 py-0.5 rounded-md"
+                      className="bg-blue-100 text-blue-500 text-xs font-medium px-2 py-0.5 rounded-md"
                     >
                       {tag}
                     </span>
@@ -175,7 +173,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
 
                 <div className=" flex-wrap items-center gap-3 text-sm text-gray-600 ">
                   <div className="flex items-center gap-1">
-                    <span className="w-3 h-3 rounded-full bg-white border-2 border-gray-400 inline-block"></span>{" "}
+                    <span className="w-3 h-3 rounded-full bg-white border-2 border-gray-400 inline-block mr-1"></span>{" "}
                     {trip.from}
                   </div>
                   <Image
@@ -185,31 +183,12 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                     width={0}
                     height={0}
                   />
-                  <div className="flex items-center -mt-1.5 -ml-0.5 ">
-                    <GoDotFill className="text-black text-lg w-5 h-5" />
+                  <div className="flex items-center -mt-2 -ml-1.5  ">
+                    <GoDotFill className="text-black text-lg w-6 h-6 mr-1" />
                     {trip.to}
                   </div>
                 </div>
-                {/* <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600">
-                  <div className="flex items-center gap-1">
-                    <span className="w-3 h-3 rounded-full bg-white border-2 border-gray-400 inline-block"></span>
-                    {trip.from}
-                  </div>
-
-                  <Image
-                    src={dots}
-                    alt="dot"
-                    className="ml-2 -mt-3"
-                    width={0}
-                    height={0}
-                  />
-
-                  <div className="flex items-center gap-1 ml-0.5">
-                    <span className="w-3 h-3 rounded-full bg-white border-2 border-gray-400 inline-block"></span>
-                    {trip.to}
-                  </div>
-                </div> */}
-
+                
                 <div className="flex items-center gap-16 mt-1 text-sm text-gray-600 mb-1">
                   <div className="flex items-center gap-2">
                     <FaCalendarAlt className="text-gray-400" />
@@ -220,18 +199,20 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                     <FaWallet />
                     <div>{trip.price}</div>
                   </div>
-                </div>
 
-                <div className="flex items-center gap-2 mt-1 text-sm text-gray-600 mb-2">
+                  <div className="flex items-center gap-2 mt-1 text-sm text-gray-600 mb-1">
                   <FaFlag /> <span>30 Trips Completed</span>
                 </div>
+                </div>
+
+                
 
                 <hr className="my-3" />
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div
-                      className={`relative w-15 h-15 -ml-1 flex items-center justify-center rounded-full font-semibold text-sm border ${catStyle.avatarBg}`}
+                      className={`relative w-15 h-15 -ml-1 flex items-center justify-center text-2xl rounded-full font-semibold  border ${catStyle.avatarBg}`}
                     >
                       {trip.host.name
                         .split(" ")
@@ -254,17 +235,27 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                     </div>
 
                     <div>
-                      <p className="text-sm font-semibold text-gray-900">
+                      <p className="text-md font-semibold text-gray-900 flex">
                         {trip.host.name}, {trip.host.age}{" "}
                         {trip.host.verified && (
-                          <FaCheckCircle className="inline text-sky-500 ml-1" />
+                          <div className="">
+                            <FaCheckCircle className="inline text-green-500 ml-1 w-5 h-5" />
+                          </div>
                         )}
                       </p>
 
-                      <div className="flex items-center gap-2 mt-1">
+                      <div className="flex gap-2">
+                        <p className="text-xs text-gray-600 mt-1">
+                          {trip.host.location} • ⭐ {trip.host.rating}
+                        </p>{" "}
+                        
+                      </div>
+
+                      <div className="flex items-center gap-2 mt-1 -ml-0.5">
                         <div
-                          className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-md font-medium ${catStyle.bg}`}
+                          className={`flex items-center gap-1 text-xs px-1  py-0.5 rounded-md font-medium ${catStyle.bg}`}
                         >
+                          <FaUser/>
                           {trip.host.category}
                         </div>
                         <div className="">
@@ -276,16 +267,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                         </div>
                       </div>
 
-                      <div className="flex gap-2">
-                        <p className="text-xs text-gray-600 mt-1">
-                          {trip.host.location} • ⭐ {trip.host.rating}
-                        </p>{" "}
-                        {/* <span
-                          className={`flex items-center gap-1 mt-1 text-xs px-2 py-0.5  font-medium ${catStyle.bg}`}
-                        >
-                          {trip.host.match}% Match
-                        </span> */}
-                      </div>
+                      
                     </div>
                   </div>
 

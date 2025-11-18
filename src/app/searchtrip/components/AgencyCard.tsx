@@ -10,6 +10,7 @@ import { ROUTES } from "@/lib/routes";
 import Image from "next/image";
 import Trip from "../../../../public/searchpageimg/view_trips.png";
 import Profile from "../../../../public/searchpageimg/view_profile.png";
+import { FaUserGroup } from "react-icons/fa6";
 import {
   FaCheckCircle,
   FaHeart,
@@ -88,11 +89,11 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
           className="w-full h-full object-cover"
         />
 
-        {agency.verified && (
+        {/* {agency.verified && (
           <span className="absolute top-3 left-3 bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
             Verified
           </span>
-        )}
+        )} */}
 
         <button
           onClick={toggleLike}
@@ -123,6 +124,12 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
 
             {agency.spotsLeft > 0 && (
               <div className="flex items-center gap-1">
+                {agency.verified && (
+                  <span className=" bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                    Verified
+                  </span>
+                )}
+
                 <span className="flex gap-2 items-center bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
                   <FaExclamationTriangle /> {agency.spotsLeft} spots left
                 </span>
@@ -135,7 +142,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
             {agency.tags.map((tag) => (
               <span
                 key={tag}
-                className="bg-gray-100 text-gray-700 text-xs font-medium px-2 py-0.5 rounded-md"
+                className="bg-blue-100 text-blue-500 text-xs font-medium px-2 py-0.5 rounded-md"
               >
                 {tag}
               </span>
@@ -167,14 +174,14 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
             </div>
           </div>
 
-          <hr className="my-3 mt-5" />
+          <hr className="my-3 " />
         </div>
 
         {/* Host Info & Actions */}
         <div className="flex items-center justify-between mt-auto">
           <div className="flex items-center gap-3">
             <div
-              className={`relative w-15 h-15 flex items-center justify-center rounded-full font-semibold text-sm border ${catStyle.avatarBg}`}
+              className={`relative w-15 h-15 flex items-center justify-center rounded-full font-semibold text-2xl border ${catStyle.avatarBg}`}
             >
               {getInitials(agency.host.name)}
 
@@ -193,25 +200,32 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
             </div>
 
             <div className="flex flex-col">
-              <p className="text-sm font-semibold text-gray-900">
+              <p className="text-md font-semibold text-gray-900 flex">
                 {agency.host.name}, {agency.host.age}{" "}
                 {agency.host.verified && (
-                  <FaCheckCircle className="inline text-sky-500 ml-1" />
+                  // <FaCheckCircle className="inline text-sky-500 ml-1" />
+                  <div className="">
+                    <FaCheckCircle className="inline text-green-500 ml-1 w-5 h-5" />
+                  </div>
                 )}
               </p>
-              <div className="flex items-center gap-2 mt-1">
+              <p className="text-xs text-gray-600 mt-1">
+                {agency.host.location} • ⭐ {agency.host.rating}
+              </p>
+              <div className="flex items-center gap-2 mt-1 -ml-0.5">
                 <div
-                  className={`flex items-center  text-xs px-2 py-0.5 rounded-md font-medium ${catStyle.bg}`}
+                  className={`flex items-center  text-xs px-1 py-0.5 rounded-md font-medium gap-1  ${catStyle.bg}`}
                 >
-                  {agency.host.category}
+                  <div className=" ">
+                    {" "}
+                    <FaUserGroup />
+                  </div>
+                  <div className="">{agency.host.category}</div>
                 </div>
                 <span className={getSafeScoreStyle(agency.host.safeScore)}>
                   <FaShieldAlt /> {agency.host.safeScore}% Safe
                 </span>
               </div>
-              <p className="text-xs text-gray-600 mt-1">
-                {agency.host.location} • ⭐ {agency.host.rating}
-              </p>
             </div>
           </div>
 

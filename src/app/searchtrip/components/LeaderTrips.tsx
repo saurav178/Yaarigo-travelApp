@@ -9,13 +9,14 @@ import { GoDotFill } from "react-icons/go";
 
 import {
   FaExclamationTriangle,
+  FaUser,
   FaHeart,
   FaCheckCircle,
   FaShieldAlt,
   FaWallet,
   FaFlag,
   FaCalendarAlt,
-  FaMapMarkerAlt,
+  // FaMapMarkerAlt,
 } from "react-icons/fa";
 import { PiMedalDuotone } from "react-icons/pi";
 
@@ -68,10 +69,10 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
 
   const getSafeScoreStyle = (score: number) => {
     if (score < 50)
-      return "bg-red-100 text-red-700 border border-red-300 px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
+      return "bg-red-100 text-red-700 border border-red-300 px-1 py-[2px] rounded-md flex items-center gap-1 text-xs";
     if (score < 75)
-      return "bg-yellow-100 text-yellow-800 border border-yellow-300 px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
-    return "bg-green-100 text-green-700 border border-green-300 px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
+      return "bg-yellow-100 text-yellow-800 border border-yellow-300 px-1 py-[2px] rounded-md flex items-center gap-1 text-xs";
+    return "bg-green-100 text-green-700 border border-green-300 px-1 py-[2px] rounded-md flex items-center gap-1 text-xs";
   };
 
   return (
@@ -116,61 +117,68 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                   </p>
                 </div>
 
-                <div>
-                  <span className="flex gap-2 items-center bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
+                <div className="flex items-center gap-2">
+                  <span className="flex items-center gap-1 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow">
+                    <span className="font-bold">{trip.host.match}%</span> Match
+                  </span>
+
+                  <span className="flex items-center gap-1 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
                     <FaExclamationTriangle /> {trip.spotsLeft} spots left
                   </span>
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-2  mb-2">
+              <div className="flex flex-wrap gap-2 mt-2  mb-3">
                 {trip.tags.map((t) => (
                   <span
                     key={t}
-                    className="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded-md"
+                    className="bg-blue-100 text-blue-500 text-xs px-2 py-0.5 rounded-md"
                   >
                     {t}
                   </span>
                 ))}
               </div>
 
-              <div className="flex-wrap items-center gap-3 text-sm text-gray-600 ">
+              <div className=" flex-wrap items-center gap-3 text-sm text-gray-600 ">
                 <div className="flex items-center gap-1">
-                  <GoDotFill className="text-black text-lg" /> {trip.from}
+                  <span className="w-3 h-3 rounded-full bg-white border-2 border-gray-400 inline-block mr-1"></span>{" "}
+                  {trip.from}
                 </div>
                 <Image
                   src={dots}
                   alt="dot"
-                  className="ml-2 -mt-3"
+                  className="ml-1.5 -mt-1"
                   width={0}
                   height={0}
                 />
-                <div className="flex items-center gap-1 ">
-                  <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
+                <div className="flex items-center -mt-2 -ml-1.5  ">
+                  <GoDotFill className="text-black text-lg w-6 h-6 mr-1" />
+                  {trip.to}
                 </div>
               </div>
 
-              <div className="flex items-center gap-8 text-sm text-gray-600 mb-1 mt-1">
+              <div className="flex items-center gap-8 text-sm text-gray-600 mb-3 mt-1">
                 <div className="flex items-center gap-2">
                   <FaCalendarAlt /> {trip.date}
                 </div>
                 <div className="flex items-center gap-2">
                   <FaWallet /> {trip.price}
                 </div>
-              </div>
-
-              <div className="flex items-center gap-2  text-sm text-gray-600">
+                <div className="flex items-center gap-2  text-sm text-gray-600">
                 <FaFlag /> <span>30 Trips Completed</span>
               </div>
+              </div>
 
-              <hr className="my-3" />
+              
+
+              <hr className="my-3 -mt-0.5" />
 
               {/* Host + actions */}
               <div className="mt-auto flex items-center justify-between">
                 <div className="flex items-center gap-3 relative">
                   {/* Avatar */}
                   <div
-                    className={`relative w-15 h-15 -ml-2.5 flex items-center justify-center rounded-full font-semibold text-sm border ${catStyle.avatarBg}`}
+                    className={`relative w-15 h-15 -ml-2.5 flex items-center justify-center rounded-full font-semibold text-2xl border ${catStyle.avatarBg}`}
                   >
                     {getInitials(trip.host.name)}
 
@@ -190,17 +198,25 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
 
                   {/* Right side */}
                   <div className="flex flex-col">
-                    <p className="text-sm font-semibold text-gray-900 flex items-center gap-1">
+                    <p className="text-md font-semibold text-gray-900  items-center gap-1 flex">
                       {trip.host.name}, {trip.host.age}
                       {trip.host.verified && (
-                        <FaCheckCircle className="text-sky-500" />
+                        // <FaCheckCircle className="text-sky-500" />
+                        <div className="">
+                            <FaCheckCircle className="inline text-green-500 ml-1 w-5 h-5" />
+                          </div>
                       )}
+                    </p>
+
+                    <p className="text-xs text-gray-600 mt-1">
+                      {trip.host.location} • ⭐ {trip.host.rating}
                     </p>
 
                     <div className="flex items-center gap-2 mt-1">
                       <span
-                        className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-md font-medium ${catStyle.bg}`}
+                        className={`flex items-center gap-1 text-xs px-1 py-0.5 rounded-md font-small ${catStyle.bg}`}
                       >
+                        <FaUser />
                         {trip.host.category}
                       </span>
 
@@ -208,10 +224,6 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                         <FaShieldAlt /> {trip.host.safeScore}% Safe
                       </span>
                     </div>
-
-                    <p className="text-xs text-gray-600 mt-1">
-                      {trip.host.location} • ⭐ {trip.host.rating}
-                    </p>
                   </div>
                 </div>
 
