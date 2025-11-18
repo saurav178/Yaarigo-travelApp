@@ -397,6 +397,247 @@
 
 // LeaderTrips.tsx
 
+// "use client";
+
+// import { useState } from "react";
+// import Image from "next/image";
+// // import { useRouter } from "next/navigation";
+// import { GoDotFill } from "react-icons/go";
+
+// import {
+//   FaExclamationTriangle,
+//   FaHeart,
+//   FaCheckCircle,
+//   FaShieldAlt,
+//   FaWallet,
+//   FaCalendarAlt,
+//   FaMapMarkerAlt,
+// } from "react-icons/fa";
+// import { PiMedalDuotone } from "react-icons/pi";
+
+// import type { Leader } from "../types/types";
+// import { LEADERS_DEMO } from "../data/data";
+// import dots from "../../../../public/searchpageimg/Line 1.png";
+// import TripImg from "../../../../public/searchpageimg/view_trips.png";
+// import Join from "../../../../public/searchpageimg/join_trips.png";
+// import Profile from "../../../../public/searchpageimg/view_profile.png";
+
+// type Props = { leaders?: Leader[] };
+
+// export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
+//   const [liked, setLiked] = useState<number[]>([]);
+//   // const router = useRouter();
+//   const toggleLike = (id: number) =>
+//     setLiked((p) => (p.includes(id) ? p.filter((x) => x !== id) : [...p, id]));
+
+//   // const getInitials = (name: string) => name.split(" ").map(s => s[0]).join("").toUpperCase();
+//   const getCategoryStyle = (category: string) => {
+//     switch (category) {
+//       case "Travel Enthusiast":
+//         return {
+//           bg: "bg-blue-100 text-blue-800",
+//           avatarBg: "bg-blue-500 text-white",
+//         };
+//       case "Featured Trip Leader":
+//         return {
+//           bg: "bg-yellow-100 text-yellow-800",
+//           avatarBg: "bg-yellow-500 text-white",
+//         };
+//       case "Featured Trip Agency":
+//         return {
+//           bg: "bg-orange-100 text-orange-800",
+//           avatarBg: "bg-orange-500 text-white",
+//         };
+//       default:
+//         return {
+//           bg: "bg-gray-100 text-gray-800",
+//           avatarBg: "bg-gray-500 text-white",
+//         };
+//     }
+//   };
+//   const getSafeScoreStyle = (score: number) => {
+//     if (score < 50) return "bg-red-100 text-red-700 ...";
+//     if (score < 75) return "bg-yellow-100 text-yellow-800 ...";
+//     return "bg-green-100 text-green-700 ...";
+//   };
+
+//   return (
+//     <div className="flex flex-col gap-3 w-full">
+//       {leaders.map((trip) => {
+//         const catStyle = getCategoryStyle(trip.host.category);
+//         return (
+//           <div
+//             key={trip.id}
+//             className="bg-white  shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 w-[949px]"
+//           >
+//             <div className="relative w-full sm:w-64 md:w-72 aspect-4/3 sm:aspect-auto">
+//               <Image
+//                 src={trip.image}
+//                 alt={trip.title}
+//                 fill
+//                 style={{ objectFit: "cover" }}
+//               />
+//               <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
+//                 {trip.host.match}% Match
+//               </div>
+//               <button
+//                 onClick={() => toggleLike(trip.id)}
+//                 className={`absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full ${
+//                   liked.includes(trip.id) ? "text-rose-500" : "text-white"
+//                 }`}
+//               >
+//                 <FaHeart size={18} />
+//               </button>
+//             </div>
+
+//             <div className="flex-1 p-4 flex flex-col">
+//               <div className="flex justify-between items-start">
+//                 <div>
+//                   <h3 className="text-lg font-semibold text-gray-900 mb-1">
+//                     {trip.title}
+//                   </h3>
+//                   <p className="text-gray-600 text-sm line-clamp-2 mb-2">
+//                     {trip.description}
+//                   </p>
+//                 </div>
+//                 <div>
+//                   <span className="flex gap-2 items-center bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
+//                     <FaExclamationTriangle /> {trip.spotsLeft} spots left
+//                   </span>
+//                 </div>
+//               </div>
+
+//               <div className="flex flex-wrap gap-2 mt-1 mb-2">
+//                 {trip.tags.map((t) => (
+//                   <span
+//                     key={t}
+//                     className="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded-md"
+//                   >
+//                     {t}
+//                   </span>
+//                 ))}
+//               </div>
+
+//               <div className=" flex-wrap items-center gap-3 text-sm text-gray-600 ">
+//                 <div className="flex items-center gap-1">
+//                   <GoDotFill className="text-black" /> {trip.from}
+//                 </div>
+//                 {/* <span className="text-gray-400">→</span> */}
+//                 <Image
+//                   src={dots}
+//                   alt="dot"
+//                   className="ml-1.5 -mt-3"
+//                   width={0}
+//                   height={0}
+//                 />
+//                 <div className="flex items-center gap-1">
+//                   <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
+//                 </div>
+//               </div>
+
+//               <div className="flex items-center gap-8 text-sm text-gray-600 mb-3">
+//                 <div className="flex items-center gap-2">
+//                   <FaCalendarAlt /> {trip.date}
+//                 </div>
+//                 <div className="flex items-center gap-2">
+//                   <FaWallet /> {trip.price}
+//                 </div>
+//               </div>
+
+//               <hr className="my-3" />
+
+//               <div className="mt-auto flex items-center justify-between">
+//                 <div className="flex items-center gap-3 relative">
+//   {/* Avatar */}
+//   <div
+//     className={`relative w-12 h-12 flex items-center justify-center rounded-full font-semibold text-sm border ${catStyle.avatarBg}`}
+//   >
+//     {getInitials(trip.host.name)}
+
+//     {trip.host.category !== "Travel Enthusiast" && (
+//       <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow">
+//         <PiMedalDuotone
+//           className={`${
+//             trip.host.category === "Featured Trip Leader"
+//               ? "text-yellow-500"
+//               : "text-orange-500"
+//           }`}
+//           size={12}
+//         />
+//       </div>
+//     )}
+//   </div>
+
+//   {/* Right side */}
+//   <div className="flex flex-col">
+//     <p className="text-sm font-semibold text-gray-900 flex items-center gap-1">
+//       {trip.host.name}, {trip.host.age}
+//       {trip.host.verified && (
+//         <FaCheckCircle className="text-sky-500" />
+//       )}
+//     </p>
+
+//     <div className="flex items-center gap-2 mt-1">
+//       <span
+//         className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-md font-medium ${catStyle.bg}`}
+//       >
+//         {trip.host.category}
+//       </span>
+
+//       <span className={getSafeScoreStyle(trip.host.safeScore)}>
+//         <FaShieldAlt /> {trip.host.safeScore}% Safe
+//       </span>
+//     </div>
+
+//     <p className="text-xs text-gray-600 mt-1">
+//       {trip.host.location} • ⭐ {trip.host.rating}
+//     </p>
+//   </div>
+// </div>
+
+
+//                 <div className="flex gap-2">
+//                   <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
+//                     <Image
+//                       src={TripImg}
+//                       alt="View Trip Icon"
+//                       width={10}
+//                       height={10}
+//                       className="mr-1 filter brightness-0 invert"
+//                     />{" "}
+//                     View Trip
+//                   </button>
+//                   <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
+//                     <Image
+//                       src={Join}
+//                       alt="Join Trip Icon"
+//                       width={20}
+//                       height={20}
+//                       className="mr-1 filter brightness-0 invert"
+//                     />{" "}
+//                     Join Trip
+//                   </button>
+//                   <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
+//                     <Image
+//                       src={Profile}
+//                       alt="View Profile Icon"
+//                       width={12}
+//                       height={12}
+//                       className="mr-1 filter brightness-0 invert"
+//                     />{" "}
+//                     View Profile
+//                   </button>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//         );
+//       })}
+//     </div>
+//   );
+// }
+
+// LeaderTrips.tsx
 "use client";
 
 import { useState } from "react";
@@ -410,6 +651,7 @@ import {
   FaCheckCircle,
   FaShieldAlt,
   FaWallet,
+  FaFlag,
   FaCalendarAlt,
   FaMapMarkerAlt,
 } from "react-icons/fa";
@@ -430,7 +672,14 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
   const toggleLike = (id: number) =>
     setLiked((p) => (p.includes(id) ? p.filter((x) => x !== id) : [...p, id]));
 
-  // const getInitials = (name: string) => name.split(" ").map(s => s[0]).join("").toUpperCase();
+  // <<< ADDED: getInitials (was missing) >>>
+  const getInitials = (name: string) =>
+    name
+      .split(" ")
+      .map((s) => s[0] ?? "")
+      .join("")
+      .toUpperCase();
+
   const getCategoryStyle = (category: string) => {
     switch (category) {
       case "Travel Enthusiast":
@@ -455,10 +704,13 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
         };
     }
   };
+
   const getSafeScoreStyle = (score: number) => {
-    if (score < 50) return "bg-red-100 text-red-700 ...";
-    if (score < 75) return "bg-yellow-100 text-yellow-800 ...";
-    return "bg-green-100 text-green-700 ...";
+    if (score < 50)
+      return "bg-red-100 text-red-700 border border-red-300 px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
+    if (score < 75)
+      return "bg-yellow-100 text-yellow-800 border border-yellow-300 px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
+    return "bg-green-100 text-green-700 border border-green-300 px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
   };
 
   return (
@@ -468,15 +720,11 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
         return (
           <div
             key={trip.id}
-            className="bg-white  shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 w-[949px]"
+            className="bg-white shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 w-[949px]"
           >
+            {/* Image */}
             <div className="relative w-full sm:w-64 md:w-72 aspect-4/3 sm:aspect-auto">
-              <Image
-                src={trip.image}
-                alt={trip.title}
-                fill
-                style={{ objectFit: "cover" }}
-              />
+              <Image src={trip.image} alt={trip.title} fill style={{ objectFit: "cover" }} />
               <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
                 {trip.host.match}% Match
               </div>
@@ -490,16 +738,14 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
               </button>
             </div>
 
+            {/* Content */}
             <div className="flex-1 p-4 flex flex-col">
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                    {trip.title}
-                  </h3>
-                  <p className="text-gray-600 text-sm line-clamp-2 mb-2">
-                    {trip.description}
-                  </p>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1">{trip.title}</h3>
+                  <p className="text-gray-600 text-sm line-clamp-2 mb-2">{trip.description}</p>
                 </div>
+
                 <div>
                   <span className="flex gap-2 items-center bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
                     <FaExclamationTriangle /> {trip.spotsLeft} spots left
@@ -509,33 +755,23 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
 
               <div className="flex flex-wrap gap-2 mt-1 mb-2">
                 {trip.tags.map((t) => (
-                  <span
-                    key={t}
-                    className="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded-md"
-                  >
+                  <span key={t} className="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded-md">
                     {t}
                   </span>
                 ))}
               </div>
 
-              <div className=" flex-wrap items-center gap-3 text-sm text-gray-600 ">
+              <div className="flex-wrap items-center gap-3 text-sm text-gray-600 ">
                 <div className="flex items-center gap-1">
                   <GoDotFill className="text-black" /> {trip.from}
                 </div>
-                {/* <span className="text-gray-400">→</span> */}
-                <Image
-                  src={dots}
-                  alt="dot"
-                  className="ml-1.5 -mt-3"
-                  width={0}
-                  height={0}
-                />
+                <Image src={dots} alt="dot" className="ml-1.5 -mt-3" width={0} height={0} />
                 <div className="flex items-center gap-1">
                   <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
                 </div>
               </div>
 
-              <div className="flex items-center gap-8 text-sm text-gray-600 mb-3">
+              <div className="flex items-center gap-8 text-sm text-gray-600 mb-1 mt-1">
                 <div className="flex items-center gap-2">
                   <FaCalendarAlt /> {trip.date}
                 </div>
@@ -544,24 +780,26 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                 </div>
               </div>
 
+              <div className="flex items-center gap-2  text-sm text-gray-600">
+                <FaFlag /> <span>30 Trips Completed</span>
+              </div>
+
               <hr className="my-3" />
 
+              {/* Host + actions */}
               <div className="mt-auto flex items-center justify-between">
                 <div className="flex items-center gap-3 relative">
-                  {/* Host Initials Avatar */}
+                  {/* Avatar */}
                   <div
                     className={`relative w-12 h-12 flex items-center justify-center rounded-full font-semibold text-sm border ${catStyle.avatarBg}`}
                   >
-                    {/* {getInitials(trip.host.name)} */}
+                    {getInitials(trip.host.name)}
 
-                    {/* Badge only for some categories */}
                     {trip.host.category !== "Travel Enthusiast" && (
                       <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow">
                         <PiMedalDuotone
                           className={`${
-                            trip.host.category === "Featured Trip Leader"
-                              ? "text-yellow-500"
-                              : "text-orange-500"
+                            trip.host.category === "Featured Trip Leader" ? "text-yellow-500" : "text-orange-500"
                           }`}
                           size={12}
                         />
@@ -569,20 +807,18 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                     )}
                   </div>
 
-                  <div>
-                    <p className="text-sm font-semibold text-gray-900">
-                      {trip.host.name}, {trip.host.age}{" "}
-                      {trip.host.verified && (
-                        <FaCheckCircle className="inline text-sky-500 ml-1" />
-                      )}
+                  {/* Right side */}
+                  <div className="flex flex-col">
+                    <p className="text-sm font-semibold text-gray-900 flex items-center gap-1">
+                      {trip.host.name}, {trip.host.age}
+                      {trip.host.verified && <FaCheckCircle className="text-sky-500" />}
                     </p>
 
-                    <div className="flex items-center gap-2 mt-1 -ml-2">
-                      <div
-                        className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-md font-medium ${catStyle.bg}`}
-                      >
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-md font-medium ${catStyle.bg}`}>
                         {trip.host.category}
-                      </div>
+                      </span>
+
                       <span className={getSafeScoreStyle(trip.host.safeScore)}>
                         <FaShieldAlt /> {trip.host.safeScore}% Safe
                       </span>
@@ -596,34 +832,14 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
 
                 <div className="flex gap-2">
                   <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
-                    <Image
-                      src={TripImg}
-                      alt="View Trip Icon"
-                      width={10}
-                      height={10}
-                      className="mr-1 filter brightness-0 invert"
-                    />{" "}
+                    <Image src={TripImg} alt="View Trip Icon" width={10} height={10} className="mr-1 filter brightness-0 invert" />{" "}
                     View Trip
                   </button>
                   <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
-                    <Image
-                      src={Join}
-                      alt="Join Trip Icon"
-                      width={20}
-                      height={20}
-                      className="mr-1 filter brightness-0 invert"
-                    />{" "}
-                    Join Trip
+                    <Image src={Join} alt="Join Trip Icon" width={20} height={20} className="mr-1 filter brightness-0 invert" /> Join Trip
                   </button>
                   <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
-                    <Image
-                      src={Profile}
-                      alt="View Profile Icon"
-                      width={12}
-                      height={12}
-                      className="mr-1 filter brightness-0 invert"
-                    />{" "}
-                    View Profile
+                    <Image src={Profile} alt="View Profile Icon" width={12} height={12} className="mr-1 filter brightness-0 invert" /> View Profile
                   </button>
                 </div>
               </div>
@@ -636,3 +852,6 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
 }
 
 
+
+
+             

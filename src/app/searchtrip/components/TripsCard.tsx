@@ -1,4 +1,3 @@
-
 // // TripsCard
 
 // "use client";
@@ -236,7 +235,7 @@
 //                                   <FaCalendarAlt className="text-gray-400" />
 //                                   <div>{trip.date}</div>
 //                                 </div>
-                
+
 //                                 <div className="flex items-center gap-2 ">
 //                                   <FaWallet />
 //                                   <div>{trip.price}</div>
@@ -279,17 +278,17 @@
 //                   </div>
 
 //                   <div className="flex gap-2">
-//                     <button 
-//                     onClick={() => router.push(`/trip/${trip.id}`)} 
+//                     <button
+//                     onClick={() => router.push(`/trip/${trip.id}`)}
 //                     className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
 //                       <Image src={TripImg} alt="View Trip Icon" width={14} height={14} className="mr-2 filter brightness-0 invert" /> View Trip
 //                     </button>
-//                     <button 
-//                     onClick={() => router.push(`/trip/${trip.id}/join`)} 
+//                     <button
+//                     onClick={() => router.push(`/trip/${trip.id}/join`)}
 //                     className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
 //                       <Image src={Join} alt="Join Trip Icon" width={16} height={16} className="mr-2 filter brightness-0 invert" /> Join Trip
 //                     </button>
-//                     <button onClick={() => router.push(`/profile/${trip.host.name.replace(/\s+/g, "-").toLowerCase()}`)} 
+//                     <button onClick={() => router.push(`/profile/${trip.host.name.replace(/\s+/g, "-").toLowerCase()}`)}
 //                     className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
 //                       <Image src={Profile} alt="View Profile Icon" width={14} height={14} className="mr-2 filter brightness-0 invert" /> View Profile
 //                     </button>
@@ -303,7 +302,6 @@
 //     </main>
 //   );
 // }
-
 
 // /src/app/searchtrip/components/TripCard.tsx
 
@@ -342,26 +340,42 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
   const router = useRouter();
 
   const toggleLike = (id: number) => {
-    setLikedTrips((prev) => (prev.includes(id) ? prev.filter((tid) => tid !== id) : [...prev, id]));
+    setLikedTrips((prev) =>
+      prev.includes(id) ? prev.filter((tid) => tid !== id) : [...prev, id]
+    );
   };
 
   const getCategoryStyle = (category: string) => {
     switch (category) {
       case "Travel Enthusiast":
-        return { bg: "bg-blue-100 text-blue-800 border-blue-300", avatarBg: "bg-blue-500 text-white" };
+        return {
+          bg: "bg-blue-100 text-blue-800 border-blue-300",
+          avatarBg: "bg-blue-500 text-white",
+        };
       case "Featured Trip Leader":
-        return { bg: "bg-yellow-100 text-yellow-800 border-yellow-300", avatarBg: "bg-yellow-500 text-white" };
+        return {
+          bg: "bg-yellow-100 text-yellow-800 border-yellow-300",
+          avatarBg: "bg-yellow-500 text-white",
+        };
       case "Trip Agency":
       case "Featured Trip Agency":
-        return { bg: "bg-orange-100 text-orange-800 border-orange-300", avatarBg: "bg-orange-500 text-white" };
+        return {
+          bg: "bg-orange-100 text-orange-800 border-orange-300",
+          avatarBg: "bg-orange-500 text-white",
+        };
       default:
-        return { bg: "bg-gray-100 text-gray-800 border-gray-300", avatarBg: "bg-gray-500 text-white" };
+        return {
+          bg: "bg-gray-100 text-gray-800 border-gray-300",
+          avatarBg: "bg-gray-500 text-white",
+        };
     }
   };
 
   const getSafeScoreStyle = (score: number) => {
-    if (score < 50) return "bg-red-100 text-red-700 border border-red-300 px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
-    if (score < 75) return "bg-yellow-100 text-yellow-800 border border-yellow-300 px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
+    if (score < 50)
+      return "bg-red-100 text-red-700 border border-red-300 px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
+    if (score < 75)
+      return "bg-yellow-100 text-yellow-800 border border-yellow-300 px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
     return "bg-green-100 text-green-700 border border-green-300 px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
   };
 
@@ -371,20 +385,32 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
         {trips.map((trip) => {
           const catStyle = getCategoryStyle(trip.host.category);
           return (
-            <article key={trip.id} className="bg-white  shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 w-[949px]">
+            <article
+              key={trip.id}
+              className="bg-white  shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 w-[949px]"
+            >
               {/* Image */}
               <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
                 {/* <img src={trip.image} alt={trip.title} className="w-full h-full object-cover" /> */}
                 <Image
-                                    src={trip.image}
-                                    alt={trip.title}
-                                    width={400}
-                                    height={300}
-                                    className="w-full h-full object-cover"
-                                    unoptimized={false}
-                                  />
-                <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">{trip.host.match}% Match</div>
-                <button onClick={() => toggleLike(trip.id)} className={`absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full transition ${likedTrips.includes(trip.id) ? "text-rose-500" : "text-white"}`}>
+                  src={trip.image}
+                  alt={trip.title}
+                  width={400}
+                  height={300}
+                  className="w-full h-full object-cover"
+                  unoptimized={false}
+                />
+                <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
+                  {trip.host.match}% Match
+                </div>
+                <button
+                  onClick={() => toggleLike(trip.id)}
+                  className={`absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full transition ${
+                    likedTrips.includes(trip.id)
+                      ? "text-rose-500"
+                      : "text-white"
+                  }`}
+                >
                   <FaHeart size={16} />
                 </button>
               </div>
@@ -393,8 +419,12 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
               <div className="p-4 flex-1">
                 <div className="flex justify-between items-start">
                   <div className="">
-                    <h2 className="text-lg font-semibold text-gray-900 leading-tight mb-1">{trip.title}</h2>
-                    <p className="text-gray-600 text-sm line-clamp-2 mb-1">{trip.description}</p>
+                    <h2 className="text-lg font-semibold text-gray-900 leading-tight mb-1">
+                      {trip.title}
+                    </h2>
+                    <p className="text-gray-600 text-sm line-clamp-2 mb-1">
+                      {trip.description}
+                    </p>
                   </div>
 
                   <div className="flex items-center gap-1">
@@ -405,27 +435,33 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                 </div>
 
                 {/* Tags */}
-              <div className="flex flex-wrap gap-2 mt-1 mb-1">
-                {trip.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="bg-gray-100 text-gray-700 text-xs font-medium px-2 py-0.5 rounded-md"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+                <div className="flex flex-wrap gap-2 mt-1 mb-1">
+                  {trip.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="bg-gray-100 text-gray-700 text-xs font-medium px-2 py-0.5 rounded-md"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
 
-                  <div className=" flex-wrap items-center gap-3 text-sm text-gray-600 ">
-                                                      <div className="flex items-center gap-1">
-                                                        <GoDotFill className="text-black" /> {trip.from}
-                                                      </div>
-                                                      {/* <span className="text-gray-400">→</span> */}
-                                                      <Image src={dots} alt="dot" className="ml-1.5 -mt-3" width={0} height={0}/>
-                                                      <div className="flex items-center gap-1">
-                                                        <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
-                                                      </div>
-                                                    </div>
+                <div className=" flex-wrap items-center gap-3 text-sm text-gray-600 ">
+                  <div className="flex items-center gap-1">
+                    <GoDotFill className="text-black" /> {trip.from}
+                  </div>
+                  {/* <span className="text-gray-400">→</span> */}
+                  <Image
+                    src={dots}
+                    alt="dot"
+                    className="ml-1.5 -mt-3"
+                    width={0}
+                    height={0}
+                  />
+                  <div className="flex items-center gap-1">
+                    <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
+                  </div>
+                </div>
                 {/* <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600 mt-2 mb-2">
                   <div className="flex items-center gap-1">
                     <GoDotFill className="text-black" /> {trip.from}
@@ -439,16 +475,16 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                 </div> */}
 
                 <div className="flex items-center gap-16 mt-1 text-sm text-gray-600 mb-1">
-                                <div className="flex items-center gap-2">
-                                  <FaCalendarAlt className="text-gray-400" />
-                                  <div>{trip.date}</div>
-                                </div>
-                
-                                <div className="flex items-center gap-2 ">
-                                  <FaWallet />
-                                  <div>{trip.price}</div>
-                                </div>
-                              </div>
+                  <div className="flex items-center gap-2">
+                    <FaCalendarAlt className="text-gray-400" />
+                    <div>{trip.date}</div>
+                  </div>
+
+                  <div className="flex items-center gap-2 ">
+                    <FaWallet />
+                    <div>{trip.price}</div>
+                  </div>
+                </div>
 
                 <div className="flex items-center gap-2 mt-1 text-sm text-gray-600 mb-2">
                   <FaFlag /> <span>30 Trips Completed</span>
@@ -458,12 +494,25 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className={`relative w-12 h-12 flex items-center justify-center rounded-full font-semibold text-sm border ${catStyle.avatarBg}`}>
-                      {trip.host.name.split(" ").map((n) => n[0]).join("").toUpperCase()}
+                    <div
+                      className={`relative w-12 h-12 flex items-center justify-center rounded-full font-semibold text-sm border ${catStyle.avatarBg}`}
+                    >
+                      {trip.host.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .toUpperCase()}
 
                       {trip.host.category !== "Travel Enthusiast" && (
                         <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow">
-                          <PiMedalDuotone className={`${trip.host.category === "Featured Trip Leader" ? "text-yellow-500" : "text-orange-500"}`} size={12} />
+                          <PiMedalDuotone
+                            className={`${
+                              trip.host.category === "Featured Trip Leader"
+                                ? "text-yellow-500"
+                                : "text-orange-500"
+                            }`}
+                            size={12}
+                          />
                         </div>
                       )}
                     </div>
@@ -471,34 +520,75 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                     <div>
                       <p className="text-sm font-semibold text-gray-900">
                         {trip.host.name}, {trip.host.age}{" "}
-                        {trip.host.verified && <FaCheckCircle className="inline text-sky-500 ml-1" />}
+                        {trip.host.verified && (
+                          <FaCheckCircle className="inline text-sky-500 ml-1" />
+                        )}
                       </p>
 
                       <div className="flex items-center gap-2 mt-1">
-                        <div className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-md font-medium ${catStyle.bg}`}>{trip.host.category}</div>
-                        <span className={getSafeScoreStyle(trip.host.safeScore)}>
+                        <div
+                          className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-md font-medium ${catStyle.bg}`}
+                        >
+                          {trip.host.category}
+                        </div>
+                        <span
+                          className={getSafeScoreStyle(trip.host.safeScore)}
+                        >
                           <FaShieldAlt /> {trip.host.safeScore}% Safe
                         </span>
                       </div>
 
-                      <p className="text-xs text-gray-600 mt-1">{trip.host.location} • ⭐ {trip.host.rating}</p>
+                      <p className="text-xs text-gray-600 mt-1">
+                        {trip.host.location} • ⭐ {trip.host.rating}
+                      </p>
                     </div>
                   </div>
 
                   <div className="flex gap-2">
-                    <button 
-                    onClick={() => router.push(`/trip/${trip.id}`)} 
-                    className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
-                      <Image src={TripImg} alt="View Trip Icon" width={14} height={14} className="mr-2 filter brightness-0 invert" /> View Trip
+                    <button
+                      onClick={() => router.push(`/trip/${trip.id}`)}
+                      className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
+                    >
+                      <Image
+                        src={TripImg}
+                        alt="View Trip Icon"
+                        width={14}
+                        height={14}
+                        className="mr-2 filter brightness-0 invert"
+                      />{" "}
+                      View Trip
                     </button>
-                    <button 
-                    onClick={() => router.push(`/trip/${trip.id}/join`)} 
-                    className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
-                      <Image src={Join} alt="Join Trip Icon" width={16} height={16} className="mr-2 filter brightness-0 invert" /> Join Trip
+                    <button
+                      onClick={() => router.push(`/trip/${trip.id}/join`)}
+                      className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
+                    >
+                      <Image
+                        src={Join}
+                        alt="Join Trip Icon"
+                        width={16}
+                        height={16}
+                        className="mr-2 filter brightness-0 invert"
+                      />{" "}
+                      Join Trip
                     </button>
-                    <button onClick={() => router.push(`/profile/${trip.host.name.replace(/\s+/g, "-").toLowerCase()}`)} 
-                    className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
-                      <Image src={Profile} alt="View Profile Icon" width={14} height={14} className="mr-2 filter brightness-0 invert" /> View Profile
+                    <button
+                      onClick={() =>
+                        router.push(
+                          `/profile/${trip.host.name
+                            .replace(/\s+/g, "-")
+                            .toLowerCase()}`
+                        )
+                      }
+                      className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
+                    >
+                      <Image
+                        src={Profile}
+                        alt="View Profile Icon"
+                        width={14}
+                        height={14}
+                        className="mr-2 filter brightness-0 invert"
+                      />{" "}
+                      View Profile
                     </button>
                   </div>
                 </div>
