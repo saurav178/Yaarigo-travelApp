@@ -204,9 +204,9 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
                 {agency.host.name}, {agency.host.age}{" "}
                 {agency.host.verified && (
                   // <FaCheckCircle className="inline text-sky-500 ml-1" />
-                  <div className="">
+                  
                     <FaCheckCircle className="inline text-green-500 ml-1 w-5 h-5" />
-                  </div>
+               
                 )}
               </p>
               <p className="text-xs text-gray-600 mt-1">
