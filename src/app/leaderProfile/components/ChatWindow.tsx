@@ -156,7 +156,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose }) => {
       {/* Header */}
       <div className="flex items-center justify-between px-3 py-2 bg-gray-100">
         <div className="flex items-center gap-1">
-          <span className="font-semibold text-[15px]">Jane Cooper</span>
+          <span className="font-semibold text-[15px]">Megha Chauhan</span>
           <svg
             className="w-4 h-4 text-gray-500"
             fill="none"
@@ -194,7 +194,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose }) => {
               </svg>
             </div>
 
-            <h2 className="mt-3 text-[17px] font-semibold">Jane Cooper</h2>
+            <h2 className="mt-3 text-[17px] font-semibold">Megha Chauhan</h2>
 
             {/* Encryption message */}
             <p className="text-gray-600 text-center text-[13px] px-6 mt-3 leading-snug">

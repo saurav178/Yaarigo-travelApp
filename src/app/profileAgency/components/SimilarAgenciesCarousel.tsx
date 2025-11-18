@@ -44,7 +44,7 @@ export default function SimilarAgenciesCarousel({
           return (
             <div
               key={index}
-              className="bg-white rounded-2xl border border-black overflow-hidden shadow-sm hover:shadow-lg transition-transform transform hover:scale-105 cursor-pointer"
+              className="bg-white overflow-hidden shadow-sm hover:shadow-lg transition-transform transform hover:scale-105 cursor-pointer"
             >
               <div className="relative w-full h-48 overflow-hidden">
                 {/* Sliding wrapper */}
@@ -65,7 +65,7 @@ export default function SimilarAgenciesCarousel({
                 {/* Left Arrow */}
                 <button
                   onClick={prevImage}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 text-white p-2 rounded-full bg-transparent hover:text-gray-400 transition"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 text-white p-2 bg-transparent hover:text-gray-400 transition"
                 >
                   <ChevronLeft className="w-6 h-6" />
                 </button>
@@ -73,12 +73,12 @@ export default function SimilarAgenciesCarousel({
                 {/* Right Arrow */}
                 <button
                   onClick={nextImage}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-white p-2 rounded-full bg-transparent hover:text-gray-400 transition"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-white p-2 bg-transparent hover:text-gray-400 transition"
                 >
                   <ChevronRight className="w-6 h-6" />
                 </button>
 
-                <span className="absolute top-3 right-3 bg-emerald-500 text-white text-xs px-3 py-1 rounded-full shadow-sm">
+                <span className="absolute top-3 right-3 bg-emerald-500 text-white text-xs px-3 py-1 shadow-sm">
                   Verified
                 </span>
               </div>
@@ -88,7 +88,7 @@ export default function SimilarAgenciesCarousel({
                   <img
                     src={agency.logo}
                     alt="logo"
-                    className="w-10 h-10 rounded-md object-cover"
+                    className="w-10 h-10 object-cover"
                   />
                   <div>
                     <h3 className="font-semibold text-sm text-gray-900">
@@ -97,7 +97,7 @@ export default function SimilarAgenciesCarousel({
                     <div className="flex items-center gap-1 text-xs text-gray-500">
                       <Star className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
                       {agency.rating}
-                      <span className="relative ml-2 bg-emerald-400 px-2 py-[2px] rounded-full text-white text-[10px] flex items-center gap-1">
+                      <span className="relative ml-2 bg-emerald-400 px-2 py-[2px]l text-white text-[10px] flex items-center gap-1">
                         <div className="relative w-4 h-4">
                           {/* White shield */}
                           <Shield
@@ -123,10 +123,10 @@ export default function SimilarAgenciesCarousel({
                 </p>
 
                 <div className="flex justify-between items-center mt-4">
-                  <button className="bg-[#1D4350] hover:bg-[#173844] text-white text-xs px-8 py-2 rounded-md font-medium transition cursor-pointer">
+                  <button className="bg-[#1D4350] hover:bg-[#173844] text-white text-xs px-8 py-2 font-medium transition cursor-pointer">
                     View Profile
                   </button>
-                  <button className="border border-[#1D4350] text-[#1D4350] text-xs px-7 py-2 rounded-md font-medium cursor-pointer">
+                  <button className="border border-[#1D4350] text-[#1D4350] text-xs px-7 py-2 font-medium cursor-pointer">
                     {agency.trips} trips
                   </button>
                 </div>

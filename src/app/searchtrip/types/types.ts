@@ -1,93 +1,78 @@
 
+
+// types
+
+export type HostCategory = "Travel Enthusiast" | "Featured Trip Leader" | "Featured Trip Agency";
+
+export type Host = {
+  name: string;
+  age: number;
+  verified: boolean;
+  location: string;
+  rating: number;
+  match: number;
+  safeScore: number;
+  category: HostCategory;
+};
+
 export type Trip = {
-  id: string;
-  name: string;
-  age?: number;           
-  location?: string;
-  from?: string;
-  to?: string;
-  price?: string | number;         
-  rating?: number;
-  duration?: string | number;     
-  tags?: string[];
-  match?: number;
-  cover?: string;
+  id: number;
+  title: string;
+  description: string;
+  tags: string[];
+  from: string;
+  to: string;
+  travelersNeeded: number;
+  price: string;
+  date: string;
+  spotsLeft: number;
+  host: Host;
+  image: string;
 };
 
-// types- for similar trips
-
-export type Similar = {
-  id: string;
-  name: string;
-  age?: number;
-  // maxAge?:number;
-  location?: string;
-  from?: string;
-  to?: string;
-  price?: string | number;
-  tags?: string[];
-  match?: number;
-  days?: string | number;
-  avatar?: string;
-  cover?: string;
-  rating: number;
-  
+export type SimilarTrip = Trip & {
+  interest?: string[];
+  tripType?: string[];
+  foodPref?: string[];
 };
 
-// types- for feature leader trips...
-
-export type Leader = {
-  id: string;
-  name: string;
-  age?: number;
-  // maxAge?:number;
-  location?: string;
-  from?: string;
-  to?: string;
-  price?: string | number;
-  tags?: string[];
-  match?: number;
-  days?: string | number;
-  avatar?: string;
-  cover?: string;
-  rating: number;
-  
+export type Leader = Trip & {
+  interest?: string[];
+  tripType?: string[];
+  foodPref?: string[];
 };
-
-
 
 export type Agency = {
-  id: string;
-  name: string;
-  // fields commonly used in your data (make optional if absent)
-  description?: string;
-  rating?: number;
-  trust?: string;
-  verified?: boolean;
-  tripsCount?: number;
-  travelersCount?: number;
-  years?: number;
-  tags?: string[];
-  avatar?: string;
-  cover?: string;
-  
-  [key: string]: unknown;
+  id: number;
+  title: string;
+  description: string;
+  tags: string[];
+  from: string;
+  to: string;
+  travelersNeeded: number;
+  verified: boolean;
+  price: string;
+  date: string;
+  spotsLeft: number;
+  stats: {
+    travelersEnrolled: string;
+    tripsCompleted: string;
+    yearsInBusiness: string;
+  };
+  host: Host;
+  image: string;
 };
 
-// data-recommendations
-
-export type Rec = {
-  id: string;
-  name: string;
-  age?: number;
-  // maxAge?:number;
-  location: string;
-  from?: string;
-  tags?: string[];
-  match?: number;
-  price?: string | number;
-  days?: string | number;
-  avatar?: string;
-  cover?: string;
-  rating: number;
+export type FilterPayload = {
+  query: string;
+  age: number;
+  duration: number;
+  budget: number;
+  minRating: number;
+  minSafeScore: number;
+  matchPercent: number;
+  scorePercent: number;
+  interest: string;
+  tripType: string;
+  foodPref: string;
 };

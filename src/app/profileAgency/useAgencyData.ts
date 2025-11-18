@@ -7,7 +7,7 @@ export default function useAgencyData() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("/api/agencyData");
+        const res = await fetch("../profileAgency/api/agencyData");
         const json = await res.json();
         setData(json);
       } catch (err) {
