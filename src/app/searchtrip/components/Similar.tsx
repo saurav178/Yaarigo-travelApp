@@ -188,7 +188,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3 relative">
                       <div
-                        className={`relative w-12 h-12 flex items-center justify-center rounded-full font-semibold text-sm border ${catStyle.avatarBg}`}
+                        className={`relative w-15 h-15 -ml-1 flex items-center justify-center rounded-full font-semibold text-sm border ${catStyle.avatarBg}`}
                       >
                         {getInitials(trip.host.name)}
 

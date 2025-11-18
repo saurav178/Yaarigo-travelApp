@@ -123,7 +123,7 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-2 mt-1 mb-2">
+              <div className="flex flex-wrap gap-2  mb-2">
                 {trip.tags.map((t) => (
                   <span
                     key={t}
@@ -170,7 +170,7 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                 <div className="flex items-center gap-3 relative">
                   {/* Avatar */}
                   <div
-                    className={`relative w-12 h-12 flex items-center justify-center rounded-full font-semibold text-sm border ${catStyle.avatarBg}`}
+                    className={`relative w-15 h-15 -ml-2.5 flex items-center justify-center rounded-full font-semibold text-sm border ${catStyle.avatarBg}`}
                   >
                     {getInitials(trip.host.name)}
 

@@ -174,7 +174,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
         <div className="flex items-center justify-between mt-auto">
           <div className="flex items-center gap-3">
             <div
-              className={`relative w-12 h-12 flex items-center justify-center rounded-full font-semibold text-sm border ${catStyle.avatarBg}`}
+              className={`relative w-15 h-15 flex items-center justify-center rounded-full font-semibold text-sm border ${catStyle.avatarBg}`}
             >
               {getInitials(agency.host.name)}
 

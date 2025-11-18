@@ -9,7 +9,7 @@ import Profile from "../../../../public/searchpageimg/view_profile.png";
 import Join from "../../../../public/searchpageimg/join_trips.png";
 import dots from "../../../../public/searchpageimg/Line 1.png";
 import {
-  FaMapMarkerAlt,
+  // FaMapMarkerAlt,
   FaCalendarAlt,
   FaCheckCircle,
   FaShieldAlt,
@@ -112,7 +112,8 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
               {/* Content */}
               <div className="p-4 flex-1">
                 <div className="flex justify-between items-start">
-                  <div className="">
+                 
+                  <div>
                     <h2 className="text-lg font-semibold text-gray-900 leading-tight mb-1">
                       {trip.title}
                     </h2>
@@ -121,12 +122,44 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-1">
-                    <span className="flex gap-2 items-center bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
+                 
+                  <div className="flex items-center gap-2">
+                
+                    <span className="flex items-center gap-1 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
                       <FaExclamationTriangle /> {trip.spotsLeft} spots left
+                    </span>
+
+                    
+                    
+                    <span className="flex items-center gap-1 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow">
+                      <span className="font-bold">{trip.host.match}%</span>{" "}
+                      Match
                     </span>
                   </div>
                 </div>
+
+                {/* <div className="flex justify-between items-start">
+                  <div>
+                    <h2 className="text-lg font-semibold text-gray-900 leading-tight mb-1">
+                      {trip.title}
+                    </h2>
+                    <p className="text-gray-600 text-sm line-clamp-2 mb-1">
+                      {trip.description}
+                    </p>
+                  </div>
+
+                
+                  <div className="flex flex-col items-end gap-2">
+                    <span className="flex items-center gap-1 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
+                      <FaExclamationTriangle /> {trip.spotsLeft} spots left
+                    </span>
+
+                    <span className="flex items-center gap-1 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow">
+                      <span className="font-bold">{trip.host.match}%</span>{" "}
+                      Match
+                    </span>
+                  </div>
+                </div> */}
 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-2 mt-1 mb-1">
@@ -142,8 +175,27 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
 
                 <div className=" flex-wrap items-center gap-3 text-sm text-gray-600 ">
                   <div className="flex items-center gap-1">
-                    <GoDotFill className="text-black text-lg" /> {trip.from}
+                    <span className="w-3 h-3 rounded-full bg-white border-2 border-gray-400 inline-block"></span>{" "}
+                    {trip.from}
                   </div>
+                  <Image
+                    src={dots}
+                    alt="dot"
+                    className="ml-1.5 -mt-1"
+                    width={0}
+                    height={0}
+                  />
+                  <div className="flex items-center -mt-1.5 -ml-0.5 ">
+                    <GoDotFill className="text-black text-lg w-5 h-5" />
+                    {trip.to}
+                  </div>
+                </div>
+                {/* <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600">
+                  <div className="flex items-center gap-1">
+                    <span className="w-3 h-3 rounded-full bg-white border-2 border-gray-400 inline-block"></span>
+                    {trip.from}
+                  </div>
+
                   <Image
                     src={dots}
                     alt="dot"
@@ -151,11 +203,13 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                     width={0}
                     height={0}
                   />
+
                   <div className="flex items-center gap-1 ml-0.5">
-                    <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
+                    <span className="w-3 h-3 rounded-full bg-white border-2 border-gray-400 inline-block"></span>
+                    {trip.to}
                   </div>
-                </div>
-               
+                </div> */}
+
                 <div className="flex items-center gap-16 mt-1 text-sm text-gray-600 mb-1">
                   <div className="flex items-center gap-2">
                     <FaCalendarAlt className="text-gray-400" />
@@ -177,7 +231,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div
-                      className={`relative w-12 h-12 flex items-center justify-center rounded-full font-semibold text-sm border ${catStyle.avatarBg}`}
+                      className={`relative w-15 h-15 -ml-1 flex items-center justify-center rounded-full font-semibold text-sm border ${catStyle.avatarBg}`}
                     >
                       {trip.host.name
                         .split(" ")
@@ -215,17 +269,22 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                         </div>
                         <div className="">
                           <span
-                          className={getSafeScoreStyle(trip.host.safeScore)}
-                        >
-                          <FaShieldAlt /> {trip.host.safeScore}% Safe
-                        </span>
+                            className={getSafeScoreStyle(trip.host.safeScore)}
+                          >
+                            <FaShieldAlt /> {trip.host.safeScore}% Safe
+                          </span>
                         </div>
                       </div>
 
                       <div className="flex gap-2">
                         <p className="text-xs text-gray-600 mt-1">
-                        {trip.host.location} • ⭐ {trip.host.rating}
-                      </p> <span className={`flex items-center gap-1 mt-1 text-xs px-2 py-0.5  font-medium ${catStyle.bg}`}>{trip.host.match}% Match</span>
+                          {trip.host.location} • ⭐ {trip.host.rating}
+                        </p>{" "}
+                        {/* <span
+                          className={`flex items-center gap-1 mt-1 text-xs px-2 py-0.5  font-medium ${catStyle.bg}`}
+                        >
+                          {trip.host.match}% Match
+                        </span> */}
                       </div>
                     </div>
                   </div>
