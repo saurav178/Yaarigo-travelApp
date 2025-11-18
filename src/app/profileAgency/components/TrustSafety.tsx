@@ -6,7 +6,7 @@ interface TrustSafetyProps {
 
 export default function TrustSafety({ items }: TrustSafetyProps) {
   return (
-    <div className="bg-white rounded-lg shadow-sm p-5 border border-black">
+    <div className="bg-white shadow-sm hover:shadow-xl transition-shadow duration-300 p-5 w-full max-w-md ml-10 border border-gray-100">
       <h3 className="text-base font-bold mb-4 text-gray-900 flex items-center gap-2">
         <Shield className="w-5 h-5 text-white fill-emerald-500" />
         Trust and Safety

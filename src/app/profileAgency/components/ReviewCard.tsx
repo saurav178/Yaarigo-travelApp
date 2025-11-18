@@ -17,7 +17,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
   const [hoveredStar, setHoveredStar] = useState<number | null>(null);
 
   return (
-    <div className="border border-black rounded-xl p-4 shadow-sm hover:shadow-md transition">
+    <div className="border border-gray-200 p-4 shadow-sm hover:shadow-md transition">
       {/* Header */}
       <div className="flex justify-between items-start mb-3">
         <div className="flex items-center gap-3">

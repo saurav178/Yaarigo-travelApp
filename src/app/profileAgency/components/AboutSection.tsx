@@ -13,7 +13,7 @@ export default function AboutSection({ about }: any) {
   const certifications = about.certifications || ["ISO 9001", "ASTA Verified"];
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-5 border border-black">
+    <div className="bg-white border border-gray-200 shadow-sm hover:shadow-xl transition-shadow duration-300 p-5">
       <h2 className="text-xl font-bold mb-3 text-gray-900">{about.title}</h2>
       <p className="text-gray-600 leading-relaxed text-sm mb-4">
         {about.description}
