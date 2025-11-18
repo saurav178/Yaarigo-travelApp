@@ -11,6 +11,8 @@ import dots from "../../../../public/searchpageimg/Line 1.png";
 // import { MdVerifiedUser } from "react-icons/md";
 // import { FaCalendarAlt } from "react-icons/fa";
 
+
+
 import {
   // FaMapMarkerAlt,
   FaUser,
@@ -25,6 +27,7 @@ import {
 import { PiMedalDuotone } from "react-icons/pi";
 import { GoDotFill } from "react-icons/go";
 import { useRouter } from "next/navigation";
+import { ROUTES } from '../../../lib/routes';
 
 import type { Trip } from "../types/types";
 import { TRIPS_DEMO } from "../data/data";
@@ -37,6 +40,7 @@ type TripCardProps = {
 export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
   const [likedTrips, setLikedTrips] = useState<number[]>([]);
   const router = useRouter();
+
 
   const toggleLike = (id: number) => {
     setLikedTrips((prev) =>
