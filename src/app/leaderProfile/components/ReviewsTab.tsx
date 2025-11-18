@@ -1,23 +1,34 @@
 "use client";
 import { Users, Star, MoreVertical } from "lucide-react";
 import { useState } from "react";
+import { reviews } from "../data/profileData";
 
 interface Review {
-  name: string;
+  author: string;
   date: string;
   rating: number;
   text: string;
+}
+
+export default function ReviewsTab() {
+  return (
+    <div className="space-y-6">
+      {reviews.map((review) => (
+        <ReviewCard key={review.id} review={review} />
+      ))}
+    </div>
+  );
 }
 
 interface ReviewCardProps {
   review: Review;
 }
 
-export default function ReviewCard({ review }: ReviewCardProps) {
+function ReviewCard({ review }: ReviewCardProps) {
   const [hoveredStar, setHoveredStar] = useState<number | null>(null);
 
   return (
-    <div className="border border-gray-200 p-4 shadow-sm hover:shadow-md transition">
+    <div className="  p-4 shadow-sm hover:shadow-md transition">
       {/* Header */}
       <div className="flex justify-between items-start mb-3">
         <div className="flex items-center gap-3">
@@ -26,7 +37,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-gray-900">{review.name}</span>
+              <span className="font-semibold text-gray-900">{review.author}</span>
               <span className="text-xs text-[#F76C6C] bg-red-50 px-2 py-0.5 rounded">
                 Verified User
               </span>

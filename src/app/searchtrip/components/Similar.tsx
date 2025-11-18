@@ -1,13 +1,13 @@
+// Similar
+
 "use client";
 
 import { useState } from "react";
 import Image from "next/image";
-import TripImg from "../../../../public/searchpageimg/view_trips.png";
-import Profile from "../../../../public/searchpageimg/view_profile.png";
-import Join from "../../../../public/searchpageimg/join_trips.png";
-import dots from "../../../../public/searchpageimg/Line 1.png";
+
 import {
-  FaMapMarkerAlt,
+  // FaMapMarkerAlt,
+  FaUser,
   FaCalendarAlt,
   FaCheckCircle,
   FaHeart,
@@ -16,136 +16,27 @@ import {
   FaExclamationTriangle,
   FaWallet,
 } from "react-icons/fa";
-import { PiMedalDuotone } from "react-icons/pi";
+
 import { GoDotFill } from "react-icons/go";
+import { PiMedalDuotone } from "react-icons/pi";
 
-export type SimilarTrip = {
-  id: number;
-  title: string;
-  description: string;
-  tags: string[];
-  from: string;
-  to: string;
-  travelersNeeded: number;
-  price: string;
-  date: string;
-  spotsLeft: number;
-  interest: string[];
-  tripType: string[];
-  foodPref: string[];
-  host: {
-    name: string;
-    age: number;
-    verified: boolean;
-    location: string;
-    rating: number;
-    match: number;
-    safeScore: number;
-    category: string;
-  };
-  image: string;
-};
+import type { SimilarTrip } from "../types/types";
+import { SIMILAR_TRIPS_DEMO } from "../data/data";
+import dots from "../../../../public/searchpageimg/Line 1.png";
+import TripImg from "../../../../public/searchpageimg/view_trips.png";
+import Join from "../../../../public/searchpageimg/join_trips.png";
+import Profile from "../../../../public/searchpageimg/view_profile.png";
 
-export const SIMILAR_TRIPS_DEMO: SimilarTrip[] = [
-  {
-    id: 1,
-    title: "Tropical Island Getaway in Maldives",
-    description:
-      "Join us for an unforgettable beach vacation! Relax by the turquoise waters, enjoy local seafood, and snorkel among vibrant coral reefs.",
-    tags: ["Beach", "Luxury", "Relaxation"],
-    from: "Kolkata, West Bengal",
-    to: "Maldives",
-    travelersNeeded: 2,
-    price: "₹45,000 / person",
-    date: "Feb 1–5, 2026",
-    spotsLeft: 2,
-    interest: ["Culture", "Beaches"],
-    tripType: ["Solo", "Family"],
-    foodPref: ["vegan", "Halal"],
-    host: {
-      name: "Priya Sharma",
-      age: 17,
-      verified: true,
-      location: "Mumbai, India",
-      rating: 3.6,
-      match: 50,
-      safeScore: 50,
-      category: "Travel Enthusiast",
-    },
-    image:
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80",
-  },
-  {
-    id: 2,
-    title: "Backpacking Through the Himalayas",
-    description:
-      "An adventurous 10-day trip through the majestic Himalayan trails — perfect for thrill seekers and nature lovers.",
-    tags: ["Adventure", "Mountains", "Trekking"],
-    from: "Patna , Bihar",
-    to: "Leh, Ladakh",
-    travelersNeeded: 5,
-    price: "₹30,000 / person",
-    date: "Mar 10–30, 2026",
-    spotsLeft: 1,
-    interest: ["Culture", "wildlife"],
-    tripType: ["Solo", "Family"],
-    foodPref: ["vegan", "Halal"],
-    host: {
-      name: "Aarav Singh",
-      age: 19,
-      verified: true,
-      location: "Delhi, India",
-      rating: 3.0,
-      match: 70,
-      safeScore: 70,
-      category: "Travel Enthusiast",
-    },
-    image:
-      "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=400&q=80",
-  },
-  {
-    id: 3,
-    title: "Cultural Escape to Kyoto",
-    description:
-      "Explore the ancient temples, tea houses, and cherry blossoms of Japan’s most serene city — Kyoto.",
-    tags: ["Culture", "History", "Asia"],
-    from: "Uttar Pradesh, India",
-    to: "Kyoto, Japan",
-    travelersNeeded: 4,
-    price: "₹25,000 / person",
-    date: "Apr 2–15, 2026",
-    spotsLeft: 3,
-    interest: ["Culture", "Beaches"],
-    tripType: ["Solo", "Family"],
-    foodPref: ["vegan", "Halal"],
-    host: {
-      name: "Neha Mehta",
-      age: 20,
-      verified: true,
-      location: "Bangalore, India",
-      rating: 3.5,
-      match: 60,
-      safeScore: 60,
-      category: "Travel Enthusiast",
-    },
-    image:
-      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&q=80",
-  },
-];
-
-type SimilarProps = {
+type Props = {
   trips?: SimilarTrip[];
-  compact?: boolean;
 };
 
-export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
+export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
   const [likedTrips, setLikedTrips] = useState<number[]>([]);
-
-  const toggleLike = (id: number) => {
-    setLikedTrips((prev) =>
-      prev.includes(id) ? prev.filter((tid) => tid !== id) : [...prev, id]
+  const toggleLike = (id: number) =>
+    setLikedTrips((p) =>
+      p.includes(id) ? p.filter((x) => x !== id) : [...p, id]
     );
-  };
 
   const getInitials = (name: string) =>
     name
@@ -158,22 +49,22 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
     switch (category) {
       case "Travel Enthusiast":
         return {
-          bg: "bg-blue-100 text-blue-800 border-blue-300",
+          bg: "bg-blue-100 text-blue-800",
           avatarBg: "bg-blue-500 text-white",
         };
       case "Featured Trip Leader":
         return {
-          bg: "bg-yellow-100 text-yellow-800 border-yellow-300",
+          bg: "bg-yellow-100 text-yellow-800",
           avatarBg: "bg-yellow-500 text-white",
         };
-      case "Trip Agency":
+      case "Featured Trip Agency":
         return {
-          bg: "bg-orange-100 text-orange-800 border-orange-300",
+          bg: "bg-orange-100 text-orange-800",
           avatarBg: "bg-orange-500 text-white",
         };
       default:
         return {
-          bg: "bg-gray-100 text-gray-800 border-gray-300",
+          bg: "bg-gray-100 text-gray-800",
           avatarBg: "bg-gray-500 text-white",
         };
     }
@@ -201,11 +92,6 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
               <div className="bg-white  shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80">
                 {/* Left Image */}
                 <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
-                  {/* <img
-                    src={trip.image}
-                    alt={trip.title}
-                    className="w-full h-full object-cover"
-                  /> */}
                   <Image
                     src={trip.image}
                     alt={trip.title}
@@ -216,9 +102,9 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
                   />
 
                   {/* Match Badge */}
-                  <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
+                  {/* <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
                     {trip.host.match}% Match
-                  </div>
+                  </div> */}
 
                   {/* Like Button */}
                   <button
@@ -245,53 +131,49 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
                       </p>
                     </div>
 
-                    <div className="flex items-center gap-1 mb-1">
-                      <span className="flex gap-2 items-center bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
+                    <div className="flex items-center gap-2">
+                      <span className="flex items-center gap-1 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow">
+                        <span className="font-bold">{trip.host.match}%</span>{" "}
+                        Match
+                      </span>
+
+                      <span className="flex items-center gap-1 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
                         <FaExclamationTriangle /> {trip.spotsLeft} spots left
                       </span>
                     </div>
                   </div>
 
                   {/* Tags */}
-                  <div className="flex flex-wrap gap-2  mb-1">
+                  <div className="flex flex-wrap gap-2 mt-2 mb-3">
                     {trip.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="bg-gray-100 text-gray-700 text-xs font-medium px-2 py-0.5 rounded-md"
+                        className="bg-blue-100 text-blue-500 text-xs font-medium px-2 py-0.5 rounded-md"
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
 
-                  {/* Trip Info */}
-                  {/* <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600 mt-2 mb-2">
-                    <div className="flex items-center gap-1">
-                      <GoDotFill className="text-black" /> {trip.from}
-                    </div>
-                    <span className="text-gray-400">→</span>
-                    <div className="flex items-center gap-1">
-                      <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
-                    </div>
-                  </div> */}
                   <div className=" flex-wrap items-center gap-3 text-sm text-gray-600 ">
                     <div className="flex items-center gap-1">
-                      <GoDotFill className="text-black" /> {trip.from}
+                      <span className="w-3 h-3 rounded-full bg-white border-2 border-gray-400 inline-block mr-1"></span>{" "}
+                      {trip.from}
                     </div>
-                    {/* <span className="text-gray-400">→</span> */}
                     <Image
                       src={dots}
                       alt="dot"
-                      className="ml-1.5 -mt-3"
+                      className="ml-1.5 -mt-1"
                       width={0}
                       height={0}
                     />
-                    <div className="flex items-center gap-1">
-                      <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
+                    <div className="flex items-center -mt-2 -ml-1.5  ">
+                      <GoDotFill className="text-black text-lg w-6 h-6 mr-1" />
+                      {trip.to}
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-16 mt-1 text-sm text-gray-600 mb-2">
+                  <div className="flex items-center gap-16 mt-1 text-sm text-gray-600 mb-1">
                     <div className="flex items-center gap-2">
                       <FaCalendarAlt className="text-gray-400" />
                       <div>{trip.date}</div>
@@ -301,10 +183,10 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
                       <FaWallet />
                       <div>{trip.price}</div>
                     </div>
-                  </div>
 
-                  <div className="flex items-center gap-2  text-sm text-gray-600">
-                    <FaFlag /> <span>25 Trips Completed</span>
+                    <div className="flex items-center gap-2  text-sm text-gray-600">
+                      <FaFlag /> <span>25 Trips Completed</span>
+                    </div>
                   </div>
 
                   <hr className="my-3 mt-3" />
@@ -313,7 +195,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3 relative">
                       <div
-                        className={`relative w-12 h-12 flex items-center justify-center rounded-full font-semibold text-sm border ${catStyle.avatarBg}`}
+                        className={`relative w-15 h-15 -ml-1 flex items-center justify-center rounded-full font-semibold text-2xl border ${catStyle.avatarBg}`}
                       >
                         {getInitials(trip.host.name)}
 
@@ -332,17 +214,27 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
                       </div>
 
                       <div>
-                        <p className="text-sm font-semibold text-gray-900">
+                        <p className="text-md font-semibold text-gray-900 flex">
                           {trip.host.name}, {trip.host.age}{" "}
                           {trip.host.verified && (
-                            <FaCheckCircle className="inline text-sky-500 ml-1" />
+                            // <FaCheckCircle className="inline text-sky-500 ml-1" />
+                           
+                              <FaCheckCircle className="inline text-green-500 ml-1 w-5 h-5" />
+                          
                           )}
                         </p>
 
-                        <div className="flex items-center gap-2 mt-1">
+                        <div className="flex gap-2">
+                          <p className="text-xs text-gray-600 mt-1 ">
+                            {trip.host.location} • ⭐ {trip.host.rating}
+                          </p>{" "}
+                        </div>
+
+                        <div className="flex items-center gap-2 mt-1 -ml-1">
                           <div
-                            className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-md font-medium ${catStyle.bg}`}
+                            className={`flex items-center gap-1 text-xs px-1 py-0.5 rounded-md font-medium ${catStyle.bg}`}
                           >
+                            <FaUser />
                             {trip.host.category}
                           </div>
                           <span
@@ -352,14 +244,14 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
                           </span>
                         </div>
 
-                        <p className="text-xs text-gray-600 mt-1">
+                        {/* <p className="text-xs text-gray-600 mt-1">
                           {trip.host.location} • ⭐ {trip.host.rating}
-                        </p>
+                        </p> */}
                       </div>
                     </div>
 
                     <div className="flex gap-2">
-                      <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
+                      <button className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
                         <Image
                           src={TripImg}
                           alt="View Trip Icon"
@@ -369,7 +261,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
                         />{" "}
                         View Trip
                       </button>
-                      <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
+                      <button className="bg-[#1D4350] text-white text-xs px-1 py-1 hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
                         <Image
                           src={Join}
                           alt="Join Trip Icon"
@@ -379,7 +271,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: SimilarProps) {
                         />{" "}
                         Join Trip
                       </button>
-                      <button className="bg-[#1D4350] text-white text-xs px-1 py-1 rounded-md hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
+                      <button className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
                         <Image
                           src={Profile}
                           alt="View Profile Icon"

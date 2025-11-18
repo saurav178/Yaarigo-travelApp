@@ -106,7 +106,7 @@ export default function ProfileHeader({
         {/* Avatar - positioned floating over cover image half */}
         <div className="absolute left-16 -top-26 w-75 h-70 overflow-hidden shadow-md z-20">
           <Image
-            src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91"
+            src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face&auto=format&q=100"
             alt="Profile"
             fill
             className="object-cover"
@@ -115,9 +115,9 @@ export default function ProfileHeader({
         {/* Info */}
         <div className="flex-1 mt-0 text-center ml-0 mr-86">
 
-          <div className="flex items-center justify-center ml-0 mr-50">
-            <h2 className="text-2xl font-semibold flex items-center gap-2">
-              Jane Cooper
+          <div className="flex items-center justify-center ml-0">
+            <h2 className="text-2xl  mr-36 font-semibold flex items-center gap-2">
+              Megha Chauhan
               <span className="bg-emerald-500 text-white text-xs px-2 py-1 rounded-full  flex items-center gap-1">
                 <Image
                   src="/ic_baseline-check-circle-outline.png"
@@ -125,14 +125,14 @@ export default function ProfileHeader({
                   width={16}
                   height={16}
                 />{" "}
-                Verified Traveler
+                Verified Leader
               </span>
             </h2>
           </div>
           <p className="text-gray-600 flex items-center ml-94 gap-1 mt-1">
-            <FaMapMarkerAlt className="text-black" /> Kiev, Ukraine
+            <FaMapMarkerAlt className="text-black" />Uttar Pradesh, India
           </p>
-          <div className="text-sm text-gray-500 mt-1 ml-0 mr-60">
+          <div className="text-sm text-gray-500 mt-1 ml-0 mr-58">
             <Image
               src="/star-icon.png"
               alt="Star"
@@ -162,7 +162,7 @@ export default function ProfileHeader({
               <p className="text-gray-500 text-sm">Following</p>
             </div>
             <div className="bg-gray-200 py-3 px-6 shadow-sm">
-              <p className="text-lg font-semibold">15</p>
+              <p className="text-lg font-semibold">25</p>
               <p className="text-gray-500 text-sm">Trips Completed</p>
             </div>
           </div>
