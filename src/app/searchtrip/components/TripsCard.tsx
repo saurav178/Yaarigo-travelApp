@@ -94,9 +94,9 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                   className="w-full h-full object-cover"
                   unoptimized={false}
                 />
-                <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
+                {/* <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
                   {trip.host.match}% Match
-                </div>
+                </div> */}
                 <button
                   onClick={() => toggleLike(trip.id)}
                   className={`absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full transition ${
@@ -142,16 +142,16 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
 
                 <div className=" flex-wrap items-center gap-3 text-sm text-gray-600 ">
                   <div className="flex items-center gap-1">
-                    <GoDotFill className="text-black" /> {trip.from}
+                    <GoDotFill className="text-black text-lg" /> {trip.from}
                   </div>
                   <Image
                     src={dots}
                     alt="dot"
-                    className="ml-1.5 -mt-3"
+                    className="ml-2 -mt-3"
                     width={0}
                     height={0}
                   />
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1 ml-0.5">
                     <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
                   </div>
                 </div>
@@ -213,16 +213,20 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                         >
                           {trip.host.category}
                         </div>
-                        <span
+                        <div className="">
+                          <span
                           className={getSafeScoreStyle(trip.host.safeScore)}
                         >
                           <FaShieldAlt /> {trip.host.safeScore}% Safe
                         </span>
+                        </div>
                       </div>
 
-                      <p className="text-xs text-gray-600 mt-1">
+                      <div className="flex gap-2">
+                        <p className="text-xs text-gray-600 mt-1">
                         {trip.host.location} • ⭐ {trip.host.rating}
-                      </p>
+                      </p> <span className={`flex items-center gap-1 mt-1 text-xs px-2 py-0.5  font-medium ${catStyle.bg}`}>{trip.host.match}% Match</span>
+                      </div>
                     </div>
                   </div>
 

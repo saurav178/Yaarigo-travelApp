@@ -259,7 +259,7 @@ export default function Filters({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow w-full max-w-md mx-auto max-h-[90vh] flex flex-col">
+    <div className="bg-white rounded-xl shadow w-full max-w-md mx-auto max-h-[90vh] flex flex-col -ml-2">
       <div className="flex items-center gap-3 p-3">
         <button className="text-sm text-gray-600 hover:text-gray-800 transition" onClick={() => router.push("/")}>
           ← Back

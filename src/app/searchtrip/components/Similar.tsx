@@ -101,9 +101,9 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                   />
 
                   {/* Match Badge */}
-                  <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
+                  {/* <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
                     {trip.host.match}% Match
-                  </div>
+                  </div> */}
 
                   {/* Like Button */}
                   <button
@@ -151,17 +151,17 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
 
                   <div className=" flex-wrap items-center gap-3 text-sm text-gray-600 ">
                     <div className="flex items-center gap-1">
-                      <GoDotFill className="text-black" /> {trip.from}
+                      <GoDotFill className="text-black text-lg" /> {trip.from}
                     </div>
 
                     <Image
                       src={dots}
                       alt="dot"
-                      className="ml-1.5 -mt-3"
+                      className="ml-2 -mt-3"
                       width={0}
                       height={0}
                     />
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1 ml-0.5">
                       <FaMapMarkerAlt className="text-gray-400" /> {trip.to}
                     </div>
                   </div>
