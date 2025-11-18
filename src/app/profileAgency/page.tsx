@@ -34,7 +34,7 @@ export default function TripAgency() {
     fetchData();
   }, []);
 
-  if (loading) return <Loader />; 
+  if (loading) return <Loader />;
 
   if (!data)
     return (
@@ -71,7 +71,8 @@ export default function TripAgency() {
     <div className="min-h-screen bg-white">
       <HeroSection hero={hero} />
 
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-6">
+      {/* <div className="w-full px-4 md:px-6 py-6 mt-24 md:mt-32"> */}
+      <div className="w-full px-4 md:px-6 py-6 mt-6 md:mt-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           {/* Left/Main Content */}
           <div className="lg:col-span-2 space-y-5">
@@ -84,7 +85,9 @@ export default function TripAgency() {
                 activeTab={activeTab}
                 onTabChange={setActiveTab}
               />
-              <div className="max-h-[600px] overflow-y-auto pr-2 space-y-4">
+
+              {/* White box wrapper */}
+              <div className="bg-white shadow-md p-4 max-h-[600px] overflow-y-auto space-y-4">
                 {activeTab === "upcoming" &&
                   upcomingTrips.map((trip: any, i: number) => (
                     <UpcomingTripCard key={i} trip={trip} />
@@ -113,7 +116,7 @@ export default function TripAgency() {
           <div className="space-y-5">
             <ContactInfo contact={contactInfo} />
             <TrustSafety items={trustSafety} />
-            <SimilarAgencies agencies={similarAgencies} />
+            {/* <SimilarAgencies agencies={similarAgencies} /> */}
           </div>
         </div>
       </div>

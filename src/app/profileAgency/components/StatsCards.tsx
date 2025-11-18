@@ -13,7 +13,7 @@ export default function StatsCards({ stats }: StatsCardsProps) {
       {stats.map((stat, i) => (
         <div
           key={i}
-          className="bg-white rounded-lg shadow-sm hover:shadow-xl transition-shadow duration-300 p-6 md:p-10 text-center border border-black h-40 md:h-35 flex flex-col justify-center"
+          className="bg-white border border-gray-100 shadow-sm hover:shadow-xl transition-shadow duration-300 p-6 md:p-10 text-center h-40 md:h-35 flex flex-col justify-center"
         >
           <div className="text-[#1D4350] text-2xl md:text-4xl font-bold mb-1">
             {stat.value}

@@ -3,6 +3,7 @@ import { MapPin, Calendar, Users } from "lucide-react";
 
 interface PastTripCardProps {
   trip: {
+    id?: string;
     title: string;
     location: string;
     date: string;
@@ -15,50 +16,57 @@ interface PastTripCardProps {
 
 export default function PastTripCard({ trip }: PastTripCardProps) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-black overflow-hidden">
-      <div className="flex flex-col sm:flex-row">
+    <div
+      className="flex flex-col md:flex-row items-center md:items-start bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300 p-4 md:p-5"
+    >
+      <div className="w-full md:w-64 h-48 overflow-hidden">
         <img
           src={trip.image}
           alt={trip.title}
-          className="w-full sm:w-64 h-48 object-cover"
+          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
         />
-        <div className="flex-1 p-5">
-          <h3 className="text-lg font-bold text-gray-900 mb-2">{trip.title}</h3>
-          <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600 mb-4">
-            <div className="flex items-center gap-1.5">
-  <MapPin className="w-4 h-4" />
-  <span>{trip.location}</span>
-</div>
-<div className="flex items-center gap-1.5">
-  <Calendar className="w-4 h-4" />
-  <span>{trip.date}</span>
-</div>
-<div className="flex items-center gap-1.5">
-  <Users className="w-4 h-4" />
-  <span>{trip.travelers}</span>
-</div>
+      </div>
 
-          </div>
-          <div className="flex items-center gap-2 mb-4">
-            <div className="flex -space-x-2">
-              {trip.travelerImages.map((img, i) => (
-                <img
-                  key={i}
-                  src={img}
-                  alt={`Traveler ${i + 1}`}
-                  className="w-8 h-8 rounded-full border-2 border-white object-cover"
-                />
-              ))}
+      <div className="w-full md:w-2/3 mt-4 md:mt-0 md:ml-6 flex flex-col justify-between">
+        <div>
+          <h3 className="text-lg font-semibold">{trip.title}</h3>
+
+          <div className="flex items-center text-gray-600 text-sm mt-1 space-x-4">
+            <div className="flex items-center gap-1">
+              <MapPin className="w-4 h-4" />
+              {trip.location}
             </div>
-            <span className="text-sm text-gray-600">
-              {trip.joined} travelers joined
-            </span>
+            <div className="flex items-center gap-1">
+              <Calendar className="w-4 h-4" />
+              {trip.date}
+            </div>
+            <div className="flex items-center gap-1">
+              <Users className="w-4 h-4" />
+              {trip.travelers}
+            </div>
           </div>
-          <div className="flex gap-4">
-          <button className="bg-white border border-black hover:bg-[#1D4350] hover:text-white text-black text-xs px-8 py-2 rounded-md font-medium transition cursor-pointer">
+        </div>
+
+        <div className="flex items-center mt-3">
+          <div className="flex -space-x-2">
+            {trip.travelerImages.map((img, i) => (
+              <img
+                key={i}
+                src={img}
+                alt={`Traveler ${i + 1}`}
+                className="w-[30px] h-[30px] rounded-full border-2 border-white object-cover"
+              />
+            ))}
+          </div>
+          <p className="ml-3 text-sm text-gray-600">
+            {trip.joined} travelers joined
+          </p>
+        </div>
+
+        <div className="flex flex-wrap gap-3 mt-5">
+          <button className="border border-[#1D4350] text-[#1D4350] px-6 py-2.5 font-medium hover:bg-[#1D4350]/10 hover:scale-105 transition-all duration-200">
             View Trip Details
           </button>
-          </div>
         </div>
       </div>
     </div>

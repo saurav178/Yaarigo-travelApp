@@ -20,7 +20,7 @@ export default function TabNavigation({ tabs, activeTab, onTabChange }: TabNavig
           <button
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
-            className={`px-8 py-3 text-sm font-bold flex items-center gap-2 whitespace-nowrap relative transition-colors duration-200
+            className={`px-8 py-3 text-sm flex items-center gap-2 whitespace-nowrap relative transition-colors duration-200
               ${activeTab === tab.id ? "text-[#1D4350]" : "text-[#1D4350] hover:text-[#173844]"} 
               hover:border-b-2 hover:border-[#1D4350] hover:rounded-t-lg`}
           >
