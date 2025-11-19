@@ -158,7 +158,7 @@ export default function SimilarTravelersSection() {
 
               {/* Buttons */}
               <div className="flex gap-2 mb-3">
-                <button className="flex items-center justify-center gap-2 flex-1 border border-red-400 text-red-500 text-sm font-medium py-1.5 rounded-md hover:bg-red-50 hover:scale-105 transition-all duration-200">
+                <button className="flex items-center justify-center gap-2 flex-1 border border-red-400 text-red-500 text-sm font-medium py-1.5 hover:bg-red-50 hover:scale-105 transition-all duration-200">
                   <Image
                     src="/view-profile.png"
                     alt="View Profile"
@@ -168,7 +168,7 @@ export default function SimilarTravelersSection() {
                   />{" "}
                   View Profile
                 </button>
-                <button className="flex items-center justify-center gap-2 flex-1 border border-red-400 text-red-500 text-sm font-medium py-1.5 rounded-md hover:bg-red-50 hover:scale-105 transition-all duration-200">
+                <button className="flex items-center justify-center gap-2 flex-1 border border-red-400 text-red-500 text-sm font-medium py-1.5 hover:bg-red-50 hover:scale-105 transition-all duration-200">
                   <Image
                     src="/view-trip.png"
                     alt="View Trip"
@@ -181,7 +181,7 @@ export default function SimilarTravelersSection() {
               </div>
 
               {/* Join Trip */}
-              <button className="w-full bg-red-400 hover:bg-red-500 text-white text-sm font-semibold py-2 rounded-md flex items-center justify-center gap-2 hover:scale-105 transition-all duration-200">
+              <button className="w-full bg-red-400 hover:bg-red-500 text-white text-sm font-semibold py-2 flex items-center justify-center gap-2 hover:scale-105 transition-all duration-200">
                 <Image
                   src="/join-trip.png"
                   alt="Join Trip"

@@ -75,7 +75,7 @@ export default function PastTripsTab() {
               </div>
 
               {/* Button */}
-              <button className="w-fit border border-[#1D4350] text-[#1D4350] text-sm font-medium px-4 py-2 rounded-md hover:bg-[#1D4350]/10 hover:scale-105 transition-all duration-200">
+              <button className="w-fit border border-[#1D4350] text-[#1D4350] text-sm font-medium px-4 py-2 hover:bg-[#1D4350]/10 hover:scale-105 transition-all duration-200">
                 View trip details
               </button>
             </div>

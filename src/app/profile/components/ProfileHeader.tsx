@@ -42,7 +42,7 @@ export default function ProfileHeader({
         />
         <button
           onClick={() => router.back()}
-          className="absolute top-4 left-4 text-white bg-black/40 px-3 py-1 rounded-md hover:bg-black/60 transition z-10"
+          className="absolute top-4 left-4 text-white bg-black/40 px-3 py-1 hover:bg-black/60 transition z-10"
         >
           ← Back
         </button>
@@ -57,7 +57,7 @@ export default function ProfileHeader({
         <div className="absolute top-4 right-4 flex gap-4 mt-4">
           <button
             onClick={onFollowToggle}
-            className={`flex items-center justify-center gap-2 px-5 py-2 rounded-md hover:scale-105 transition-all duration-200 ${
+            className={`flex items-center justify-center gap-2 px-5 py-2 hover:scale-105 transition-all duration-200 ${
               isFollowing
                 ? "bg-[#1D4350] text-white hover:bg-[#0f2a35]"
                 : "bg-[#1D4350] text-white hover:bg-[#0f2a35]"
@@ -74,7 +74,7 @@ export default function ProfileHeader({
             )}
             {isFollowing ? "Following" : "Follow"}
           </button>
-          <button className="flex items-center justify-center gap-2 bg-[#1D4350] hover:bg-[#0f2a35] text-white px-5 py-2 rounded-md hover:scale-105 transition-all duration-200">
+          <button className="flex items-center justify-center gap-2 bg-[#1D4350] hover:bg-[#0f2a35] text-white px-5 py-2 hover:scale-105 transition-all duration-200">
             <Image
               src="/view-trip.png"
               alt="View Trip"
@@ -115,7 +115,7 @@ export default function ProfileHeader({
         {/* Info */}
         <div className="flex-1 mt-0 text-center ml-0 mr-86">
 
-          <div className="flex items-center justify-center ml-0 mr-50">
+          <div className="flex items-center justify-center ml-0 mr-10">
             <h2 className="text-2xl font-semibold flex items-center gap-2">
               Jane Cooper
               <span className="bg-emerald-500 text-white text-xs px-2 py-1 rounded-full  flex items-center gap-1">
@@ -129,10 +129,10 @@ export default function ProfileHeader({
               </span>
             </h2>
           </div>
-          <p className="text-gray-600 flex items-center ml-94 gap-1 mt-1">
+          <p className="text-gray-600 flex items-center ml-92 gap-1 mt-1">
             <FaMapMarkerAlt className="text-black" /> Kiev, Ukraine
           </p>
-          <div className="text-sm text-gray-500 mt-1 ml-0 mr-60">
+          <div className="text-sm text-gray-500 mt-1 ml-0 mr-20">
             <Image
               src="/star-icon.png"
               alt="Star"

@@ -126,10 +126,10 @@ export default function FeaturedTravelAgencySection() {
 
               {/* Buttons */}
               <div className="flex gap-2">
-                <button className="flex-1 bg-red-400 hover:bg-red-500 text-white text-sm font-medium py-2 rounded-md hover:scale-105 transition-all duration-200">
+                <button className="flex-1 bg-red-400 hover:bg-red-500 text-white text-sm font-medium py-2 hover:scale-105 transition-all duration-200">
                   View Profile
                 </button>
-                <button className="flex-1 border border-red-400 text-red-500 hover:bg-red-50 text-sm font-medium py-2 rounded-md hover:scale-105 transition-all duration-200">
+                <button className="flex-1 border border-red-400 text-red-500 hover:bg-red-50 text-sm font-medium py-2 hover:scale-105 transition-all duration-200">
                   {trip.trips > 10 ? "3 trips" : "2 trips"}
                 </button>
               </div>

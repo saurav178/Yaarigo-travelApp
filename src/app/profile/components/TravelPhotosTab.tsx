@@ -34,6 +34,7 @@ export default function TravelPhotosTab() {
               width={800}
               height={600}
               className="object-cover w-full h-64"
+              unoptimized={true}
             />
           </div>
         ))}
@@ -52,6 +53,7 @@ export default function TravelPhotosTab() {
               width={800}
               height={600}
               className="object-contain w-full h-full"
+              unoptimized={true}
             />
             <div className="mt-4 text-center bg-[#1D4350] bg-opacity-50 p-4 ">
               <p className="text-lg font-semibold text-white">{selectedPhoto.location}</p>
