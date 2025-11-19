@@ -21,7 +21,7 @@ interface TripProps {
  
 export default function TripOverview({ trip }: TripProps) {
   return (
-    <div className="border rounded-lg p-6 bg-white">
+<div className="rounded-lg p-6 bg-white w-full shadow-lg hover:shadow-2xl transition-all duration-300">
       {/* Title & Description */}
       <h2 className="text-lg font-semibold mb-2">{trip.title}</h2>
       <p className="text-sm text-gray-600 mb-6">{trip.description}</p>
@@ -67,7 +67,7 @@ export default function TripOverview({ trip }: TripProps) {
  
  
       {/* Bottom Section Info */}
-      <div className="grid grid-cols-2 gap-6 text-sm">
+      <div className="grid grid-cols-2 gap-6 text-sm ml-10">
         <div className="flex items-start gap-3">
  <img
       src="/icon/ix_user-management-filled.png"

@@ -30,7 +30,7 @@ export default function HeroSection() {
 
         {/* Bottom Info Section */}
         <div>
-          <div className="bg-[#FF6B6B] text-white font-semibold px-4 py-1 rounded-full inline-block mb-2">
+          <div className="bg-[#1D4350] text-white font-semibold px-4 py-1 rounded-full inline-block mb-2">
             Beach & Culture
           </div>
 
