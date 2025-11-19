@@ -15,41 +15,25 @@ export default function TabsSection() {
         <div className="flex  space-x-10 border-b border-gray-200 mb-6 px-8 bg-gray-200 mt-2">
           <button
             onClick={() => setActiveTab("Upcoming Trips")}
-            className={`pb-2 text-sm font-medium transition-colors duration-200 mt-4 ${
-              activeTab === "Upcoming Trips"
-                ? "text-[#1D4350] border-b-2 border-[#1D4350]"
-                : "text-gray-500 hover:text-[#1D4350]"
-            }`}
+            className={`pb-2 text-sm font-medium mt-4 text-black`}
           >
             Upcoming Trips
           </button>
           <button
             onClick={() => setActiveTab("Past Trips")}
-            className={`pb-2 text-sm font-medium transition-colors duration-200 mt-4 ${
-              activeTab === "Past Trips"
-                ? "text-[#1D4350] border-b-2 border-[#1D4350]"
-                : "text-gray-500 hover:text-[#1D4350]"
-            }`}
+            className={`pb-2 text-sm font-medium mt-4 text-black`}
           >
             Past Trips
           </button>
           <button
             onClick={() => setActiveTab("Reviews")}
-            className={`pb-2 text-sm font-medium transition-colors duration-200 mt-4 ${
-              activeTab === "Reviews"
-                ? "text-[#1D4350] border-b-2 border-[#1D4350]"
-                : "text-gray-500 hover:text-[#1D4350]"
-            }`}
+            className={`pb-2 text-sm font-medium mt-4 text-black`}
           >
             Reviews
           </button>
           <button
             onClick={() => setActiveTab("Travel Photos")}
-            className={`pb-2 text-sm font-medium transition-colors duration-200 mt-4 ${
-              activeTab === "Travel Photos"
-                ? "text-[#1D4350] border-b-2 border-[#1D4350]"
-                : "text-gray-500 hover:text-[#1D4350]"
-            }`}
+            className={`pb-2 text-sm font-medium mt-4 text-black`}
           >
             Travel Photos
           </button>
