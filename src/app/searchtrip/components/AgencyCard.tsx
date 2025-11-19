@@ -3,7 +3,7 @@
 "use client";
 
 import { useState } from "react";
-import { FcBusiness } from "react-icons/fc";
+// import { FcBusiness } from "react-icons/fc";
 import { ImUsers } from "react-icons/im";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/routes";
@@ -13,7 +13,10 @@ import Profile from "../../../../public/searchpageimg/view_profile.png";
 import { FaUserGroup } from "react-icons/fa6";
 import {
   FaCheckCircle,
+  // FaBriefcase,
+  FaSuitcase,
   FaHeart,
+  FaStar,
   FaShieldAlt,
   FaFlag,
   FaExclamationTriangle,
@@ -28,7 +31,6 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
   const toggleLike = () => {
     setLiked((prev) => !prev);
   };
-
 
   const getInitials = (name: string) =>
     name
@@ -79,16 +81,19 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
   };
 
   return (
-    <div className="bg-white shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 w-[949px] transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+    <div className="bg-white shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 w-[949px] hover:shadow-[0_12px_20px_-6px_rgba(0,0,0,0.25)] transition-shadow duration-300 ">
       {/* Left Image Section */}
       <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
-        <Image
-          src={agency.image}
-          alt={agency.title}
-          width={400}
-          height={400}
-          className="w-full h-full object-cover transition-transform duration-500 ease-out hover:scale-105"
-        />
+        <div className="relative w-full h-full overflow-hidden group">
+          <Image
+            src={agency.image}
+            alt={agency.title}
+            width={400}
+            height={300}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            unoptimized={false}
+          />
+        </div>
 
         {/* {agency.verified && (
           <span className="absolute top-3 left-3 bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
@@ -150,7 +155,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
             ))}
           </div>
 
-          <div className=" flex-wrap gap-8 text-sm text-gray-700 mb-4 ">
+          <div className=" flex-wrap gap-8 text-sm text-gray-600 mb-4 ">
             <div className="flex items-center gap-3 mt-3">
               <ImUsers />
               <span>
@@ -160,19 +165,34 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
             </div>
 
             <div className="flex items-center gap-2 mt-2">
-              <FaFlag className="text-gray-400" />{" "}
+              <FaFlag className="text-gray-600" />{" "}
               <span>
                 <strong>{agency.stats.tripsCompleted}</strong> trips completed
               </span>
             </div>
 
-            <div className="flex items-center gap-2 mt-2">
+            {/* <div className="flex items-center gap-2 mt-2">
               <FcBusiness />
               <span>
                 <strong>{agency.stats.yearsInBusiness}</strong> years in
                 business
               </span>
-            </div>
+            </div> */}
+            <div className="flex items-center gap-2 mt-2">
+  <FaSuitcase className="text-gray-600" />
+  <span>
+    <strong>{agency.stats.yearsInBusiness}</strong> years in business
+  </span>
+</div>
+
+
+{/* 
+            <div className="flex items-center gap-2 mt-2">
+  <FaBriefcase className="text-black" />
+  <span>
+    <strong>{agency.stats.yearsInBusiness}</strong> years in business
+  </span>
+</div> */}
           </div>
 
           <hr className="my-3 " />
@@ -205,13 +225,18 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
                 {agency.host.name}, {agency.host.age}{" "}
                 {agency.host.verified && (
                   // <FaCheckCircle className="inline text-sky-500 ml-1" />
-                  
-                    <FaCheckCircle className="inline text-green-500 ml-1 w-5 h-5" />
-               
+
+                  <FaCheckCircle className="inline text-green-500 ml-1 w-5 h-5" />
                 )}
               </p>
-              <p className="text-xs text-gray-600 mt-1">
+              {/* <p className="text-xs text-gray-600 mt-1">
                 {agency.host.location} • ⭐ {agency.host.rating}
+              </p> */}
+
+              <p className="text-xs text-gray-600 mt-1 flex items-center  ">
+                {agency.host.location} •
+                <FaStar className="text-yellow-500 w-3.5 h-3.5 ml-1 mr-1.5" />
+                {agency.host.rating}
               </p>
               <div className="flex items-center gap-2 mt-1 -ml-0.5">
                 <div
@@ -230,7 +255,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
             </div>
           </div>
 
-          <div className="flex items-start gap-5 ">
+          <div className="flex items-start gap-5 mb-4 ">
             <button className="bg-[#1D4350] text-white text-xs  px-1 py-1  cursor-pointer hover:bg-[#173844] flex items-center justify-center h-8 w-35">
               <Image
                 src={Trip}

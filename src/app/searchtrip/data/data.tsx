@@ -117,6 +117,29 @@ export const TRIPS_DEMO: Trip[] = [
     },
     image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80",
   },
+   {
+    id: 6,
+    title: "Desert Safari in Rajasthan",
+    description: "Join us for a thrilling desert safari experience in Jaisalmer! Camel rides, star gazing, and camping in golden dunes await.",
+    tags: ["Hiking", "Camping", "Culture"],
+    from: "Jaipur , Rajasthan",
+    to: "Delhi, India",
+    travelersNeeded: 4,
+    price: "₹500 / person (shared costs)",
+    date: "Jan 10–25, 2026",
+    spotsLeft: 1,
+    host: {
+      name: "Ravi Patel",
+      age: 10,
+      verified: true,
+      location: "Surat, India",
+      rating: 2.0,
+      match: 30,
+      safeScore: 30,
+      category: "Travel Enthusiast",
+    },
+    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80",
+  },
 ];
 
 export const SIMILAR_TRIPS_DEMO: SimilarTrip[] = [
