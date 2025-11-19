@@ -67,7 +67,7 @@ export default function TripOverview({ trip }: TripProps) {
  
  
       {/* Bottom Section Info */}
-      <div className="grid grid-cols-2 gap-6 text-sm">
+      <div className="grid grid-cols-2 gap-6 text-sm ml-10">
         <div className="flex items-start gap-3">
  <img
       src="/icon/ix_user-management-filled.png"

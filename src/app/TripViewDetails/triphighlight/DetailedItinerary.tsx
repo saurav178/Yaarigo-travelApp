@@ -60,7 +60,7 @@ const DetailedItinerary = () => {
   }, [activeStep]);
 
   return (
-    <section className="py-10 bg-white rounded-lg my-6">
+    <section className="py-10 bg-white rounded-lg my-6 shadow-lg hover:shadow-2xl transition-all duration-300">
       <div className="max-w-6xl mx-auto px-6">
         <h2 className="text-xl font-bold mb-6">Detailed Itinerary</h2>
 
@@ -77,48 +77,57 @@ const DetailedItinerary = () => {
             />
 
             {/* Steps */}
-            <div className="flex flex-col gap-8 ml-12 relative">
-              {itinerary.map((day, index) => (
-                <div
-                  key={index}
-                  ref={(el) => {
-                    if (el) stepRefs.current[index] = el;
-                  }}
-                >
-                  <button
-                    onClick={() => {
-                      setActiveStep(index + 1);
-                      setImageSrc(day.image);
-                    }}
-                    className="flex items-start gap-4 text-left w-full "
-                  >
-                    {/* Step circle */}
-                    <div
-                      className={`w-8 h-8 flex items-center justify-center rounded-full  transition-all duration-300 ${
-                        activeStep === index + 1
-                          ? "bg-red-500 text-white border-none" // Changed to bg-red-500 and text-white
-                          : "bg-red-500 text-white-600"
-                      }`}
-                    >
-                      {index + 1}
-                    </div>
+          {/* Steps */}
+<div className="flex flex-col gap-12 ml-12 relative">
+  {itinerary.map((day, index) => (
+    <div
+      key={index}
+      ref={(el) => {
+        if (el) stepRefs.current[index] = el;
+      }}
+      className="relative"
+    >
+      {/* CONNECTOR LINE: dot ke center se next dot ke center tak */}
+      {index < itinerary.length - 1 && (
+        <div
+          className="absolute left-[15px] top-8 w-[2px] bg-red-500"
+          style={{ height: "190px" , marginLeft:"10px" }} // line length (adjust anytime)
+        ></div>
+      )}
 
-                    {/* White Card */}
-                    <div className="bg-white shadow-sm border rounded-xl p-4 w-full">
-                      <h3 className="text-lg font-semibold text-gray-900">
-                        Day {index + 1}: {day.title}
-                      </h3>
+      <button
+        onClick={() => {
+          setActiveStep(index + 1);
+          setImageSrc(day.image);
+        }}
+        className="flex items-start gap-4 text-left w-full "
+      >
+        {/* Step circle */}
+        <div
+          className={`w-8 h-8 flex items-center justify-center rounded-full transition-all duration-300
+            ${activeStep === index + 1 ? "bg-red-500 text-white" : "bg-red-500 text-white"}
+          `}
+        >
+          {index + 1}
+        </div>
 
-                      <ul className="list-disc list-inside text-sm text-gray-700 mt-1">
-                        {day.activities.map((activity, i) => (
-                          <li key={i}>{activity}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </button>
-                </div>
-              ))}
-            </div>
+        {/* Card */}
+        <div className="bg-white shadow-sm border rounded-xl p-4 w-full">
+          <h3 className="text-lg font-semibold text-gray-900">
+            Day {index + 1}: {day.title}
+          </h3>
+
+          <ul className="list-disc list-inside text-sm text-gray-700 mt-1">
+            {day.activities.map((activity, i) => (
+              <li key={i}>{activity}</li>
+            ))}
+          </ul>
+        </div>
+      </button>
+    </div>
+  ))}
+</div>
+
           </div>
 
           {/* IMAGE SECTION */}
