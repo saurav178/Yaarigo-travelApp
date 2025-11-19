@@ -15,25 +15,25 @@ export default function TabsSection() {
         <div className="flex  space-x-10 border-b border-gray-200 mb-6 px-8 bg-gray-200 mt-2">
           <button
             onClick={() => setActiveTab("Upcoming Trips")}
-            className={`pb-2 text-sm font-medium mt-4 text-black`}
+            className={`pb-2 text-sm font-medium mt-4 text-black ${activeTab === "Upcoming Trips" ? "border-b-2 border-[#1D4350]" : ""}`}
           >
             Upcoming Trips
           </button>
           <button
             onClick={() => setActiveTab("Past Trips")}
-            className={`pb-2 text-sm font-medium mt-4 text-black`}
+            className={`pb-2 text-sm font-medium mt-4 text-black ${activeTab === "Past Trips" ? "border-b-2 border-[#1D4350]" : ""}`}
           >
             Past Trips
           </button>
           <button
             onClick={() => setActiveTab("Reviews")}
-            className={`pb-2 text-sm font-medium mt-4 text-black`}
+            className={`pb-2 text-sm font-medium mt-4 text-black ${activeTab === "Reviews" ? "border-b-2 border-[#1D4350]" : ""}`}
           >
             Reviews
           </button>
           <button
             onClick={() => setActiveTab("Travel Photos")}
-            className={`pb-2 text-sm font-medium mt-4 text-black`}
+            className={`pb-2 text-sm font-medium mt-4 text-black ${activeTab === "Travel Photos" ? "border-b-2 border-[#1D4350]" : ""}`}
           >
             Travel Photos
           </button>

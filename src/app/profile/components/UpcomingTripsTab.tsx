@@ -81,7 +81,7 @@ export default function UpcomingTripsTab() {
 
               {/* Buttons */}
               <div className="flex flex-wrap gap-3 mt-5">
-                <button className="bg-[#1D4350] text-white px-6 py-2.5 rounded-lg font-medium hover:bg-[#0f2a35] hover:scale-105 transition-all duration-200">
+                <button className="bg-[#1D4350] text-white px-6 py-2.5 font-medium hover:bg-[#0f2a35] hover:scale-105 transition-all duration-200">
                   Join Trip
                 </button>
                 <button className="border border-black text-black px-6 py-2.5 font-medium ">
