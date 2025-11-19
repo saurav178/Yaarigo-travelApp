@@ -731,7 +731,7 @@ export default function Page() {
         <main className="col-span-12 lg:col-span-8 xl:col-span-9">
           {/* Top row: Trending + chips */}
           <div className="flex flex-wrap items-center gap-3 mb-6">
-            <div className="flex items-center gap-2 bg-orange-50 text-orange-700 px-3 py-1 rounded-full font-medium w-fit">
+            <div className="flex items-center gap-2 bg-orange-50 text-orange-700 px-3 py-1 rounded-full font-medium w-fit cursor-pointer">
               <Flame className="w-4 h-4 text-orange-500" />
               <span>Trending</span>
             </div>
@@ -787,7 +787,7 @@ export default function Page() {
           {(activeFilter === "all" || activeFilter === "leader") &&
             filteredLeaders.length > 0 && (
               <section className="mb-8">
-                <h3 className="text-lg font-semibold mb-4">
+                <h3 className="text-lg font-semibold mb-4 ">
                   Featured Trip Leaders
                 </h3>
                 <LeaderTrips leaders={filteredLeaders} />

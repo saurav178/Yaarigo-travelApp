@@ -569,7 +569,7 @@ export default function Filters({
           </button>
 
           {tripTypeOpen && (
-            <div className="grid grid-cols-2 gap-5 mt-3">
+            <div className="grid grid-cols-2 gap-3 mt-3 ml-6 mr-6">
               {tripTypeOptions.map((opt) => {
                 const allSelected = isAllSelected(localTripType, ALL_TRIP);
                 const isActive =
@@ -583,7 +583,7 @@ export default function Filters({
                         toggleFromList(prev, opt, ALL_TRIP)
                       )
                     }
-                    className={`text-sm py-2 px-2 cursor-pointer   transition 
+                    className={`text-sm py-1.5 px-1 cursor-pointer   transition 
               ${
                 isActive
                   ? "bg-[#1D4350] text-white"
@@ -599,6 +599,7 @@ export default function Filters({
         </div>
 
         {/* Food Preference */}
+
         <div className="mb-3">
           <button
             onClick={() => setFoodPrefOpen((o) => !o)}
@@ -613,7 +614,7 @@ export default function Filters({
             />
           </button>
           {foodPrefOpen && (
-            <div className="grid grid-cols-2 gap-5  mt-2">
+            <div className="grid grid-cols-2 gap-3  mt-3 ml-6 mr-6">
               {foodPrefOptions.map((opt) => {
                 const allSelected = isAllSelected(localFoodPref, ALL_FOOD);
                 const isActive =
@@ -626,7 +627,7 @@ export default function Filters({
                         toggleFromList(prev, opt, ALL_FOOD)
                       )
                     }
-                    className={`text-sm py-2  cursor-pointer  w-full transition ${
+                    className={`text-sm py-1.5 px-px cursor-pointer  w-full transition ${
                       isActive
                         ? "bg-[#1D4350] text-white"
                         : "bg-transparent text-gray-700"
@@ -639,6 +640,9 @@ export default function Filters({
             </div>
           )}
         </div>
+
+        
+
 
         {/* Sliders */}
         <div>
