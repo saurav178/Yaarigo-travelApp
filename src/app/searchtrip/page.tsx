@@ -1,221 +1,705 @@
 
+
+// // searchtrip/ main-page
+
+// "use client";
+
+// import { useMemo, useState } from "react";
+// import Similar, {
+//   SIMILAR_TRIPS_DEMO,
+//   SimilarTrip,
+// } from "./components/Similar";
+// import { Flame } from "lucide-react";
+// import TripCard, { TRIPS_DEMO, Trip } from "./components/TripsCard";
+// import LeaderTrips, {
+//   LEADERS_DEMO,
+//   Leader,
+// } from "./components/LeaderTrips";
+// import AgencyCarousel, {
+//   AGENCIES_DEMO,
+// } from "./components/AgencyCarousel";
+// import Filters, { FilterPayload } from "./components/Filters";
+// import type { Agency } from "./components/AgencyCard";
+
+// type ActiveFilter = "all" | "best" | "agency" | "leader";
+
+// // convert chip string like "+ Beaches, + Culture" → ["beaches","culture"]
+// const normalizeChipsToValues = (value: string): string[] => {
+//   if (!value || value === "All") return [];
+//   return value
+//     .split(",")
+//     .map((s) =>
+//       s
+//         .trim()
+//         .replace(/^\+ /, "") // remove leading "+ "
+//         .toLowerCase()
+//     )
+//     .filter(Boolean);
+// };
+
+// export default function Page() {
+//   // Filter states (controlled by Filters component)
+//   const [query, setQuery] = useState("");
+//   const [age, setAge] = useState(18);
+//   const [duration, setDuration] = useState(5);
+//   const [budget, setBudget] = useState(15000);
+//   const [minRating, setMinRating] = useState(0);
+//   const [minSafeScore, setMinSafeScore] = useState(0);
+
+//   // from Interests / Trip type / Food preference chips
+//   const [interest, setInterest] = useState<string>("All");
+//   const [tripType, setTripType] = useState<string>("All");
+//   const [foodPref, setFoodPref] = useState<string>("All");
+
+//   // Has the user clicked "Apply Filter" yet?
+//   const [hasAppliedFilters, setHasAppliedFilters] = useState(false);
+
+//   // Top row chips
+//   const [activeFilter, setActiveFilter] =
+//     useState<ActiveFilter>("all");
+
+//   // helper for price parsing (from string like "₹1,500 / person...")
+//   const parsePrice = (price: string): number => {
+//     const digits = price.replace(/[^\d]/g, "");
+//     if (!digits) return 0;
+//     return Number(digits);
+//   };
+
+//   /* ------- FILTERED TRIPS (Best Match) ------- */
+//   const filteredTrips: Trip[] = useMemo(() => {
+//     // start from all trips
+//     let base = TRIPS_DEMO;
+
+//     // SEARCH (always active, even before Apply)
+//     if (query.trim()) {
+//       const q = query.toLowerCase();
+//       base = base.filter((trip) => {
+//         const inTitle = trip.title.toLowerCase().includes(q);
+//         const inFrom = trip.from.toLowerCase().includes(q);
+//         const inTo = trip.to.toLowerCase().includes(q);
+//         return inTitle || inFrom || inTo;
+//       });
+//     }
+
+//     // if filters haven't been applied yet → return search-only result
+//     if (!hasAppliedFilters) {
+//       return base;
+//     }
+
+//     // after Apply Filter → apply all other conditions
+//     return base.filter((trip) => {
+//       // rating
+//       if (minRating > 0 && trip.host.rating < minRating) return false;
+
+//       // safe score
+//       if (minSafeScore > 0 && trip.host.safeScore < minSafeScore)
+//         return false;
+
+//       // age slider (simple: keep hosts within ±5 years)
+//       if (Math.abs(trip.host.age - age) > 5) return false;
+
+//       // budget slider: price <= budget
+//       const numericPrice = parsePrice(trip.price);
+//       if (budget > 0 && numericPrice > budget) return false;
+
+//       // duration slider – example logic (can improve later)
+//       if (duration > 0 && trip.date.length < duration) {
+//         return false;
+//       }
+
+//       // if your Trip type also has interest/tripType/foodPref,
+//       // you can add the same logic as SimilarTrip here.
+
+//       return true;
+//     });
+//   }, [
+//     query,
+//     hasAppliedFilters,
+//     minRating,
+//     minSafeScore,
+//     age,
+//     budget,
+//     duration,
+//   ]);
+
+//   /* ------- FILTERED LEADERS ------- */
+//   const filteredLeaders: Leader[] = useMemo(() => {
+//     let base = LEADERS_DEMO;
+
+//     // SEARCH always active
+//     if (query.trim()) {
+//       const q = query.toLowerCase();
+//       base = base.filter((leader) => {
+//         const inTitle = leader.title.toLowerCase().includes(q);
+//         const inFrom = leader.from.toLowerCase().includes(q);
+//         const inTo = leader.to.toLowerCase().includes(q);
+//         return inTitle || inFrom || inTo;
+//       });
+//     }
+
+//     if (!hasAppliedFilters) {
+//       return base;
+//     }
+
+//     return base.filter((leader) => {
+//       if (minRating > 0 && leader.host.rating < minRating) return false;
+//       if (minSafeScore > 0 && leader.host.safeScore < minSafeScore)
+//         return false;
+
+//       if (Math.abs(leader.host.age - age) > 5) return false;
+
+//       const numericPrice = parsePrice(leader.price);
+//       if (budget > 0 && numericPrice > budget) return false;
+
+//       return true;
+//     });
+//   }, [query, hasAppliedFilters, minRating, minSafeScore, age, budget]);
+
+//   /* ------- FILTERED AGENCIES ------- */
+//   const filteredAgencies: Agency[] = useMemo(() => {
+//     let base = AGENCIES_DEMO;
+
+//     // SEARCH always active
+//     if (query.trim()) {
+//       const q = query.toLowerCase();
+//       base = base.filter((agency) => {
+//         const inTitle = agency.title.toLowerCase().includes(q);
+//         const inFrom = agency.from.toLowerCase().includes(q);
+//         const inTo = agency.to.toLowerCase().includes(q);
+//         return inTitle || inFrom || inTo;
+//       });
+//     }
+
+//     if (!hasAppliedFilters) {
+//       return base;
+//     }
+
+//     return base.filter((agency) => {
+//       if (minRating > 0 && agency.host.rating < minRating) return false;
+//       if (minSafeScore > 0 && agency.host.safeScore < minSafeScore)
+//         return false;
+
+//       const numericPrice = parsePrice(agency.price);
+//       if (budget > 0 && numericPrice > budget) return false;
+
+//       return true;
+//     });
+//   }, [query, hasAppliedFilters, minRating, minSafeScore, budget]);
+
+//   /* ------- FILTERED SIMILAR TRIPS ------- */
+//   const filteredSimilarTrips: SimilarTrip[] = useMemo(() => {
+//     let base = SIMILAR_TRIPS_DEMO;
+
+//     // SEARCH always active (title / from / to)
+//     if (query.trim()) {
+//       const q = query.toLowerCase();
+//       base = base.filter((trip) => {
+//         const inTitle = trip.title.toLowerCase().includes(q);
+//         const inFrom = trip.from.toLowerCase().includes(q);
+//         const inTo = trip.to.toLowerCase().includes(q);
+//         return inTitle || inFrom || inTo;
+//       });
+//     }
+
+//     if (!hasAppliedFilters) {
+//       // only search filter applied
+//       return base;
+//     }
+
+//     const interestValues = normalizeChipsToValues(interest);
+//     const tripTypeValues = normalizeChipsToValues(tripType);
+//     const foodValues = normalizeChipsToValues(foodPref);
+
+//     return base.filter((trip) => {
+//       // ⭐ rating
+//       if (minRating > 0 && trip.host.rating < minRating) return false;
+
+//       // 🛡 safe score
+//       if (minSafeScore > 0 && trip.host.safeScore < minSafeScore)
+//         return false;
+
+//       // 👤 age
+//       if (Math.abs(trip.host.age - age) > 5) return false;
+
+//       // 💰 budget
+//       const numericPrice = parsePrice(trip.price);
+//       if (budget > 0 && numericPrice > budget) return false;
+
+//       // ❤️ Interest filter
+//       if (interestValues.length) {
+//         const tripInterests = (trip.interest ?? []).map((i) =>
+//           i.toLowerCase()
+//         );
+//         const hasAnyInterest = interestValues.some((v) =>
+//           tripInterests.includes(v)
+//         );
+//         if (!hasAnyInterest) return false;
+//       }
+
+//       // 👥 Trip type filter
+//       if (tripTypeValues.length) {
+//         const tripTypes = (trip.tripType ?? []).map((t) =>
+//           t.toLowerCase()
+//         );
+//         const hasAnyType = tripTypeValues.some((v) =>
+//           tripTypes.includes(v)
+//         );
+//         if (!hasAnyType) return false;
+//       }
+
+//       // 🍽 Food preference filter
+//       if (foodValues.length) {
+//         const tripFoods = (trip.foodPref ?? []).map((f) =>
+//           f.toLowerCase()
+//         );
+//         const hasAnyFood = foodValues.some((v) =>
+//           tripFoods.includes(v)
+//         );
+//         if (!hasAnyFood) return false;
+//       }
+
+//       return true;
+//     });
+//   }, [
+//     query,
+//     hasAppliedFilters,
+//     minRating,
+//     minSafeScore,
+//     age,
+//     budget,
+//     interest,
+//     tripType,
+//     foodPref,
+//   ]);
+
+//   // When user presses "Apply Filter" button in Filters
+//   const handleApplyFilters = (payload: FilterPayload) => {
+//     console.log("Filters applied: ", payload);
+//     setHasAppliedFilters(true);
+//     // setters already called inside Filters (setQuery, setAge, setInterest, etc.)
+//   };
+
+//   // When "Clear all filters" is pressed in Filters
+//   const handleClearFilters = () => {
+//     setHasAppliedFilters(false);
+//     // Filters will also reset states via setters it has
+//   };
+
+//   // Chip style helper
+//   const chipClass = (type: ActiveFilter) =>
+//     `px-3 py-1.5 rounded-full text-sm font-medium border transition
+//      ${
+//        activeFilter === type
+//          ? "bg-[#1D4350] text-white border-[#0A4D4A]"
+//          : "bg-white text-gray-700 border-gray-200 hover:shadow-sm"
+//      }`;
+
+//   return (
+//     <div className="min-h-screen p-6 md:p-10 mt-11">
+//       <div className="max-w-7xl mx-auto grid grid-cols-12 gap-6">
+//         {/* LEFT: Filters Panel */}
+//         <aside className="col-span-12 lg:col-span-4 xl:col-span-3">
+//           <div className="sticky top-6">
+//             <Filters
+//               query={query}
+//               setQuery={setQuery}
+//               age={age}
+//               setAge={setAge}
+//               duration={duration}
+//               setDuration={setDuration}
+//               budget={budget}
+//               setBudget={setBudget}
+//               minRating={minRating}
+//               setMinRating={setMinRating}
+//               minSafeScore={minSafeScore}
+//               setMinSafeScore={setMinSafeScore}
+//               interest={interest}
+//               setInterest={setInterest}
+//               tripType={tripType}
+//               setTripType={setTripType}
+//               foodPref={foodPref}
+//               setFoodPref={setFoodPref}
+//               onApply={handleApplyFilters}
+//               onClear={handleClearFilters}
+//             />
+//           </div>
+//         </aside>
+
+//         {/* RIGHT: Main Content */}
+//         <main className="col-span-12 lg:col-span-8 xl:col-span-9">
+//           {/* Top row: Trending + chips */}
+//           <div className="flex flex-wrap items-center gap-3 mb-6">
+//             <div className="flex items-center gap-2 bg-orange-50 text-orange-700 px-3 py-1 rounded-full font-medium w-fit">
+//               <Flame className="w-4 h-4 text-orange-500" />
+//               <span>Trending</span>
+//             </div>
+
+//             <button
+//               onClick={() => setActiveFilter("all")}
+//               className={chipClass("all")}
+//               aria-pressed={activeFilter === "all"}
+//             >
+//               All
+//             </button>
+
+//             <button
+//               onClick={() => setActiveFilter("best")}
+//               className={chipClass("best")}
+//               aria-pressed={activeFilter === "best"}
+//               title="Show only Best Match trips"
+//             >
+//               Best Match
+//             </button>
+
+//             <button
+//               onClick={() => setActiveFilter("agency")}
+//               className={chipClass("agency")}
+//               aria-pressed={activeFilter === "agency"}
+//               title="Show only Featured Trip Agencies"
+//             >
+//               Featured Trip Agency
+//             </button>
+
+//             <button
+//               onClick={() => setActiveFilter("leader")}
+//               className={chipClass("leader")}
+//               aria-pressed={activeFilter === "leader"}
+//               title="Show only Featured Trip Leaders"
+//             >
+//               Featured Trip Leader
+//             </button>
+//           </div>
+
+//           {/* Best Match */}
+//           {(activeFilter === "all" || activeFilter === "best") &&
+//             filteredTrips.length > 0 && (
+//               <section className="mb-8">
+//                 <h3 className="text-lg font-semibold mb-4">
+//                   Best Match
+//                 </h3>
+//                 <TripCard trips={filteredTrips} />
+//               </section>
+//             )}
+
+//           {/* Featured Trip Leaders */}
+//           {(activeFilter === "all" || activeFilter === "leader") &&
+//             filteredLeaders.length > 0 && (
+//               <section className="mb-8">
+//                 <h3 className="text-lg font-semibold mb-4">
+//                   Featured Trip Leaders
+//                 </h3>
+//                 <LeaderTrips leaders={filteredLeaders} />
+//               </section>
+//             )}
+
+//           {/* Featured Travel Agencies */}
+//           {(activeFilter === "all" || activeFilter === "agency") &&
+//             filteredAgencies.length > 0 && (
+//               <section className="mb-8">
+//                 <h3 className="text-lg font-semibold mb-4">
+//                   Featured Travel Agencies
+//                 </h3>
+//                 <AgencyCarousel agencies={filteredAgencies} />
+//               </section>
+//             )}
+
+//           {/* Similar Trips */}
+//           {filteredSimilarTrips.length > 0 && (
+//             <div>
+//               <h3 className="text-lg font-semibold mb-4">
+//                 Similar Trips
+//               </h3>
+//               <Similar trips={filteredSimilarTrips} />
+//             </div>
+//           )}
+//         </main>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+// page.tsx
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
-import TripCard from "@/src/app/searchtrip/components/TripsCard";
-import HorizontalCarousel from "@/src/app/searchtrip/components/HorizontalCarousel";
-import Filters from "@/src/app/searchtrip/components/Filters";
-import type { Leader, Similar, Trip } from "@/src/app/searchtrip/types/types";
-import { SAMPLE_DATA_01 } from "./data/bestmatch";
-import { AGENCIES } from "@/src/app/searchtrip/data/agencies";
-import AgencyCarousel from "@/src/app/searchtrip/components/AgencyCarousel";
-import RecommendationsCarousel from "@/src/app/searchtrip/components/RecommendationsCarousel";
-import AIHeader from "./components/AIHeader";
+import { useMemo, useState } from "react";
 
-import { SAMPLE_DATA_02 } from "./data/similartrips";
-import { SAMPLE_DATA_03 } from "./data/leadertrips";
-import SimilarTrips from "@/src/app/searchtrip/components/TripsCard";
-import LeaderTrips from "@/src/app/searchtrip/components/TripsCard";
+import Similar from "./components/Similar";
+import { Flame } from "lucide-react";
+import TripCard from "./components/TripsCard";
+import LeaderTrips from "./components/LeaderTrips";
+import AgencyCarousel from "./components/AgencyCarousel";
+import Filters from "./components/Filters";
 
-/** DEBUG flag (toggle for console diagnostics) */
-const DEBUG = false;
+import type { Trip, SimilarTrip, Leader, Agency } from "./types/types";
+import { TRIPS_DEMO, SIMILAR_TRIPS_DEMO, LEADERS_DEMO, AGENCIES_DEMO } from "./data/data";
 
-/** Union type for items we filter */
-type Item = Trip | Similar | Leader;
+type ActiveFilter = "all" | "best" | "agency" | "leader";
 
-
-
-
-//  Normalizes and extracts numbers from a price/duration string.
-
-function parseNumbersFromString(s: string | null | undefined): number[] {
-  if (!s && s !== "") return [];
-  const str = String(s);
-
-  let normalized = str
-    .replace(/\u00A0/g, " ")
-    .replace(/,/g, "")
-    .replace(/₹/g, "")
-    .trim()
-    .toLowerCase();
-
-  // convert "15k" -> "15000"
-  normalized = normalized.replace(/(\d+(?:\.\d+)?)\s*k\b/g, (_m, n) =>
-    String(Number(n) * 1000)
-  );
-
-  const matches = normalized.match(/(\d+(?:\.\d+)?)/g);
-  if (!matches) return [];
-  return matches.map((m) => Number(m)).filter((n) => Number.isFinite(n));
-}
-
-/**
- * Given trip.price (number|string) return {min,max} or null if none found.
- */
-function tripPriceRange(p: unknown): { min?: number; max?: number } | null {
-  if (p == null) return null;
-  if (typeof p === "number") return { min: p, max: p };
-  if (typeof p === "string") {
-    const nums = parseNumbersFromString(p);
-    if (nums.length === 0) return null;
-    if (nums.length === 1) return { min: nums[0], max: nums[0] };
-    return { min: Math.min(...nums), max: Math.max(...nums) };
-  }
-  return null;
-}
-
-/** Safely convert incoming budget prop to a number */
-function toNumberSafe(v: unknown): number {
-  if (typeof v === "number" && Number.isFinite(v)) return v;
-  if (typeof v === "string") {
-    const cleaned = v.replace(/[^\d.]/g, "");
-    const n = Number(cleaned);
-    return Number.isFinite(n) ? n : 0;
-  }
-  return 0;
-}
-
-/** Typed accessors for unknown union members */
-function getStringProp(obj: unknown, prop: string): string | undefined {
-  if (obj && typeof obj === "object" && prop in obj) {
-    const v = (obj as Record<string, unknown>)[prop];
-    return typeof v === "string" ? v : undefined;
-  }
-  return undefined;
-}
-function getNumberProp(obj: unknown, prop: string): number | undefined {
-  if (obj && typeof obj === "object" && prop in obj) {
-    const v = (obj as Record<string, unknown>)[prop];
-    return typeof v === "number" ? v : undefined;
-  }
-  return undefined;
-}
-
-/** Representative trip days (returns smallest number found if range provided) */
-function tripDaysValueStatic(item: Item): number | null {
-  const rawNumber =
-    getNumberProp(item, "days") ?? getNumberProp(item, "duration");
-  if (rawNumber != null) return rawNumber;
-
-  const rawString =
-    getStringProp(item, "days") ?? getStringProp(item, "duration");
-  if (rawString != null) {
-    const nums = parseNumbersFromString(rawString);
-    if (nums.length === 0) return null;
-    return Math.min(...nums);
-  }
-  return null;
-}
+/** convert chip string like "+ Beaches, + Culture" → ["beaches","culture"] */
+const normalizeChipsToValues = (value: string): string[] => {
+  if (!value || value === "All") return [];
+  return value
+    .split(",")
+    .map((s) => s.trim().replace(/^\+ /, "").toLowerCase())
+    .filter(Boolean);
+};
 
 export default function Page() {
-  const [query, setQuery] = useState("Simla, Himachal Pradesh, India");
+  // Filter states (controlled by Filters component)
+  const [query, setQuery] = useState("");
   const [age, setAge] = useState(18);
-  const [duration, setDuration] = useState(5); // treated as max days
-  const [budget, setBudget] = useState(15000); // user's maximum budget
+  const [duration, setDuration] = useState(5);
+  const [budget, setBudget] = useState(15000);
+  const [minRating, setMinRating] = useState(0);
+  const [minSafeScore, setMinSafeScore] = useState(0);
 
-  // sample trips
-  const trips = SAMPLE_DATA_01;
-  const trip1 = SAMPLE_DATA_02;
-  const trip2 = SAMPLE_DATA_03;
+  // from Interests / Trip type / Food preference chips
+  const [interest, setInterest] = useState<string>("All");
+  const [tripType, setTripType] = useState<string>("All");
+  const [foodPref, setFoodPref] = useState<string>("All");
 
-  // Memoized helper that uses top-level stable helpers
-  const tripDaysValue = useCallback((item: Item): number | null => {
-    return tripDaysValueStatic(item);
-  }, []);
+  // Has the user clicked "Apply Filter" yet?
+  const [hasAppliedFilters, setHasAppliedFilters] = useState(false);
 
-  // makePredicate is stable (no changing deps) because it relies on top-level helpers
-  const makePredicate = useCallback(
-    (qRaw: string, ageMax: number, daysMax: number, budgetMaxRaw: unknown) =>
-      (t: Item): boolean => {
-        // Query
-        const q = (qRaw ?? "").trim().toLowerCase();
-        if (q) {
-          const name = getStringProp(t, "name") ?? "";
-          const location = getStringProp(t, "location") ?? "";
-          const from = getStringProp(t, "from") ?? "";
-          const to = getStringProp(t, "to") ?? "";
-          const hay = `${name} ${location} ${from} ${to}`.toLowerCase();
-          if (!hay.includes(q)) return false;
-        }
+  // Top row chips
+  const [activeFilter, setActiveFilter] = useState<ActiveFilter>("all");
 
-        // Age
-        const itemAge = getNumberProp(t, "age");
-        if (typeof itemAge === "number") {
-          if (itemAge > ageMax) return false;
-        }
+  // helper for price parsing (from string like "₹1,500 / person...")
+  const parsePrice = (price: string): number => {
+    const digits = price.replace(/[^\d]/g, "");
+    if (!digits) return 0;
+    return Number(digits);
+  };
 
-        // Days
-        const days = tripDaysValue(t);
-        if (days !== null) {
-          if (days > daysMax) return false;
-        }
+  /* ------- FILTERED TRIPS (Best Match) ------- */
+  const filteredTrips: Trip[] = useMemo(() => {
+    // start from all trips
+    let base = TRIPS_DEMO;
 
-        // Budget
-        const budgetMax = toNumberSafe(budgetMaxRaw);
-        if (budgetMax > 0) {
-          const rawPrice = (t as unknown as Record<string, unknown>)["price"];
-          const pr = tripPriceRange(rawPrice);
-          if (pr) {
-            const tripMinPrice = pr.min ?? pr.max ?? 0;
-            if (tripMinPrice > budgetMax) return false;
-          }
-          // keep items with no price info (original behavior)
-        }
-
-        return true;
-      },
-    [tripDaysValue]
-  );
-
-  // Filtered arrays: makePredicate is stable; helpers are top-level — eslint won't complain
-  const filtered = useMemo(() => {
-    const predicate = makePredicate(query, age, duration, budget);
-
-    if (DEBUG) {
-      console.debug("Filtering with:", { query, age, duration, budget });
-      trips.forEach((t) => {
-        const rawPrice = (t as unknown as Record<string, unknown>)["price"];
-        const pr = tripPriceRange(rawPrice);
-        if (pr) {
-          console.debug(
-            "Trip price parse:",
-            (t as unknown as Record<string, unknown>)["id"],
-            getStringProp(t, "name"),
-            "=>",
-            pr
-          );
-        } else {
-          console.debug(
-            "Trip price parse: none for",
-            (t as unknown as Record<string, unknown>)["id"],
-            getStringProp(t, "name"),
-            "raw:",
-            rawPrice
-          );
-        }
+    // SEARCH (always active, even before Apply)
+    if (query.trim()) {
+      const q = query.toLowerCase();
+      base = base.filter((trip) => {
+        const inTitle = trip.title.toLowerCase().includes(q);
+        const inFrom = trip.from.toLowerCase().includes(q);
+        const inTo = trip.to.toLowerCase().includes(q);
+        return inTitle || inFrom || inTo;
       });
     }
 
-    return trips.filter(predicate);
+    // if filters haven't been applied yet → return search-only result
+    if (!hasAppliedFilters) {
+      return base;
+    }
 
-  }, [query, trips, age, duration, budget, makePredicate]);
+    // after Apply Filter → apply all other conditions
+    return base.filter((trip) => {
+      // rating
+      if (minRating > 0 && trip.host.rating < minRating) return false;
 
-  const filtered1 = useMemo(() => {
-    const predicate = makePredicate(query, age, duration, budget);
-    return trip1.filter(predicate);
-  }, [query, trip1, age, duration, budget, makePredicate]);
+      // safe score
+      if (minSafeScore > 0 && trip.host.safeScore < minSafeScore)
+        return false;
 
-  const filtered2 = useMemo(() => {
-    const predicate = makePredicate(query, age, duration, budget);
-    return trip2.filter(predicate);
-  }, [query, trip2, age, duration, budget, makePredicate]);
+      // age slider (simple: keep hosts within ±5 years)
+      if (Math.abs(trip.host.age - age) > 5) return false;
 
-  // -------------------------
-  // Render (unchanged layout and components)
-  // -------------------------
+      // budget slider: price <= budget
+      const numericPrice = parsePrice(trip.price);
+      if (budget > 0 && numericPrice > budget) return false;
+
+      // duration slider – example logic (can improve later)
+      if (duration > 0 && trip.date.length < duration) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [
+    query,
+    hasAppliedFilters,
+    minRating,
+    minSafeScore,
+    age,
+    budget,
+    duration,
+  ]);
+
+  /* ------- FILTERED LEADERS ------- */
+  const filteredLeaders: Leader[] = useMemo(() => {
+    let base = LEADERS_DEMO;
+
+    // SEARCH always active
+    if (query.trim()) {
+      const q = query.toLowerCase();
+      base = base.filter((leader) => {
+        const inTitle = leader.title.toLowerCase().includes(q);
+        const inFrom = leader.from.toLowerCase().includes(q);
+        const inTo = leader.to.toLowerCase().includes(q);
+        return inTitle || inFrom || inTo;
+      });
+    }
+
+    if (!hasAppliedFilters) {
+      return base;
+    }
+
+    return base.filter((leader) => {
+      if (minRating > 0 && leader.host.rating < minRating) return false;
+      if (minSafeScore > 0 && leader.host.safeScore < minSafeScore)
+        return false;
+
+      if (Math.abs(leader.host.age - age) > 5) return false;
+
+      const numericPrice = parsePrice(leader.price);
+      if (budget > 0 && numericPrice > budget) return false;
+
+      return true;
+    });
+  }, [query, hasAppliedFilters, minRating, minSafeScore, age, budget]);
+
+  /* ------- FILTERED AGENCIES ------- */
+  const filteredAgencies: Agency[] = useMemo(() => {
+    let base = AGENCIES_DEMO;
+
+    // SEARCH always active
+    if (query.trim()) {
+      const q = query.toLowerCase();
+      base = base.filter((agency) => {
+        const inTitle = agency.title.toLowerCase().includes(q);
+        const inFrom = agency.from.toLowerCase().includes(q);
+        const inTo = agency.to.toLowerCase().includes(q);
+        return inTitle || inFrom || inTo;
+      });
+    }
+
+    if (!hasAppliedFilters) {
+      return base;
+    }
+
+    return base.filter((agency) => {
+      if (minRating > 0 && agency.host.rating < minRating) return false;
+      if (minSafeScore > 0 && agency.host.safeScore < minSafeScore)
+        return false;
+
+      const numericPrice = parsePrice(agency.price);
+      if (budget > 0 && numericPrice > budget) return false;
+
+      return true;
+    });
+  }, [query, hasAppliedFilters, minRating, minSafeScore, budget]);
+
+  /* ------- FILTERED SIMILAR TRIPS ------- */
+  const filteredSimilarTrips: SimilarTrip[] = useMemo(() => {
+    let base = SIMILAR_TRIPS_DEMO;
+
+    // SEARCH always active (title / from / to)
+    if (query.trim()) {
+      const q = query.toLowerCase();
+      base = base.filter((trip) => {
+        const inTitle = trip.title.toLowerCase().includes(q);
+        const inFrom = trip.from.toLowerCase().includes(q);
+        const inTo = trip.to.toLowerCase().includes(q);
+        return inTitle || inFrom || inTo;
+      });
+    }
+
+    if (!hasAppliedFilters) {
+      // only search filter applied
+      return base;
+    }
+
+    const interestValues = normalizeChipsToValues(interest);
+    const tripTypeValues = normalizeChipsToValues(tripType);
+    const foodValues = normalizeChipsToValues(foodPref);
+
+    return base.filter((trip) => {
+      // ⭐ rating
+      if (minRating > 0 && trip.host.rating < minRating) return false;
+
+      // 🛡 safe score
+      if (minSafeScore > 0 && trip.host.safeScore < minSafeScore)
+        return false;
+
+      // 👤 age
+      if (Math.abs(trip.host.age - age) > 5) return false;
+
+      // 💰 budget
+      const numericPrice = parsePrice(trip.price);
+      if (budget > 0 && numericPrice > budget) return false;
+
+      // ❤️ Interest filter
+      if (interestValues.length) {
+        const tripInterests = (trip.interest ?? []).map((i) =>
+          i.toLowerCase()
+        );
+        const hasAnyInterest = interestValues.some((v) =>
+          tripInterests.includes(v)
+        );
+        if (!hasAnyInterest) return false;
+      }
+
+      // 👥 Trip type filter
+      if (tripTypeValues.length) {
+        const tripTypes = (trip.tripType ?? []).map((t) =>
+          t.toLowerCase()
+        );
+        const hasAnyType = tripTypeValues.some((v) =>
+          tripTypes.includes(v)
+        );
+        if (!hasAnyType) return false;
+      }
+
+      // 🍽 Food preference filter
+      if (foodValues.length) {
+        const tripFoods = (trip.foodPref ?? []).map((f) =>
+          f.toLowerCase()
+        );
+        const hasAnyFood = foodValues.some((v) =>
+          tripFoods.includes(v)
+        );
+        if (!hasAnyFood) return false;
+      }
+
+      return true;
+    });
+  }, [
+    query,
+    hasAppliedFilters,
+    minRating,
+    minSafeScore,
+    age,
+    budget,
+    interest,
+    tripType,
+    foodPref,
+  ]);
+
+  // When user presses "Apply Filter" button in Filters
+  const handleApplyFilters = () => {
+    setHasAppliedFilters(true);
+  };
+
+  // When "Clear all filters" is pressed in Filters
+  const handleClearFilters = () => {
+    setHasAppliedFilters(false);
+    // Filters will also reset states via setters it has
+  };
+
+  // Chip style helper
+  const chipClass = (type: ActiveFilter) =>
+    `px-3 py-1.5 rounded-full text-sm font-medium border transition
+     ${
+       activeFilter === type
+         ? "bg-[#1D4350] text-white border-[#0A4D4A]"
+         : "bg-white text-gray-700 border-gray-200 hover:shadow-sm"
+     }`;
+
   return (
     <div className="min-h-screen p-6 md:p-10 mt-11">
       <div className="max-w-7xl mx-auto grid grid-cols-12 gap-6">
+        {/* LEFT: Filters Panel */}
         <aside className="col-span-12 lg:col-span-4 xl:col-span-3">
           <div className="sticky top-6">
             <Filters
@@ -227,72 +711,109 @@ export default function Page() {
               setDuration={setDuration}
               budget={budget}
               setBudget={setBudget}
+              minRating={minRating}
+              setMinRating={setMinRating}
+              minSafeScore={minSafeScore}
+              setMinSafeScore={setMinSafeScore}
+              interest={interest}
+              setInterest={setInterest}
+              tripType={tripType}
+              setTripType={setTripType}
+              foodPref={foodPref}
+              setFoodPref={setFoodPref}
+              onApply={handleApplyFilters}
+              onClear={handleClearFilters}
             />
           </div>
         </aside>
 
+        {/* RIGHT: Main Content */}
         <main className="col-span-12 lg:col-span-8 xl:col-span-9">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-xl font-bold">
-                Results for {query || "Anywhere"}
-              </h1>
-              <p className="text-sm text-gray-500">
-                Discover travel companions for your next adventure
-              </p>
+          {/* Top row: Trending + chips */}
+          <div className="flex flex-wrap items-center gap-3 mb-6">
+            <div className="flex items-center gap-2 bg-orange-50 text-orange-700 px-3 py-1 rounded-full font-medium w-fit">
+              <Flame className="w-4 h-4 text-orange-500" />
+              <span>Trending</span>
             </div>
-            <div className="text-sm text-gray-500">
-              {filtered.length} Results
-            </div>
+
+            <button
+              onClick={() => setActiveFilter("all")}
+              className={chipClass("all")}
+              aria-pressed={activeFilter === "all"}
+            >
+              All
+            </button>
+
+            <button
+              onClick={() => setActiveFilter("best")}
+              className={chipClass("best")}
+              aria-pressed={activeFilter === "best"}
+              title="Show only Best Match trips"
+            >
+              Best Match
+            </button>
+
+            <button
+              onClick={() => setActiveFilter("agency")}
+              className={chipClass("agency")}
+              aria-pressed={activeFilter === "agency"}
+              title="Show only Featured Trip Agencies"
+            >
+              Featured Trip Agency
+            </button>
+
+            <button
+              onClick={() => setActiveFilter("leader")}
+              className={chipClass("leader")}
+              aria-pressed={activeFilter === "leader"}
+              title="Show only Featured Trip Leaders"
+            >
+              Featured Trip Leader
+            </button>
           </div>
 
-          <section className="mb-8">
-            <h3 className="text-lg font-semibold mb-12">Best Match</h3>
-            <HorizontalCarousel
-              items={filtered.sort((a, b) => (b.match ?? 0) - (a.match ?? 0))}
-              visible={3}
-              renderItem={(t) => <TripCard trip={t as Trip} compact />}
-            />
-          </section>
-
-          <section className="mb-8">
-            <h3 className="text-lg font-semibold mb-12">
-              Featured Trip Leaders
-            </h3>
-            <HorizontalCarousel
-              items={filtered2}
-              visible={3}
-              renderItem={(t) => <LeaderTrips trip={t as Leader} compact />}
-            />
-          </section>
-
-          <main className="p-6 bg-gray-50 min-h-screen -mt-6">
-            <div className="max-w-7xl mx-auto">
-              <AIHeader count={3} />
-              <RecommendationsCarousel />
-            </div>
-          </main>
-
-          <main className="p-8 bg-gray-50 min-h-screen -mt-16">
-            {Array.isArray(AGENCIES) && AGENCIES.length > 0 ? (
-              <AgencyCarousel agencies={AGENCIES} />
-            ) : (
-              <div className="p-6 text-sm text-gray-500">
-                No agencies available.
-              </div>
+          {/* Best Match */}
+          {(activeFilter === "all" || activeFilter === "best") &&
+            filteredTrips.length > 0 && (
+              <section className="mb-8">
+                <h3 className="text-lg font-semibold mb-4">
+                  Best Match
+                </h3>
+                <TripCard trips={filteredTrips} />
+              </section>
             )}
-          </main>
 
-          <section className="mb-8">
-            <h3 className="text-lg font-semibold mb-12 -mt-10">
-              Similar Trips
-            </h3>
-            <HorizontalCarousel
-              items={filtered1}
-              visible={3}
-              renderItem={(t) => <SimilarTrips trip={t as Similar} compact />}
-            />
-          </section>
+          {/* Featured Trip Leaders */}
+          {(activeFilter === "all" || activeFilter === "leader") &&
+            filteredLeaders.length > 0 && (
+              <section className="mb-8">
+                <h3 className="text-lg font-semibold mb-4">
+                  Featured Trip Leaders
+                </h3>
+                <LeaderTrips leaders={filteredLeaders} />
+              </section>
+            )}
+
+          {/* Featured Travel Agencies */}
+          {(activeFilter === "all" || activeFilter === "agency") &&
+            filteredAgencies.length > 0 && (
+              <section className="mb-8">
+                <h3 className="text-lg font-semibold mb-4">
+                  Featured Travel Agencies
+                </h3>
+                <AgencyCarousel agencies={filteredAgencies} />
+              </section>
+            )}
+
+          {/* Similar Trips */}
+          {filteredSimilarTrips.length > 0 && (
+            <div>
+              <h3 className="text-lg font-semibold mb-4">
+                Similar Trips
+              </h3>
+              <Similar trips={filteredSimilarTrips} />
+            </div>
+          )}
         </main>
       </div>
     </div>
