@@ -2,17 +2,17 @@ import { FaFacebookF, FaTwitter, FaLink } from "react-icons/fa";
  
 const ShareThisTrip = () => {
   return (
-    <div className="border rounded-xl p-5 bg-white shadow-sm">
+<div className="rounded-lg p-6 bg-white w-full shadow-lg hover:shadow-2xl transition-all duration-300">
       <h2 className="text-lg font-semibold mb-3">Share this trip</h2>
       <div className="flex items-center justify-between">
         <div className="flex gap-3">
-          <button className="p-2 bg-gray-100 rounded-full hover:bg-gray-200">
+          <button className="p-2 bg-gray-900 rounded-full hover:bg-gray-200">
             <FaFacebookF />
           </button>
-          <button className="p-2 bg-gray-100 rounded-full hover:bg-gray-200">
+          <button className="p-2 bg-gray-900 rounded-full hover:bg-gray-200">
             <FaTwitter />
           </button>
-          <button className="p-2 bg-gray-100 rounded-full hover:bg-gray-200">
+          <button className="p-2 bg-gray-900 rounded-full hover:bg-gray-200">
             <FaLink />
           </button>
         </div>

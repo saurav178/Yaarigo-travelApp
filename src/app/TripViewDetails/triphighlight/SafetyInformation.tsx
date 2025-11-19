@@ -1,6 +1,6 @@
 const SafetyInformation = () => {
   return (
-    <div className="border rounded-xl p-5 bg-green-100 border-green-200">
+    <div className="rounded-lg p-6 bg-green-100 w-full shadow-lg hover:shadow-2xl transition-all duration-300">
       <div className="flex items-center gap-3">
         <img
           src="/icon/mingcute_safety-certificate-fill.png"
@@ -11,6 +11,7 @@ const SafetyInformation = () => {
           Safety Information
         </h2>
       </div>
+
       <p className="text-sm text-gray-700 mt-2">
         All travelers are verified and rated by the community. The trip leader
         has a 96% safety rating.
@@ -18,7 +19,5 @@ const SafetyInformation = () => {
     </div>
   );
 };
- 
+
 export default SafetyInformation;
- 
- 

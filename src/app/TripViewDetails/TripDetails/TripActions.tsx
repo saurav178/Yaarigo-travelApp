@@ -24,7 +24,7 @@ export default function TripActions({ trip }: TripActionsProps) {
   };
  
   return (
-    <div className="border rounded-lg p-6 bg-white w-full">
+<div className="rounded-lg p-6 bg-white w-full shadow-lg hover:shadow-2xl transition-all duration-300">
       {/* 💡 Added flex + justify-between here */}
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-xl font-bold">₹{trip.budget}</h3>
