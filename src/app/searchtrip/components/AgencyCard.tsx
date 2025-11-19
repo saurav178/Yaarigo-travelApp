@@ -79,7 +79,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
   };
 
   return (
-    <div className="bg-white  shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80  w-[949px] ">
+    <div className="bg-white shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 w-[949px] transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
       {/* Left Image Section */}
       <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
         <Image
@@ -87,7 +87,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
           alt={agency.title}
           width={400}
           height={400}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover transition-transform duration-500 ease-out hover:scale-105"
         />
 
         {/* {agency.verified && (
@@ -231,7 +231,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
           </div>
 
           <div className="flex items-start gap-5 ">
-            <button className="bg-[#1D4350] text-white text-xs  px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-35">
+            <button className="bg-[#1D4350] text-white text-xs  px-1 py-1  cursor-pointer hover:bg-[#173844] flex items-center justify-center h-8 w-35">
               <Image
                 src={Trip}
                 alt="View Trip Icon"
@@ -244,7 +244,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
 
             <button
               onClick={handleProfAgency}
-              className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-35"
+              className="bg-[#1D4350] text-white text-xs px-1 py-1  cursor-pointer hover:bg-[#173844] flex items-center justify-center h-8 w-35"
             >
               <Image
                 src={Profile}

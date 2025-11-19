@@ -89,7 +89,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
               key={trip.id}
               className="flex justify-center w-full bg-gray-50 py-2"
             >
-              <div className="bg-white  shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80">
+              <div className="bg-white  shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                 {/* Left Image */}
                 <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
                   <Image
@@ -97,7 +97,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                     alt={trip.title}
                     width={400}
                     height={300}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-transform duration-500 ease-out hover:scale-105"
                     unoptimized={false}
                   />
 
@@ -251,7 +251,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                     </div>
 
                     <div className="flex gap-2">
-                      <button className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-26">
+                      <button className="bg-[#1D4350] text-white text-xs px-1 py-1  cursor-pointer hover:bg-[#173844] flex items-center justify-center h-8 w-26">
                         <Image
                           src={TripImg}
                           alt="View Trip Icon"
@@ -261,7 +261,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                         />{" "}
                         View Trip
                       </button>
-                      <button className="bg-[#1D4350] text-white text-xs px-1 py-1 hover:bg-[#1D4350] flex items-center justify-center h-8 w-26">
+                      <button className="bg-[#1D4350] text-white text-xs px-1 py-1 cursor-pointer hover:bg-[#173844] flex items-center justify-center h-8 w-26">
                         <Image
                           src={Join}
                           alt="Join Trip Icon"
@@ -271,7 +271,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                         />{" "}
                         Join Trip
                       </button>
-                      <button className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
+                      <button className="bg-[#1D4350] text-white text-xs px-1 py-1 cursor-pointer  hover:bg-[#173844] flex items-center justify-center h-8 w-27">
                         <Image
                           src={Profile}
                           alt="View Profile Icon"

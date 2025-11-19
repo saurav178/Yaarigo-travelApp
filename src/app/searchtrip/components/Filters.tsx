@@ -294,7 +294,7 @@ export default function Filters({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow w-full max-w-md mx-auto max-h-[90vh] flex flex-col -ml-2">
+    <div className="bg-white rounded-xl shadow w-full max-w-md mx-auto max-h-[90vh] flex flex-col px-3 -ml-3">
       <div className="flex items-center gap-3 p-3">
         <button
           className="text-sm text-gray-600 hover:text-gray-800 transition"
@@ -379,7 +379,7 @@ export default function Filters({
             {languages.map((l) => (
               <div
                 key={l}
-                className="flex items-center gap-2 bg-white text-gray-600 px-3 py-1 rounded-full text-sm font-medium"
+                className="flex items-center gap-2 bg-[#173844] text-white px-3 py-1 rounded-full text-sm font-medium"
               >
                 <span>{l}</span>
                 <button onClick={() => removeLang(l)}>
@@ -415,7 +415,7 @@ export default function Filters({
             {likes.map((item) => (
               <div
                 key={item}
-                className="flex items-center gap-2 bg-white text-gray-600 px-3 py-1 rounded-full text-sm font-medium"
+                className="flex items-center gap-2 bg-[#173844] text-white px-3 py-1 rounded-full text-sm font-medium"
               >
                 <span>{item}</span>
                 <button onClick={() => removeLike(item)}>
@@ -696,7 +696,7 @@ export default function Filters({
 
       <button
         onClick={handleApply}
-        className="mt-4 m-3 w-auto md:w-full bg-[#1D4350] text-white py-2 px-3  font-semibold hover:bg-[#163935] transition"
+        className="mt-4 mb-3 mx-auto  w-fit bg-[#1D4350] text-white py-2 px-14  font-semibold hover:bg-#173844 transition cursor-pointer"
       >
         Apply Filter
       </button>

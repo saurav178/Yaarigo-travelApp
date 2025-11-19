@@ -11,8 +11,6 @@ import dots from "../../../../public/searchpageimg/Line 1.png";
 // import { MdVerifiedUser } from "react-icons/md";
 // import { FaCalendarAlt } from "react-icons/fa";
 
-
-
 import {
   // FaMapMarkerAlt,
   FaUser,
@@ -27,7 +25,7 @@ import {
 import { PiMedalDuotone } from "react-icons/pi";
 import { GoDotFill } from "react-icons/go";
 import { useRouter } from "next/navigation";
-import { ROUTES } from '../../../lib/routes';
+import { ROUTES } from "../../../lib/routes";
 
 import type { Trip } from "../types/types";
 import { TRIPS_DEMO } from "../data/data";
@@ -42,16 +40,12 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
   const router = useRouter();
 
   const handleViewTrips = () => {
-    
-    router.push(ROUTES.TRIP_DETAILS); 
+    router.push(ROUTES.TRIP_DETAILS);
   };
 
   const handleViewProfile = () => {
-    
-    router.push(ROUTES.USER_PROFILE); 
+    router.push(ROUTES.USER_PROFILE);
   };
-
-
 
   const toggleLike = (id: number) => {
     setLikedTrips((prev) =>
@@ -101,7 +95,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
           return (
             <article
               key={trip.id}
-              className="bg-white  shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 w-[949px]"
+              className="bg-white shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 w-[949px] transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             >
               {/* Image */}
               <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
@@ -110,7 +104,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                   alt={trip.title}
                   width={400}
                   height={300}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-500 ease-out hover:scale-105"
                   unoptimized={false}
                 />
                 {/* <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
@@ -153,7 +147,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                 </div>
 
                 {/* Tags */}
-                
+
                 <div className="flex flex-wrap gap-2 mt-2 mb-3">
                   {trip.tags.map((tag) => (
                     <span
@@ -182,7 +176,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                     {trip.to}
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-16 mt-1 text-sm text-gray-600 mb-1">
                   <div className="flex items-center gap-2">
                     <FaCalendarAlt className="text-gray-600" />
@@ -195,11 +189,9 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                   </div>
 
                   <div className="flex items-center gap-2 mt-1 text-sm text-gray-600 mb-1">
-                  <FaFlag /> <span>30 Trips Completed</span>
+                    <FaFlag /> <span>30 Trips Completed</span>
+                  </div>
                 </div>
-                </div>
-
-                
 
                 <hr className="my-3" />
 
@@ -232,9 +224,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                       <p className="text-md font-semibold text-gray-900 flex">
                         {trip.host.name}, {trip.host.age}{" "}
                         {trip.host.verified && (
-                          
-                            <FaCheckCircle className="inline text-green-500 ml-1 w-5 h-5" />
-                         
+                          <FaCheckCircle className="inline text-green-500 ml-1 w-5 h-5" />
                         )}
                       </p>
 
@@ -242,14 +232,13 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                         <p className="text-xs text-gray-600 mt-1">
                           {trip.host.location} • ⭐ {trip.host.rating}
                         </p>{" "}
-                        
                       </div>
 
                       <div className="flex items-center gap-2 mt-1 -ml-0.5">
                         <div
                           className={`flex items-center gap-1 text-xs px-1  py-0.5 rounded-md font-medium ${catStyle.bg}`}
                         >
-                          <FaUser/>
+                          <FaUser />
                           {trip.host.category}
                         </div>
                         <div className="">
@@ -260,15 +249,13 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                           </span>
                         </div>
                       </div>
-
-                      
                     </div>
                   </div>
 
                   <div className="flex gap-2">
                     <button
                       onClick={handleViewTrips}
-                      className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
+                      className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#173844] cursor-pointer flex items-center justify-center h-8 w-27"
                     >
                       <Image
                         src={TripImg}
@@ -279,10 +266,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                       />{" "}
                       View Trip
                     </button>
-                    <button
-                      
-                      className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
-                    >
+                    <button className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#173844] cursor-pointer flex items-center justify-center h-8 w-27">
                       <Image
                         src={Join}
                         alt="Join Trip Icon"
@@ -294,7 +278,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                     </button>
                     <button
                       onClick={handleViewProfile}
-                      className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-27"
+                      className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#173844] cursor-pointer flex items-center justify-center h-8 w-27"
                     >
                       <Image
                         src={Profile}
