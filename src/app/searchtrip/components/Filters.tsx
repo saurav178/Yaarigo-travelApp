@@ -294,7 +294,7 @@ export default function Filters({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow w-full max-w-md mx-auto max-h-[90vh] flex flex-col -ml-2">
+    <div className="bg-white  shadow w-full max-w-md mx-auto max-h-[90vh] flex flex-col px-3 -ml-3">
       <div className="flex items-center gap-3 p-3">
         <button
           className="text-sm text-gray-600 hover:text-gray-800 transition"
@@ -322,7 +322,7 @@ export default function Filters({
               setQuery(v);
             }}
             placeholder="Destination typing..."
-            className="w-full pl-9 pr-10 py-2 rounded-md border text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1D4350]"
+            className="w-full pl-9 pr-10 py-2  border text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1D4350]"
           />
           <button
             type="button"
@@ -347,7 +347,7 @@ export default function Filters({
                 setLocalQuery(tag.label);
                 setQuery(tag.queryKey);
               }}
-              className="px-3 py-1 text-sm text-white rounded-full transition cursor-pointer bg-[#1D4350]"
+              className="px-3 py-1 text-sm text-white   cursor-pointer bg-[#1D4350] hover:bg-[#173844] transition"
             >
               {tag.label}
             </button>
@@ -366,7 +366,7 @@ export default function Filters({
               onChange={(e) => setInputLang(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && addLang()}
               placeholder="Language typing..."
-              className="w-full pl-9 pr-20 py-2 rounded-md border text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1D4350]"
+              className="w-full pl-9 pr-20 py-2  border text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1D4350]"
             />
             <button
               onClick={addLang}
@@ -379,7 +379,7 @@ export default function Filters({
             {languages.map((l) => (
               <div
                 key={l}
-                className="flex items-center gap-2 bg-white text-gray-600 px-3 py-1 rounded-full text-sm font-medium"
+                className="flex items-center gap-2 bg-[#173844] text-white px-3 py-1  text-sm font-medium"
               >
                 <span>{l}</span>
                 <button onClick={() => removeLang(l)}>
@@ -402,7 +402,7 @@ export default function Filters({
               onChange={(e) => setLikesInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && addLike()}
               placeholder="Add what you like... (e.g. Hiking, Beaches)"
-              className="w-full pl-9 pr-20 py-2 rounded-md border text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1D4350]"
+              className="w-full pl-9 pr-20 py-2 border text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1D4350]"
             />
             <button
               onClick={addLike}
@@ -415,7 +415,7 @@ export default function Filters({
             {likes.map((item) => (
               <div
                 key={item}
-                className="flex items-center gap-2 bg-white text-gray-600 px-3 py-1 rounded-full text-sm font-medium"
+                className="flex items-center gap-2 bg-[#173844] text-white px-3 py-1  text-sm font-medium"
               >
                 <span>{item}</span>
                 <button onClick={() => removeLike(item)}>
@@ -488,7 +488,7 @@ export default function Filters({
                 return (
                   <label
                     key={p}
-                    className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition ${
+                    className={`flex items-center gap-2 p-2  cursor-pointer transition ${
                       isActive ? "bg-[#E8F1F1]" : ""
                     }`}
                   >
@@ -531,7 +531,7 @@ export default function Filters({
                 return (
                   <label
                     key={p}
-                    className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition ${
+                    className={`flex items-center gap-2 p-2  cursor-pointer transition ${
                       isActive ? "bg-[#E8F1F1]" : ""
                     }`}
                   >
@@ -558,7 +558,7 @@ export default function Filters({
           <button
             onClick={() => setTripTypeOpen((o) => !o)}
             aria-expanded={tripTypeOpen}
-            className="w-full flex items-center justify-between text-xs font-medium text-gray-700"
+            className=" w-full flex items-center justify-between text-xs font-medium text-gray-700"
           >
             <span>Trip Type</span>
             <FaChevronDown
@@ -569,7 +569,7 @@ export default function Filters({
           </button>
 
           {tripTypeOpen && (
-            <div className="grid grid-cols-2 gap-5 mt-3">
+            <div className="grid grid-cols-2 gap-3 mt-3 ml-6 mr-6">
               {tripTypeOptions.map((opt) => {
                 const allSelected = isAllSelected(localTripType, ALL_TRIP);
                 const isActive =
@@ -583,7 +583,7 @@ export default function Filters({
                         toggleFromList(prev, opt, ALL_TRIP)
                       )
                     }
-                    className={`text-sm py-2 px-2 cursor-pointer   transition 
+                    className={`text-sm py-1.5 px-1 cursor-pointer   transition 
               ${
                 isActive
                   ? "bg-[#1D4350] text-white"
@@ -599,6 +599,7 @@ export default function Filters({
         </div>
 
         {/* Food Preference */}
+
         <div className="mb-3">
           <button
             onClick={() => setFoodPrefOpen((o) => !o)}
@@ -613,7 +614,7 @@ export default function Filters({
             />
           </button>
           {foodPrefOpen && (
-            <div className="grid grid-cols-2 gap-5  mt-2">
+            <div className="grid grid-cols-2 gap-3  mt-3 ml-6 mr-6">
               {foodPrefOptions.map((opt) => {
                 const allSelected = isAllSelected(localFoodPref, ALL_FOOD);
                 const isActive =
@@ -626,7 +627,7 @@ export default function Filters({
                         toggleFromList(prev, opt, ALL_FOOD)
                       )
                     }
-                    className={`text-sm py-2  cursor-pointer  w-full transition ${
+                    className={`text-sm py-1.5 px-px cursor-pointer  w-full transition ${
                       isActive
                         ? "bg-[#1D4350] text-white"
                         : "bg-transparent text-gray-700"
@@ -639,6 +640,9 @@ export default function Filters({
             </div>
           )}
         </div>
+
+        
+
 
         {/* Sliders */}
         <div>
@@ -692,7 +696,7 @@ export default function Filters({
 
       <button
         onClick={handleApply}
-        className="mt-4 m-3 w-auto md:w-full bg-[#1D4350] text-white py-2 px-3  font-semibold hover:bg-[#163935] transition"
+        className="mt-4 mb-3 mx-auto  w-fit bg-[#1D4350] text-white py-2 px-14  font-semibold hover:bg-[#173844] transition cursor-pointer"
       >
         Apply Filter
       </button>

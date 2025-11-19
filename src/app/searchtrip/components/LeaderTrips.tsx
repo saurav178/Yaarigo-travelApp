@@ -10,12 +10,15 @@ import { GoDotFill } from "react-icons/go";
 import {
   FaExclamationTriangle,
   FaUser,
+  FaStar,
   FaHeart,
   FaCheckCircle,
   FaShieldAlt,
   FaWallet,
+  // FaCalendar,
   FaFlag,
-  FaCalendarAlt,
+  // FaCalendarAlt,
+   FaCalendar,
   // FaMapMarkerAlt,
 } from "react-icons/fa";
 import { PiMedalDuotone } from "react-icons/pi";
@@ -82,16 +85,21 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
         return (
           <div
             key={trip.id}
-            className="bg-white shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 w-[949px]"
+            className="bg-white shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 w-[949px] hover:shadow-[0_12px_20px_-6px_rgba(0,0,0,0.25)] transition-shadow duration-300"
           >
             {/* Image */}
             <div className="relative w-full sm:w-64 md:w-72 aspect-4/3 sm:aspect-auto">
-              <Image
-                src={trip.image}
-                alt={trip.title}
-                fill
-                style={{ objectFit: "cover" }}
-              />
+              <div className="relative w-full h-full overflow-hidden group">
+                <Image
+                  src={trip.image}
+                  alt={trip.title}
+                  width={400}
+                  height={300}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  unoptimized={false}
+                />
+              </div>
+
               {/* <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
                 {trip.host.match}% Match
               </div> */}
@@ -159,17 +167,15 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
 
               <div className="flex items-center gap-8 text-sm text-gray-600 mb-3 mt-1">
                 <div className="flex items-center gap-2">
-                  <FaCalendarAlt /> {trip.date}
+                  < FaCalendar /> {trip.date}
                 </div>
                 <div className="flex items-center gap-2">
                   <FaWallet /> {trip.price}
                 </div>
                 <div className="flex items-center gap-2  text-sm text-gray-600">
-                <FaFlag /> <span>30 Trips Completed</span>
+                  <FaFlag /> <span>30 Trips Completed</span>
+                </div>
               </div>
-              </div>
-
-              
 
               <hr className="my-3 -mt-0.5" />
 
@@ -202,15 +208,18 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                       {trip.host.name}, {trip.host.age}
                       {trip.host.verified && (
                         // <FaCheckCircle className="text-sky-500" />
-                        
-                            <FaCheckCircle className="inline text-green-500 ml-1 w-5 h-5" />
-                          
+
+                        <FaCheckCircle className="inline text-green-500 ml-1 w-5 h-5" />
                       )}
                     </p>
 
-                    <p className="text-xs text-gray-600 mt-1">
-                      {trip.host.location} • ⭐ {trip.host.rating}
-                    </p>
+                   
+
+                    <p className="text-xs text-gray-600 mt-1 flex items-center  ">
+                                              {trip.host.location} {" "} •
+                                              <FaStar className="text-yellow-500 w-3.5 h-3.5 ml-1 mr-1.5" />
+                                              {trip.host.rating}
+                                            </p>
 
                     <div className="flex items-center gap-2 mt-1">
                       <span
@@ -227,8 +236,8 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                   </div>
                 </div>
 
-                <div className="flex gap-2">
-                  <button className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
+                <div className="flex gap-2 mb-4">
+                  <button className="bg-[#1D4350] text-white text-xs px-1 py-1 cursor-pointer hover:bg-[#173844] flex items-center justify-center h-8 w-26">
                     <Image
                       src={TripImg}
                       alt="View Trip Icon"
@@ -238,7 +247,7 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                     />{" "}
                     View Trip
                   </button>
-                  <button className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
+                  <button className="bg-[#1D4350] text-white text-xs px-1 py-1 cursor-pointer  hover:bg-[#173844] flex items-center justify-center h-8 w-26">
                     <Image
                       src={Join}
                       alt="Join Trip Icon"
@@ -248,7 +257,7 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                     />{" "}
                     Join Trip
                   </button>
-                  <button className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-27">
+                  <button className="bg-[#1D4350] text-white text-xs px-1 py-1 cursor-pointer  hover:bg-[#173844] flex items-center justify-center h-8 w-27">
                     <Image
                       src={Profile}
                       alt="View Profile Icon"
