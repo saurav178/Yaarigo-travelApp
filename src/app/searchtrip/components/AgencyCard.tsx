@@ -29,6 +29,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
     setLiked((prev) => !prev);
   };
 
+
   const getInitials = (name: string) =>
     name
       .split(" ")
@@ -73,7 +74,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
 
   const router = useRouter();
 
-  const handleJoinTrip = () => {
+  const handleProfAgency = () => {
     router.push(ROUTES.VIEW_PROFILE);
   };
 
@@ -242,7 +243,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
             </button>
 
             <button
-              onClick={handleJoinTrip}
+              onClick={handleProfAgency}
               className="bg-[#1D4350] text-white text-xs px-1 py-1  hover:bg-[#1D4350] flex items-center justify-center h-8 w-35"
             >
               <Image
