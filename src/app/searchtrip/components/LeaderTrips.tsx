@@ -213,9 +213,7 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                       )}
                     </p>
 
-                    {/* <p className="text-xs text-gray-600 mt-1">
-                      {trip.host.location} • ⭐ {trip.host.rating}
-                    </p> */}
+                   
 
                     <p className="text-xs text-gray-600 mt-1 flex items-center  ">
                                               {trip.host.location} {" "} •
