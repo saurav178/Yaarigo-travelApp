@@ -10,7 +10,7 @@ export const TRIPS_DEMO: Trip[] = [
     from: "Kolkata, West Bengal",
     to: "Simla, Himachal Pradesh",
     travelersNeeded: 3,
-    price: "₹1,500 / person (shared costs)",
+    price: "₹1,500 / person ",
     date: "Dec 15–25, 2025",
     spotsLeft: 2,
     host: {
@@ -33,7 +33,7 @@ export const TRIPS_DEMO: Trip[] = [
     from: "Ahmedabad, Gujarat",
     to: "Mumbai, India",
     travelersNeeded: 4,
-    price: "₹20,000 / person (shared costs)",
+    price: "₹20,000 / person ",
     date: "Jan 10–30, 2026",
     spotsLeft: 1,
     host: {
@@ -56,7 +56,7 @@ export const TRIPS_DEMO: Trip[] = [
     from: "Mumbai, India",
     to: "Gokarna, Karnataka",
     travelersNeeded: 5,
-    price: "₹1,800 / person (shared costs)",
+    price: "₹1,800 / person ",
     date: "Feb 5–9, 2026",
     spotsLeft: 3,
     host: {
@@ -79,7 +79,7 @@ export const TRIPS_DEMO: Trip[] = [
     from: "Mumbai, India",
     to: "Gokarna, Karnataka",
     travelersNeeded: 5,
-    price: "₹1,800 / person (shared costs)",
+    price: "₹1,800 / person ",
     date: "Feb 5–9, 2026",
     spotsLeft: 3,
     host: {
@@ -102,7 +102,7 @@ export const TRIPS_DEMO: Trip[] = [
     from: "Ahmedabad, Gujarat",
     to: "Mumbai, India",
     travelersNeeded: 4,
-    price: "₹20,000 / person (shared costs)",
+    price: "₹20,000 / person ",
     date: "Jan 10–30, 2026",
     spotsLeft: 1,
     host: {
@@ -125,7 +125,7 @@ export const TRIPS_DEMO: Trip[] = [
     from: "Jaipur , Rajasthan",
     to: "Delhi, India",
     travelersNeeded: 4,
-    price: "₹500 / person (shared costs)",
+    price: "₹500 / person ",
     date: "Jan 10–25, 2026",
     spotsLeft: 1,
     host: {
@@ -232,7 +232,7 @@ export const LEADERS_DEMO: Leader[] = [
     from: "Kolkata, West Bengal",
     to: "Simla, Himachal Pradesh",
     travelersNeeded: 3,
-    price: "₹1,500 / person (shared costs)",
+    price: "₹1,500 / person ",
     date: "Dec 15–17, 2025",
     spotsLeft: 2,
     interest: ["Hiking", "Beaches"],
@@ -258,7 +258,7 @@ export const LEADERS_DEMO: Leader[] = [
     from: "Ahmedabad, Gujarat",
     to: "Jaisalmer, Rajasthan",
     travelersNeeded: 4,
-    price: "₹2,000 / person (shared costs)",
+    price: "₹2,000 / person ",
     date: "Jan 10–12, 2026",
     spotsLeft: 1,
     interest: ["Culture", "Beaches"],
@@ -284,7 +284,7 @@ export const LEADERS_DEMO: Leader[] = [
     from: "Mumbai, India",
     to: "Gokarna, Karnataka",
     travelersNeeded: 5,
-    price: "₹1,800 / person (shared costs)",
+    price: "₹1,800 / person ",
     date: "Feb 5–9, 2026",
     spotsLeft: 3,
     interest: ["Culture", "Wildlife"],
@@ -314,7 +314,7 @@ export const AGENCIES_DEMO: Agency[] = [
     to: "Simla, Himachal Pradesh",
     travelersNeeded: 3,
     verified: true,
-    price: "₹1,500 / person (shared costs)",
+    price: "₹1,500 / person ",
     date: "Dec 15–17, 2025",
     spotsLeft: 2,
     stats: {
@@ -343,7 +343,7 @@ export const AGENCIES_DEMO: Agency[] = [
     to: "Jaisalmer, Rajasthan",
     travelersNeeded: 4,
     verified: true,
-    price: "₹2,000 / person (shared costs)",
+    price: "₹2,000 / person ",
     date: "Jan 10–12, 2026",
     spotsLeft: 1,
     stats: {
@@ -372,7 +372,7 @@ export const AGENCIES_DEMO: Agency[] = [
     to: "Gokarna, Karnataka",
     verified: true,
     travelersNeeded: 5,
-    price: "₹1,800 / person (shared costs)",
+    price: "₹1,800 / person ",
     date: "Feb 5–9, 2026",
     spotsLeft: 3,
     stats: {
@@ -402,7 +402,7 @@ export const AGENCIES_DEMO: Agency[] = [
     to: "Simla, Himachal Pradesh",
     travelersNeeded: 3,
     verified: true,
-    price: "₹1,500 / person (shared costs)",
+    price: "₹1,500 / person ",
     date: "Dec 15–17, 2025",
     spotsLeft: 2,
     stats: {
@@ -433,7 +433,7 @@ export const AGENCIES_DEMO: Agency[] = [
     to: "Delhi, Delhi",
     travelersNeeded: 4,
     verified: true,
-    price: "₹1,200 / person (shared costs)",
+    price: "₹1,200 / person ",
     date: "Apr 1-3, 2026",
     spotsLeft: 2,
     stats: {

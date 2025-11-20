@@ -170,7 +170,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-16 mt-1 text-sm text-gray-600 mb-1">
+                  <div className="flex items-center gap-15 mt-1 text-sm text-gray-600 mb-1">
                     <div className="flex items-center gap-2">
                       < FaCalendar className="text-gray-600" />
                       <div>{trip.date}</div>

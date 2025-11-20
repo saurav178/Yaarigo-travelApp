@@ -183,7 +183,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
 
                
 
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 mt-2 text-sm text-gray-600 mb-5">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-15 mt-2 text-sm text-gray-600 mb-5">
                   <div className="flex items-center gap-2 w-full sm:w-auto">
                     <FaCalendar className="text-gray-600" />
                     <div className="truncate">{trip.date}</div>
