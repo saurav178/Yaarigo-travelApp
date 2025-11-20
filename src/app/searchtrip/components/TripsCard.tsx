@@ -86,7 +86,8 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
   };
 
   return (
-    // wrapper: mobile full width, desktop constrained to 949px (lg)
+    
+
     <main className="w-full flex justify-center px-3 lg:px-0">
       <div className="w-full lg:max-w-[949px] mx-auto flex flex-col gap-3">
         {trips.map((trip) => {
@@ -180,7 +181,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                   </div>
                 </div>
 
-                {/* DATE / PRICE / TRIPS COMPLETED  */}
+               
 
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 mt-2 text-sm text-gray-600 mb-5">
                   <div className="flex items-center gap-2 w-full sm:w-auto">
