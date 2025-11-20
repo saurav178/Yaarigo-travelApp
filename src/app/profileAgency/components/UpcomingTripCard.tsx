@@ -2,14 +2,14 @@ import React from "react";
 import Image from "next/image";
 import { upcomingTrips } from "../data/upcomingTrips";
 
-export default function UpcomingTripsTab() {
+export default function UpcomingTripsTab({ trip }: any) {
   return (
-    <section className="w-full max-w-5xl mx-auto mt-4 px-4">
-      <div className="flex flex-col gap-6 max-h-[800px]">
+    <section className="w-full max-w-5xl mx-auto mt-0 px-4">
+       <div className="flex flex-col gap-6">
         {upcomingTrips.map((trip) => (
           <div
             key={trip.id}
-            className="flex flex-col md:flex-row items-center md:items-start
+            className=" relative flex flex-col md:flex-row items-center md:items-start
             bg-white border border-gray-200 shadow-sm hover:shadow-md
             transition-shadow duration-300 p-4 md:p-5"
           >
@@ -18,7 +18,7 @@ export default function UpcomingTripsTab() {
               <img
                 src={trip.image}
                 alt={trip.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
               />
             </div>
 
@@ -64,10 +64,10 @@ export default function UpcomingTripsTab() {
 
               {/* Buttons */}
               <div className="flex flex-wrap gap-3 mt-5">
-                <button className="bg-[#1D4350] text-white px-6 py-2.5 font-medium hover:bg-[#0f2a35] hover:scale-105 transition-all duration-200">
+                <button className="bg-[#1D4350] text-white px-6 py-2.5 font-medium hover:bg-[#0f2a35] hover:scale-105 transition-all duration-200 cursor-pointer">
                   Join Trip
                 </button>
-                <button className="border border-[#1D4350] text-[#1D4350] px-6 py-2.5 font-medium hover:bg-[#1D4350]/10 hover:scale-105 transition-all duration-200">
+                <button className="border border-[#1D4350] text-[#1D4350] px-6 py-2.5 font-medium hover:bg-[#1D4350]/10 hover:scale-105 transition-all duration-200 cursor-pointer">
                   View trip details
                 </button>
               </div>

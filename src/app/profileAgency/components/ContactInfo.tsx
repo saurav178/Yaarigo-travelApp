@@ -10,7 +10,7 @@ export default function ContactInfo({ contact }: any) {
   ];
 
   return (
-     <div className="bg-white shadow-sm hover:shadow-xl transition-shadow duration-300 p-5 w-full max-w-md ml-10 border border-gray-100">
+     <div className="bg-white shadow-sm hover:shadow-xl transition-shadow duration-300 p-5 w-full max-w-md border border-gray-100">
       <h3 className="text-base font-bold mb-4 text-gray-900">
         Contact Information
       </h3>
@@ -38,7 +38,7 @@ export default function ContactInfo({ contact }: any) {
         </div>
       </div>
 
-      <button className="w-full mt-5 bg-[#1D4350] hover:bg-[#173844] text-white py-2.5 text-sm font-medium transition">
+      <button className="w-full mt-5 bg-[#1D4350] hover:bg-[#173844] text-white py-2.5 text-sm font-medium transition cursor-pointer">
         Send Message
       </button>
     </div>

@@ -68,12 +68,14 @@ export default function TripAgency() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    // <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white w-full overflow-x-hidden">
+
       <HeroSection hero={hero} />
 
-      {/* <div className="w-full px-4 md:px-6 py-6 mt-24 md:mt-32"> */}
       <div className="w-full px-4 md:px-6 py-6 mt-6 md:mt-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+
           {/* Left/Main Content */}
           <div className="lg:col-span-2 space-y-5">
             <StatsCards stats={stats} />
@@ -87,7 +89,8 @@ export default function TripAgency() {
               />
 
               {/* White box wrapper */}
-              <div className="bg-white shadow-md p-4 max-h-[600px] overflow-y-auto space-y-4">
+              <div className="bg-white shadow-md p-4 max-h-[70vh] md:max-h-[600px] overflow-y-auto space-y-4 rounded-xl">
+
                 {activeTab === "upcoming" &&
                   upcomingTrips.map((trip: any, i: number) => (
                     <UpcomingTripCard key={i} trip={trip} />

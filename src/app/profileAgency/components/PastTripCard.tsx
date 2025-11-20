@@ -64,7 +64,7 @@ export default function PastTripCard({ trip }: PastTripCardProps) {
         </div>
 
         <div className="flex flex-wrap gap-3 mt-5">
-          <button className="border border-[#1D4350] text-[#1D4350] px-6 py-2.5 font-medium hover:bg-[#1D4350]/10 hover:scale-105 transition-all duration-200">
+          <button className="border border-[#1D4350] text-[#1D4350] px-6 py-2.5 font-medium hover:bg-[#1D4350]/10 hover:scale-105 transition-all duration-200 cursor-pointer">
             View Trip Details
           </button>
         </div>
