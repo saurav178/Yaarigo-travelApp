@@ -111,7 +111,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
 
                 <button
                   onClick={() => toggleLike(trip.id)}
-                  className={`absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full shadow-md transition-all ring-0 focus:outline-none ${
+                  className={`absolute top-3 right-3 w-9 h-9  cursor-pointer flex items-center justify-center rounded-full shadow-md transition-all ring-0 focus:outline-none ${
                     likedTrips.includes(trip.id)
                       ? "text-rose-500 bg-white/90"
                       : "text-white bg-black/30"
@@ -293,7 +293,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
 
                     <button
                       onClick={handleViewProfile}
-                      className="bg-[#1D4350] text-white text-xs px-3 py-2 hover:bg-[#173844] cursor-pointer flex items-center justify-center h-8 min-w-[88px] "
+                      className="bg-[#1D4350] text-white text-xs px-3 py-2 hover:bg-[#173844] cursor-pointer flex items-center justify-center h-8 min-w-[88px]"
                     >
                       <Image
                         src={Profile}

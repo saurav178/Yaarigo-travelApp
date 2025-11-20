@@ -171,33 +171,17 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
               </span>
             </div>
 
-            {/* <div className="flex items-center gap-2 mt-2">
-              <FcBusiness />
+            <div className="flex items-center gap-2 mt-2">
+              <FaSuitcase className="text-gray-600" />
               <span>
                 <strong>{agency.stats.yearsInBusiness}</strong> years in
                 business
               </span>
-            </div> */}
-            <div className="flex items-center gap-2 mt-2">
-  <FaSuitcase className="text-gray-600" />
-  <span>
-    <strong>{agency.stats.yearsInBusiness}</strong> years in business
-  </span>
-</div>
-
-
-{/* 
-            <div className="flex items-center gap-2 mt-2">
-  <FaBriefcase className="text-black" />
-  <span>
-    <strong>{agency.stats.yearsInBusiness}</strong> years in business
-  </span>
-</div> */}
+            </div>
           </div>
 
           <hr className="my-3 " />
         </div>
-
         {/* Host Info & Actions */}
         <div className="flex items-center justify-between mt-auto">
           <div className="flex items-center gap-3">

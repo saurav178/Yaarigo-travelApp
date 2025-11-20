@@ -68,7 +68,6 @@ export default function TripAgency() {
   };
 
   return (
-    // <div className="min-h-screen bg-white">
     <div className="min-h-screen bg-white w-full overflow-x-hidden">
 
       <HeroSection hero={hero} />
@@ -89,7 +88,7 @@ export default function TripAgency() {
               />
 
               {/* White box wrapper */}
-              <div className="bg-white shadow-md p-4 max-h-[70vh] md:max-h-[600px] overflow-y-auto space-y-4 rounded-xl">
+              <div className="bg-white shadow-md p-4 max-h-[70vh] md:max-h-[600px] overflow-y-auto space-y-4">
 
                 {activeTab === "upcoming" &&
                   upcomingTrips.map((trip: any, i: number) => (

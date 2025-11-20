@@ -106,7 +106,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                   {/* Like Button */}
                   <button
                     onClick={() => toggleLike(trip.id)}
-                    className={`absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full transition ${
+                    className={`absolute top-3 right-3 w-8 h-8 cursor-pointer flex items-center justify-center rounded-full transition ${
                       likedTrips.includes(trip.id)
                         ? "text-rose-500"
                         : "text-white"
@@ -115,7 +115,6 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                     <FaHeart size={18} />
                   </button>
                 </div>
-
                 {/* Right Content */}
                 <div className="flex-1 p-4">
                   <div className="flex justify-between items-start">

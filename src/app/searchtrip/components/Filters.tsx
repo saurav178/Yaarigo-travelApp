@@ -294,17 +294,17 @@ export default function Filters({
   };
 
   return (
-    <div className="bg-white  shadow w-full max-w-md mx-auto max-h-[90vh] flex flex-col px-3 -ml-3">
+    <div className="bg-white  shadow w-full max-w-md mx-auto max-h-[88vh] flex flex-col px-3 -ml-3">
       <div className="flex items-center gap-3 p-3">
         <button
-          className="text-sm text-gray-600 hover:text-gray-800 transition"
+          className="text-sm text-gray-600 cursor-pointer hover:bg-[#E8F1F1] transition"
           onClick={() => router.push("/")}
         >
           ← Back
         </button>
         <button
           onClick={handleClearAll}
-          className="ml-auto text-sm text-gray-600 hover:underline"
+          className="ml-auto text-sm text-gray-600 hover:underline cursor-pointer hover:bg-[#E8F1F1]"
         >
           Clear all filters
         </button>
@@ -370,7 +370,7 @@ export default function Filters({
             />
             <button
               onClick={addLang}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 text-sm font-medium hover:underline"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 text-sm font-medium hover:underline cursor-pointer"
             >
               Add
             </button>
@@ -406,7 +406,7 @@ export default function Filters({
             />
             <button
               onClick={addLike}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 text-sm font-medium hover:underline"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 text-sm font-medium hover:underline cursor-pointer"
             >
               Add
             </button>
@@ -589,7 +589,7 @@ export default function Filters({
               ${
                 isActive
                   ? "bg-[#1D4350] text-white hover:bg-[#173844] "
-                  : "bg-transparent text-gray-700 hover:bg-[#2E6C87]"
+                  : "bg-transparent text-gray-700 hover:bg-[#E8F1F1]"
               }`}
                   >
                     {opt}
@@ -632,7 +632,7 @@ export default function Filters({
                     className={`text-sm py-1.5 px-px cursor-pointer  w-full transition ${
                       isActive
                         ? "bg-[#1D4350] text-white hover:bg-[#173844] "
-                        : "bg-transparent text-gray-700 hover:bg-[#2E6C87]"
+                        : "bg-transparent text-gray-700 hover:bg-[#E8F1F1]"
                     }`}
                   >
                     {opt}

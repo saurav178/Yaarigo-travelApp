@@ -106,7 +106,7 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
               </div> */}
                 <button
                   onClick={() => toggleLike(trip.id)}
-                  className={`absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full ${
+                  className={`absolute top-3 right-3 w-9 h-9 cursor-pointer flex items-center justify-center rounded-full ${
                     liked.includes(trip.id) ? "text-rose-500" : "text-white"
                   }`}
                 >
@@ -187,7 +187,7 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                   </div>
                 </div>
 
-                <hr className="my-3 mt-2" />
+                <hr className="my-3" />
 
                 {/* Host + actions */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-2">
@@ -246,7 +246,7 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                     </div>
                   </div>
 
-                  <div className="flex gap-2 mb-2 flex-wrap">
+                  <div className="flex gap-2 mb-5 flex-wrap">
                     <button className="bg-[#1D4350] text-white text-xs px-1 py-1 cursor-pointer hover:bg-[#173844] flex items-center justify-center h-8 w-26">
                       <Image
                         src={TripImg}

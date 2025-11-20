@@ -270,11 +270,11 @@ export default function Page() {
 
   // Chip style helper
   const chipClass = (type: ActiveFilter) =>
-    `px-3 py-1.5 rounded-full text-sm font-medium border transition
+    `px-3 py-1.5 rounded-full text-sm font-medium border transition cursor-pointer
      ${
        activeFilter === type
          ? "bg-[#1D4350] text-white border-[#0A4D4A]"
-         : "bg-white text-gray-700 border-gray-200 hover:shadow-sm"
+         : "bg-white text-gray-700 border-gray-200 hover:bg-[#E8F1F1]"
      }`;
 
   return (
@@ -283,7 +283,7 @@ export default function Page() {
     
     {/* LEFT: Filters Panel */}
     <aside className="col-span-12 lg:col-span-4 xl:col-span-3">
-      <div className="lg:sticky lg:top-6">
+      <div className="lg:sticky lg:top-6 ">
         <Filters
           query={query}
           setQuery={setQuery}
@@ -394,126 +394,5 @@ export default function Page() {
     </main>
   </div>
 </div>
-
-    // <div className="min-h-screen p-6 md:p-10 mt-11">
-    //   <div className="w-screen mx-auto grid grid-cols-12 gap-6">
-    //     {/* LEFT: Filters Panel */}
-    //     <aside className="col-span-12 lg:col-span-4 xl:col-span-3">
-    //       <div className="sticky top-6">
-    //         <Filters
-    //           query={query}
-    //           setQuery={setQuery}
-    //           age={age}
-    //           setAge={setAge}
-    //           duration={duration}
-    //           setDuration={setDuration}
-    //           budget={budget}
-    //           setBudget={setBudget}
-    //           minRating={minRating}
-    //           setMinRating={setMinRating}
-    //           minSafeScore={minSafeScore}
-    //           setMinSafeScore={setMinSafeScore}
-    //           interest={interest}
-    //           setInterest={setInterest}
-    //           tripType={tripType}
-    //           setTripType={setTripType}
-    //           foodPref={foodPref}
-    //           setFoodPref={setFoodPref}
-    //           onApply={handleApplyFilters}
-    //           onClear={handleClearFilters}
-    //         />
-    //       </div>
-    //     </aside>
-
-    //     {/* RIGHT: Main Content */}
-    //     <main className="col-span-12 lg:col-span-8 xl:col-span-9">
-    //       {/* Top row: Trending + chips */}
-    //       <div className="flex flex-wrap items-center gap-3 mb-6">
-    //         <div className="flex items-center gap-2 bg-orange-50 text-orange-700 px-3 py-1 rounded-full font-medium w-fit cursor-pointer">
-    //           <Flame className="w-4 h-4 text-orange-500" />
-    //           <span>Trending</span>
-    //         </div>
-
-    //         <button
-    //           onClick={() => setActiveFilter("all")}
-    //           className={chipClass("all")}
-    //           aria-pressed={activeFilter === "all"}
-    //         >
-    //           All
-    //         </button>
-
-    //         <button
-    //           onClick={() => setActiveFilter("best")}
-    //           className={chipClass("best")}
-    //           aria-pressed={activeFilter === "best"}
-    //           title="Show only Best Match trips"
-    //         >
-    //           Best Match
-    //         </button>
-
-    //         <button
-    //           onClick={() => setActiveFilter("agency")}
-    //           className={chipClass("agency")}
-    //           aria-pressed={activeFilter === "agency"}
-    //           title="Show only Featured Trip Agencies"
-    //         >
-    //           Featured Trip Agency
-    //         </button>
-
-    //         <button
-    //           onClick={() => setActiveFilter("leader")}
-    //           className={chipClass("leader")}
-    //           aria-pressed={activeFilter === "leader"}
-    //           title="Show only Featured Trip Leaders"
-    //         >
-    //           Featured Trip Leader
-    //         </button>
-    //       </div>
-
-    //       {/* Best Match */}
-    //       {(activeFilter === "all" || activeFilter === "best") &&
-    //         filteredTrips.length > 0 && (
-    //           <section className="mb-8">
-    //             <h3 className="text-lg font-semibold mb-4">
-    //               Best Match
-    //             </h3>
-    //             <TripCard trips={filteredTrips} />
-    //           </section>
-    //         )}
-
-    //       {/* Featured Trip Leaders */}
-    //       {(activeFilter === "all" || activeFilter === "leader") &&
-    //         filteredLeaders.length > 0 && (
-    //           <section className="mb-8">
-    //             <h3 className="text-lg font-semibold mb-4 ">
-    //               Featured Trip Leaders
-    //             </h3>
-    //             <LeaderTrips leaders={filteredLeaders} />
-    //           </section>
-    //         )}
-
-    //       {/* Featured Travel Agencies */}
-    //       {(activeFilter === "all" || activeFilter === "agency") &&
-    //         filteredAgencies.length > 0 && (
-    //           <section className="mb-8">
-    //             <h3 className="text-lg font-semibold mb-4">
-    //               Featured Travel Agencies
-    //             </h3>
-    //             <AgencyCarousel agencies={filteredAgencies} />
-    //           </section>
-    //         )}
-
-    //       {/* Similar Trips */}
-    //       {filteredSimilarTrips.length > 0 && (
-    //         <div>
-    //           <h3 className="text-lg font-semibold mb-4">
-    //             Similar Trips
-    //           </h3>
-    //           <Similar trips={filteredSimilarTrips} />
-    //         </div>
-    //       )}
-    //     </main>
-    //   </div>
-    // </div>
   );
 }
