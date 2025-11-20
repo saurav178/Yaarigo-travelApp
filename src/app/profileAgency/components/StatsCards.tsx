@@ -9,7 +9,7 @@ interface StatsCardsProps {
 
 export default function StatsCards({ stats }: StatsCardsProps) {
   return (
-    <div className="grid grid-cols-3 gap-3 md:gap-4">
+    <div className="grid grid-cols-3 gap-3 md:gap-4 px-2 sm:px-4">
       {stats.map((stat, i) => (
         <div
           key={i}

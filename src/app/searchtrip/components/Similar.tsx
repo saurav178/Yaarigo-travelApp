@@ -79,8 +79,8 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
   };
 
   return (
-    <main className="flex flex-col items-center w-[949px] flex-1">
-      <div className="w-[99%] max-w-5xl flex flex-col gap-3">
+    <main className="flex flex-col items-center w-full flex-1">
+      <div className="w-[99%] max-full flex flex-col gap-3">
         {trips.map((trip) => {
           const catStyle = getCategoryStyle(trip.host.category);
 

@@ -89,13 +89,13 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
     
 
     <main className="w-full flex justify-center px-3 lg:px-0">
-      <div className="w-full lg:max-w-[949px] mx-auto flex flex-col gap-3">
+      <div className="w-full  mx-auto flex flex-col gap-3">
         {trips.map((trip) => {
           const catStyle = getCategoryStyle(trip.host.category);
           return (
             <article
               key={trip.id}
-              className="bg-white shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden  transition-shadow duration-300 hover:shadow-[0_12px_20px_-6px_rgba(0,0,0,0.25)]  lg:h-80 lg:w-[949px] w-full"
+              className="bg-white shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden  transition-shadow duration-300 hover:shadow-[0_12px_20px_-6px_rgba(0,0,0,0.25)]  lg:h-80   w-full"
             >
               {/* Image */}
               <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-44 sm:h-auto lg:h-auto">
