@@ -6,10 +6,8 @@ import { useState } from "react";
 import Image from "next/image";
 
 import {
-  // FaMapMarkerAlt,
   FaUser,
   FaStar,
-  // FaCalendarAlt,
   FaCheckCircle,
   FaCalendar,
   FaHeart,
@@ -105,11 +103,6 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                     />
                   </div>
 
-                  {/* Match Badge */}
-                  {/* <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
-                    {trip.host.match}% Match
-                  </div> */}
-
                   {/* Like Button */}
                   <button
                     onClick={() => toggleLike(trip.id)}
@@ -177,7 +170,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-16 mt-1 text-sm text-gray-600 mb-1">
+                  <div className="flex items-center gap-15 mt-1 text-sm text-gray-600 mb-1">
                     <div className="flex items-center gap-2">
                       < FaCalendar className="text-gray-600" />
                       <div>{trip.date}</div>
@@ -221,17 +214,10 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                         <p className="text-md font-semibold text-gray-900 flex">
                           {trip.host.name}, {trip.host.age}{" "}
                           {trip.host.verified && (
-                            // <FaCheckCircle className="inline text-sky-500 ml-1" />
 
                             <FaCheckCircle className="inline text-green-500 ml-1 w-5 h-5" />
                           )}
                         </p>
-
-                        {/* <div className="flex gap-2">
-                          <p className="text-xs text-gray-600 mt-1 ">
-                            {trip.host.location} • ⭐ {trip.host.rating}
-                          </p>{" "}
-                        </div> */}
 
                         <div className="flex gap-2">
                           <p className="text-xs text-gray-600 mt-1 flex items-center  ">
@@ -254,10 +240,6 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                             <FaShieldAlt /> {trip.host.safeScore}% Safe
                           </span>
                         </div>
-
-                        {/* <p className="text-xs text-gray-600 mt-1">
-                          {trip.host.location} • ⭐ {trip.host.rating}
-                        </p> */}
                       </div>
                     </div>
 
