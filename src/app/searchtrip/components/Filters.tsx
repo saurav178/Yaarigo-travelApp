@@ -511,6 +511,7 @@ export default function Filters({
         </div>
 
         {/* Safe Score */}
+
         <div className="mb-3">
           <button
             onClick={() => setSafeOpen((o) => !o)}
@@ -554,11 +555,12 @@ export default function Filters({
         </div>
 
         {/* Trip Type */}
+
         <div className="mb-3">
           <button
             onClick={() => setTripTypeOpen((o) => !o)}
             aria-expanded={tripTypeOpen}
-            className=" w-full flex items-center justify-between text-xs font-medium text-gray-700"
+            className="w-full flex items-center justify-between text-xs font-medium text-gray-700"
           >
             <span>Trip Type</span>
             <FaChevronDown
@@ -583,11 +585,11 @@ export default function Filters({
                         toggleFromList(prev, opt, ALL_TRIP)
                       )
                     }
-                    className={`text-sm py-1.5 px-1 cursor-pointer   transition 
+                    className={`text-sm py-1.5 px-1 cursor-pointer transition-colors duration-150 
               ${
                 isActive
-                  ? "bg-[#1D4350] text-white"
-                  : "bg-transparent text-gray-700"
+                  ? "bg-[#1D4350] text-white hover:bg-[#173844] "
+                  : "bg-transparent text-gray-700 hover:bg-[#2E6C87]"
               }`}
                   >
                     {opt}
@@ -629,8 +631,8 @@ export default function Filters({
                     }
                     className={`text-sm py-1.5 px-px cursor-pointer  w-full transition ${
                       isActive
-                        ? "bg-[#1D4350] text-white"
-                        : "bg-transparent text-gray-700"
+                        ? "bg-[#1D4350] text-white hover:bg-[#173844] "
+                        : "bg-transparent text-gray-700 hover:bg-[#2E6C87]"
                     }`}
                   >
                     {opt}
@@ -640,9 +642,6 @@ export default function Filters({
             </div>
           )}
         </div>
-
-        
-
 
         {/* Sliders */}
         <div>
