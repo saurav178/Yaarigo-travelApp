@@ -1,15 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HeroSection from "./HeroSection";
 import KeyFeaturesSection from "./KeyFeaturesSection";
 import WhyChooseSection from "./WhyChooseSection";
 import HowItWorksSection from "./HowItWorksSection";
 import SafetyTrustSection from "./SafetyTrustSection";
-import CommunitySection from "./CommunitySection"
+import CommunitySection from "./CommunitySection";
+import Loader from "@/components/Loader/Loader";
 
 export default function LandingPage() {
   const [isVisible, setIsVisible] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowLoader(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Show loader if either loading data or 2-second timer is active
+  if (showLoader) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center bg-white">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <main className="flex flex-col">
@@ -17,31 +33,19 @@ export default function LandingPage() {
       <HeroSection />
 
       {/* ================= Key Features Section ================= */}
-      <KeyFeaturesSection 
-        isVisible={isVisible} 
-        setIsVisible={setIsVisible} 
-      />
+      <KeyFeaturesSection isVisible={isVisible} setIsVisible={setIsVisible} />
 
       {/* ================= Why Choose Travio Section ================= */}
-      <WhyChooseSection 
-        isVisible={isVisible} 
-        setIsVisible={setIsVisible} 
-      />
+      <WhyChooseSection isVisible={isVisible} setIsVisible={setIsVisible} />
 
       {/* ================= How it Works Section ================= */}
-      <HowItWorksSection 
-        isVisible={isVisible} 
-        setIsVisible={setIsVisible} 
-      />
+      <HowItWorksSection isVisible={isVisible} setIsVisible={setIsVisible} />
 
       {/* ================= Safety & Trust Section ================= */}
       <SafetyTrustSection />
 
       {/* ================= Join Our Global Community Section ================= */}
-      <CommunitySection 
-        isVisible={isVisible} 
-        setIsVisible={setIsVisible} 
-      />
+      <CommunitySection isVisible={isVisible} setIsVisible={setIsVisible} />
     </main>
   );
 }

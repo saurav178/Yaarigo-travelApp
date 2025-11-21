@@ -5,7 +5,7 @@ import { ArrowLeft, MapPin, CalendarDays } from "lucide-react";
 
 export default function HeroSection() {
   return (
-    <div className="relative w-full h-[70vh] overflow-hidden">
+    <div className="relative w-full h-[70vh] overflow-hidden shadow-lg hover:shadow-2xl">
       {/* Background Image */}
       <Image
         src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80"

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProfileHeader from "./components/ProfileHeader";
 import AboutSection from "./components/AboutSection";
 import TabsSection from "./components/TabsSection";
@@ -7,11 +7,13 @@ import SimilarTravelersSection from "./components/SimilarTravelersSection";
 import FeaturedTripLeaderSection from "./components/FeaturedTripLeaderSection";
 import FeaturedTravelAgencySection from "./components/FeaturedTravelAgencySection";
 import ChatWindow from "./components/ChatWindow";
+import Loader from "@/components/Loader/Loader";
 
 export default function ProfilePage() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
   const [followersCount, setFollowersCount] = useState(1234);
+  const [showLoader, setShowLoader] = useState(true);
 
   const handleFollowToggle = () => {
     const newFollowing = !isFollowing;
@@ -20,6 +22,20 @@ export default function ProfilePage() {
       newFollowing ? prev + 1 : prev - 1
     );
   };
+
+   useEffect(() => {
+      const timer = setTimeout(() => setShowLoader(false), 2000);
+      return () => clearTimeout(timer);
+    }, []);
+  
+    // Show loader if either loading data or 2-second timer is active
+    if (showLoader) {
+      return (
+        <div className="w-full h-screen flex items-center justify-center bg-white">
+          <Loader />
+        </div>
+      );
+    }
 
   const handleChatOpen = () => {
     setIsChatOpen(true);

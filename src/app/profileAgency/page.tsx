@@ -11,14 +11,15 @@ import TravelPhotos from "./components/TravelPhotos";
 import SimilarAgenciesCarousel from "./components/SimilarAgenciesCarousel";
 import ContactInfo from "./components/ContactInfo";
 import TrustSafety from "./components/TrustSafety";
-import SimilarAgencies from "./components/SimilarAgencies";
-import Loader from "./components/Loader";
+import Loader from "../../components/Loader/Loader";
 
 export default function TripAgency() {
   const [activeTab, setActiveTab] = useState("upcoming");
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(true); // Loader state
 
+  // Fetch data
   useEffect(() => {
     async function fetchData() {
       try {
@@ -34,7 +35,20 @@ export default function TripAgency() {
     fetchData();
   }, []);
 
-  if (loading) return <Loader />;
+  // Hide loader after 2 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => setShowLoader(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Show loader if either loading data or 2-second timer is active
+  if (showLoader) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center bg-white">
+        <Loader />
+      </div>
+    );
+  }
 
   if (!data)
     return (
@@ -63,19 +77,22 @@ export default function TripAgency() {
     { id: "photos", label: "Travel Photos", count: travelPhotos.length },
   ];
 
-  const handleRatingClick = (reviewIndex: number, newRating: number) => {
-    reviews[reviewIndex].rating = newRating; // optional: maintain state if needed
-  };
-
   return (
+<<<<<<< HEAD
     // <div className="min-h-screen bg-white">
     <div className="min-h-screen bg-white w-full overflow-x-hidden">
 
+=======
+    <div className="min-h-screen bg-white w-full overflow-x-hidden">
+>>>>>>> 63e90ead738cf5ea157132bf932819acaa4b2043
       <HeroSection hero={hero} />
 
       <div className="w-full px-4 md:px-6 py-6 mt-6 md:mt-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+<<<<<<< HEAD
 
+=======
+>>>>>>> 63e90ead738cf5ea157132bf932819acaa4b2043
           {/* Left/Main Content */}
           <div className="lg:col-span-2 space-y-5">
             <StatsCards stats={stats} />
@@ -88,9 +105,13 @@ export default function TripAgency() {
                 onTabChange={setActiveTab}
               />
 
+<<<<<<< HEAD
               {/* White box wrapper */}
               <div className="bg-white shadow-md p-4 max-h-[70vh] md:max-h-[600px] overflow-y-auto space-y-4 rounded-xl">
 
+=======
+              <div className="bg-white shadow-md p-4 max-h-[70vh] md:max-h-[600px] overflow-y-auto space-y-4">
+>>>>>>> 63e90ead738cf5ea157132bf932819acaa4b2043
                 {activeTab === "upcoming" &&
                   upcomingTrips.map((trip: any, i: number) => (
                     <UpcomingTripCard key={i} trip={trip} />
@@ -119,7 +140,6 @@ export default function TripAgency() {
           <div className="space-y-5">
             <ContactInfo contact={contactInfo} />
             <TrustSafety items={trustSafety} />
-            {/* <SimilarAgencies agencies={similarAgencies} /> */}
           </div>
         </div>
       </div>

@@ -89,13 +89,13 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
     
 
     <main className="w-full flex justify-center px-3 lg:px-0">
-      <div className="w-full lg:max-w-[949px] mx-auto flex flex-col gap-3">
+      <div className="w-full  mx-auto flex flex-col gap-3">
         {trips.map((trip) => {
           const catStyle = getCategoryStyle(trip.host.category);
           return (
             <article
               key={trip.id}
-              className="bg-white shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden  transition-shadow duration-300 hover:shadow-[0_12px_20px_-6px_rgba(0,0,0,0.25)]  lg:h-80 lg:w-[949px] w-full"
+              className="bg-white shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden  transition-shadow duration-300 hover:shadow-[0_12px_20px_-6px_rgba(0,0,0,0.25)]  lg:h-80   w-full"
             >
               {/* Image */}
               <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-44 sm:h-auto lg:h-auto">
@@ -111,7 +111,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
 
                 <button
                   onClick={() => toggleLike(trip.id)}
-                  className={`absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full shadow-md transition-all ring-0 focus:outline-none ${
+                  className={`absolute top-3 right-3 w-9 h-9  cursor-pointer flex items-center justify-center rounded-full shadow-md transition-all ring-0 focus:outline-none ${
                     likedTrips.includes(trip.id)
                       ? "text-rose-500 bg-white/90"
                       : "text-white bg-black/30"
@@ -293,7 +293,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
 
                     <button
                       onClick={handleViewProfile}
-                      className="bg-[#1D4350] text-white text-xs px-3 py-2 hover:bg-[#173844] cursor-pointer flex items-center justify-center h-8 min-w-[88px] "
+                      className="bg-[#1D4350] text-white text-xs px-3 py-2 hover:bg-[#173844] cursor-pointer flex items-center justify-center h-8 min-w-[88px]"
                     >
                       <Image
                         src={Profile}

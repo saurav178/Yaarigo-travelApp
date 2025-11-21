@@ -1,19 +1,23 @@
-
 // main page
 
 "use client";
 
-import { useMemo, useState } from "react";
-
+import { useEffect, useMemo, useState } from "react";
+import Loader from "@/components/Loader/Loader";
 import Similar from "./components/Similar";
-import { Flame } from "lucide-react";
 import TripCard from "./components/TripsCard";
 import LeaderTrips from "./components/LeaderTrips";
 import AgencyCarousel from "./components/AgencyCarousel";
 import Filters from "./components/Filters";
 
 import type { Trip, SimilarTrip, Leader, Agency } from "./types/types";
-import { TRIPS_DEMO, SIMILAR_TRIPS_DEMO, LEADERS_DEMO, AGENCIES_DEMO } from "./data/data";
+import {
+  TRIPS_DEMO,
+  SIMILAR_TRIPS_DEMO,
+  LEADERS_DEMO,
+  AGENCIES_DEMO,
+} from "./data/data";
+import { Flame } from "lucide-react";
 
 type ActiveFilter = "all" | "best" | "agency" | "leader";
 
@@ -53,6 +57,9 @@ export default function Page() {
     return Number(digits);
   };
 
+  const [isVisible, setIsVisible] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
+
   /* ------- FILTERED TRIPS (Best Match) ------- */
   const filteredTrips: Trip[] = useMemo(() => {
     // start from all trips
@@ -80,8 +87,7 @@ export default function Page() {
       if (minRating > 0 && trip.host.rating < minRating) return false;
 
       // safe score
-      if (minSafeScore > 0 && trip.host.safeScore < minSafeScore)
-        return false;
+      if (minSafeScore > 0 && trip.host.safeScore < minSafeScore) return false;
 
       // age slider (simple: keep hosts within ±5 years)
       if (Math.abs(trip.host.age - age) > 5) return false;
@@ -200,8 +206,7 @@ export default function Page() {
       if (minRating > 0 && trip.host.rating < minRating) return false;
 
       // 🛡 safe score
-      if (minSafeScore > 0 && trip.host.safeScore < minSafeScore)
-        return false;
+      if (minSafeScore > 0 && trip.host.safeScore < minSafeScore) return false;
 
       // 👤 age
       if (Math.abs(trip.host.age - age) > 5) return false;
@@ -212,9 +217,7 @@ export default function Page() {
 
       // ❤️ Interest filter
       if (interestValues.length) {
-        const tripInterests = (trip.interest ?? []).map((i) =>
-          i.toLowerCase()
-        );
+        const tripInterests = (trip.interest ?? []).map((i) => i.toLowerCase());
         const hasAnyInterest = interestValues.some((v) =>
           tripInterests.includes(v)
         );
@@ -223,23 +226,15 @@ export default function Page() {
 
       // 👥 Trip type filter
       if (tripTypeValues.length) {
-        const tripTypes = (trip.tripType ?? []).map((t) =>
-          t.toLowerCase()
-        );
-        const hasAnyType = tripTypeValues.some((v) =>
-          tripTypes.includes(v)
-        );
+        const tripTypes = (trip.tripType ?? []).map((t) => t.toLowerCase());
+        const hasAnyType = tripTypeValues.some((v) => tripTypes.includes(v));
         if (!hasAnyType) return false;
       }
 
       // 🍽 Food preference filter
       if (foodValues.length) {
-        const tripFoods = (trip.foodPref ?? []).map((f) =>
-          f.toLowerCase()
-        );
-        const hasAnyFood = foodValues.some((v) =>
-          tripFoods.includes(v)
-        );
+        const tripFoods = (trip.foodPref ?? []).map((f) => f.toLowerCase());
+        const hasAnyFood = foodValues.some((v) => tripFoods.includes(v));
         if (!hasAnyFood) return false;
       }
 
@@ -270,19 +265,33 @@ export default function Page() {
 
   // Chip style helper
   const chipClass = (type: ActiveFilter) =>
-    `px-3 py-1.5 rounded-full text-sm font-medium border transition
+    `px-3 py-1.5 rounded-full text-sm font-medium border transition cursor-pointer
      ${
        activeFilter === type
          ? "bg-[#1D4350] text-white border-[#0A4D4A]"
-         : "bg-white text-gray-700 border-gray-200 hover:shadow-sm"
+         : "bg-white text-gray-700 border-gray-200 hover:bg-[#E8F1F1]"
      }`;
 
+  useEffect(() => {
+    const timer = setTimeout(() => setShowLoader(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Show loader if either loading data or 2-second timer is active
+  if (showLoader) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center bg-white">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen p-6 md:p-10 mt-11">
-      <div className="max-w-7xl mx-auto grid grid-cols-12 gap-6">
+    <div className="min-h-screen p-4 sm:p-6 md:p-10 mt-11">
+      <div className="w-full mx-auto grid grid-cols-12 gap-6">
         {/* LEFT: Filters Panel */}
         <aside className="col-span-12 lg:col-span-4 xl:col-span-3">
-          <div className="sticky top-6">
+          <div className="lg:sticky lg:top-6 ">
             <Filters
               query={query}
               setQuery={setQuery}
@@ -311,8 +320,8 @@ export default function Page() {
         {/* RIGHT: Main Content */}
         <main className="col-span-12 lg:col-span-8 xl:col-span-9">
           {/* Top row: Trending + chips */}
-          <div className="flex flex-wrap items-center gap-3 mb-6">
-            <div className="flex items-center gap-2 bg-orange-50 text-orange-700 px-3 py-1 rounded-full font-medium w-fit cursor-pointer">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6">
+            <div className="flex items-center gap-2 bg-orange-50 text-orange-700 px-3 py-1 rounded-full font-medium cursor-pointer w-fit">
               <Flame className="w-4 h-4 text-orange-500" />
               <span>Trending</span>
             </div>
@@ -329,7 +338,6 @@ export default function Page() {
               onClick={() => setActiveFilter("best")}
               className={chipClass("best")}
               aria-pressed={activeFilter === "best"}
-              title="Show only Best Match trips"
             >
               Best Match
             </button>
@@ -338,7 +346,6 @@ export default function Page() {
               onClick={() => setActiveFilter("agency")}
               className={chipClass("agency")}
               aria-pressed={activeFilter === "agency"}
-              title="Show only Featured Trip Agencies"
             >
               Featured Trip Agency
             </button>
@@ -347,7 +354,6 @@ export default function Page() {
               onClick={() => setActiveFilter("leader")}
               className={chipClass("leader")}
               aria-pressed={activeFilter === "leader"}
-              title="Show only Featured Trip Leaders"
             >
               Featured Trip Leader
             </button>
@@ -357,9 +363,7 @@ export default function Page() {
           {(activeFilter === "all" || activeFilter === "best") &&
             filteredTrips.length > 0 && (
               <section className="mb-8">
-                <h3 className="text-lg font-semibold mb-4">
-                  Best Match
-                </h3>
+                <h3 className="text-lg font-semibold mb-4">Best Match</h3>
                 <TripCard trips={filteredTrips} />
               </section>
             )}
@@ -368,7 +372,7 @@ export default function Page() {
           {(activeFilter === "all" || activeFilter === "leader") &&
             filteredLeaders.length > 0 && (
               <section className="mb-8">
-                <h3 className="text-lg font-semibold mb-4 ">
+                <h3 className="text-lg font-semibold mb-4">
                   Featured Trip Leaders
                 </h3>
                 <LeaderTrips leaders={filteredLeaders} />
@@ -389,9 +393,7 @@ export default function Page() {
           {/* Similar Trips */}
           {filteredSimilarTrips.length > 0 && (
             <div>
-              <h3 className="text-lg font-semibold mb-4">
-                Similar Trips
-              </h3>
+              <h3 className="text-lg font-semibold mb-4">Similar Trips</h3>
               <Similar trips={filteredSimilarTrips} />
             </div>
           )}

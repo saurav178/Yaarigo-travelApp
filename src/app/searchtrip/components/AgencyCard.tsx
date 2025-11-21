@@ -81,7 +81,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
   };
 
   return (
-    <div className="bg-white shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 w-[949px] hover:shadow-[0_12px_20px_-6px_rgba(0,0,0,0.25)] transition-shadow duration-300 ">
+    <div className="bg-white shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden h-80 w-full hover:shadow-[0_12px_20px_-6px_rgba(0,0,0,0.25)] transition-shadow duration-300 ">
       {/* Left Image Section */}
       <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-[180px] sm:h-auto">
         <div className="relative w-full h-full overflow-hidden group">
@@ -171,33 +171,17 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
               </span>
             </div>
 
-            {/* <div className="flex items-center gap-2 mt-2">
-              <FcBusiness />
+            <div className="flex items-center gap-2 mt-2">
+              <FaSuitcase className="text-gray-600" />
               <span>
                 <strong>{agency.stats.yearsInBusiness}</strong> years in
                 business
               </span>
-            </div> */}
-            <div className="flex items-center gap-2 mt-2">
-  <FaSuitcase className="text-gray-600" />
-  <span>
-    <strong>{agency.stats.yearsInBusiness}</strong> years in business
-  </span>
-</div>
-
-
-{/* 
-            <div className="flex items-center gap-2 mt-2">
-  <FaBriefcase className="text-black" />
-  <span>
-    <strong>{agency.stats.yearsInBusiness}</strong> years in business
-  </span>
-</div> */}
+            </div>
           </div>
 
           <hr className="my-3 " />
         </div>
-
         {/* Host Info & Actions */}
         <div className="flex items-center justify-between mt-auto">
           <div className="flex items-center gap-3">

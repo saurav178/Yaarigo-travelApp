@@ -455,6 +455,3 @@ export const AGENCIES_DEMO: Agency[] = [
       "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=400&q=80",
   },
 ];
-
-
-

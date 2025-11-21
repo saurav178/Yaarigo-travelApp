@@ -178,5 +178,9 @@ export default function ProfileHeader({
       )}
     </div>
   );
+<<<<<<< HEAD
 } 
 
+=======
+} 
+>>>>>>> 63e90ead738cf5ea157132bf932819acaa4b2043

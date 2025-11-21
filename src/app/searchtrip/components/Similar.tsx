@@ -79,8 +79,8 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
   };
 
   return (
-    <main className="flex flex-col items-center w-[949px] flex-1">
-      <div className="w-[99%] max-w-5xl flex flex-col gap-3">
+    <main className="flex flex-col items-center w-full flex-1">
+      <div className="w-[99%] max-full flex flex-col gap-3">
         {trips.map((trip) => {
           const catStyle = getCategoryStyle(trip.host.category);
 
@@ -106,7 +106,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                   {/* Like Button */}
                   <button
                     onClick={() => toggleLike(trip.id)}
-                    className={`absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full transition ${
+                    className={`absolute top-3 right-3 w-8 h-8 cursor-pointer flex items-center justify-center rounded-full transition ${
                       likedTrips.includes(trip.id)
                         ? "text-rose-500"
                         : "text-white"
@@ -115,7 +115,6 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                     <FaHeart size={18} />
                   </button>
                 </div>
-
                 {/* Right Content */}
                 <div className="flex-1 p-4">
                   <div className="flex justify-between items-start">

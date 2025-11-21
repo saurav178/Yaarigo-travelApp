@@ -24,7 +24,11 @@ const JoinedTravelers = () => {
   }, []);
  
   return (
+<<<<<<< HEAD
     <div className="rounded-xl p-5 bg-white shadow-lg hover:shadow-2xl transition-all duration-300 -mt-85">
+=======
+    <div className="p-5 bg-white shadow-lg hover:shadow-2xl transition-all duration-300 -mt-70">
+>>>>>>> 63e90ead738cf5ea157132bf932819acaa4b2043
       <h2 className="text-lg font-semibold mb-3">
         Joined Travelers ({travelers.length})
       </h2>
@@ -44,7 +48,7 @@ const JoinedTravelers = () => {
                 </p>
               </div>
             </div>
-            <button className="px-3 py-1 border rounded-lg bg-[#121212] text-white hover:bg-gray-100">
+            <button className="px-3 py-1 border bg-[#121212] text-white hover:bg-gray-100">
               View
             </button>
           </div>

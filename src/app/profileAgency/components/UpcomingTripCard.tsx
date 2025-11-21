@@ -78,6 +78,3 @@ export default function UpcomingTripsTab({ trip }: any) {
     </section>
   );
 }
-
-
-

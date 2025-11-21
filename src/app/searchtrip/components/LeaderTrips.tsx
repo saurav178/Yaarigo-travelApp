@@ -79,14 +79,14 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
   };
 
   return (
-    <main className="w-full flex justify-center px-3 lg:px-0">
-      <div className="w-full lg:max-w-[949px] mx-auto flex flex-col gap-3">
+    <main className="w-full flex justify-center  px-3 lg:px-0">
+      <div className="w-full   mx-auto flex flex-col gap-3">
         {leaders.map((trip) => {
           const catStyle = getCategoryStyle(trip.host.category);
           return (
             <div
               key={trip.id}
-              className="bg-white shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden  transition-shadow duration-300 hover:shadow-[0_12px_20px_-6px_rgba(0,0,0,0.25)]  lg:h-80 lg:w-[949px] w-full"
+              className="bg-white shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden  transition-shadow duration-300 hover:shadow-[0_12px_20px_-6px_rgba(0,0,0,0.25)]  lg:h-80  w-full"
             >
               {/* Image */}
               <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-44 sm:h-auto lg:h-auto">
@@ -106,7 +106,7 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
               </div> */}
                 <button
                   onClick={() => toggleLike(trip.id)}
-                  className={`absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full ${
+                  className={`absolute top-3 right-3 w-9 h-9 cursor-pointer flex items-center justify-center rounded-full ${
                     liked.includes(trip.id) ? "text-rose-500" : "text-white"
                   }`}
                 >
@@ -187,7 +187,7 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                   </div>
                 </div>
 
-                <hr className="my-3 mt-2" />
+                <hr className="my-3" />
 
                 {/* Host + actions */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-2">
@@ -246,7 +246,7 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                     </div>
                   </div>
 
-                  <div className="flex gap-2 mb-2 flex-wrap">
+                  <div className="flex gap-2 mb-5 flex-wrap">
                     <button className="bg-[#1D4350] text-white text-xs px-1 py-1 cursor-pointer hover:bg-[#173844] flex items-center justify-center h-8 w-26">
                       <Image
                         src={TripImg}

@@ -21,14 +21,18 @@ interface TripProps {
  
 export default function TripOverview({ trip }: TripProps) {
   return (
+<<<<<<< HEAD
 <div className="rounded-lg p-6 bg-white w-full shadow-lg hover:shadow-2xl transition-all duration-300">
+=======
+<div className="p-6 bg-white w-full shadow-lg hover:shadow-2xl transition-all duration-300">
+>>>>>>> 63e90ead738cf5ea157132bf932819acaa4b2043
       {/* Title & Description */}
       <h2 className="text-lg font-semibold mb-2">{trip.title}</h2>
       <p className="text-sm text-gray-600 mb-6">{trip.description}</p>
  
  
 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6 text-sm justify-center">
-  <div className="bg-gray-100 p-3 rounded-md flex flex-col justify-between shadow-sm max-w-[180px] mx-auto">
+  <div className="bg-gray-100 p-3 flex flex-col justify-between shadow-sm max-w-[180px] mx-auto">
     <div className="flex items-center gap-2 text-black">
       <img src="/icon/ic_baseline-route.png" alt="route icon" className="w-5 h-5 object-contain" />
       <p className="text-gray-700 font-semibold">Route</p>
@@ -36,7 +40,7 @@ export default function TripOverview({ trip }: TripProps) {
     <p className="font-medium mt-2 text-gray-800">{trip.from}</p>
   </div>
  
-  <div className="bg-gray-100 p-3 rounded-md flex flex-col justify-between shadow-sm max-w-[180px] mx-auto">
+  <div className="bg-gray-100 p-3 flex flex-col justify-between shadow-sm max-w-[180px] mx-auto">
     <div className="flex items-center gap-2 text-black">
       <CalendarDays size={18} strokeWidth={2.5} />
       <p className="text-gray-700 font-semibold">Dates</p>
@@ -46,7 +50,7 @@ export default function TripOverview({ trip }: TripProps) {
     </p>
   </div>
  
-  <div className="bg-gray-100 p-3 rounded-md flex flex-col justify-between shadow-sm max-w-[180px] mx-auto">
+  <div className="bg-gray-100 p-3 flex flex-col justify-between shadow-sm max-w-[180px] mx-auto">
     <div className="flex items-center gap-2 text-black">
       <img src="/icon/iconoir_wallet-solid.png" alt="budget icon" className="w-5 h-5 object-contain" />
       <p className="text-gray-700 font-semibold">Budget</p>
@@ -54,7 +58,7 @@ export default function TripOverview({ trip }: TripProps) {
     <p className="font-medium mt-2 text-gray-800">₹{trip.budget} / person</p>
   </div>
  
-  <div className="bg-gray-100 p-3 rounded-md flex flex-col justify-between shadow-sm max-w-[180px] mx-auto">
+  <div className="bg-gray-100 p-3 flex flex-col justify-between shadow-sm max-w-[180px] mx-auto">
     <div className="flex items-center gap-2 text-black">
       <img src="/icon/ix_user-management-filled.png" alt="travelers icon" className="w-5 h-5 object-contain" />
       <p className="text-gray-700 font-semibold">Travelers</p>

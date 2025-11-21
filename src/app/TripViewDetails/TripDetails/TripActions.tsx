@@ -24,7 +24,11 @@ export default function TripActions({ trip }: TripActionsProps) {
   };
  
   return (
+<<<<<<< HEAD
 <div className="rounded-lg p-6 bg-white w-full shadow-lg hover:shadow-2xl transition-all duration-300">
+=======
+<div className="p-6 bg-white w-full shadow-lg hover:shadow-2xl transition-all duration-300 mt-2">
+>>>>>>> 63e90ead738cf5ea157132bf932819acaa4b2043
       {/* 💡 Added flex + justify-between here */}
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-xl font-bold">₹{trip.budget}</h3>
@@ -56,14 +60,14 @@ export default function TripActions({ trip }: TripActionsProps) {
  
       <button
         onClick={handleJoinTrip}
-        className="w-full bg-[#1D4350] hover:bg-[#1D4350] text-white font-medium py-2 rounded-md mb-4"
+        className="w-full bg-[#1D4350]  text-white font-medium py-2 mb-4"
       >
         Join this trip
       </button>
  
       <button
         onClick={handleChat}
-        className="w-full border border-gray-300 text-gray-700 font-medium py-2 rounded-md hover:bg-gray-100"
+        className="w-full bg-[#1D4350] border-gray-300 text-gray-700 font-medium py-2"
       >
         Chat with Organizer
       </button>
