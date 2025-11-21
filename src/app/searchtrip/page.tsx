@@ -1,19 +1,23 @@
-
 // main page
 
 "use client";
 
-import { useMemo, useState } from "react";
-
+import { useEffect, useMemo, useState } from "react";
+import Loader from "@/components/Loader/Loader";
 import Similar from "./components/Similar";
-import { Flame } from "lucide-react";
 import TripCard from "./components/TripsCard";
 import LeaderTrips from "./components/LeaderTrips";
 import AgencyCarousel from "./components/AgencyCarousel";
 import Filters from "./components/Filters";
 
 import type { Trip, SimilarTrip, Leader, Agency } from "./types/types";
-import { TRIPS_DEMO, SIMILAR_TRIPS_DEMO, LEADERS_DEMO, AGENCIES_DEMO } from "./data/data";
+import {
+  TRIPS_DEMO,
+  SIMILAR_TRIPS_DEMO,
+  LEADERS_DEMO,
+  AGENCIES_DEMO,
+} from "./data/data";
+import { Flame } from "lucide-react";
 
 type ActiveFilter = "all" | "best" | "agency" | "leader";
 
@@ -53,6 +57,9 @@ export default function Page() {
     return Number(digits);
   };
 
+  const [isVisible, setIsVisible] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
+
   /* ------- FILTERED TRIPS (Best Match) ------- */
   const filteredTrips: Trip[] = useMemo(() => {
     // start from all trips
@@ -80,8 +87,7 @@ export default function Page() {
       if (minRating > 0 && trip.host.rating < minRating) return false;
 
       // safe score
-      if (minSafeScore > 0 && trip.host.safeScore < minSafeScore)
-        return false;
+      if (minSafeScore > 0 && trip.host.safeScore < minSafeScore) return false;
 
       // age slider (simple: keep hosts within ±5 years)
       if (Math.abs(trip.host.age - age) > 5) return false;
@@ -200,8 +206,7 @@ export default function Page() {
       if (minRating > 0 && trip.host.rating < minRating) return false;
 
       // 🛡 safe score
-      if (minSafeScore > 0 && trip.host.safeScore < minSafeScore)
-        return false;
+      if (minSafeScore > 0 && trip.host.safeScore < minSafeScore) return false;
 
       // 👤 age
       if (Math.abs(trip.host.age - age) > 5) return false;
@@ -212,9 +217,7 @@ export default function Page() {
 
       // ❤️ Interest filter
       if (interestValues.length) {
-        const tripInterests = (trip.interest ?? []).map((i) =>
-          i.toLowerCase()
-        );
+        const tripInterests = (trip.interest ?? []).map((i) => i.toLowerCase());
         const hasAnyInterest = interestValues.some((v) =>
           tripInterests.includes(v)
         );
@@ -223,23 +226,15 @@ export default function Page() {
 
       // 👥 Trip type filter
       if (tripTypeValues.length) {
-        const tripTypes = (trip.tripType ?? []).map((t) =>
-          t.toLowerCase()
-        );
-        const hasAnyType = tripTypeValues.some((v) =>
-          tripTypes.includes(v)
-        );
+        const tripTypes = (trip.tripType ?? []).map((t) => t.toLowerCase());
+        const hasAnyType = tripTypeValues.some((v) => tripTypes.includes(v));
         if (!hasAnyType) return false;
       }
 
       // 🍽 Food preference filter
       if (foodValues.length) {
-        const tripFoods = (trip.foodPref ?? []).map((f) =>
-          f.toLowerCase()
-        );
-        const hasAnyFood = foodValues.some((v) =>
-          tripFoods.includes(v)
-        );
+        const tripFoods = (trip.foodPref ?? []).map((f) => f.toLowerCase());
+        const hasAnyFood = foodValues.some((v) => tripFoods.includes(v));
         if (!hasAnyFood) return false;
       }
 
@@ -277,122 +272,133 @@ export default function Page() {
          : "bg-white text-gray-700 border-gray-200 hover:bg-[#E8F1F1]"
      }`;
 
+  useEffect(() => {
+    const timer = setTimeout(() => setShowLoader(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Show loader if either loading data or 2-second timer is active
+  if (showLoader) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center bg-white">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen p-4 sm:p-6 md:p-10 mt-11">
-  <div className="w-full mx-auto grid grid-cols-12 gap-6">
-    
-    {/* LEFT: Filters Panel */}
-    <aside className="col-span-12 lg:col-span-4 xl:col-span-3">
-      <div className="lg:sticky lg:top-6 ">
-        <Filters
-          query={query}
-          setQuery={setQuery}
-          age={age}
-          setAge={setAge}
-          duration={duration}
-          setDuration={setDuration}
-          budget={budget}
-          setBudget={setBudget}
-          minRating={minRating}
-          setMinRating={setMinRating}
-          minSafeScore={minSafeScore}
-          setMinSafeScore={setMinSafeScore}
-          interest={interest}
-          setInterest={setInterest}
-          tripType={tripType}
-          setTripType={setTripType}
-          foodPref={foodPref}
-          setFoodPref={setFoodPref}
-          onApply={handleApplyFilters}
-          onClear={handleClearFilters}
-        />
+      <div className="w-full mx-auto grid grid-cols-12 gap-6">
+        {/* LEFT: Filters Panel */}
+        <aside className="col-span-12 lg:col-span-4 xl:col-span-3">
+          <div className="lg:sticky lg:top-6 ">
+            <Filters
+              query={query}
+              setQuery={setQuery}
+              age={age}
+              setAge={setAge}
+              duration={duration}
+              setDuration={setDuration}
+              budget={budget}
+              setBudget={setBudget}
+              minRating={minRating}
+              setMinRating={setMinRating}
+              minSafeScore={minSafeScore}
+              setMinSafeScore={setMinSafeScore}
+              interest={interest}
+              setInterest={setInterest}
+              tripType={tripType}
+              setTripType={setTripType}
+              foodPref={foodPref}
+              setFoodPref={setFoodPref}
+              onApply={handleApplyFilters}
+              onClear={handleClearFilters}
+            />
+          </div>
+        </aside>
+
+        {/* RIGHT: Main Content */}
+        <main className="col-span-12 lg:col-span-8 xl:col-span-9">
+          {/* Top row: Trending + chips */}
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6">
+            <div className="flex items-center gap-2 bg-orange-50 text-orange-700 px-3 py-1 rounded-full font-medium cursor-pointer w-fit">
+              <Flame className="w-4 h-4 text-orange-500" />
+              <span>Trending</span>
+            </div>
+
+            <button
+              onClick={() => setActiveFilter("all")}
+              className={chipClass("all")}
+              aria-pressed={activeFilter === "all"}
+            >
+              All
+            </button>
+
+            <button
+              onClick={() => setActiveFilter("best")}
+              className={chipClass("best")}
+              aria-pressed={activeFilter === "best"}
+            >
+              Best Match
+            </button>
+
+            <button
+              onClick={() => setActiveFilter("agency")}
+              className={chipClass("agency")}
+              aria-pressed={activeFilter === "agency"}
+            >
+              Featured Trip Agency
+            </button>
+
+            <button
+              onClick={() => setActiveFilter("leader")}
+              className={chipClass("leader")}
+              aria-pressed={activeFilter === "leader"}
+            >
+              Featured Trip Leader
+            </button>
+          </div>
+
+          {/* Best Match */}
+          {(activeFilter === "all" || activeFilter === "best") &&
+            filteredTrips.length > 0 && (
+              <section className="mb-8">
+                <h3 className="text-lg font-semibold mb-4">Best Match</h3>
+                <TripCard trips={filteredTrips} />
+              </section>
+            )}
+
+          {/* Featured Trip Leaders */}
+          {(activeFilter === "all" || activeFilter === "leader") &&
+            filteredLeaders.length > 0 && (
+              <section className="mb-8">
+                <h3 className="text-lg font-semibold mb-4">
+                  Featured Trip Leaders
+                </h3>
+                <LeaderTrips leaders={filteredLeaders} />
+              </section>
+            )}
+
+          {/* Featured Travel Agencies */}
+          {(activeFilter === "all" || activeFilter === "agency") &&
+            filteredAgencies.length > 0 && (
+              <section className="mb-8">
+                <h3 className="text-lg font-semibold mb-4">
+                  Featured Travel Agencies
+                </h3>
+                <AgencyCarousel agencies={filteredAgencies} />
+              </section>
+            )}
+
+          {/* Similar Trips */}
+          {filteredSimilarTrips.length > 0 && (
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Similar Trips</h3>
+              <Similar trips={filteredSimilarTrips} />
+            </div>
+          )}
+        </main>
       </div>
-    </aside>
-
-    {/* RIGHT: Main Content */}
-    <main className="col-span-12 lg:col-span-8 xl:col-span-9">
-
-      {/* Top row: Trending + chips */}
-      <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6">
-        <div className="flex items-center gap-2 bg-orange-50 text-orange-700 px-3 py-1 rounded-full font-medium cursor-pointer w-fit">
-          <Flame className="w-4 h-4 text-orange-500" />
-          <span>Trending</span>
-        </div>
-
-        <button
-          onClick={() => setActiveFilter("all")}
-          className={chipClass("all")}
-          aria-pressed={activeFilter === "all"}
-        >
-          All
-        </button>
-
-        <button
-          onClick={() => setActiveFilter("best")}
-          className={chipClass("best")}
-          aria-pressed={activeFilter === "best"}
-        >
-          Best Match
-        </button>
-
-        <button
-          onClick={() => setActiveFilter("agency")}
-          className={chipClass("agency")}
-          aria-pressed={activeFilter === "agency"}
-        >
-          Featured Trip Agency
-        </button>
-
-        <button
-          onClick={() => setActiveFilter("leader")}
-          className={chipClass("leader")}
-          aria-pressed={activeFilter === "leader"}
-        >
-          Featured Trip Leader
-        </button>
-      </div>
-
-      {/* Best Match */}
-      {(activeFilter === "all" || activeFilter === "best") &&
-        filteredTrips.length > 0 && (
-          <section className="mb-8">
-            <h3 className="text-lg font-semibold mb-4">Best Match</h3>
-            <TripCard trips={filteredTrips} />
-          </section>
-        )}
-
-      {/* Featured Trip Leaders */}
-      {(activeFilter === "all" || activeFilter === "leader") &&
-        filteredLeaders.length > 0 && (
-          <section className="mb-8">
-            <h3 className="text-lg font-semibold mb-4">
-              Featured Trip Leaders
-            </h3>
-            <LeaderTrips leaders={filteredLeaders} />
-          </section>
-        )}
-
-      {/* Featured Travel Agencies */}
-      {(activeFilter === "all" || activeFilter === "agency") &&
-        filteredAgencies.length > 0 && (
-          <section className="mb-8">
-            <h3 className="text-lg font-semibold mb-4">
-              Featured Travel Agencies
-            </h3>
-            <AgencyCarousel agencies={filteredAgencies} />
-          </section>
-        )}
-
-      {/* Similar Trips */}
-      {filteredSimilarTrips.length > 0 && (
-        <div>
-          <h3 className="text-lg font-semibold mb-4">Similar Trips</h3>
-          <Similar trips={filteredSimilarTrips} />
-        </div>
-      )}
-
-    </main>
-  </div>
-</div>
+    </div>
   );
 }
