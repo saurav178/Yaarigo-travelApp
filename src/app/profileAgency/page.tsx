@@ -8,16 +8,19 @@ import UpcomingTripCard from "./components/UpcomingTripCard";
 import PastTripCard from "./components/PastTripCard";
 import ReviewCard from "./components/ReviewCard";
 import TravelPhotos from "./components/TravelPhotos";
-import SimilarAgenciesCarousel from "./components/SimilarAgenciesCarousel";
+// import SimilarAgenciesCarousel from "./components/SimilarAgenciesCarousel";
 import ContactInfo from "./components/ContactInfo";
 import TrustSafety from "./components/TrustSafety";
 import Loader from "../../components/Loader/Loader";
+
+import { AGENCIES_DEMO } from "../searchtrip/data/data";
+import TripsCard from "../searchtrip/components/TripsCard";
 
 export default function TripAgency() {
   const [activeTab, setActiveTab] = useState("upcoming");
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [showLoader, setShowLoader] = useState(true); // Loader state
+  const [showLoader, setShowLoader] = useState(true);
 
   // Fetch data
   useEffect(() => {
@@ -117,13 +120,27 @@ export default function TripAgency() {
               </div>
             </div>
 
-            <SimilarAgenciesCarousel agencies={similarAgencies} />
+            {/* <SimilarAgenciesCarousel agencies={similarAgencies} /> */}
           </div>
 
           {/* Right Sidebar */}
           <div className="space-y-5">
             <ContactInfo contact={contactInfo} />
             <TrustSafety items={trustSafety} />
+          </div>
+        </div>
+
+        {/* Featured Travel Agencies */}
+        <div className="w-full mt-8">
+          <h2 className="text-xl font-semibold mb-3">
+            Featured Travel Agencies
+          </h2>
+          <div className="flex space-x-4 overflow-x-auto pb-3 w-full">
+            {AGENCIES_DEMO.map((trip) => (
+              <div key={trip.id} className="flex-shrink-0 min-w-[300px]">
+                <TripsCard trips={[trip]} />
+              </div>
+            ))}
           </div>
         </div>
       </div>

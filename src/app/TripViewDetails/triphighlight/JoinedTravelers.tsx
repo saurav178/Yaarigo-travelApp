@@ -1,5 +1,3 @@
-
- 
 "use client";
 import { useEffect, useState } from "react";
 import { fetchData } from "../lib/api";
@@ -44,7 +42,7 @@ const JoinedTravelers = () => {
                 </p>
               </div>
             </div>
-            <button className="px-3 py-1 border bg-[#121212] text-white hover:bg-gray-100">
+            <button className="px-3 py-1 border bg-[#1D4350] text-white hover:bg-[#16333b] transition-colors duration-300 cursor-pointer">
               View
             </button>
           </div>

@@ -55,18 +55,19 @@ export default function TripActions({ trip }: TripActionsProps) {
  
  
       <button
-        onClick={handleJoinTrip}
-        className="w-full bg-[#1D4350]  text-white font-medium py-2 mb-4"
-      >
-        Join this trip
-      </button>
- 
-      <button
-        onClick={handleChat}
-        className="w-full bg-[#1D4350] border-gray-300 text-gray-700 font-medium py-2"
-      >
-        Chat with Organizer
-      </button>
+  onClick={handleJoinTrip}
+  className="w-full bg-[#1D4350] text-white font-medium py-2 mb-4 cursor-pointer hover:bg-[#16333b] transition-colors duration-300"
+>
+  Join this trip
+</button>
+
+<button
+  onClick={handleChat}
+   className="w-full bg-[#1D4350] text-white font-medium py-2 mb-4 cursor-pointer hover:bg-[#16333b] transition-colors duration-300"
+>
+  Chat with Organizer
+</button>
+
     </div>
   );
 }
