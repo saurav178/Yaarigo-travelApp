@@ -152,7 +152,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose }) => {
   const emojis = ['😊', '😂', '😍', '👍', '❤️', '😢', '😎', '🤔', '😴', '😡', '🙌', '👏', '💯', '🔥', '✨'];
 
   return (
-    <div className="fixed bottom-10 right-10 w-80 md:w-96 lg:w-[400px] bg-white text-black shadow-2xl border border-gray-300 overflow-hidden flex flex-col h-96">
+    <div className="fixed bottom-1 right-10 w-80 md:w-96 lg:w-[400px] bg-white text-black shadow-2xl border border-gray-300 overflow-hidden flex flex-col h-96">
       {/* Header */}
       <div className="flex items-center justify-between px-3 py-2 bg-gray-100">
         <div className="flex items-center gap-1">

@@ -95,7 +95,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
           return (
             <article
               key={trip.id}
-              className="bg-white shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden  transition-shadow duration-300 hover:shadow-[0_12px_20px_-6px_rgba(0,0,0,0.25)]  lg:h-80   w-full"
+              className="bg-white shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden  transition-shadow duration-300 hover:shadow-[0_12px_20px_-6px_rgba(0,0,0,0.25)]  lg:h-80 w-full"
             >
               {/* Image */}
               <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-44 sm:h-auto lg:h-auto">
@@ -268,39 +268,39 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                   <div className="flex gap-2 mb-2 flex-wrap">
                     <button
                       onClick={handleViewTrips}
-                      className="bg-[#1D4350] text-white text-xs px-3 py-2 hover:bg-[#173844] cursor-pointer flex items-center justify-center h-8 min-w-[88px] "
+                      className="bg-[#1D4350] text-white text-xs px-3 py-2 hover:bg-[#173844] cursor-pointer flex items-center justify-center h-8 w-26  "
                     >
                       <Image
                         src={TripImg}
                         alt="View Trip Icon"
-                        width={14}
-                        height={14}
-                        className="mr-2 filter brightness-0 invert"
+                        width={10}
+                        height={10}
+                        className="mr-1 filter brightness-0 invert"
                       />
                       <span className="truncate">View Trip</span>
                     </button>
 
-                    <button className="bg-[#1D4350] text-white text-xs px-3 py-2 hover:bg-[#173844] cursor-pointer flex items-center justify-center h-8 min-w-[88px] ">
+                    <button className="bg-[#1D4350] text-white text-xs px-3 py-2 hover:bg-[#173844] cursor-pointer flex items-center justify-center h-8 w-26  ">
                       <Image
                         src={Join}
                         alt="Join Trip Icon"
-                        width={16}
-                        height={16}
-                        className="mr-2 filter brightness-0 invert"
+                        width={10}
+                        height={10}
+                        className="mr-1 filter brightness-0 invert"
                       />
                       <span className="truncate">Join Trip</span>
                     </button>
 
                     <button
                       onClick={handleViewProfile}
-                      className="bg-[#1D4350] text-white text-xs px-3 py-2 hover:bg-[#173844] cursor-pointer flex items-center justify-center h-8 min-w-[88px]"
+                      className="bg-[#1D4350] text-white text-xs px-3 py-2 hover:bg-[#173844] cursor-pointer flex items-center justify-center h-8 w-26 "
                     >
                       <Image
                         src={Profile}
                         alt="View Profile Icon"
-                        width={14}
-                        height={14}
-                        className="mr-2 filter brightness-0 invert"
+                        width={10}
+                        height={10}
+                        className="mr-1 filter brightness-0 invert"
                       />
                       <span className="truncate">View Profile</span>
                     </button>

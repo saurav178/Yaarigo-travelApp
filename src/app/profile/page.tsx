@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import ProfileHeader from "./components/ProfileHeader";
 import AboutSection from "./components/AboutSection";
 import TabsSection from "./components/TabsSection";
-import SimilarTravelersSection from "./components/SimilarTravelersSection";
-import FeaturedTripLeaderSection from "./components/FeaturedTripLeaderSection";
-import FeaturedTravelAgencySection from "./components/FeaturedTravelAgencySection";
+import Similar from "./components/Similar";
+
+
 import ChatWindow from "./components/ChatWindow";
 import Loader from "@/components/Loader/Loader";
 
@@ -59,10 +59,7 @@ export default function ProfilePage() {
         <AboutSection />
         <TabsSection />
       </div>
-
-      <SimilarTravelersSection />
-      <FeaturedTripLeaderSection />
-      <FeaturedTravelAgencySection />
+      <Similar   />
 
       <ChatWindow isOpen={isChatOpen} onClose={handleChatClose} />
     </div>

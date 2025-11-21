@@ -4,19 +4,19 @@ import { upcomingTrips } from "../data/profileData";
 
 export default function UpcomingTripsTab() {
   return (
-    <section className="w-full max-w-5xl mx-auto mt-4 px-4">
+    <section className="w-full max-w-5xl mx-auto  px-4">
       <div className="flex flex-col gap-6 max-h-[800px] overflow-y-scroll">
         {upcomingTrips.map((trip) => (
           <div
             key={trip.id}
-            className="flex flex-col md:flex-row items-center md:items-start bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300 p-4 md:p-5"
+            className="flex flex-col md:flex-row items-center md:items-start bg-white  border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300 p-4 md:p-5"
           >
             {/* Trip Image */}
             <div className="w-full md:w-1/3">
               <img
                 src={trip.image}
                 alt={trip.title}
-                className="rounded-lg object-cover w-full h-[180px]"
+                className="object-cover w-full h-[180px]"
               />
             </div>
 
@@ -70,7 +70,7 @@ export default function UpcomingTripsTab() {
                       alt={`Traveler ${i + 1}`}
                       width={30}
                       height={30}
-                      className="rounded-full border-2 border-white"
+                      className=" rounded-full border-2 border-white"
                     />
                   ))}
                 </div>
@@ -81,10 +81,10 @@ export default function UpcomingTripsTab() {
 
               {/* Buttons */}
               <div className="flex flex-wrap gap-3 mt-5">
-                <button className="bg-[#1D4350] text-white px-6 py-2.5 rounded-lg font-medium hover:bg-[#0f2a35] hover:scale-105 transition-all duration-200">
+                <button className="bg-[#1D4350] text-white px-6 py-2.5 font-medium hover:bg-[#0f2a35] hover:scale-105 transition-all duration-200">
                   Join Trip
                 </button>
-                <button className="border border-[#1D4350] text-[#1D4350] px-6 py-2.5 rounded-lg font-medium hover:bg-[#1D4350]/10 hover:scale-105 transition-all duration-200">
+                <button className="border border-[#1D4350] text-[#1D4350] px-6 py-2.5  font-medium hover:bg-[#1D4350]/10 hover:scale-105 transition-all duration-200">
                   View trip details
                 </button>
               </div>

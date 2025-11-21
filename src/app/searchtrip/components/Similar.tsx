@@ -263,7 +263,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                         />{" "}
                         Join Trip
                       </button>
-                      <button className="bg-[#1D4350] text-white text-xs px-1 py-1 cursor-pointer  hover:bg-[#173844] flex items-center justify-center h-8 w-27">
+                      <button className="bg-[#1D4350] text-white text-xs px-1 py-1 cursor-pointer  hover:bg-[#173844] flex items-center justify-center h-8 w-26">
                         <Image
                           src={Profile}
                           alt="View Profile Icon"
