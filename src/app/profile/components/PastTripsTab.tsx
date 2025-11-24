@@ -4,20 +4,20 @@ import { pastTrips } from "../data/profileData";
 
 export default function PastTripsTab() {
   return (
-    <section className="w-full max-w-5xl mx-auto mt-10 px-4">
+    <section className="w-full max-w-5xl mx-auto  px-4">
       {/* Scrollable Container */}
       <div className="flex flex-col gap-6 max-h-[800px] overflow-y-auto pr-2 scroll-smooth">
         {pastTrips.map((trip, index) => (
           <div
             key={trip.id}
-            className="flex items-center justify-between border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 bg-white p-4"
+            className="flex items-center justify-between border border-gray-300 shadow-sm hover:shadow-md transition-all duration-300 bg-white p-4"
           >
             {/* Left Image */}
             <div className="w-full md:w-1/3">
               <img
                 src={trip.image}
                 alt={trip.title}
-                className="rounded-lg object-cover w-full h-[180px]"
+                className=" object-cover w-full h-[180px]"
               />
             </div>
 

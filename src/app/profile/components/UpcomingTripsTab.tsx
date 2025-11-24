@@ -5,19 +5,19 @@ import { upcomingTrips } from "../data/profileData";
 
 export default function UpcomingTripsTab() {
   return (
-    <section className="w-full max-w-5xl mx-auto mt-4 px-4">
+    <section className="w-full max-w-5xl mx-auto  px-4">
       <div className="flex flex-col gap-6 max-h-[800px] overflow-y-scroll">
         {upcomingTrips.map((trip) => (
           <div
             key={trip.id}
-            className="flex flex-col md:flex-row items-center md:items-start bg-white rounded-xl border border-gray-200 shadow-sm  p-4 md:p-5"
+            className="flex flex-col md:flex-row items-center md:items-start bg-white border border-gray-200 shadow-sm  p-4 md:p-5"
           >
             {/* Trip Image */}
             <div className="w-full md:w-1/3">
               <img
                 src={trip.image}
                 alt={trip.title}
-                className="rounded-lg object-cover w-full h-[180px]"
+                className="object-cover w-full h-[180px]"
               />
             </div>
 

@@ -20,7 +20,7 @@ export default function TravelPhotosTab() {
   };
 
   return (
-    <div className="mt-8">
+    <div className="">
       <div className="grid grid-cols-3 gap-1">
         {travelPhotos.map((photo, index) => (
           <div

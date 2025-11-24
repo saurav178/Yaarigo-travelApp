@@ -29,6 +29,8 @@ import dots from "../../../../public/searchpageimg/Line 1.png";
 import TripImg from "../../../../public/searchpageimg/view_trips.png";
 import Join from "../../../../public/searchpageimg/join_trips.png";
 import Profile from "../../../../public/searchpageimg/view_profile.png";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "../../../lib/routes";
 
 type Props = { leaders?: Leader[] };
 
@@ -44,6 +46,13 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
       .map((s) => s[0] ?? "")
       .join("")
       .toUpperCase();
+    
+    
+    const router = useRouter();
+
+    const handleLeaderProfile = () => {
+      router.push(ROUTES.PROFILE_LEADER);
+    };
 
   const getCategoryStyle = (category: string) => {
     switch (category) {
@@ -267,7 +276,9 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                       />{" "}
                       Join Trip
                     </button>
-                    <button className="bg-[#1D4350] text-white text-xs px-1 py-1 cursor-pointer  hover:bg-[#173844] flex items-center justify-center h-8 w-27">
+                    <button 
+                    onClick={handleLeaderProfile}
+                    className="bg-[#1D4350] text-white text-xs px-1 py-1 cursor-pointer  hover:bg-[#173844] flex items-center justify-center h-8 w-26">
                       <Image
                         src={Profile}
                         alt="View Profile Icon"

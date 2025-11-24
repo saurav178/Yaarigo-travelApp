@@ -1,10 +1,4 @@
 
-
-<<<<<<< HEAD
-"use client";
-
-import { useEffect, useRef, useState } from "react";
-=======
 // "use client";
 
 // import { useEffect, useRef, useState } from "react";
@@ -147,7 +141,6 @@ import { useEffect, useRef, useState } from "react";
 
 import { useEffect, useRef, useState } from "react";
 import RoundButton from "./RoundButton";
->>>>>>> 63e90ead738cf5ea157132bf932819acaa4b2043
 
 interface DayPlan {
   title: string;
@@ -204,88 +197,6 @@ const DetailedItinerary = () => {
     }
   }, [activeStep]);
 
-<<<<<<< HEAD
-  return (
-    <section className="py-10 bg-white rounded-lg my-6 shadow-lg hover:shadow-2xl transition-all duration-300">
-      <div className="max-w-6xl mx-auto px-6">
-        <h2 className="text-xl font-bold mb-6">Detailed Itinerary</h2>
-
-        <div className="grid md:grid-cols-2 gap-12 items-start relative">
-          {/* TIMELINE */}
-          <div className="relative mt-6 md:mt-12">
-            {/* Main vertical line */}
-            <div className="absolute left-5 top-0 h-full w-[2px] bg-gray-300 rounded-full" />
-
-            {/* Moving blue indicator */}
-            <div
-              className="absolute left-[18px] w-[3px] bg-red rounded-full transition-all duration-500"
-              style={{ top: lineTop, height: lineHeight }}
-            />
-
-            {/* Steps */}
-          {/* Steps */}
-<div className="flex flex-col gap-12 ml-12 relative">
-  {itinerary.map((day, index) => (
-    <div
-      key={index}
-      ref={(el) => {
-        if (el) stepRefs.current[index] = el;
-      }}
-      className="relative"
-    >
-      {/* CONNECTOR LINE: dot ke center se next dot ke center tak */}
-      {index < itinerary.length - 1 && (
-        <div
-          className="absolute left-[15px] top-8 w-[2px] bg-red-500"
-          style={{ height: "190px" , marginLeft:"10px" }} // line length (adjust anytime)
-        ></div>
-      )}
-
-      <button
-        onClick={() => {
-          setActiveStep(index + 1);
-          setImageSrc(day.image);
-        }}
-        className="flex items-start gap-4 text-left w-full "
-      >
-        {/* Step circle */}
-        <div
-          className={`w-8 h-8 flex items-center justify-center rounded-full transition-all duration-300
-            ${activeStep === index + 1 ? "bg-red-500 text-white" : "bg-red-500 text-white"}
-          `}
-        >
-          {index + 1}
-        </div>
-
-        {/* Card */}
-        <div className="bg-white shadow-sm border rounded-xl p-4 w-full">
-          <h3 className="text-lg font-semibold text-gray-900">
-            Day {index + 1}: {day.title}
-          </h3>
-
-          <ul className="list-disc list-inside text-sm text-gray-700 mt-1">
-            {day.activities.map((activity, i) => (
-              <li key={i}>{activity}</li>
-            ))}
-          </ul>
-        </div>
-      </button>
-    </div>
-  ))}
-</div>
-
-          </div>
-
-          {/* IMAGE SECTION */}
-        <div className="flex justify-center mt-14">
-            <img
-              src={imageSrc}
-              alt="Day Image"
-              className="w-[350px] h-[350px] object-cover shadow-md transition-all duration-500" // Custom border radius removed
-            />
-          </div>
-        </div>
-=======
   const handleStepClick = (index: number) => {
     setActiveStep(index + 1);
     setImageSrc(itinerary[index].image);
@@ -299,11 +210,6 @@ const DetailedItinerary = () => {
        <div className="grid md:grid-cols-2 gap-12 items-start relative">
   {/* TIMELINE */}
   <div className="relative mt-6 md:mt-10">
-    {/* Active step line */}
-    <div
-      className="absolute left-4 w-[3px] bg-gray-300 transition-all duration-500"
-      style={{ top: lineTop, height: lineHeight }}
-    />
 
     <div className="flex flex-col gap-12 ml-10 relative">
       {itinerary.map((day, index) => (
@@ -352,24 +258,21 @@ const DetailedItinerary = () => {
     </div>
   </div>
 
-  {/* IMAGE SECTION */}
-  <div className="flex justify-center mt-14">
-    <img
-      src={imageSrc}
-      alt="Day Image"
-      className="w-[350px] h-[350px] object-cover shadow-md transition-transform duration-500 ease-in-out transform hover:scale-105"
-    />
-  </div>
+{/* IMAGE SECTION */}
+<div className="flex justify-center mt-14 overflow-hidden w-[350px] h-[350px]">
+  <img
+    src={imageSrc}
+    alt="Day Image"
+    className="w-full h-full object-cover transition-transform duration-500 ease-in-out transform hover:scale-105"
+  />
 </div>
 
->>>>>>> 63e90ead738cf5ea157132bf932819acaa4b2043
+
+</div>
+
       </div>
     </section>
   );
 };
 
-<<<<<<< HEAD
 export default DetailedItinerary;
-=======
-export default DetailedItinerary;
->>>>>>> 63e90ead738cf5ea157132bf932819acaa4b2043

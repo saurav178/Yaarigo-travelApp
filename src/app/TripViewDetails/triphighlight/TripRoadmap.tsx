@@ -62,11 +62,7 @@ const TripRoadmap = ({ itinerary = dummyData.itinerary }: TripRoadmapProps) => {
   if (!customIcon) return <p>Loading map...</p>;
 
   return (
-<<<<<<< HEAD
-    <div className="shadow-2xl rounded-xl p-5 bg-white shadow-sm transition-all duration-300">
-=======
     <div className="shadow-2xl p-5 bg-white shadow-sm transition-all duration-300">
->>>>>>> 63e90ead738cf5ea157132bf932819acaa4b2043
       <h2 className="text-lg font-semibold mb-3">Trip Roadmap</h2>
 
       <div className="h-80 w-full overflow-hidden border">
