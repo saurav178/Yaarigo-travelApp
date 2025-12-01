@@ -27,7 +27,7 @@ export default function ForgotPasswordForm() {
       <div className="glassmorphism-card">
         {/* Header */}
         <div className="text-center mb-5 animate-slideDown">
-          <div className="inline-block p-2.5 bg-gradient-to-r from-[#1D4350] to-[#A43931] rounded-full mb-3 animate-bounce-slow">
+          <div className="inline-block p-2.5 bg gradient-to-r from-[#1D4350] to-[#A43931] rounded-full mb-3 animate-bounce-slow">
             <svg
               className="w-5 h-5 text-white"
               fill="none"
@@ -42,10 +42,10 @@ export default function ForgotPasswordForm() {
               />
             </svg>
           </div>
-          <h2 className="text-xl font-bold bg-gradient-to-r from-[#1D4350] to-[#A43931] bg-clip-text text-transparent">
+          <h2 className="text-xl font-bold bg gradient-to-r from-[#1D4350] to-[#A43931] bg-clip-text text-transparent">
             Forgot Password
           </h2>
-          <p className="text-xs text-gray-600 mt-1">We'll send you a reset link</p>
+          <p className="text-xs text-gray-600 mt-1">We will send you a reset link</p>
         </div>
         
         {/* Form Content */}
@@ -67,7 +67,7 @@ export default function ForgotPasswordForm() {
                 onChange={(e) => setEmailOrPhone(e.target.value)}
               />
             </div>
-            <p className="text-xs text-gray-400 mt-1">We'll send a reset link to this email or phone</p>
+            <p className="text-xs text-gray-400 mt-1">We will send a reset link to this email or phone</p>
           </div>
 
           {/* Reset Password Button */}
