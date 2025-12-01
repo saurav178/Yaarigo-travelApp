@@ -1,5 +1,5 @@
 
-// // IdentityVerificationComponent
+// IdentityVerificationComponent
 
 // "use client";
 
@@ -980,6 +980,8 @@ export default function IdentityVerification() {
                               <Image
                                 src={u}
                                 alt={`preview-${i}`}
+                                height={0}
+                                width={0}
                                 className="h-32 w-full object-cover rounded-md shadow-sm"
                               />
                             </div>
