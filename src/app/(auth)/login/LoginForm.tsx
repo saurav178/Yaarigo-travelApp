@@ -197,6 +197,9 @@
 import { useState } from "react";
 import { useModal } from "@/context/ModalContext";
 
+import { ROUTES } from "../../../lib/routes";
+import { useRouter } from "next/navigation";
+
 export default function LoginForm() {
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -235,12 +238,18 @@ export default function LoginForm() {
     }
   };
 
+  const router = useRouter();
+
+  const handleVerification = () => {
+    router.push(ROUTES.VERIFICATION);
+  };
+
   return (
     <div className="w-full max-w-md mx-auto animate-fadeIn">
       {/* <div className="glassmorphism-card"> */}
         {/* Header with gradient animation */}
         <div className="text-center mb-5 animate-slideDown">
-          <div className="inline-block p-2.5 bg-gradient-to-r from-[#1D4350] to-[#A43931] rounded-full mb-3 animate-bounce-slow">
+          <div className="inline-block p-2.5 bg gradient-to-r from-[#1D4350] to-[#A43931] rounded-full mb-3 animate-bounce-slow">
             <svg
               className="w-5 h-5 text-white"
               fill="none"
@@ -255,7 +264,7 @@ export default function LoginForm() {
               />
             </svg>
           </div>
-          <h2 className="text-xl font-bold bg-gradient-to-r from-[#1D4350] to-[#A43931] bg-clip-text text-transparent">
+          <h2 className="text-xl font-bold bg gradient-to-r from-[#1D4350] to-[#A43931] bg-clip-text text-transparent">
             Welcome Back
           </h2>
           <p className="text-xs text-gray-600 mt-1">
@@ -396,8 +405,11 @@ export default function LoginForm() {
           </div>
 
           {/* Login Button */}
+
           <div className="animate-slideUp" style={{ animationDelay: "0.5s" }}>
             <button
+            onClick={handleVerification}
+
               type="submit"
               disabled={isLoading}
               className="btn-gradient group"
@@ -515,11 +527,11 @@ export default function LoginForm() {
             style={{ animationDelay: "0.8s" }}
           >
             <span className="text-xs text-gray-600">
-              Don't have an account?{" "}
+              Do not have an account?{" "}
               <button
                 type="button"
                 onClick={() => openModal("register")}
-                className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#1D4350] to-[#A43931] hover:from-[#A43931] hover:to-[#1D4350] transition-all duration-300 hover:scale-105 inline-block"
+                className="font-bold text-transparent bg-clip-text bg gradient-to-r from-[#1D4350] to-[#A43931] hover:from-[#A43931] hover:to-[#1D4350] transition-all duration-300 hover:scale-105 inline-block"
               >
                 Create Account
               </button>

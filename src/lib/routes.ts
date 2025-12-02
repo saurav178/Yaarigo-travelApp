@@ -5,4 +5,6 @@ export const ROUTES = {
   USER_PROFILE: "/profile",
   PROFILE_LEADER: "/leaderProfile",
   LOGIN: "/auth/login",
+  VERIFICATION : "/verification",
+  BACKLOGIN : "/login"
 };

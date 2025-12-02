@@ -6,6 +6,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import DocumentFields from "./DocumentFields";
 import { BsUpload } from "react-icons/bs";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "../../../lib/routes";
 
 type Mode = "pdf" | "image" | null;
 
@@ -133,12 +135,21 @@ export default function IdentityVerification() {
     alert(`Submitting ${docType || "(no document type)"} with file(s): ${names || "(none)"}`);
   }
 
+  const router = useRouter();
+
+  const handleBackLogin = () => {
+    router.push(ROUTES.BACKLOGIN);
+  };
+
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4 mt-10">
       <div className="w-full max-w-4xl">
         {/* HEADER */}
         <div className="flex items-center gap-4 mb-6">
-          <button className="flex items-center gap-2 cursor-pointer bg-transparent text-gray-700 hover:bg-[#E8F1F1] ml-10">
+          <button 
+          type="submit"
+          onClick={handleBackLogin}
+          className="flex items-center gap-2 cursor-pointer bg-transparent text-gray-700 hover:bg-[#E8F1F1] ml-10">
             <span className="text-2xl">←</span>
             <span className="hidden sm:inline">Back</span>
           </button>
