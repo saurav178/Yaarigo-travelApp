@@ -531,8 +531,7 @@ export default function LoginForm() {
               <button
                 type="button"
                 onClick={() => openModal("register")}
-                className="font-bold text-transparent bg-clip-text bg gradient-to-r from-[#1D4350] to-[#A43931] hover:from-[#A43931] hover:to-[#1D4350] transition-all duration-300 hover:scale-105 inline-block"
-              >
+                className="font-bold text-transparent bg-clip-text bg gradient-to-r from-[#1D4350] to-[#A43931] hover:from-[#A43931] hover:to-[#1D4350] transition-all duration-300 hover:scale-105 inline-block"           >
                 Create Account
               </button>
             </span>
