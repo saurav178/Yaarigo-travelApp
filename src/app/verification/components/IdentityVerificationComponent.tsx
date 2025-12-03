@@ -8,6 +8,7 @@ import { BsUpload } from "react-icons/bs";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "../../../lib/routes";
+// import { ArrowLeft } from "lucide-react";
 
 type Mode = "pdf" | "image" | null;
 
@@ -141,25 +142,53 @@ export default function IdentityVerification() {
     router.push(ROUTES.BACKLOGIN);
   };
 
+  const handleProfileSetup = () => {
+    router.push(ROUTES.PROFILESETUP);
+  };
+
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4 mt-10">
       <div className="w-full max-w-4xl">
         {/* HEADER */}
-        <div className="flex items-center gap-4 mb-6">
-          <button 
-          type="submit"
+
+        <div className="w-full max-w-3xl mt-14 mb-4">
+        <button
           onClick={handleBackLogin}
-          className="flex items-center gap-2 cursor-pointer bg-transparent text-gray-700 hover:bg-[#E8F1F1] ml-10">
-            <span className="text-2xl">←</span>
-            <span className="hidden sm:inline">Back</span>
-          </button>
-          <div className="flex-1 mt-15">
-            <div className="h-3 rounded-full bg-[#E8F1F2]">
-              <div className="h-3 rounded-full bg-[#1d4350] w-1/3" />
-            </div>
-            <div className="text-xs text-gray-500 mt-1">Step 2 of 5</div>
+          className="flex items-center text-gray-700 gap-2 text-sm mb-4 cursor-pointer"
+        >
+          ← Back
+        </button>
+        <div className="w-full">
+          <div className="w-full h-2 rounded-full overflow-hidden bg-blue-400">
+            <div className="w-full h-full rounded-full" style={{
+                width: "40%",
+                background: "linear-gradient(90deg, #1D4350 0%, #1D4350 40%, #3b97f3ff 100%)"}}></div>
           </div>
+          <p className="text-gray-400 text-xs mt-2">Step 2 of 5</p>
         </div>
+      </div>
+
+      {/* <div className="w-full">
+  <div className="h-2 rounded-full overflow-hidden bg-gray-200">
+    <div
+      className="h-full rounded-full transition-all duration-500"
+      style={{
+        width: `${progress}%`, // 40%
+        background: "linear-gradient(90deg, #1D4350 0%, #3b97f3ff 100%)",
+      }}
+    />
+  </div>
+
+  <div className="flex items-center justify-between mt-2">
+    <p className="text-gray-400 text-xs">
+      Step {CURRENT_STEP} of {TOTAL_STEPS}
+    </p>
+    <span className="text-gray-500 text-xs">{progress}%</span>
+  </div>
+</div> */}
+
+
+    
 
         {/* FORM */}
         <form onSubmit={onSubmit} className="bg-white rounded-lg p-4 md:p-8 shadow-sm">
@@ -367,6 +396,7 @@ export default function IdentityVerification() {
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
             <button
               type="submit"
+              onClick={handleProfileSetup}
               className="flex-1 bg-[#1D4350] hover:bg-[#173844] text-white px-4 py-2 text-sm cursor-pointer"
             >
               Continue
