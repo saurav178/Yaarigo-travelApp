@@ -408,6 +408,10 @@
 import { useState } from "react";
 import { useModal } from "@/context/ModalContext";
 
+import { ROUTES } from "../../../lib/routes";
+import { useRouter } from "next/navigation";
+
+
 export default function RegisterForm() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -454,9 +458,16 @@ export default function RegisterForm() {
     }
   };
 
+
+   const router = useRouter();
+
+  const handleVerification = () => {
+    router.push(ROUTES.VERIFICATION);
+  };
+
   return (
     <>
-      <div className="w-full max-w-md mx-auto animate-fadeIn relative">
+      <div className="w-full max-w-md mx-auto animate-fadeIn relative mt-22">
         <div className="glassmorphism-card">
           {/* Header */}
           <div className="text-center mb-5 animate-slideDown">
@@ -590,6 +601,7 @@ export default function RegisterForm() {
             >
               <button
                 type="submit"
+                onClick={handleVerification}
                 disabled={isLoading}
                 className="btn-gradient group w-full"
               >
