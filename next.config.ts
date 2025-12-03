@@ -15,28 +15,19 @@
 
 // export default nextConfig;
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
-      // Main Unsplash domain
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-      },
-      // Unsplash “plus” premium domain (your failing one)
-      {
-        protocol: "https",
-        hostname: "plus.unsplash.com",
-      },
-      // Fallbacks (used by getPosts for dynamic images)
-      {
-        protocol: "https",
-        hostname: "source.unsplash.com",
-      },
+      { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "plus.unsplash.com" },
+      { protocol: "https", hostname: "source.unsplash.com" },
+      { protocol: "https", hostname: "i.pravatar.cc" },
+      { protocol: "https", hostname: "ui-avatars.com" },
     ],
   },
 };
 
 export default nextConfig;
-
