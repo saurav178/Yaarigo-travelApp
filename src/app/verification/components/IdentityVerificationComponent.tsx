@@ -167,29 +167,7 @@ export default function IdentityVerification() {
           <p className="text-gray-400 text-xs mt-2">Step 2 of 5</p>
         </div>
       </div>
-
-      {/* <div className="w-full">
-  <div className="h-2 rounded-full overflow-hidden bg-gray-200">
-    <div
-      className="h-full rounded-full transition-all duration-500"
-      style={{
-        width: `${progress}%`, // 40%
-        background: "linear-gradient(90deg, #1D4350 0%, #3b97f3ff 100%)",
-      }}
-    />
-  </div>
-
-  <div className="flex items-center justify-between mt-2">
-    <p className="text-gray-400 text-xs">
-      Step {CURRENT_STEP} of {TOTAL_STEPS}
-    </p>
-    <span className="text-gray-500 text-xs">{progress}%</span>
-  </div>
-</div> */}
-
-
-    
-
+ 
         {/* FORM */}
         <form onSubmit={onSubmit} className="bg-white rounded-lg p-4 md:p-8 shadow-sm">
           <h2 className="text-lg font-semibold mb-1">Identity Verification</h2>

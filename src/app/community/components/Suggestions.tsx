@@ -16,12 +16,12 @@ export default function Suggestions() {
     </h3>
 
     <ul className="space-y-3 text-sm text-neutral-700">
-      <li className="hover:text-orange-600 cursor-pointer transition">🏕️ Budget backpacking in Vietnam</li>
-      <li className="hover:text-orange-600 cursor-pointer transition">🧭 Solo female travel tips</li>
-      <li className="hover:text-orange-600 cursor-pointer transition">🌤️ Best time to visit Moscow</li>
-      <li className="hover:text-orange-600 cursor-pointer transition">📖 Travel Stories / Journals</li>
-      <li className="hover:text-orange-600 cursor-pointer transition">💬 Discussion Forums</li>
-      <li className="hover:text-orange-600 cursor-pointer transition">🎉 Events / Meetups</li>
+      <li className="hover:text-[#3b97f3ff] cursor-pointer transition">🏕️ Budget backpacking in Vietnam</li>
+      <li className="hover:text-[#3b97f3ff] cursor-pointer transition">🧭 Solo female travel tips</li>
+      <li className="hover:text-[#3b97f3ff] cursor-pointer transition">🌤️ Best time to visit Moscow</li>
+      <li className="hover:text-[#3b97f3ff] cursor-pointer transition">📖 Travel Stories / Journals</li>
+      <li className="hover:text-[#3b97f3ff] cursor-pointer transition">💬 Discussion Forums</li>
+      <li className="hover:text-[#3b97f3ff] cursor-pointer transition">🎉 Events / Meetups</li>
     </ul>
 
     <div className="mt-5 border-t border-neutral-200 pt-4">
@@ -29,10 +29,10 @@ export default function Suggestions() {
         🤖 AI Enhancements
       </h4>
       <ul className="list-disc pl-5 text-sm text-neutral-700 space-y-1">
-        <li>Spam filtering & moderation</li>
-        <li>Story summarization</li>
-        <li>Personalized feed</li>
-        <li>“Ask a Local” feature</li>
+        <li className="cursor-pointer hover:text-[#3b97f3ff]">Spam filtering & moderation</li>
+        <li className="cursor-pointer hover:text-[#3b97f3ff]">Story summarization</li>
+        <li className="cursor-pointer hover:text-[#3b97f3ff]">Personalized feed</li>
+        <li className="cursor-pointer hover:text-[#3b97f3ff]">“Ask a Local” feature</li>
       </ul>
     </div>
 
@@ -41,9 +41,9 @@ export default function Suggestions() {
         🏆 Gamification
       </h4>
       <ul className="list-disc pl-5 text-sm text-neutral-700 space-y-1">
-        <li>Badges</li>
-        <li>Leaderboards</li>
-        <li>Challenges</li>
+        <li className="cursor-pointer hover:text-[#3b97f3ff]">Badges</li>
+        <li className="cursor-pointer hover:text-[#3b97f3ff]">Leaderboards</li>
+        <li className="cursor-pointer hover:text-[#3b97f3ff]">Challenges</li>
       </ul>
     </div>
   </div>

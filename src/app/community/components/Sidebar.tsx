@@ -112,7 +112,7 @@ export default function Sidebar() {
                 key={t.key}
                 onClick={() => go(t.key)}
                 className={[
-                  "w-full flex items-center justify-between px-4 py-3 transition border cursor-pointer rounded-md",
+                  "w-full flex items-center justify-between px-4 py-3 transition border cursor-pointer ",
                   t.hover,
                   t.border,
                   isActive
@@ -153,7 +153,7 @@ export default function Sidebar() {
             <h3 className="text-lg font-semibold text-neutral-800 flex items-center gap-2">
               🧭 Your Journey
             </h3>
-            <span className="px-3 py-1 text-sm font-medium text-white bg-linear-to-r from-orange-500 to-pink-500 rounded-full shadow-sm">
+            <span className="px-3 py-1 text-sm font-medium text-white bg-[#1D4350] rounded-full shadow-sm">
               Level 7
             </span>
           </div>
@@ -173,7 +173,8 @@ export default function Sidebar() {
             </div>
 
             <div className="mt-3 h-2 bg-neutral-200 rounded-full overflow-hidden">
-              <div className="h-full bg-linear-to-r from-orange-400 to-pink-500 w-[46%]" />
+              <div className=" h-full bg-linear-to-r from-[#1D4350] w-[70%] to-[#3b97f3ff] " />
+              {/* //className="h-full bg-linear-to-r from-[#1D4350] w-[70%] to-[#3b97f3ff]  */}
             </div>
           </div>
 

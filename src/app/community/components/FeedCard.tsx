@@ -56,7 +56,7 @@ export default function FeedCard({ post }: { post: Post }) {
         <div className="flex-1">
           <div className="flex items-center justify-between mb-2">
             <div className="text-sm text-neutral-600">
-              <span className="font-medium text-neutral-800">{post.author}</span> •{' '}
+              <span className=" font-bold text-base text-neutral-800 ">{post.author}</span> •{' '}
               <span className="capitalize">{post.location}</span> • {post.timeAgo}
             </div>
             <button className="text-neutral-400 hover:text-neutral-700 transition" aria-label="Bookmark">
@@ -81,8 +81,8 @@ export default function FeedCard({ post }: { post: Post }) {
           <div className="mt-4 flex items-center gap-5 text-sm text-neutral-600">
             <button
               onClick={handleLike}
-              className={`transition flex items-center gap-1 ${
-                liked ? 'text-red-600' : 'hover:text-orange-600'
+              className={`transition flex items-center gap-1  ${
+                liked ? 'text-red-600 cursor-pointer' : 'hover:text-orange-600 cursor-pointer'
               }`}
             >
               {liked ? '❤️ Liked' : '🤍 Like'} ({likeCount})
@@ -90,14 +90,14 @@ export default function FeedCard({ post }: { post: Post }) {
 
             <button
               onClick={handleComment}
-              className="hover:text-blue-600 transition flex items-center gap-1"
+              className="hover:text-blue-600 transition flex items-center gap-1 cursor-pointer"
             >
               💬 Comment
             </button>
 
             <button
               onClick={handleShare}
-              className="hover:text-green-600 transition flex items-center gap-1"
+              className="hover:text-green-600 transition flex items-center gap-1 cursor-pointer"
             >
               🔗 Share
             </button>
