@@ -50,7 +50,7 @@ export default function FeedCard({ post }: { post: Post }) {
   };
 
   return (
-    <article className="bg-white border border-neutral-200 p-5 shadow-soft hover:shadow-md transition-all duration-200 rounded-xl">
+    <article className="bg-white border border-neutral-200 p-5 shadow-soft hover:shadow-md transition-all duration-200">
       <div className="flex items-start justify-between gap-4">
         {/* Text */}
         <div className="flex-1">
@@ -105,7 +105,7 @@ export default function FeedCard({ post }: { post: Post }) {
         </div>
 
         {/* Image */}
-        <div className="relative w-44 h-32 overflow-hidden border border-neutral-200 bg-neutral-100 rounded-lg flex items-center justify-center">
+        <div className="relative w-44 h-32 overflow-hidden border border-neutral-200 bg-neutral-100  flex items-center justify-center">
           {post.imageUrl ? (
             <Image
               src={post.imageUrl}
