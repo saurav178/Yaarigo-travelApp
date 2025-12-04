@@ -3,11 +3,11 @@
 export default function Suggestions() {
   return (
 
-    <aside className="bg-white border border-neutral-200 shadow-soft  p-5 sticky top-5 mt-5" >
+    <aside className="bg-white border border-neutral-200 shadow-soft  p-5 sticky top-33 mt-15" >
   {/* Create Button */}
-  <button className="w-full mb-5 py-3 border-2 border-dashed border-orange-300 text-orange-600 font-semibold text-base hover:bg-orange-50 transition-all">
+  {/* <button className="w-full mb-5 py-3 border-2 border-dashed border-orange-300 text-orange-600 font-semibold text-base hover:bg-orange-50 transition-all">
     + Create
-  </button>
+  </button> */}
 
   {/* Smart Suggestions Section */}
   <div className="bg-neutral-50 border border-neutral-200  p-5">
