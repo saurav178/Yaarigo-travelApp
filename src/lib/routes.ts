@@ -8,4 +8,7 @@ export const ROUTES = {
   VERIFICATION : "/verification",
   BACKLOGIN : "/register",
   PROFILESETUP : "/profilesetup",
+  DASHBOARD : "/dashboard",
+  USERPROFILE : "/userProfile",
+
 };
