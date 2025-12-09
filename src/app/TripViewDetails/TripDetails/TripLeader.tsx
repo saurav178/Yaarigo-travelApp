@@ -1,15 +1,14 @@
- 
 "use client";
- 
+
 interface LeaderProps {
   leader: any;
 }
- 
+
 export default function TripLeader({ leader }: LeaderProps) {
   return (
-<div className=" p-6 bg-white w-full shadow-lg hover:shadow-2xl transition-all duration-300">
+    <div className=" p-6 bg-white w-full shadow-lg hover:shadow-2xl transition-all duration-300">
       <h3 className="text-md font-semibold">Hosted By</h3>
- 
+
       <div className="flex items-center gap-3">
         <img
           src={leader.photoUrl}
@@ -23,10 +22,8 @@ export default function TripLeader({ leader }: LeaderProps) {
           </p>
         </div>
       </div>
- 
+
       <p className="text-sm text-gray-600">{leader.bio}</p>
     </div>
   );
 }
- 
- 

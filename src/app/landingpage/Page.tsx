@@ -8,6 +8,7 @@ import HowItWorksSection from "./HowItWorksSection";
 import SafetyTrustSection from "./SafetyTrustSection";
 import CommunitySection from "./CommunitySection";
 import Loader from "@/components/Loader/Loader";
+import AuthModal from "@/components/Modal/AuthModal"; 
 
 export default function LandingPage() {
   const [isVisible, setIsVisible] = useState(false);
@@ -28,24 +29,29 @@ export default function LandingPage() {
   }
 
   return (
-    <main className="flex flex-col">
-      {/* ================= Hero Section ================= */}
-      <HeroSection />
+    <>
+      <main className="flex flex-col">
+        {/* ================= Hero Section ================= */}
+        <HeroSection />
 
-      {/* ================= Key Features Section ================= */}
-      <KeyFeaturesSection isVisible={isVisible} setIsVisible={setIsVisible} />
+        {/* ================= Key Features Section ================= */}
+        <KeyFeaturesSection isVisible={isVisible} setIsVisible={setIsVisible} />
 
-      {/* ================= Why Choose Travio Section ================= */}
-      <WhyChooseSection isVisible={isVisible} setIsVisible={setIsVisible} />
+        {/* ================= Why Choose Travio Section ================= */}
+        <WhyChooseSection isVisible={isVisible} setIsVisible={setIsVisible} />
 
-      {/* ================= How it Works Section ================= */}
-      <HowItWorksSection isVisible={isVisible} setIsVisible={setIsVisible} />
+        {/* ================= How it Works Section ================= */}
+        <HowItWorksSection isVisible={isVisible} setIsVisible={setIsVisible} />
 
-      {/* ================= Safety & Trust Section ================= */}
-      <SafetyTrustSection />
+        {/* ================= Safety & Trust Section ================= */}
+        <SafetyTrustSection />
 
-      {/* ================= Join Our Global Community Section ================= */}
-      <CommunitySection isVisible={isVisible} setIsVisible={setIsVisible} />
-    </main>
+        {/* ================= Join Our Global Community Section ================= */}
+        <CommunitySection isVisible={isVisible} setIsVisible={setIsVisible} />
+      </main>
+
+      {/* ================= Auth Modal ================= */}
+      <AuthModal />
+    </>
   );
 }

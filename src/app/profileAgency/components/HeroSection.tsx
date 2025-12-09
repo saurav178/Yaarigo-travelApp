@@ -157,6 +157,62 @@ export default function HeroSection({ hero }: HeroSectionProps) {
                   {hero.category}
                 </span>
               )}
+<<<<<<< HEAD
+
+              {/* Location */}
+              <div className="flex items-center gap-1 text-gray-500 text-sm mt-1">
+                <MapPin className="w-4 h-4" />
+                <span>{hero.location}</span>
+              </div>
+
+              {/* Safety score + Rating inline */}
+              <div className="flex items-center gap-3 mt-2">
+                <div
+                  className={`px-2 py-0.5 rounded-2xl ${bgColor} ${textColor} text-xs`}
+                >
+                  {safety}% Safe
+                </div>
+                {hero.rating && (
+                  <div className="flex items-center gap-1 text-gray-500 text-sm">
+                    {/* CUSTOM FILLED STAR */}
+                    <div className="relative w-4 h-4">
+                      {/* Gray empty star */}
+                      <svg
+                        className="w-4 h-4 text-gray-300 absolute top-0 left-0"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                      </svg>
+
+                      {/* Yellow filled star based on rating */}
+                      <div
+                        className="absolute top-0 left-0 overflow-hidden"
+                        style={{ width: `${(hero.rating / 5) * 100}%` }}
+                      >
+                        <svg
+                          className="w-4 h-4 text-yellow-400 fill-yellow-400"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                        </svg>
+                      </div>
+                    </div>
+
+                    <span>
+                      {hero.rating} ({hero.reviews})
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="flex gap-2 mt-4">
+            <button className="bg-[#1D4350] hover:bg-[#173844] text-white px-8 py-3 text-xs font-medium transition cursor-pointer">
+              Contact
+=======
             </div>
           </div>
 
@@ -174,6 +230,7 @@ export default function HeroSection({ hero }: HeroSectionProps) {
                 className="filter invert"
               />
               {isFollowing ? "Following" : "Follow"}
+>>>>>>> 63e90ead738cf5ea157132bf932819acaa4b2043
             </button>
 
             <button className="flex items-center justify-center gap-2 px-4 py-2 text-white bg-[#1D4350] hover:bg-[#0f2a35] hover:scale-105 transition-transform duration-200 w-full sm:w-auto cursor-pointer">

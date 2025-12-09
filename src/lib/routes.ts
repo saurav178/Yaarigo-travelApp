@@ -4,4 +4,11 @@ export const ROUTES = {
   VIEW_PROFILE: "/profileAgency",
   USER_PROFILE: "/profile",
   PROFILE_LEADER: "/leaderProfile",
+  LOGIN: "/auth/login",
+  VERIFICATION : "/verification",
+  BACKLOGIN : "/register",
+  PROFILESETUP : "/profilesetup",
+  DASHBOARD : "/dashboard",
+  USERPROFILE : "/userProfile",
+
 };

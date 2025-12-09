@@ -2,11 +2,14 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useModal } from '@/context/ModalContext'; // Add this import
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const { openModal } = useModal(); // Add this hook
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,7 +19,17 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const isHeroPage = pathname === "/" || pathname === "/landing-page";
+  const isHeroPage = pathname === "/" || pathname === "/landingpage";
+
+  // Update handleLogin to use modal
+  const handleLogin = () => {
+    openModal('login'); // Open login modal instead of navigating
+  };
+
+  // Add handleSignUp for the signup button
+  const handleSignUp = () => {
+    openModal('register'); // Open register modal
+  };
 
   return (
     <header
@@ -27,6 +40,7 @@ export default function Header() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        
         {/* Logo */}
         <Link
           href="/"
@@ -47,31 +61,26 @@ export default function Header() {
               : "text-gray-800"
           }`}
         >
-          <Link href="/my-trips" className="hover:text-[#1DA69B] transition">
-            About Us
-          </Link>
-          <Link href="/explore" className="hover:text-[#1DA69B] transition">
-            Explore Trips
-          </Link>
-          {/* <Link href="/nearby" className="hover:text-red-500 transition">
-            Nearby Essentials
-          </Link> */}
-          <Link href="/community" className="hover:text-[#1DA69B] transition">
-            How it Works
-          </Link>
+          <Link href="/my-trips">About Us</Link>
+          <Link href="/explore">Explore Trips</Link>
+          <Link href="/community">How it Works</Link>
         </nav>
 
-        {/* Login Button */}
-        <Link
-          href="/login"
-          className={`text-sm px-4 py-2 rounded-full shadow-md transition font-semibold ${
-            isHeroPage && !isScrolled
-              ? "bg-white text-[#0073B9] hover:bg-gray-100"
-              : "bg-[#1D4350] hover:bg-[#1DA69B] text-white"
-          }`}
-        >
-          Log In
-        </Link>
+        {/* Auth Buttons */}
+        <div className="flex items-center space-x-3">
+          {/* Login Button */}
+          <button
+            onClick={handleLogin}
+            className={`text-sm px-4 py-2 rounded-full shadow-md transition font-semibold ${
+              isHeroPage && !isScrolled
+                ? "bg-white text-[#0073B9] hover:bg-gray-100"
+                : "bg-[#1D4350] hover:bg-[#1DA69B] text-white"
+            }`}
+          >
+            Log In
+          </button>
+          
+        </div>
       </div>
     </header>
   );
