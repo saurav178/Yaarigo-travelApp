@@ -5,4 +5,3 @@ export const ROUTES = {
   USER_PROFILE: "/profile",
   PROFILE_LEADER: "/leaderProfile",
 };
-
