@@ -31,7 +31,7 @@ export async function POST(request: Request) {
         userId: 'jane-cooper'
       }
     });
-  } catch (error) {
+  } catch (_error: unknown){
     return NextResponse.json(
       { success: false, error: 'Failed to send message' },
       { status: 500 }
