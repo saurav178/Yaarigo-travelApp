@@ -1,9 +1,6 @@
 import { NextResponse } from 'next/server';
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const agencyId = searchParams.get('agencyId');
-
+export async function GET() {
   const trips = [
     {
       id: 1,

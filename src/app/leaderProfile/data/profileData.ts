@@ -90,7 +90,7 @@ export const upcomingTrips = [
     date: "Mar 10 - Mar 17, 2026",
     travelers: 2,
     image:
-      "https://images.unsplash.com/photo-1502602898536-47ad22581b52?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=180&q=80",
+      "https://images.unsplash.com/photo-1539635278303-d4002c07eae3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=180&q=80",
     avatars: [
       "https://images.unsplash.com/photo-1520813792240-56fc4a3765a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80",
       "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80",
@@ -162,7 +162,7 @@ export const pastTrips = [
     date: "Mar 5 - Mar 12, 2025",
     travelers: 2,
     image:
-      "https://images.unsplash.com/photo-1502602898536-47ad22581b52?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=180&q=80",
+     "https://images.unsplash.com/photo-1539635278303-d4002c07eae3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=180&q=80",
     avatars: [
       "https://images.unsplash.com/photo-1520813792240-56fc4a3765a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80",
       "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=30&h=30&q=80",

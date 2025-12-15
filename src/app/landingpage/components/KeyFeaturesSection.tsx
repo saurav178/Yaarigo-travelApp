@@ -1,14 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
 
 interface KeyFeaturesSectionProps {
   isVisible: boolean;
   setIsVisible: (visible: boolean) => void;
 }
 
-export default function KeyFeaturesSection({ isVisible, setIsVisible }: KeyFeaturesSectionProps) {
+export default function KeyFeaturesSection({
+  isVisible,
+  setIsVisible,
+}: KeyFeaturesSectionProps) {
   return (
     <section
       className="py-12 bg-white"
@@ -48,8 +50,8 @@ export default function KeyFeaturesSection({ isVisible, setIsVisible }: KeyFeatu
                   AI Trip Planner
                 </h3>
                 <p className="text-gray-600 text-sm leading-relaxed">
-                  Personalized itineraries based on your preferences, time,
-                  and budget — crafted intelligently for every journey.
+                  Personalized itineraries based on your preferences, time, and
+                  budget — crafted intelligently for every journey.
                 </p>
               </div>
             </div>
@@ -130,8 +132,7 @@ export default function KeyFeaturesSection({ isVisible, setIsVisible }: KeyFeatu
               { src: "/images/img4.jpg", alt: "Trip 4" },
             ].map((img, i) => {
               let cornerClass = "";
-              if (i === 0)
-                cornerClass = "rounded-tr-[30px] rounded-bl-[30px]";
+              if (i === 0) cornerClass = "rounded-tr-[30px] rounded-bl-[30px]";
               else if (i === 1)
                 cornerClass = "rounded-tl-[30px] rounded-br-[30px]";
               else if (i === 2)

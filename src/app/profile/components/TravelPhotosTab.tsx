@@ -16,7 +16,7 @@ export default function TravelPhotosTab() {
   };
 
   const closeZoom = () => {
-    setSelectedPhoto(null);
+    setSelectedPhoto(null); 
   };
 
   return (

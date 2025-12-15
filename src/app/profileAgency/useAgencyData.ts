@@ -1,7 +1,28 @@
 import { useEffect, useState } from "react";
 
+interface Agency {
+  logo?: string;
+  image?: string;
+  name: string;
+  rating?: number;
+  trips?: number;
+}
+
+interface AgencyData {
+  hero?: unknown;
+  stats?: unknown;
+  about?: unknown;
+  upcomingTrips?: unknown[];
+  pastTrips?: unknown[];
+  reviews?: unknown[];
+  travelPhotos?: string[];
+  similarAgencies?: Agency[];
+  contactInfo?: unknown;
+  trustSafety?: unknown[];
+}
+
 export default function useAgencyData() {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<AgencyData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

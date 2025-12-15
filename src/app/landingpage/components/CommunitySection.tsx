@@ -37,7 +37,7 @@ export default function CommunitySection({
           </h2>
 
           <p className="text-gray-500 mt-2 text-sm md:text-base">
-            Hear from travelers who've found their perfect travel companions
+            Hear from travelers who have found their perfect travel companions
           </p>
         </div>
 
@@ -47,28 +47,28 @@ export default function CommunitySection({
             {
               name: "Sarah Chen",
               location: "Tokyo, Japan",
-              text: "I found the perfect travel buddy for my Southeast Asia trip! We had similar interests and it made the journey unforgettable.",
+              text: `I found the perfect travel buddy for my Southeast Asia trip! We had similar interests and it made the journey unforgettable.`,
               initials: "SC",
               gradient: "from-blue-500 to-cyan-500",
             },
             {
               name: "Marcus Rodriguez",
               location: "Barcelona, Spain",
-              text: "The AI matching is incredible. Every person I connected with was genuinely compatible with my travel style.",
+              text: `The AI matching is incredible. Every person I connected with was genuinely compatible with my travel style.`,
               initials: "MR",
               gradient: "from-emerald-500 to-teal-500",
             },
             {
               name: "Emma Wilson",
               location: "New York, USA",
-              text: "Safety features gave me peace of mind. I felt secure meeting new people and exploring together.",
+              text: `Safety features gave me peace of mind. I felt secure meeting new people and exploring together.`,
               initials: "EW",
               gradient: "from-emerald-500 to-teal-500",
             },
             {
               name: "Raj Patel",
               location: "Mumbai, India",
-              text: "Made lifelong friends through Travio. Now we're planning our third trip together awesome!",
+              text: `Made lifelong friends through Travio. Now we are planning our third trip together, awesome!`,
               initials: "RP",
               gradient: "from-blue-500 to-cyan-500",
             },
@@ -78,8 +78,7 @@ export default function CommunitySection({
               <div
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"
                 style={{
-                  backgroundImage:
-                    "linear-gradient(to bottom right, cyan, #1D4350)",
+                  backgroundImage: "linear-gradient(to bottom right, cyan, #1D4350)",
                 }}
               ></div>
 
@@ -98,9 +97,7 @@ export default function CommunitySection({
                     {review.initials}
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-bold text-gray-900 text-sm">
-                      {review.name}
-                    </h4>
+                    <h4 className="font-bold text-gray-900 text-sm">{review.name}</h4>
                     <p className="text-gray-500 text-xs flex items-center gap-1.5 mt-0.5">
                       <svg
                         className="w-3.5 h-3.5"
@@ -120,7 +117,7 @@ export default function CommunitySection({
                   {/* Stars in header */}
                   <div className="flex gap-0.5">
                     {Array(5)
-                      .fill(null) //changes
+                      .fill(null)
                       .map((_, idx) => (
                         <svg
                           key={idx}
@@ -145,9 +142,7 @@ export default function CommunitySection({
                 </svg>
 
                 {/* Review Text */}
-                <p className="text-gray-700 text-sm leading-relaxed italic">
-                  "{review.text}"
-                </p>
+                <p className="text-gray-700 text-sm leading-relaxed italic">{review.text}</p>
 
                 {/* Decorative bottom accent */}
                 <div
@@ -187,16 +182,10 @@ export default function CommunitySection({
                   >
                     {stat.value}
                   </h3>
-                  <p className="text-gray-600 text-xs md:text-sm mt-2 font-medium">
-                    {stat.label}
-                  </p>
-                  {/* Animated underline - THIS WAS MISSING */}
+                  <p className="text-gray-600 text-xs md:text-sm mt-2 font-medium">{stat.label}</p>
                   <div
                     className="h-1 w-0 group-hover:w-full mx-auto mt-2 rounded-full transition-all duration-500"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(to right, cyan, #1D4350)",
-                    }}
+                    style={{ backgroundImage: "linear-gradient(to right, cyan, #1D4350)" }}
                   ></div>
                 </div>
               ))}
@@ -207,8 +196,7 @@ export default function CommunitySection({
 
       <style jsx>{`
         @keyframes blob {
-          0%,
-          100% {
+          0%, 100% {
             transform: translate(0, 0) scale(1);
           }
           33% {

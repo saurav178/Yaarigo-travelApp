@@ -1,10 +1,10 @@
 "use client";
-import DashboardHeader from "./DashboardHeader";
-import Banner from "./Banner";
-import StatsCards from "./StatsCards";
-import QuickActions from "./QuickActions";
-import RecommendedSection from "./RecommendedSection";
-import RecentTrips from "./RecentTrips";
+import DashboardHeader from "./components/DashboardHeader";
+import Banner from "./components/Banner";
+import StatsCards from "./components/StatsCards";
+import QuickActions from "./components/QuickActions";
+import RecommendedSection from "./components/RecommendedSection";
+import RecentTrips from "./components/RecentTrips";
 export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">

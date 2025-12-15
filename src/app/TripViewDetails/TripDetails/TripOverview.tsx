@@ -1,19 +1,34 @@
 "use client";
+import Image from "next/image";
 
 import {
   CalendarDays,
   Wallet,
-  Users,
-  Users2,
   Car,
   Globe,
-  Handshake,
-  Utensils,
-  Clock,
 } from "lucide-react";
 
+interface Trip {
+  title: string;
+  description: string;
+  from: string;
+  startDate: string;
+  endDate: string;
+  budget: number;
+  joinedTravelers: number;
+  maxTravelers: number;
+  groupSize: string;
+  tripStyle: string;
+  travelStyle: string;
+  duration: string;
+  languages: string[];
+  splitCost: boolean;
+  lookingFor: string;
+  foodPreference: string;
+}
+
 interface TripProps {
-  trip: any;
+  trip: Trip;
 }
 
 export default function TripOverview({ trip }: TripProps) {
@@ -24,11 +39,13 @@ export default function TripOverview({ trip }: TripProps) {
       <p className="text-sm text-gray-600 mb-6">{trip.description}</p>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6 text-sm justify-center">
-        <div className="bg-gray-100 p-3 flex flex-col justify-between  max-w-[180px] mx-auto">
+        <div className="bg-gray-100 p-3 flex flex-col justify-between max-w-[180px] mx-auto">
           <div className="flex items-center gap-2 text-black">
-            <img
+            <Image
               src="/icon/ic_baseline-route.png"
               alt="route icon"
+              width={20}
+              height={20}
               className="w-5 h-5 object-contain"
             />
             <p className="text-gray-700 font-semibold">Route</p>
@@ -48,9 +65,11 @@ export default function TripOverview({ trip }: TripProps) {
 
         <div className="bg-gray-100 p-3 flex flex-col justify-between max-w-[180px] mx-auto">
           <div className="flex items-center gap-2 text-black">
-            <img
+            <Image
               src="/icon/iconoir_wallet-solid.png"
               alt="budget icon"
+              width={20}
+              height={20}
               className="w-5 h-5 object-contain"
             />
             <p className="text-gray-700 font-semibold">Budget</p>
@@ -62,9 +81,11 @@ export default function TripOverview({ trip }: TripProps) {
 
         <div className="bg-gray-100 p-3 flex flex-col justify-between shadow-sm max-w-[180px] mx-auto">
           <div className="flex items-center gap-2 text-black">
-            <img
+            <Image
               src="/icon/ix_user-management-filled.png"
               alt="travelers icon"
+              width={20}
+              height={20}
               className="w-5 h-5 object-contain"
             />
             <p className="text-gray-700 font-semibold">Travelers</p>
@@ -78,11 +99,13 @@ export default function TripOverview({ trip }: TripProps) {
       {/* Bottom Section Info */}
       <div className="grid grid-cols-2 gap-6 text-sm ml-10">
         <div className="flex items-start gap-3">
-          <img
+          <Image
             src="/icon/ix_user-management-filled.png"
-            alt="travelers icon"
+            alt="group size"
+            width={20}
+            height={20}            
             className="w-5 h-5 object-contain"
-          />{" "}
+          />
           <div>
             <p className="text-gray-500">Group Size</p>
             <p className="font-semibold">{trip.groupSize}</p>
@@ -98,9 +121,11 @@ export default function TripOverview({ trip }: TripProps) {
         </div>
 
         <div className="flex items-start gap-3">
-          <img
+          <Image
             src="/icon/ix_car-filled.png"
-            alt="travelers icon"
+            alt="travel style"
+            width={20}
+            height={20}
             className="w-5 h-5 object-contain"
           />
           <div>
@@ -134,9 +159,11 @@ export default function TripOverview({ trip }: TripProps) {
         </div>
 
         <div className="flex items-start gap-3">
-          <img
+          <Image
             src="/icon/ic_baseline-transgender.png"
-            alt="travelers icon"
+            alt="looking for"
+            width={20}
+            height={20}
             className="w-5 h-5 object-contain"
           />
           <div>
@@ -146,12 +173,13 @@ export default function TripOverview({ trip }: TripProps) {
         </div>
 
         <div className="flex items-start gap-3">
-          <img
+          <Image
             src="/icon/ic_baseline-no-meals.png"
-            alt="travelers icon"
+            alt="food preference"
+            width={20}
+            height={20}
             className="w-5 h-5 object-contain"
           />
-
           <div>
             <p className="text-gray-500">Food Preference</p>
             <p className="font-semibold">{trip.foodPreference}</p>

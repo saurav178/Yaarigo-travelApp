@@ -13,7 +13,7 @@ interface Review {
 export default function ReviewsTab() {
   return (
     <div className="space-y-6">
-      {reviews.map((review) => (
+      {reviews.map((review) => ( 
         <ReviewCard key={review.id} review={review} />
       ))}
     </div>

@@ -13,7 +13,7 @@ import {
   FaStar,
   FaHeart,
   FaCheckCircle,
-  FaShieldAlt,
+  FaShieldAlt, 
   FaWallet,
   // FaCalendar,
   FaFlag,

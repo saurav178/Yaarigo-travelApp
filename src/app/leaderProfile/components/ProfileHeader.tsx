@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { FaMapMarkerAlt, FaCheckCircle, FaCheck, FaHeart, FaShieldAlt } from "react-icons/fa";
+import { FaMapMarkerAlt, FaHeart, FaShieldAlt } from "react-icons/fa";
 
 interface ProfileHeaderProps {
   isFollowing: boolean;

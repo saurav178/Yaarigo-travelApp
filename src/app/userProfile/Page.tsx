@@ -1,8 +1,8 @@
 "use client";
+import Image from "next/image";
 
 import React, { useState, ChangeEvent } from "react";
 import {
-  Trip,
   TripStatus,
   Profile,
   SectionProps,
@@ -38,9 +38,10 @@ export default function ProfilePage() {
     const keys = path.split(".");
 
     setEditingProfile((prev) => {
-      const copy: any = structuredClone(prev);
+      const copy: Profile = structuredClone(prev);
 
-      let cur = copy;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let cur: any = copy;
       for (let i = 0; i < keys.length - 1; i++) {
         cur = cur[keys[i]];
       }
@@ -52,7 +53,7 @@ export default function ProfilePage() {
   };
 
   const handleSave = () => {
-    let updated: Profile = { ...editingProfile };
+    const updated: Profile = { ...editingProfile };
 
     if (editingProfile.profilePhoto instanceof File) {
       updated.profilePhoto = URL.createObjectURL(editingProfile.profilePhoto);
@@ -74,13 +75,15 @@ export default function ProfilePage() {
 
   const toggleArrayItem = (path: "travelStyles" | "languages", item: string) => {
     setEditingProfile((prev) => {
-      const copy: any = structuredClone(prev);
+      const copy: Profile = structuredClone(prev);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const arr: string[] = path.split(".").reduce((acc: any, k: string) => acc[k], copy);
 
       const exists = arr.includes(item);
       const newArr = exists ? arr.filter((x) => x !== item) : [...arr, item];
 
-      let cur = copy;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let cur: any = copy;
       const keys = path.split(".");
       for (let i = 0; i < keys.length - 1; i++) cur = cur[keys[i]];
       cur[keys[keys.length - 1]] = newArr;
@@ -101,7 +104,7 @@ export default function ProfilePage() {
         <header className="relative w-full overflow-hidden bg-white border rounded-sm">
           {/* COVER BANNER */}
           <div className="w-full h-40 sm:h-52 md:h-64 relative">
-            <img
+            <Image
               src={typeof profile.coverPhoto === "string" ? profile.coverPhoto : ""}
               className="w-full h-full object-cover"
               alt="cover"
@@ -120,7 +123,7 @@ export default function ProfilePage() {
             {/* PROFILE PHOTO */}
             <div className="absolute -top-16 sm:-top-24 left-1/2 -translate-x-1/2 sm:left-8 sm:translate-x-0">
               <div className="w-28 h-28 sm:w-40 sm:h-40 md:w-[200px] md:h-[200px] overflow-hidden shadow-lg border-4 border-white rounded-full sm:rounded-none">
-                <img
+                <Image
                   src={typeof profile.profilePhoto === "string" ? profile.profilePhoto : ""}
                   className="w-full h-full object-cover"
                   alt="profile"
@@ -617,7 +620,7 @@ export default function ProfilePage() {
                             className="border rounded-lg p-4"
                           >
                             <div className="flex items-start gap-4">
-                              <img
+                              <Image
                                 src={r.image}
                                 alt={r.name}
                                 className="w-12 h-12 rounded-full object-cover"
@@ -731,7 +734,7 @@ export default function ProfilePage() {
                     <>
                       <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                         {photos.map((g, i) => (
-                          <img
+                          <Image
                             key={i}
                             src={g}
                             alt={`gallery-${i}`}
@@ -806,7 +809,7 @@ export default function ProfilePage() {
                         className="flex items-center justify-between px-3 py-3 hover:bg-gray-50 rounded-lg"
                       >
                         <div className="flex items-center gap-3">
-                          <img
+                          <Image
                             src={f.image}
                             className="w-12 h-12 rounded-full object-cover"
                             alt={f.name}
@@ -898,7 +901,7 @@ export default function ProfilePage() {
                         className="flex items-center justify-between px-3 py-3 hover:bg-gray-50 rounded-lg"
                       >
                         <div className="flex items-center gap-3">
-                          <img
+                          <Image
                             src={f.image}
                             className="w-12 h-12 rounded-full object-cover"
                             alt={f.name}
@@ -1007,7 +1010,7 @@ function FileUploadField({ label, value, onChange }: FileUploadFieldProps) {
       )}
 
       {value && typeof value === "string" && (
-        <img
+        <Image
           src={value}
           alt="preview"
           className="mt-2 w-24 h-24 rounded-md object-cover border"
@@ -1140,7 +1143,7 @@ function TripCard({ trip }: TripCardProps) {
 
   return (
     <div className="border rounded-lg p-4 flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center">
-      <img
+      <Image
         src={trip.image}
         className="w-full h-40 sm:w-36 sm:h-32 object-cover rounded-md"
         alt={trip.title}
@@ -1180,3 +1183,27 @@ function TripCard({ trip }: TripCardProps) {
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -12,7 +12,7 @@ export default function TabsSection() {
     <div className="w-full mr-4 md:flex-1">
       <div className="bg-gray-50 shadow-md">
         {/* Tabs Header */}
-        <div className="flex  space-x-10 border-b border-gray-200 mb-6 px-8 bg-gray-200 ">
+        <div className="flex  space-x-10 border-b border-gray-200 mb-6 px-8 bg-gray-200 "> 
           <button
             onClick={() => setActiveTab("Upcoming Trips")}
             className={`pb-2 text-sm font-medium mt-4 text-black ${activeTab === "Upcoming Trips" ? "border-b-2 border-[#1D4350]" : ""}`}

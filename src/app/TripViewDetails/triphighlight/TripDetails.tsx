@@ -1,8 +1,6 @@
 "use client";
 
-import TripHighlights from "./TripHighlights";
 import JoinedTravelers from "./JoinedTravelers";
-import DetailedItinerary from "./DetailedItinerary";
 import TripRoadmap from "./TripRoadmap";
 import SafetyInformation from "./SafetyInformation";
 import ShareThisTrip from "./ShareThisTrip";

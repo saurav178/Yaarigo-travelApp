@@ -145,7 +145,8 @@ export default function VerifyOTPForm() {
                   onChange={(e) => setMobileNumber(e.target.value.replace(/\D/g, '').slice(0, 10))}
                 />
               </div>
-              <p className="text-xs text-gray-400 mt-1">We'll send a verification code to this number</p>
+              {/* <p className="text-xs text-gray-400 mt-1">We'll send a verification code to this number</p> */}
+              <p className="text-xs text-gray-400 mt-1">We&apos;ll send a verification code to this number</p>
             </div>
 
             <div className="animate-slideUp pt-1" style={{ animationDelay: "0.2s" }}>
@@ -413,7 +414,8 @@ export default function VerifyOTPForm() {
                 Change
               </button>
             </div>
-            <p className="text-xs text-gray-400 mt-1">We've sent a 4-digit code to this number</p>
+            {/* <p className="text-xs text-gray-400 mt-1">We've sent a 4-digit code to this number</p> */}
+            <p className="text-xs text-gray-400 mt-1">We&apos;ve sent a 4-digit code to this number</p>
           </div>
 
           <div className="animate-slideUp" style={{ animationDelay: "0.2s" }}>

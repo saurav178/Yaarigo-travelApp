@@ -19,7 +19,7 @@ export default function ReviewsTab() {
     </div>
   );
 }
-
+ 
 interface ReviewCardProps {
   review: Review;
 }

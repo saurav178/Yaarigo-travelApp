@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Travio - Travel Made Simple
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app). Travio is your ultimate travel companion for planning and managing trips.
@@ -28,9 +27,8 @@ All layout components are located in `src/components/layout/`:
 - `Navbar.tsx` - Primary navigation bar
 - `Sidebar.tsx` - Collapsible sidebar
 - `Footer.tsx` - Footer with links and social media
-=======
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
->>>>>>> origin/feature/community-nearby-essential
 
 ## Getting Started
 

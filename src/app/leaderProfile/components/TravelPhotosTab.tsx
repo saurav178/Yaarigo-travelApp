@@ -19,7 +19,7 @@ export default function TravelPhotosTab() {
     setSelectedPhoto(null);
   };
 
-  return (
+  return ( 
     <div className="">
       <div className="grid grid-cols-3 gap-1">
         {travelPhotos.map((photo, index) => (
