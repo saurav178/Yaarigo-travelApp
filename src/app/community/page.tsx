@@ -124,7 +124,7 @@ function CommunityContent() {
       <div className="mx-auto max-w-none px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-14 pt-20 pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 xl:gap-8">
           {/* Sidebar */}
-          <div className="lg:col-span-4">
+          <div className="lg:col-span-4 sticky top-25 ">
             <Sidebar />
           </div>
 

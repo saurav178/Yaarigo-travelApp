@@ -6,5 +6,4 @@ timeAgo: string
 text: string
 bestTime?: string
 imageUrl?: string;
-}
-;
+};
