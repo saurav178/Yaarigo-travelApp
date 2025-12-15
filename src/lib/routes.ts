@@ -10,5 +10,6 @@ export const ROUTES = {
   PROFILESETUP : "/profilesetup",
   DASHBOARD : "/dashboard",
   USERPROFILE : "/userProfile",
+  COMMUNITY_PAGE : "/community"
 
 };
