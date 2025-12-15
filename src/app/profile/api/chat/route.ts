@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
@@ -10,14 +10,14 @@ export async function POST(request: Request) {
       id: Date.now(),
       message: message,
       timestamp: new Date().toISOString(),
-      sender: 'user',
-      userId: userId || 'current-user'
+      sender: "user",
+      userId: userId || "current-user",
     };
 
     // Simulate a response from Jane Cooper after a short delay
     setTimeout(() => {
       // This would normally be handled by WebSocket or polling
-      console.log('Jane Cooper would respond here');
+      console.log("Jane Cooper would respond here");
     }, 1000);
 
     return NextResponse.json({
@@ -25,15 +25,17 @@ export async function POST(request: Request) {
       message: response,
       response: {
         id: Date.now() + 1,
-        message: "Hi! Thanks for your message. I'm excited to chat about travel plans!",
+        message:
+          "Hi! Thanks for your message. I'm excited to chat about travel plans!",
         timestamp: new Date().toISOString(),
-        sender: 'jane-cooper',
-        userId: 'jane-cooper'
-      }
+        sender: "jane-cooper",
+        userId: "jane-cooper",
+      },
     });
   } catch (error) {
+    console.error("Chat API error:", error);
     return NextResponse.json(
-      { success: false, error: 'Failed to send message' },
+      { success: false, error: "Failed to send message" },
       { status: 500 }
     );
   }

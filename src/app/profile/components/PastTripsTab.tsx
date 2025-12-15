@@ -7,17 +7,18 @@ export default function PastTripsTab() {
     <section className="w-full max-w-5xl mx-auto  px-4">
       {/* Scrollable Container */}
       <div className="flex flex-col gap-6 max-h-[800px] overflow-y-auto pr-2 scroll-smooth">
-        {pastTrips.map((trip, index) => (
+        {pastTrips.map((trip) => (
           <div
             key={trip.id}
             className="flex items-center justify-between border border-gray-300 shadow-sm hover:shadow-md transition-all duration-300 bg-white p-4"
           >
             {/* Left Image */}
-            <div className="w-full md:w-1/3">
-              <img
+            <div className="relative w-full md:w-1/3 h-[180px]">
+              <Image
                 src={trip.image}
                 alt={trip.title}
-                className=" object-cover w-full h-[180px]"
+                fill
+                className="object-cover"
               />
             </div>
 
@@ -61,11 +62,13 @@ export default function PastTripsTab() {
               <div className="flex items-center gap-2 mb-2">
                 <div className="flex -space-x-2">
                   {trip.avatars.map((img, i) => (
-                    <img
+                    <Image
                       key={i}
                       src={img}
                       alt="traveler"
-                      className="w-6 h-6 rounded-full border-2 border-white"
+                      width={24}
+                      height={24}
+                      className="rounded-full border-2 border-white"
                     />
                   ))}
                 </div>

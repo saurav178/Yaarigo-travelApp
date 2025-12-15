@@ -12,7 +12,7 @@ export default function AboutSection() {
         Wildlife photographer and nature lover. Eco-conscious traveler.
       </p>
 
-      <h4 className=" mt-2 ml-2 mb-4 flex items-center gap-1">
+      <h4 className=" mt-2 ml-2 mb-4 flex items-center gap-1"> 
         <Image
           src="/language.png"
           alt="Languages"

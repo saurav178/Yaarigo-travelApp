@@ -35,7 +35,6 @@ export default function Page() {
   const [minRating, setMinRating] = useState(0);
   const [minSafeScore, setMinSafeScore] = useState(0);
 
-  const [loading, setLoading] = useState(true);
   const [showLoader, setShowLoader] = useState(true);
 
   // from Interests / Trip type / Food preference chips

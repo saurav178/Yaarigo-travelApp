@@ -2,13 +2,12 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { useModal } from '@/context/ModalContext'; // Add this import
+import { usePathname} from "next/navigation";
+import { useModal } from "@/context/ModalContext"; // Add this import
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
   const { openModal } = useModal(); // Add this hook
 
   useEffect(() => {
@@ -23,13 +22,13 @@ export default function Header() {
 
   // Update handleLogin to use modal
   const handleLogin = () => {
-    openModal('login'); // Open login modal instead of navigating
+    openModal("login"); // Open login modal instead of navigating
   };
 
   // Add handleSignUp for the signup button
-  const handleSignUp = () => {
-    openModal('register'); // Open register modal
-  };
+  // const handleSignUp = () => {
+  //   openModal('register'); // Open register modal
+  // };
 
   return (
     <header
@@ -40,7 +39,6 @@ export default function Header() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        
         {/* Logo */}
         <Link
           href="/"
@@ -79,7 +77,6 @@ export default function Header() {
           >
             Log In
           </button>
-          
         </div>
       </div>
     </header>

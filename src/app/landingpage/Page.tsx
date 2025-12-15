@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import HeroSection from "./HeroSection";
-import KeyFeaturesSection from "./KeyFeaturesSection";
-import WhyChooseSection from "./WhyChooseSection";
-import HowItWorksSection from "./HowItWorksSection";
-import SafetyTrustSection from "./SafetyTrustSection";
-import CommunitySection from "./CommunitySection";
+import HeroSection from "./components/HeroSection";
+import KeyFeaturesSection from "./components/KeyFeaturesSection";
+import WhyChooseSection from "./components/WhyChooseSection";
+import HowItWorksSection from "./components/HowItWorksSection";
+import SafetyTrustSection from "./components/SafetyTrustSection";
+import CommunitySection from "./components/CommunitySection";
 import Loader from "@/components/Loader/Loader";
 import AuthModal from "@/components/Modal/AuthModal"; 
 

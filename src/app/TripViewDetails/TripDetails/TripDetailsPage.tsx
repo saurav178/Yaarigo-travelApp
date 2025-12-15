@@ -6,13 +6,48 @@ import TripLeader from "./TripLeader";
 import DetailedItinerary from "../triphighlight/DetailedItinerary";
 import TripHighlights from "../triphighlight/TripHighlights";
 
+interface ItineraryItem {
+  location: string;
+  activities: string[];
+}
+
+interface TripData {
+  tripId: number;
+  title: string;
+  description: string;
+  from: string;
+  startDate: string;
+  endDate: string;
+  budget: number;
+  maxTravelers: number;
+  joinedTravelers: number;
+  groupSize: string;
+  tripStyle: string;
+  travelStyle: string;
+  duration: string;
+  languages: string[];
+  splitCost: boolean;
+  lookingFor: string;
+  foodPreference: string;
+  itinerary: ItineraryItem[];
+}
+
+interface LeaderData {
+  leaderId: number;
+  name: string;
+  rating: number;
+  reviewsCount: number;
+  bio: string;
+  photoUrl: string;
+}
+
 export default function TripDetailsPage() {
-  const [tripData, setTripData] = useState<any>(null);
-  const [leaderData, setLeaderData] = useState<any>(null);
+  const [tripData, setTripData] = useState<TripData | null>(null);
+  const [leaderData, setLeaderData] = useState<LeaderData | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Dummy data (fallback)
-  const dummyTrip = {
+  const dummyTrip: TripData = {
     tripId: 101,
     title: "Trip Overview",
     description: "Relax and explore the beaches of Goa with friends!",
@@ -54,7 +89,7 @@ export default function TripDetailsPage() {
     ],
   };
 
-  const dummyLeader = {
+  const dummyLeader: LeaderData = {
     leaderId: 1001,
     name: "Courtney Henry",
     rating: 4.8,
@@ -68,16 +103,21 @@ export default function TripDetailsPage() {
     setTripData(dummyTrip);
     setLeaderData(dummyLeader);
     setLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading)
     return <div className="p-10 text-center">Loading trip details...</div>;
+
+  // Null check - agar data nahi hai toh render mat karo
+  if (!tripData || !leaderData) return null;
 
   return (
     <div className="bg-gray-50 min-h-screen p-10">
       <div className="max-w-8xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Section */}
         <div className="lg:col-span-2 space-y-6">
+          {/* Ab tripData guaranteed non-null hai kyunki upar check kar chuke */}
           <TripOverview trip={tripData} />
           <TripHighlights />
           <DetailedItinerary itinerary={tripData.itinerary} />

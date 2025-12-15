@@ -1,4 +1,5 @@
 // "use client";
+
 // import { useState, useEffect } from "react";
 // import HeroSection from "./components/HeroSection";
 // import StatsCards from "./components/StatsCards";
@@ -8,7 +9,6 @@
 // import PastTripCard from "./components/PastTripCard";
 // import ReviewCard from "./components/ReviewCard";
 // import TravelPhotos from "./components/TravelPhotos";
-// // import SimilarAgenciesCarousel from "./components/SimilarAgenciesCarousel";
 // import ContactInfo from "./components/ContactInfo";
 // import TrustSafety from "./components/TrustSafety";
 // import Loader from "../../components/Loader/Loader";
@@ -16,10 +16,43 @@
 // import { AGENCIES_DEMO } from "../searchtrip/data/data";
 // import TripsCard from "../searchtrip/components/TripsCard";
 
+// // eslint-disable-next-line @typescript-eslint/no-explicit-any
+// type AnyObject = any;
+
+// interface Trip {
+//   id: string | number;
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   [key: string]: any;
+// }
+
+// interface Review {
+//   id: string | number;
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   [key: string]: any;
+// }
+
+// interface AgencyData {
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   hero: any;
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   stats: any;
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   about: any;
+//   upcomingTrips: Trip[];
+//   pastTrips: Trip[];
+//   reviews: Review[];
+//   travelPhotos: string[];
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   similarAgencies: any[];
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   contactInfo: any;
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   trustSafety: any[];
+// }
+
 // export default function TripAgency() {
 //   const [activeTab, setActiveTab] = useState("upcoming");
-//   const [data, setData] = useState<any>(null);
-//   const [loading, setLoading] = useState(true);
+//   const [data, setData] = useState<AgencyData | null>(null);
 //   const [showLoader, setShowLoader] = useState(true);
 
 //   // Fetch data
@@ -31,20 +64,17 @@
 //         setData(json);
 //       } catch (err) {
 //         console.error("Failed to fetch agency data:", err);
-//       } finally {
-//         setLoading(false);
 //       }
 //     }
 //     fetchData();
 //   }, []);
 
-//   // Hide loader after 2 seconds
+//   // Show Loader for 2 sec
 //   useEffect(() => {
 //     const timer = setTimeout(() => setShowLoader(false), 2000);
 //     return () => clearTimeout(timer);
 //   }, []);
 
-//   // Show loader if either loading data or 2-second timer is active
 //   if (showLoader) {
 //     return (
 //       <div className="w-full h-screen flex items-center justify-center bg-white">
@@ -68,7 +98,6 @@
 //     pastTrips,
 //     reviews,
 //     travelPhotos,
-//     similarAgencies,
 //     contactInfo,
 //     trustSafety,
 //   } = data;
@@ -81,53 +110,44 @@
 //   ];
 
 //   return (
-// <<<<<<< HEAD
-//     // <div className="min-h-screen bg-white">
 //     <div className="min-h-screen bg-white w-full overflow-x-hidden">
 
-// =======
-//     <div className="min-h-screen bg-white w-full overflow-x-hidden">
-// >>>>>>> 63e90ead738cf5ea157132bf932819acaa4b2043
+//       {/* HERO SECTION */}
 //       <HeroSection hero={hero} />
 
 //       <div className="w-full px-4 md:px-6 py-6 mt-6 md:mt-8">
 //         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-// <<<<<<< HEAD
 
-// =======
-// >>>>>>> 63e90ead738cf5ea157132bf932819acaa4b2043
-//           {/* Left/Main Content */}
+//           {/* MAIN CONTENT (LEFT) */}
 //           <div className="lg:col-span-2 space-y-5">
+
 //             <StatsCards stats={stats} />
 //             <AboutSection about={about} />
 
 //             <div className="space-y-4">
+
 //               <TabNavigation
 //                 tabs={tabs}
 //                 activeTab={activeTab}
 //                 onTabChange={setActiveTab}
 //               />
 
-// <<<<<<< HEAD
-//               {/* White box wrapper */}
+//               {/* WHITE BOX WRAPPER */}
 //               <div className="bg-white shadow-md p-4 max-h-[70vh] md:max-h-[600px] overflow-y-auto space-y-4 rounded-xl">
 
-// =======
-//               <div className="bg-white shadow-md p-4 max-h-[70vh] md:max-h-[600px] overflow-y-auto space-y-4">
-// >>>>>>> 63e90ead738cf5ea157132bf932819acaa4b2043
 //                 {activeTab === "upcoming" &&
-//                   upcomingTrips.map((trip: any, i: number) => (
-//                     <UpcomingTripCard key={i} trip={trip} />
+//                   upcomingTrips.map((trip, i) => (
+//                     <UpcomingTripCard key={i} trip={trip as AnyObject} />
 //                   ))}
 
 //                 {activeTab === "past" &&
-//                   pastTrips.map((trip: any, i: number) => (
-//                     <PastTripCard key={i} trip={trip} />
+//                   pastTrips.map((trip, i) => (
+//                     <PastTripCard key={i} trip={trip as AnyObject} />
 //                   ))}
 
 //                 {activeTab === "reviews" &&
-//                   reviews.map((review: any, i: number) => (
-//                     <ReviewCard key={i} review={review} />
+//                   reviews.map((review, i) => (
+//                     <ReviewCard key={i} review={review as AnyObject} />
 //                   ))}
 
 //                 {activeTab === "photos" && (
@@ -135,22 +155,21 @@
 //                 )}
 //               </div>
 //             </div>
-
-//             {/* <SimilarAgenciesCarousel agencies={similarAgencies} /> */}
 //           </div>
 
-//           {/* Right Sidebar */}
+//           {/* SIDEBAR (RIGHT) */}
 //           <div className="space-y-5">
 //             <ContactInfo contact={contactInfo} />
 //             <TrustSafety items={trustSafety} />
 //           </div>
 //         </div>
 
-//         {/* Featured Travel Agencies */}
+//         {/* FEATURED AGENCIES */}
 //         <div className="w-full mt-8">
 //           <h2 className="text-xl font-semibold mb-3">
 //             Featured Travel Agencies
 //           </h2>
+
 //           <div className="flex space-x-4 overflow-x-auto pb-3 w-full">
 //             {AGENCIES_DEMO.map((trip) => (
 //               <div key={trip.id} className="flex-shrink-0 min-w-[300px]">
@@ -163,6 +182,18 @@
 //     </div>
 //   );
 // }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -179,15 +210,15 @@ import ReviewCard from "./components/ReviewCard";
 import TravelPhotos from "./components/TravelPhotos";
 import ContactInfo from "./components/ContactInfo";
 import TrustSafety from "./components/TrustSafety";
+import SimilarAgencies from "./components/SimilarAgencies";
 import Loader from "../../components/Loader/Loader";
 
-import { AGENCIES_DEMO } from "../searchtrip/data/data";
-import TripsCard from "../searchtrip/components/TripsCard";
+import type { AgencyData, Tab } from "./types/types";
 
 export default function TripAgency() {
-  const [activeTab, setActiveTab] = useState("upcoming");
-  const [data, setData] = useState<any>(null);
-  const [showLoader, setShowLoader] = useState(true);
+  const [activeTab, setActiveTab] = useState<string>("upcoming");
+  const [data, setData] = useState<AgencyData | null>(null);
+  const [showLoader, setShowLoader] = useState<boolean>(true);
 
   // Fetch data
   useEffect(() => {
@@ -195,7 +226,7 @@ export default function TripAgency() {
       try {
         const res = await fetch("profileAgency/api/agencyData");
         const json = await res.json();
-        setData(json);
+        setData(json as AgencyData);
       } catch (err) {
         console.error("Failed to fetch agency data:", err);
       }
@@ -217,12 +248,13 @@ export default function TripAgency() {
     );
   }
 
-  if (!data)
+  if (!data) {
     return (
       <div className="min-h-screen flex justify-center items-center text-red-500">
         Failed to load data.
       </div>
     );
+  }
 
   const {
     hero,
@@ -232,12 +264,12 @@ export default function TripAgency() {
     pastTrips,
     reviews,
     travelPhotos,
-    similarAgencies,
     contactInfo,
     trustSafety,
+    similarAgencies,
   } = data;
 
-  const tabs = [
+  const tabs: Tab[] = [
     { id: "upcoming", label: "Upcoming Trips", count: upcomingTrips.length },
     { id: "past", label: "Past Trips", count: pastTrips.length },
     { id: "reviews", label: "Reviews", count: reviews.length },
@@ -271,18 +303,18 @@ export default function TripAgency() {
               <div className="bg-white shadow-md p-4 max-h-[70vh] md:max-h-[600px] overflow-y-auto space-y-4 rounded-xl">
 
                 {activeTab === "upcoming" &&
-                  upcomingTrips.map((trip: any, i: number) => (
-                    <UpcomingTripCard key={i} trip={trip} />
+                  upcomingTrips.map((trip, i) => (
+                    <UpcomingTripCard key={trip.id || i} trip={trip} />
                   ))}
 
                 {activeTab === "past" &&
-                  pastTrips.map((trip: any, i: number) => (
-                    <PastTripCard key={i} trip={trip} />
+                  pastTrips.map((trip, i) => (
+                    <PastTripCard key={trip.id || i} trip={trip} />
                   ))}
 
                 {activeTab === "reviews" &&
-                  reviews.map((review: any, i: number) => (
-                    <ReviewCard key={i} review={review} />
+                  reviews.map((review, i) => (
+                    <ReviewCard key={review.id || i} review={review} />
                   ))}
 
                 {activeTab === "photos" && (
@@ -296,21 +328,7 @@ export default function TripAgency() {
           <div className="space-y-5">
             <ContactInfo contact={contactInfo} />
             <TrustSafety items={trustSafety} />
-          </div>
-        </div>
-
-        {/* FEATURED AGENCIES */}
-        <div className="w-full mt-8">
-          <h2 className="text-xl font-semibold mb-3">
-            Featured Travel Agencies
-          </h2>
-
-          <div className="flex space-x-4 overflow-x-auto pb-3 w-full">
-            {AGENCIES_DEMO.map((trip) => (
-              <div key={trip.id} className="flex-shrink-0 min-w-[300px]">
-                <TripsCard trips={[trip]} />
-              </div>
-            ))}
+            <SimilarAgencies agencies={similarAgencies} />
           </div>
         </div>
       </div>

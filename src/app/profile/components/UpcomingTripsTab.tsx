@@ -1,4 +1,3 @@
-
 import React from "react";
 import Image from "next/image";
 import { upcomingTrips } from "../data/profileData";
@@ -13,11 +12,12 @@ export default function UpcomingTripsTab() {
             className="flex flex-col md:flex-row items-center md:items-start bg-white border border-gray-200 shadow-sm  p-4 md:p-5"
           >
             {/* Trip Image */}
-            <div className="w-full md:w-1/3">
-              <img
+            <div className="relative w-full md:w-1/3 h-[180px]">
+              <Image
                 src={trip.image}
                 alt={trip.title}
-                className="object-cover w-full h-[180px]"
+                fill
+                className="object-cover"
               />
             </div>
 

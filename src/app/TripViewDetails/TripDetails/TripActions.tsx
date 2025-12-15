@@ -1,7 +1,16 @@
 "use client";
 
+interface Trip {
+  budget: number | string;
+  startDate: string;
+  endDate: string;
+  duration: string;
+  maxTravelers: number;
+  joinedTravelers: number;
+}
+
 interface TripActionsProps {
-  trip: any;
+  trip: Trip;
 }
 
 export default function TripActions({ trip }: TripActionsProps) {

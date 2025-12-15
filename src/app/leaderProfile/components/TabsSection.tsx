@@ -20,7 +20,7 @@ export default function TabsSection() {
                 ? "text-[#1D4350] border-b-2 border-[#1D4350]"
                 : "text-gray-500 hover:text-[#1D4350]"
             }`}
-          >
+          > 
             Upcoming Trips
           </button>
           <button

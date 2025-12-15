@@ -1,9 +1,20 @@
 // "use client";
 
-// export default function AboutSection({ about }: any) {
+// interface About {
+//   title: string;
+//   description: string;
+//   specialities?: string[];
+//   certifications?: string[];
+// }
+
+// interface AboutSectionProps {
+//   about: About | null;
+// }
+
+// export default function AboutSection({ about }: AboutSectionProps) {
 //   if (!about) return <p>Loading...</p>;
 
-//   // Fallback values agar data me na ho
+//   // Fallback values if data is missing
 //   const specialities = about.specialities || [
 //     "Adventure Tours",
 //     "Cultural Tours",
@@ -23,7 +34,7 @@
 //       <div className="mb-4">
 //         <h3 className="text-sm font-bold mb-3 mt-8 text-gray-900">Specialities</h3>
 //         <div className="flex flex-wrap gap-2">
-//           {specialities.map((item: string, i: number) => (
+//           {specialities.map((item, i) => (
 //             <span
 //               key={i}
 //               className="border border-gray-700 px-2 py-0.5 rounded-full text-xs text-gray-500 font-bold"
@@ -40,7 +51,7 @@
 //           Certifications & Awards
 //         </h3>
 //         <div className="flex flex-wrap gap-2">
-//           {certifications.map((item: string, i: number) => (
+//           {certifications.map((item, i) => (
 //             <span
 //               key={i}
 //               className="border border-gray-700 px-2 py-0.5 rounded-full text-xs text-gray-500 font-bold"
@@ -55,24 +66,29 @@
 // }
 
 
-"use client";
 
-interface About {
-  title: string;
-  description: string;
-  specialities?: string[];
-  certifications?: string[];
-}
+
+
+
+
+
+
+
+
+
+
+
+"use client";
+import type { AboutData } from '../types/types';
 
 interface AboutSectionProps {
-  about: About | null;
+  about: AboutData;
 }
 
 export default function AboutSection({ about }: AboutSectionProps) {
   if (!about) return <p>Loading...</p>;
 
-  // Fallback values if data is missing
-  const specialities = about.specialities || [
+  const specialities = about.specialities || about.specialties || [
     "Adventure Tours",
     "Cultural Tours",
     "Sustainable Tourism",
@@ -87,7 +103,6 @@ export default function AboutSection({ about }: AboutSectionProps) {
         {about.description}
       </p>
 
-      {/* Specialities Section */}
       <div className="mb-4">
         <h3 className="text-sm font-bold mb-3 mt-8 text-gray-900">Specialities</h3>
         <div className="flex flex-wrap gap-2">
@@ -102,7 +117,6 @@ export default function AboutSection({ about }: AboutSectionProps) {
         </div>
       </div>
 
-      {/* Certifications Section */}
       <div>
         <h3 className="text-sm font-bold mb-3 mt-8 text-gray-900">
           Certifications & Awards

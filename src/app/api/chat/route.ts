@@ -31,7 +31,8 @@ export async function POST(request: Request) {
         userId: 'jane-cooper'
       }
     });
-  } catch (_error: unknown){
+  } catch (error: unknown) {
+    console.error('Chat API error:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to send message' },
       { status: 500 }

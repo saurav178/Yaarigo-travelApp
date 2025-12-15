@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { Suspense, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 
 import FeedCard from "./components/FeedCard";
@@ -10,7 +10,8 @@ import { getPosts } from "./data/posts";
 
 type TabKey = "trending" | "qa" | "events" | "travel-twins" | "live";
 
-export default function Page() {
+// Separate component that uses useSearchParams
+function CommunityContent() {
   const search = useSearchParams();
   const activeTab = (search.get("tab") as TabKey) || "trending";
 
@@ -95,5 +96,18 @@ export default function Page() {
         </div>
       </div>
     </main>
+  );
+}
+
+// Main page component with Suspense wrapper
+export default function Page() {
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto px-4 py-6 mt-12 text-center">
+        <p className="text-lg text-gray-600">Loading community...</p>
+      </div>
+    }>
+      <CommunityContent />
+    </Suspense>
   );
 }
