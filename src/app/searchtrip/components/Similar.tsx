@@ -104,7 +104,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                   </div>
 
                   {/* Like Button */}
-                  <button
+                  {/* <button
                     onClick={() => toggleLike(trip.id)}
                     className={`absolute top-3 right-3 w-8 h-8 cursor-pointer flex items-center justify-center rounded-full transition ${
                       likedTrips.includes(trip.id)
@@ -113,6 +113,22 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                     }`}
                   >
                     <FaHeart size={18} />
+                  </button> */}
+
+                  <button
+                    onClick={() => toggleLike(trip.id)}
+                    className={`absolute top-3 right-3 w-9 h-9 cursor-pointer flex items-center justify-center rounded-full shadow-md transition-all ring-0 focus:outline-none ${
+                      likedTrips.includes(trip.id)
+                        ? "text-rose-500 bg-white/90"
+                        : "text-white bg-black/30"
+                    }`}
+                    aria-label={
+                      likedTrips.includes(trip.id)
+                        ? "Remove from favorites"
+                        : "Add to favorites"
+                    }
+                  >
+                    <FaHeart size={16} aria-hidden="true" focusable="false" />
                   </button>
                 </div>
                 {/* Right Content */}
@@ -128,7 +144,11 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <span className="flex items-center gap-1 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow">
+                      {/* <span className="flex items-center gap-1 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow">
+                        <span className="font-bold">{trip.host.match}%</span>{" "}
+                        Match
+                      </span> */}
+                      <span className="flex items-center gap-1 bg-green-700 text-white text-xs font-semibold px-2 py-1 rounded-full shadow">
                         <span className="font-bold">{trip.host.match}%</span>{" "}
                         Match
                       </span>
@@ -136,6 +156,11 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                       <span className="flex items-center gap-1 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
                         <FaExclamationTriangle /> {trip.spotsLeft} spots left
                       </span>
+
+                      {/* <span className="flex items-center gap-1 bg-red-700 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
+                        <FaExclamationTriangle className="text-yellow-200" />{" "}
+                        {trip.spotsLeft} spots left
+                      </span> */}
                     </div>
                   </div>
 
@@ -148,6 +173,13 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                       >
                         {tag}
                       </span>
+
+                      // <span
+                      //   key={tag}
+                      //   className="bg-blue-100 text-blue-700 text-xs font-medium px-2 py-0.5 rounded-md"
+                      // >
+                      //   {tag}
+                      // </span>
                     ))}
                   </div>
 
@@ -171,7 +203,7 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
 
                   <div className="flex items-center gap-15 mt-1 text-sm text-gray-600 mb-1">
                     <div className="flex items-center gap-2">
-                      < FaCalendar className="text-gray-600" />
+                      <FaCalendar className="text-gray-600" />
                       <div>{trip.date}</div>
                     </div>
 
@@ -193,6 +225,14 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                       <div
                         className={`relative w-15 h-15 -ml-1 flex items-center justify-center rounded-full font-semibold text-2xl border ${catStyle.avatarBg}`}
                       >
+
+                      {/* <div
+                        className={`relative flex items-center justify-center 
+              rounded-full font-semibold border 
+              text-white text-xl sm:text-2xl 
+              w-12 h-12 sm:w-14 sm:h-14 
+              ${catStyle.avatarBg || "bg-blue-700 border-blue-800"}`}
+                      > */}
                         {getInitials(trip.host.name)}
 
                         {trip.host.category !== "Travel Enthusiast" && (
@@ -213,7 +253,6 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                         <p className="text-md font-semibold text-gray-900 flex">
                           {trip.host.name}, {trip.host.age}{" "}
                           {trip.host.verified && (
-
                             <FaCheckCircle className="inline text-green-500 ml-1 w-5 h-5" />
                           )}
                         </p>
