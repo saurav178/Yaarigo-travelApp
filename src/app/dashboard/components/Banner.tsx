@@ -45,7 +45,7 @@ export default function Banner() {
       </div>
 
       {/* Animated Travel Icon */}
-      <div className="absolute bottom-8 right-8 md:bottom-12 md:right-12">
+      {/* <div className="absolute bottom-8 right-8 md:bottom-12 md:right-12">
         <div className="relative w-24 h-24">
           <div className="absolute inset-0 bg-white/20 rounded-full animate-ping" />
           <div
@@ -54,9 +54,11 @@ export default function Banner() {
           />
           <div className="absolute inset-0 flex items-center justify-center">
             <span className="text-5xl">🧳</span>
-          </div>
+          </div> */}
+
           {/* Orbiting dots */}
-          <div
+          
+          {/* <div
             className="absolute top-1/2 left-1/2 w-2 h-2 bg-white rounded-full"
             style={{ animation: "orbit 3s linear infinite" }}
           />
@@ -75,7 +77,7 @@ export default function Banner() {
             }}
           />
         </div>
-      </div>
+      </div> */}
 
       {/* CSS Animations */}
       <style jsx>{`

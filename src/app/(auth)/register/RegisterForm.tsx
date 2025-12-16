@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useModal } from "@/context/ModalContext";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "../../../lib/routes";
 
 export default function RegisterForm() {
   const [fullName, setFullName] = useState("");
@@ -47,6 +49,12 @@ export default function RegisterForm() {
       console.error("Request failed:", err);
       setIsLoading(false);
     }
+  };
+
+ const router = useRouter();
+
+  const handleVerification = () => {
+    router.push(ROUTES.VERIFICATION);
   };
 
   return (
@@ -223,6 +231,7 @@ export default function RegisterForm() {
         <div className="animate-slideUp" style={{ animationDelay: "0.4s" }}>
           <button
             type="submit"
+            onClick={handleVerification}
             disabled={isLoading}
             className="w-full py-3 px-4 bg-gradient-to-r from-[#1D4350] to-[#A43931] text-white font-semibold rounded-lg hover:from-[#A43931] hover:to-[#1D4350] transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
           >
