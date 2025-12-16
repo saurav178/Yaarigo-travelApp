@@ -35,12 +35,12 @@ export default function Footer() {
               placeholder="Enter your email"
               className="px-4 py-2 bg-white text-gray-800 w-64 outline-none placeholder:text-gray-600"
             />
-            {/* <button className="bg-white text-[#f36b6b] font-medium px-4 py-2 hover:bg-gray-100 transition cursor-pointer">
-              Subscribe
-            </button> */}
-            <button className="bg-white text-red-700 font-medium px-4 py-2 hover:bg-gray-100 transition cursor-pointer">
+            <button className="bg-white text-[#f36b6b] font-medium px-4 py-2 hover:bg-gray-100 transition cursor-pointer">
               Subscribe
             </button>
+            {/* <button className="bg-white text-red-700 font-medium px-4 py-2 hover:bg-gray-100 transition cursor-pointer">
+              Subscribe
+            </button> */}
           </div>
         </div>
       </div>

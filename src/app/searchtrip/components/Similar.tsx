@@ -153,33 +153,33 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                         Match
                       </span>
 
-                      {/* <span className="flex items-center gap-1 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
+                      <span className="flex items-center gap-1 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
                         <FaExclamationTriangle /> {trip.spotsLeft} spots left
-                      </span> */}
+                      </span>
 
-                      <span className="flex items-center gap-1 bg-red-700 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
+                      {/* <span className="flex items-center gap-1 bg-red-700 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
                         <FaExclamationTriangle className="text-yellow-200" />{" "}
                         {trip.spotsLeft} spots left
-                      </span>
+                      </span> */}
                     </div>
                   </div>
 
                   {/* Tags */}
                   <div className="flex flex-wrap gap-2 mt-2 mb-3">
                     {trip.tags.map((tag) => (
-                      // <span
-                      //   key={tag}
-                      //   className="bg-blue-100 text-blue-500 text-xs font-medium px-2 py-0.5 rounded-md"
-                      // >
-                      //   {tag}
-                      // </span>
-
                       <span
                         key={tag}
-                        className="bg-blue-100 text-blue-700 text-xs font-medium px-2 py-0.5 rounded-md"
+                        className="bg-blue-100 text-blue-500 text-xs font-medium px-2 py-0.5 rounded-md"
                       >
                         {tag}
                       </span>
+
+                      // <span
+                      //   key={tag}
+                      //   className="bg-blue-100 text-blue-700 text-xs font-medium px-2 py-0.5 rounded-md"
+                      // >
+                      //   {tag}
+                      // </span>
                     ))}
                   </div>
 
@@ -222,17 +222,17 @@ export default function Similar({ trips = SIMILAR_TRIPS_DEMO }: Props) {
                   {/* Host Info */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3 relative">
-                      {/* <div
-                        className={`relative w-15 h-15 -ml-1 flex items-center justify-center rounded-full font-semibold text-2xl border ${catStyle.avatarBg}`}
-                      > */}
-
                       <div
+                        className={`relative w-15 h-15 -ml-1 flex items-center justify-center rounded-full font-semibold text-2xl border ${catStyle.avatarBg}`}
+                      >
+
+                      {/* <div
                         className={`relative flex items-center justify-center 
               rounded-full font-semibold border 
               text-white text-xl sm:text-2xl 
               w-12 h-12 sm:w-14 sm:h-14 
               ${catStyle.avatarBg || "bg-blue-700 border-blue-800"}`}
-                      >
+                      > */}
                         {getInitials(trip.host.name)}
 
                         {trip.host.category !== "Travel Enthusiast" && (

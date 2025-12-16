@@ -159,13 +159,13 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                       Match
                     </span>
 
-                    {/* <span className="flex items-center gap-1 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
-                      <FaExclamationTriangle /> {trip.spotsLeft} spots left
-                    </span> */}
-
-                    <span className="flex items-center gap-1 bg-red-700 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
+                    <span className="flex items-center gap-1 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
                       <FaExclamationTriangle /> {trip.spotsLeft} spots left
                     </span>
+
+                    {/* <span className="flex items-center gap-1 bg-red-700 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
+                      <FaExclamationTriangle /> {trip.spotsLeft} spots left
+                    </span> */}
                   </div>
                 </div>
 
@@ -173,19 +173,19 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
 
                 <div className="flex flex-wrap gap-2 mt-2 mb-3">
                   {trip.tags.map((tag) => (
-                    // <span
-                    //   key={tag}
-                    //   className="bg-blue-100 text-blue-500 text-xs font-medium px-2 py-0.5 rounded-md"
-                    // >
-                    //   {tag}
-                    // </span>
-
                     <span
                       key={tag}
-                      className="bg-blue-100 text-blue-700 text-xs font-medium px-2 py-0.5 rounded-md"
+                      className="bg-blue-100 text-blue-500 text-xs font-medium px-2 py-0.5 rounded-md"
                     >
                       {tag}
                     </span>
+
+                    // <span
+                    //   key={tag}
+                    //   className="bg-blue-100 text-blue-700 text-xs font-medium px-2 py-0.5 rounded-md"
+                    // >
+                    //   {tag}
+                    // </span>
                   ))}
                 </div>
 
@@ -232,14 +232,14 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
 
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-2">
                   <div className="flex items-center gap-3 min-w-0">
-                    {/* <div
-                      className={`relative flex items-center justify-center text-xl sm:text-2xl rounded-full font-semibold border ${catStyle.avatarBg} w-12 h-12 sm:w-14 sm:h-14 shrink-0`}
-                    > */}
                     <div
+                      className={`relative flex items-center justify-center text-xl sm:text-2xl rounded-full font-semibold border ${catStyle.avatarBg} w-12 h-12 sm:w-14 sm:h-14 shrink-0`}
+                    >
+                    {/* <div
                       className={`relative flex items-center justify-center text-white text-lg sm:text-2xl rounded-full font-semibold border ${
                         catStyle.avatarBg || "bg-blue-700"
                       } w-10 h-10 sm:w-14 sm:h-14 shrink-0`}
-                    >
+                    > */}
                       <span className="select-none truncate">
                         {trip.host.name
                           .split(" ")
