@@ -1,14 +1,14 @@
 // Filters
- 
+
 "use client";
- 
+
 import { useEffect, useState } from "react";
 import { Search, Mic, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FaChevronDown, FaStar } from "react-icons/fa";
- 
+
 import type { FilterPayload } from "../types/types";
- 
+
 type Props = {
   query: string;
   setQuery: (v: string) => void;
@@ -35,7 +35,7 @@ type Props = {
   onClear?: () => void;
   onApply?: (payload: FilterPayload) => void;
 };
- 
+
 export default function Filters({
   query,
   setQuery,
@@ -63,12 +63,12 @@ export default function Filters({
   onApply,
 }: Props) {
   const router = useRouter();
- 
+
   const [localQuery, setLocalQuery] = useState<string>(query);
   const [localAge, setLocalAge] = useState<number>(age);
   const [localDuration, setLocalDuration] = useState<number>(duration);
   const [localBudget, setLocalBudget] = useState<number>(budget);
- 
+
   const [localMinRating, setLocalMinRating] = useState<number>(minRating ?? 0);
   const [localMinSafeScore, setLocalMinSafeScore] = useState<number>(
     minSafeScore ?? 0
@@ -79,22 +79,22 @@ export default function Filters({
   const [localScorePercent, setLocalScorePercent] = useState<number>(
     scorePercent ?? 0
   );
- 
+
   const [likesInput, setLikesInput] = useState<string>("");
   const [likes, setLikes] = useState<string[]>([]);
- 
+
   const [localTripType, setLocalTripType] = useState<string[]>([]);
   const [localFoodPref, setLocalFoodPref] = useState<string[]>([]);
- 
+
   const [inputLang, setInputLang] = useState<string>("");
   const [languages, setLanguages] = useState<string[]>(["English"]);
- 
+
   const [ratingOpen, setRatingOpen] = useState<boolean>(true);
   const [campabilityOpen, setCampabilityOpen] = useState<boolean>(true);
   const [safeOpen, setSafeOpen] = useState<boolean>(true);
   const [tripTypeOpen, setTripTypeOpen] = useState<boolean>(true);
   const [foodPrefOpen, setFoodPrefOpen] = useState<boolean>(true);
- 
+
   const percentOptions = [90, 80, 70, 60, 50, 0] as const;
   const tripTypeOptions = [
     "+ Solo",
@@ -112,7 +112,7 @@ export default function Filters({
   ] as const;
   const ALL_TRIP = "+ All";
   const ALL_FOOD = "+ All";
- 
+
   const parseCSV = (value: string | undefined): string[] => {
     if (!value) return [];
     const trimmed = value.trim();
@@ -122,7 +122,7 @@ export default function Filters({
       .map((s) => s.trim())
       .filter(Boolean);
   };
- 
+
   const parseMulti = (
     value: string | undefined,
     allLabel: string
@@ -135,7 +135,7 @@ export default function Filters({
       .map((s) => s.trim())
       .filter(Boolean);
   };
- 
+
   useEffect(() => setLocalQuery(query), [query]);
   useEffect(() => setLocalAge(age), [age]);
   useEffect(() => setLocalDuration(duration), [duration]);
@@ -144,18 +144,18 @@ export default function Filters({
   useEffect(() => setLocalMinSafeScore(minSafeScore ?? 0), [minSafeScore]);
   useEffect(() => setLocalMatchPercent(matchPercent ?? 0), [matchPercent]);
   useEffect(() => setLocalScorePercent(scorePercent ?? 0), [scorePercent]);
- 
+
   useEffect(() => {
     setLikes(parseCSV(interest));
   }, [interest]);
- 
+
   useEffect(() => {
     setLocalTripType(parseMulti(tripType, ALL_TRIP));
   }, [tripType]);
   useEffect(() => {
     setLocalFoodPref(parseMulti(foodPref, ALL_FOOD));
   }, [foodPref]);
- 
+
   const addLang = () => {
     const v = inputLang.trim();
     if (!v) return;
@@ -166,7 +166,7 @@ export default function Filters({
   };
   const removeLang = (l: string) =>
     setLanguages((prev) => prev.filter((x) => x !== l));
- 
+
   const addLike = () => {
     const v = likesInput.trim();
     if (!v) return;
@@ -177,10 +177,10 @@ export default function Filters({
   };
   const removeLike = (value: string) =>
     setLikes((prev) => prev.filter((x) => x !== value));
- 
+
   const startVoice = () =>
     alert("Voice search demo — replace with real voice input if needed.");
- 
+
   const toggleFromList = (
     prev: string[],
     opt: string,
@@ -197,18 +197,18 @@ export default function Filters({
     else next = [...next, opt];
     return next;
   };
- 
+
   const buildMultiString = (values: string[]): string => {
     if (!values.length) return "All";
     if (values.length === 1 && values[0].startsWith("+ All")) return "All";
     return values.join(", ");
   };
- 
+
   const likesToString = (values: string[]): string => {
     if (!values.length) return "All";
     return values.join(", ");
   };
- 
+
   const buildPayload = (): FilterPayload => ({
     query: localQuery,
     age: localAge,
@@ -222,7 +222,7 @@ export default function Filters({
     tripType: buildMultiString(localTripType),
     foodPref: buildMultiString(localFoodPref),
   });
- 
+
   const handleApply = () => {
     const payload = buildPayload();
     setQuery(payload.query);
@@ -238,7 +238,7 @@ export default function Filters({
     setFoodPref?.(payload.foodPref);
     onApply?.(payload);
   };
- 
+
   const handleClearAll = () => {
     const cleared: FilterPayload = {
       query: "",
@@ -253,7 +253,7 @@ export default function Filters({
       tripType: "All",
       foodPref: "All",
     };
- 
+
     setLocalQuery(cleared.query);
     setLocalAge(cleared.age);
     setLocalDuration(cleared.duration);
@@ -268,7 +268,7 @@ export default function Filters({
     setLanguages(["English"]);
     setInputLang("");
     setLikesInput("");
- 
+
     setQuery(cleared.query);
     setAge(cleared.age);
     setDuration(cleared.duration);
@@ -280,19 +280,19 @@ export default function Filters({
     setInterest?.(cleared.interest);
     setTripType?.(cleared.tripType);
     setFoodPref?.(cleared.foodPref);
- 
+
     onClear?.();
     onApply?.(cleared);
   };
- 
+
   const isAllSelected = (list: string[], allLabel: string) =>
     list.length === 0 || list.includes(allLabel);
- 
+
   const onStarClick = (value: number) => {
     if (value === localMinRating) setLocalMinRating(0);
     else setLocalMinRating(value);
   };
- 
+
   return (
     <div className="bg-white  shadow w-full max-w-md mx-auto max-h-[88vh] flex flex-col px-3 -ml-3">
       <div className="flex items-center gap-3 p-3">
@@ -309,12 +309,12 @@ export default function Filters({
           Clear all filters
         </button>
       </div>
- 
+
       <div className="mt-1 space-y-4 overflow-y-auto pr-1 flex-1 p-3">
         {/* Search */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-          <input
+          {/* <input
             value={localQuery}
             onChange={(e) => {
               const v = e.target.value;
@@ -323,17 +323,47 @@ export default function Filters({
             }}
             placeholder="Destination typing..."
             className="w-full pl-9 pr-10 py-2  border text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1D4350]"
+          /> */}
+          <input
+            value={localQuery}
+            onChange={(e) => {
+              const v = e.target.value;
+              setLocalQuery(v);
+              setQuery(v);
+            }}
+            placeholder="Destination typing..."
+            aria-label="Search destination"
+            className="w-full pl-9 pr-10
+             py-3        /* increased from 2 → 3 for ~44px height */
+             border  text-sm
+             placeholder-gray-400
+             focus:outline-none focus:ring-2 focus:ring-[#1D4350]"
           />
-          <button
+
+          {/* <button
             type="button"
             onClick={startVoice}
             aria-label="Voice Search"
             className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1D4350] transition-colors"
           >
             <Mic className="w-4 h-4" />
+          </button> */}
+
+          <button
+            type="button"
+            onClick={startVoice}
+            aria-label="Voice Search"
+            className="absolute right-3 top-1/2 -translate-y-1/2
+             flex items-center justify-center
+             w-11 h-11 rounded-full  /* 44px = 11 * 4px */
+             text-gray-400 hover:text-[#1D4350]
+             hover:bg-gray-100 transition-colors
+             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1D4350]"
+          >
+            <Mic className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>
- 
+
         {/* Quick tags */}
         <div className="flex flex-wrap gap-2 mt-2 cursor-pointer">
           {[
@@ -353,7 +383,7 @@ export default function Filters({
             </button>
           ))}
         </div>
- 
+
         {/* Language */}
         <div>
           <label className="block text-xs font-medium text-gray-500 mb-2">
@@ -361,21 +391,51 @@ export default function Filters({
           </label>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <input
+            {/* <input
               value={inputLang}
               onChange={(e) => setInputLang(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && addLang()}
               placeholder="Language typing..."
               className="w-full pl-9 pr-20 py-2  border text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1D4350]"
-            />
-            <button
+            /> */}
+
+            {/* <button
               onClick={addLang}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 text-sm font-medium hover:underline cursor-pointer"
             >
               Add
+            </button> */}
+
+            <input
+              value={inputLang}
+              onChange={(e) => setInputLang(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && addLang()}
+              placeholder="Language typing..."
+              aria-label="Enter a language" /* improves screen reader support */
+              className="w-full pl-9 pr-20
+             py-3                      
+             min-h-11      
+             border  text-sm
+             placeholder-gray-400
+             focus:outline-none focus:ring-2 focus:ring-[#1D4350]"
+            />
+
+            <button
+              onClick={addLang}
+              type="button"
+              aria-label="Add language"
+              className="absolute right-3 top-1/2 -translate-y-1/2
+             flex items-center justify-center
+             px-3 py-2 
+             text-gray-600 text-sm font-medium
+             hover:underline cursor-pointer
+              focus:outline-none
+             focus:ring-2 focus:ring-offset-2 focus:ring-[#1D4350]"
+            >
+              Add
             </button>
           </div>
-          <div className="mt-3 flex flex-wrap gap-2">
+          {/* <div className="mt-3 flex flex-wrap gap-2">
             {languages.map((l) => (
               <div
                 key={l}
@@ -387,9 +447,27 @@ export default function Filters({
                 </button>
               </div>
             ))}
+          </div> */}
+
+          <div className="mt-3 flex flex-wrap gap-2">
+            {languages.map((l) => (
+              <div
+                key={l}
+                className="flex items-center gap-2 bg-[#173844] text-white px-3 py-1 text-sm font-medium "
+              >
+                <span>{l}</span>
+                <button
+                  onClick={() => removeLang(l)}
+                  aria-label={`Remove ${l} language`}
+                  className="p-1 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-red-500 rounded"
+                >
+                  <X className="w-3 h-3" aria-hidden="true" />
+                </button>
+              </div>
+            ))}
           </div>
         </div>
- 
+
         {/* Interests (likes) */}
         <div>
           <label className="block text-xs font-medium text-gray-500 mb-2">
@@ -397,16 +475,45 @@ export default function Filters({
           </label>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <input
+            {/* <input
               value={likesInput}
               onChange={(e) => setLikesInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && addLike()}
               placeholder="Add what you like... (e.g. Hiking, Beaches)"
               className="w-full pl-9 pr-20 py-2 border text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1D4350]"
-            />
-            <button
+            /> */}
+            {/* <button
               onClick={addLike}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 text-sm font-medium hover:underline cursor-pointer"
+            >
+              Add
+            </button> */}
+
+            <input
+              value={likesInput}
+              onChange={(e) => setLikesInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && addLike()}
+              placeholder="Add what you like... (e.g. Hiking, Beaches)"
+              aria-label="Add what you like" /* accessibility name if no visible label */
+              className="w-full pl-9 pr-20
+             py-3                   
+             min-h-11           
+             border text-sm
+             placeholder-gray-400
+             focus:outline-none focus:ring-2 focus:ring-[#1D4350]"
+            />
+
+            <button
+              onClick={addLang}
+              type="button"
+              aria-label="Add language"
+              className="absolute right-3 top-1/2 -translate-y-1/2
+             flex items-center justify-center
+             px-3 py-2  /* enlarges touch target ≈44×44px */
+             text-gray-600 text-sm font-medium
+             hover:underline cursor-pointer
+             rounded-md focus:outline-none
+             focus:ring-2 focus:ring-offset-2 focus:ring-[#1D4350]"
             >
               Add
             </button>
@@ -425,7 +532,7 @@ export default function Filters({
             ))}
           </div>
         </div>
- 
+
         {/* Rating */}
         <div className="mb-3">
           <button
@@ -440,7 +547,7 @@ export default function Filters({
               }`}
             />
           </button>
- 
+
           {ratingOpen && (
             <div className="flex items-center gap-2">
               {[1, 2, 3, 4, 5].map((n) => (
@@ -466,7 +573,7 @@ export default function Filters({
             </div>
           )}
         </div>
- 
+
         {/* Compatibility */}
         <div className="mb-3">
           <button
@@ -509,9 +616,9 @@ export default function Filters({
             </div>
           )}
         </div>
- 
+
         {/* Safe Score */}
- 
+
         <div className="mb-3">
           <button
             onClick={() => setSafeOpen((o) => !o)}
@@ -553,9 +660,9 @@ export default function Filters({
             </div>
           )}
         </div>
- 
+
         {/* Trip Type */}
- 
+
         <div className="mb-3">
           <button
             onClick={() => setTripTypeOpen((o) => !o)}
@@ -569,14 +676,14 @@ export default function Filters({
               }`}
             />
           </button>
- 
+
           {tripTypeOpen && (
             <div className="grid grid-cols-2 gap-3 mt-3 ml-6 mr-6">
               {tripTypeOptions.map((opt) => {
                 const allSelected = isAllSelected(localTripType, ALL_TRIP);
                 const isActive =
                   opt === ALL_TRIP ? allSelected : localTripType.includes(opt);
- 
+
                 return (
                   <button
                     key={opt}
@@ -599,9 +706,9 @@ export default function Filters({
             </div>
           )}
         </div>
- 
+
         {/* Food Preference */}
- 
+
         <div className="mb-3">
           <button
             onClick={() => setFoodPrefOpen((o) => !o)}
@@ -642,13 +749,17 @@ export default function Filters({
             </div>
           )}
         </div>
- 
+
         {/* Sliders */}
         <div>
-          <label className="block text-xs font-medium text-gray-500 mt-3 mb-2">
+          <label
+            htmlFor="day-range"
+            className="block text-xs font-medium text-gray-500 mt-3 mb-2"
+          >
             Duration (days)
           </label>
           <input
+            id="day-range"
             type="range"
             min={1}
             max={50}
@@ -658,12 +769,16 @@ export default function Filters({
           />
           <div className="text-xs text-gray-500 mt-1">{localDuration} days</div>
         </div>
- 
+
         <div>
-          <label className="block text-xs font-medium text-gray-500 mt-3 mb-2">
+          <label
+            htmlFor="age-range"
+            className="block text-xs font-medium text-gray-500 mt-3 mb-2"
+          >
             Age Range
           </label>
           <input
+            id="age-range"
             type="range"
             min={12}
             max={50}
@@ -673,8 +788,8 @@ export default function Filters({
           />
           <div className="text-xs text-gray-500 mt-1">{localAge} Years</div>
         </div>
- 
-        <div className="pb-2">
+
+        {/* <div className="pb-2">
           <label className="block text-xs font-medium text-gray-500 mt-3 mb-2">
             Budget (Rs)
           </label>
@@ -690,9 +805,31 @@ export default function Filters({
           <div className="text-xs text-gray-500 mt-1">
             ₹{localBudget.toLocaleString()}
           </div>
+        </div> */}
+
+        <div className="pb-2">
+          <label
+            htmlFor="budget-range"
+            className="block text-xs font-medium text-gray-500 mt-3 mb-2"
+          >
+            Budget (Rs)
+          </label>
+          <input
+            id="budget-range"
+            type="range"
+            min={0}
+            max={200000}
+            step={500}
+            value={localBudget}
+            onChange={(e) => setLocalBudget(Number(e.target.value))}
+            className="w-full accent-[#1D4350]"
+          />
+          <div className="text-xs text-gray-500 mt-1">
+            ₹{localBudget.toLocaleString()}
+          </div>
         </div>
       </div>
- 
+
       <button
         onClick={handleApply}
         className="mt-4 mb-3 mx-auto  w-fit bg-[#1D4350] text-white py-2 px-14  font-semibold hover:bg-[#173844] transition cursor-pointer"
