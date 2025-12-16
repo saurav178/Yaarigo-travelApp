@@ -98,16 +98,17 @@ export default function ProfilePage() {
   const pastTrips = profile.trips.filter((t) => t.status === "completed");
 
   return (
-    <div className="min-h-screen bg-white text-black">
-      <div className="w-[95%]  mx-auto px-4 sm:px-6 py-6 sm:py-8">
+    <div className="min-h-screen bg-gray-100 text-black mt-16">
+      <div className="w-full  mx-auto  ">
         {/* Header */}
-        <header className="relative w-full overflow-hidden bg-white border rounded-sm">
+        <header className="relative w-full overflow-hidden bg-white  ">
           {/* COVER BANNER */}
           <div className="w-full h-40 sm:h-52 md:h-64 relative">
-            <Image
+            <img
               src={typeof profile.coverPhoto === "string" ? profile.coverPhoto : ""}
               className="w-full h-full object-cover"
               alt="cover"
+               
             />
 
             <button
@@ -123,7 +124,7 @@ export default function ProfilePage() {
             {/* PROFILE PHOTO */}
             <div className="absolute -top-16 sm:-top-24 left-1/2 -translate-x-1/2 sm:left-8 sm:translate-x-0">
               <div className="w-28 h-28 sm:w-40 sm:h-40 md:w-[200px] md:h-[200px] overflow-hidden shadow-lg border-4 border-white rounded-full sm:rounded-none">
-                <Image
+                <img
                   src={typeof profile.profilePhoto === "string" ? profile.profilePhoto : ""}
                   className="w-full h-full object-cover"
                   alt="profile"
@@ -215,7 +216,7 @@ export default function ProfilePage() {
         </header>
 
         {/* Tabs  */}
-        <nav className="mt-6 bg-gray-100 rounded-lg p-2 flex items-center gap-2">
+        <nav className="mt-6 bg-gray-100 rounded-lg p-2 flex items-center gap-2 mx-4">
           {["details", "trips", "reviews", "gallery"].map((tab) => (
             <button
               key={tab}
@@ -234,7 +235,7 @@ export default function ProfilePage() {
         </nav>
 
        
-        <main className="mt-6">
+        <main className="mt-6 px-6 sm:px-6">
           {/* DETAILS WALA TAB */}
           {activeTab === "details" && (
             <>
@@ -620,7 +621,7 @@ export default function ProfilePage() {
                             className="border rounded-lg p-4"
                           >
                             <div className="flex items-start gap-4">
-                              <Image
+                              <img
                                 src={r.image}
                                 alt={r.name}
                                 className="w-12 h-12 rounded-full object-cover"
@@ -734,7 +735,7 @@ export default function ProfilePage() {
                     <>
                       <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                         {photos.map((g, i) => (
-                          <Image
+                          <img
                             key={i}
                             src={g}
                             alt={`gallery-${i}`}
@@ -967,7 +968,7 @@ export default function ProfilePage() {
 
 function Section({ children }: SectionProps) {
   return (
-    <div className="p-4 sm:p-6 shadow-lg bg-white mt-6 rounded-md">
+    <div className="p-4 sm:p-6 shadow-lg bg-white mt-6  ">
       {children}
     </div>
   );
@@ -1010,7 +1011,7 @@ function FileUploadField({ label, value, onChange }: FileUploadFieldProps) {
       )}
 
       {value && typeof value === "string" && (
-        <Image
+        <img
           src={value}
           alt="preview"
           className="mt-2 w-24 h-24 rounded-md object-cover border"
@@ -1143,7 +1144,7 @@ function TripCard({ trip }: TripCardProps) {
 
   return (
     <div className="border rounded-lg p-4 flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center">
-      <Image
+      <img
         src={trip.image}
         className="w-full h-40 sm:w-36 sm:h-32 object-cover rounded-md"
         alt={trip.title}
