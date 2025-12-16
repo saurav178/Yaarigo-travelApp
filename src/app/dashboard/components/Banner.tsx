@@ -184,9 +184,9 @@ export default function Banner() {
         />
       </div>
 
-      <div className="relative z-10 px-6 py-16 md:px-8 md:py-20 h-full flex items-center">
+      <div className="  relative z-10 px-6 py-16 md:px-8 md:py-20 h-full flex items-center justify-start">
         <div className="max-w-7xl mx-auto">
-          <div className="max-w-3xl">
+          <div className="max-w-3xl -ml-160">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 drop-shadow-2xl leading-tight">
               Welcome back, <span className="text-white">John!</span>
             </h1>

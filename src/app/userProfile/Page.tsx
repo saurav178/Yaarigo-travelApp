@@ -108,6 +108,8 @@ export default function ProfilePage() {
               src={typeof profile.coverPhoto === "string" ? profile.coverPhoto : ""}
               className="w-full h-full object-cover"
               alt="cover"
+              width={120}
+              height={120}
             />
 
             <button
@@ -127,6 +129,8 @@ export default function ProfilePage() {
                   src={typeof profile.profilePhoto === "string" ? profile.profilePhoto : ""}
                   className="w-full h-full object-cover"
                   alt="profile"
+                  width={120}
+              height={120}
                 />
               </div>
             </div>
