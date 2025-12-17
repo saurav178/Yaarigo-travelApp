@@ -47,7 +47,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto animate-fadeIn">
+    <div className="w-full max-w-md mx-auto animate-fadeIn bg-red">
       {/* <div className="glassmorphism-card"> */}
       {/* Header with gradient animation */}
       <div className="text-center mb-5 animate-slideDown">
