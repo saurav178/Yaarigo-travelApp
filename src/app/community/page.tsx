@@ -7,6 +7,8 @@ import { useSearchParams } from "next/navigation";
 import FeedCard from "./components/FeedCard";
 import Sidebar from "./components/Sidebar";
 import { getPosts } from "./data/posts";
+import Loader from "../../components/Loader/Loader";
+import { useEffect } from "react";
 
 type TabKey =
   | "trending"
@@ -117,6 +119,21 @@ function CommunityContent() {
     ];
     return dates[index % dates.length];
   };
+
+  const [showLoader, setShowLoader] = useState<boolean>(true);
+
+   useEffect(() => {
+    const timer = setTimeout(() => setShowLoader(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (showLoader) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center bg-white">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <main className="min-h-screen w-full bg-neutral-50">

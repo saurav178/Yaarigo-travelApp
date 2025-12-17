@@ -101,7 +101,7 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
           </span>
         )} */}
 
-        <button
+        {/* <button
           onClick={toggleLike}
           aria-pressed={liked}
           className={`absolute top-3 right-3 w-8 h-8 flex cursor-pointer items-center justify-center rounded-full transition ${
@@ -109,6 +109,17 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
           }`}
         >
           <FaHeart size={18} />
+        </button> */}
+
+        <button
+          onClick={toggleLike}
+          aria-pressed={liked}
+          aria-label={liked ? "Remove from favorites" : "Add to favorites"}
+          className={`absolute top-3 right-3 w-8 h-8 flex cursor-pointer items-center justify-center rounded-full transition ${
+            liked ? "text-rose-500" : "text-white"
+          }`}
+        >
+          <FaHeart size={18} aria-hidden="true" focusable="false" />
         </button>
       </div>
 
@@ -131,7 +142,10 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
             {agency.spotsLeft > 0 && (
               <div className="flex items-center gap-1">
                 {agency.verified && (
-                  <span className=" bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                  // <span className=" bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                  //   Verified
+                  // </span>
+                  <span className="bg-green-700 text-white text-xs font-semibold px-3 py-1 rounded-full">
                     Verified
                   </span>
                 )}
@@ -139,6 +153,11 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
                 <span className="flex gap-2 items-center bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
                   <FaExclamationTriangle /> {agency.spotsLeft} spots left
                 </span>
+
+                {/* <span className="flex gap-2 items-center bg-red-700 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
+                  <FaExclamationTriangle className="text-yellow-200" />{" "}
+                  {agency.spotsLeft} spots left
+                </span> */}
               </div>
             )}
           </div>
@@ -152,6 +171,12 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
               >
                 {tag}
               </span>
+              // <span
+              //   key={tag}
+              //   className="bg-blue-100 text-blue-700 text-xs font-medium px-2 py-0.5 rounded-md"
+              // >
+              //   {tag}
+              // </span>
             ))}
           </div>
 
@@ -188,6 +213,22 @@ export default function AgencyCard({ agency }: { agency: Agency }) {
             <div
               className={`relative w-15 h-15 flex items-center justify-center rounded-full font-semibold text-2xl border ${catStyle.avatarBg}`}
             >
+
+            {/* <div
+              className={`relative flex items-center justify-center 
+              rounded-full font-semibold border 
+              text-white text-xl sm:text-2xl 
+              w-12 h-12 sm:w-14 sm:h-14 
+              ${catStyle.avatarBg || "bg-blue-700 border-blue-800"}`}
+            > */}
+
+            {/* <div
+              className={`relative flex items-center justify-center 
+              rounded-full font-semibold border 
+              text-white text-xl sm:text-2xl 
+              w-12 h-12 sm:w-14 sm:h-14 
+              bg-blue-700 border-blue-800`}
+            > */}
               {getInitials(agency.host.name)}
 
               {agency.host.category !== "Travel Enthusiast" && (

@@ -46,13 +46,12 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
       .map((s) => s[0] ?? "")
       .join("")
       .toUpperCase();
-    
-    
-    const router = useRouter();
 
-    const handleLeaderProfile = () => {
-      router.push(ROUTES.PROFILE_LEADER);
-    };
+  const router = useRouter();
+
+  const handleLeaderProfile = () => {
+    router.push(ROUTES.PROFILE_LEADER);
+  };
 
   const getCategoryStyle = (category: string) => {
     switch (category) {
@@ -113,13 +112,27 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                 {/* <div className="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
                 {trip.host.match}% Match
               </div> */}
-                <button
+                {/* <button
                   onClick={() => toggleLike(trip.id)}
                   className={`absolute top-3 right-3 w-9 h-9 cursor-pointer flex items-center justify-center rounded-full ${
                     liked.includes(trip.id) ? "text-rose-500" : "text-white"
                   }`}
                 >
                   <FaHeart size={18} />
+                </button> */}
+
+                <button
+                  onClick={() => toggleLike(trip.id)}
+                  className={`absolute top-3 right-3 w-9 h-9 cursor-pointer flex items-center justify-center rounded-full ${
+                    liked.includes(trip.id) ? "text-rose-500" : "text-white"
+                  }`}
+                  aria-label={
+                    liked.includes(trip.id)
+                      ? "Remove from favorites"
+                      : "Add to favorites"
+                  }
+                >
+                  <FaHeart size={18} aria-hidden="true" focusable="false" />
                 </button>
               </div>
 
@@ -136,7 +149,12 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                   </div>
 
                   <div className="flex items-center gap-2 self-start">
-                    <span className="flex items-center gap-1 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow">
+                    {/* <span className="flex items-center gap-1 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow">
+                      <span className="font-bold">{trip.host.match}%</span>{" "}
+                      Match
+                    </span> */}
+
+                    <span className="flex items-center gap-1 bg-green-700 text-white text-xs font-semibold px-2 py-1 rounded-full shadow">
                       <span className="font-bold">{trip.host.match}%</span>{" "}
                       Match
                     </span>
@@ -144,6 +162,11 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                     <span className="flex items-center gap-1 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
                       <FaExclamationTriangle /> {trip.spotsLeft} spots left
                     </span>
+
+                    {/* <span className="flex items-center gap-1 bg-red-700 text-white text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
+                      <FaExclamationTriangle className="text-yellow-200" />{" "}
+                      {trip.spotsLeft} spots left
+                    </span> */}
                   </div>
                 </div>
 
@@ -157,6 +180,13 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                     >
                       {t}
                     </span>
+
+                    // <span
+                    //   key={t}
+                    //   className="bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-md"
+                    // >
+                    //   {t}
+                    // </span>
                   ))}
                 </div>
 
@@ -202,9 +232,37 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-2">
                   <div className="flex items-center gap-3 relative">
                     {/* Avatar */}
+
                     <div
                       className={`relative w-15 h-15 -ml-2.5 flex items-center justify-center rounded-full font-semibold text-2xl border ${catStyle.avatarBg}`}
                     >
+
+                    {/* <div
+                      className={`relative flex items-center justify-center 
+              rounded-full font-semibold border 
+              text-white text-xl sm:text-2xl 
+              w-12 h-12 sm:w-14 sm:h-14 
+              -ml-2 sm:-ml-3 
+              ${catStyle.avatarBg || "bg-blue-700 border-blue-800"}`}
+                    > */}
+
+                    {/* <div
+                      className={`relative flex items-center justify-center 
+              rounded-full font-semibold border 
+              text-white text-xl sm:text-2xl 
+              w-12 h-12 sm:w-14 sm:h-14 
+              -ml-2 sm:-ml-3 
+              ${catStyle.avatarBg || "bg-blue-800 border-blue-900"}`}
+                    > */}
+
+                   {/* <div
+  className="relative flex items-center justify-center 
+             rounded-full font-semibold border 
+             text-white text-xl sm:text-2xl 
+             w-12 h-12 sm:w-14 sm:h-14 
+             -ml-2 sm:-ml-3 
+             bg-blue-900 border-blue-950"
+> */}
                       {getInitials(trip.host.name)}
 
                       {trip.host.category !== "Travel Enthusiast" && (
@@ -276,9 +334,10 @@ export default function LeaderTrips({ leaders = LEADERS_DEMO }: Props) {
                       />{" "}
                       Join Trip
                     </button>
-                    <button 
-                    onClick={handleLeaderProfile}
-                    className="bg-[#1D4350] text-white text-xs px-1 py-1 cursor-pointer  hover:bg-[#173844] flex items-center justify-center h-8 w-26">
+                    <button
+                      onClick={handleLeaderProfile}
+                      className="bg-[#1D4350] text-white text-xs px-1 py-1 cursor-pointer  hover:bg-[#173844] flex items-center justify-center h-8 w-26"
+                    >
                       <Image
                         src={Profile}
                         alt="View Profile Icon"

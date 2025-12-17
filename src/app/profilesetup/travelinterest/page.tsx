@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
+import { ROUTES } from "../../../lib/routes";
 
 export default function Step3Interests() {
   const interests = [
@@ -27,6 +28,10 @@ export default function Step3Interests() {
     } else {
       setSelected([...selected, item]);
     }
+  };
+
+  const handlerFinal = () => {
+    router.push(ROUTES.DASHBOARD);
   };
 
   return (
@@ -72,7 +77,10 @@ export default function Step3Interests() {
       </div>
 
       {/* Complete Setup Button */}
-      <button className="bg-[#1D4350] text-white mt-6 py-2 px-4 text-sm font-medium hover:bg-[#1D4350] hover:scale-105 hover:shadow-md transition ">
+      <button 
+      type="submit"
+      onClick={handlerFinal}
+      className="bg-[#1D4350] text-white mt-6 py-2 px-4 text-sm font-medium hover:bg-[#1D4350] hover:scale-105 hover:shadow-md transition ">
         Complete setup
       </button>
     </div>
