@@ -12,7 +12,7 @@ export const initialProfile: Profile = {
   about:
     "Passionate traveler seeking adventure and authentic cultural experiences. Love hiking, photography, and trying local cuisine.",
   profilePhoto:
-    "https://image2url.com/images/1764151322305-1bf3fa50-3256-4304-b882-d47e247246ab.jpg",
+    "https://images.unsplash.com/photo-1500534623283-312aade485b7",
   coverPhoto:
     "https://images.unsplash.com/photo-1500534623283-312aade485b7",
 
@@ -38,7 +38,7 @@ export const initialProfile: Profile = {
       start: "2025-12-15",
       end: "2025-12-22",
       image:
-        "https://image2url.com/images/1764150430906-6eb57ad0-bfca-451c-9fbe-98dc64cd99a2.jpg",
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7",
       status: "confirmed",
       participants: ["You", "Alice", "Bob"],
       rating: 5.0,
@@ -50,7 +50,7 @@ export const initialProfile: Profile = {
       start: "2026-02-10",
       end: "2026-02-15",
       image:
-        "https://image2url.com/images/1764150334632-363c37b6-5e03-4f01-8ed0-1501d67b352d.jpg",
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7",
       status: "planning",
       participants: ["You", "Charlie"],
       rating: null,
@@ -62,7 +62,7 @@ export const initialProfile: Profile = {
       start: "2024-08-01",
       end: "2024-08-10",
       image:
-        "https://image2url.com/images/1764150334632-363c37b6-5e03-4f01-8ed0-1501d67b352d.jpg",
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7",
       status: "completed",
       participants: ["You", "John"],
       rating: 4.9,
