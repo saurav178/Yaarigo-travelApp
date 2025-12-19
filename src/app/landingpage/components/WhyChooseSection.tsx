@@ -1,6 +1,7 @@
 "use client";
 
 import { ShieldCheck, Sparkles, Users } from "lucide-react";
+import { whyChooseFeatures } from "../data";
 
 interface WhyChooseSectionProps {
   isVisible: boolean;
@@ -8,6 +9,19 @@ interface WhyChooseSectionProps {
 }
 
 export default function WhyChooseSection({ isVisible, setIsVisible }: WhyChooseSectionProps) {
+  const getIcon = (iconName: string) => {
+    switch (iconName) {
+      case "Users":
+        return <Users className="w-10 h-10 text-white" />;
+      case "Sparkles":
+        return <Sparkles className="w-10 h-10 text-white" />;
+      case "ShieldCheck":
+        return <ShieldCheck className="w-10 h-10 text-white" />;
+      default:
+        return <Users className="w-10 h-10 text-white" />;
+    }
+  };
+
   return (
     <section
       className="py-20 bg-white"
@@ -37,29 +51,7 @@ export default function WhyChooseSection({ isVisible, setIsVisible }: WhyChooseS
       </div>
 
       <div className="mt-12 grid gap-8 md:grid-cols-3 max-w-5xl mx-auto px-5">
-        {[
-          {
-            gradient: "from-blue-500 to-cyan-500",
-            bgGradient: "from-blue-50 to-cyan-50",
-            title: "Connect Authentically",
-            desc: "Meet verified travelers who share your interests, travel style, and destinations. Build meaningful connections before you go.",
-            icon: <Users className="w-10 h-10 text-white" />,
-          },
-          {
-            gradient: "from-purple-500 to-pink-500",
-            bgGradient: "from-purple-50 to-pink-50",
-            title: "AI-Powered Matching",
-            desc: "Our smart algorithm matches you with compatible travel companions based on your preferences, personality, and travel goals.",
-            icon: <Sparkles className="w-10 h-10 text-white" />,
-          },
-          {
-            gradient: "from-emerald-500 to-teal-500",
-            bgGradient: "from-emerald-50 to-teal-50",
-            title: "Travel Safely",
-            desc: "Verified profiles, secure messaging, and safety features ensure you can focus on the adventure, not the worries.",
-            icon: <ShieldCheck className="w-10 h-10 text-white" />,
-          },
-        ].map((feature, i) => (
+        {whyChooseFeatures.map((feature, i) => (
           <div key={i} className="group relative">
             {/* Animated background blob */}
             <div
@@ -73,7 +65,7 @@ export default function WhyChooseSection({ isVisible, setIsVisible }: WhyChooseS
                 <div
                   className={`w-14 h-14 bg-gradient-to-br ${feature.gradient} rounded-2xl flex items-center justify-center transform group-hover:rotate-6 group-hover:scale-110 transition-all duration-500 shadow-lg`}
                 >
-                  {feature.icon}
+                  {getIcon(feature.iconName)}
                 </div>
                 {/* Decorative dots */}
                 <div className="absolute -top-2 -right-2 w-4 h-4 bg-yellow-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -86,7 +78,7 @@ export default function WhyChooseSection({ isVisible, setIsVisible }: WhyChooseS
               </h3>
 
               <p className="text-gray-600 leading-relaxed text-sm">
-                {feature.desc}
+                {feature.description}
               </p>
 
               {/* Hover indicator */}

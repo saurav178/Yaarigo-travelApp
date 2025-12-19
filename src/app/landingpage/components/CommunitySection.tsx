@@ -1,5 +1,8 @@
 "use client";
 
+import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, Key } from "react";
+import { communityTestimonials, communityStats } from "../data";
+
 interface CommunitySectionProps {
   isVisible: boolean;
   setIsVisible: (visible: boolean) => void;
@@ -43,36 +46,7 @@ export default function CommunitySection({
 
         {/* Testimonials Grid */}
         <div className="grid md:grid-cols-2 gap-3 max-w-6xl mx-auto mb-10">
-          {[
-            {
-              name: "Sarah Chen",
-              location: "Tokyo, Japan",
-              text: `I found the perfect travel buddy for my Southeast Asia trip! We had similar interests and it made the journey unforgettable.`,
-              initials: "SC",
-              gradient: "from-blue-500 to-cyan-500",
-            },
-            {
-              name: "Marcus Rodriguez",
-              location: "Barcelona, Spain",
-              text: `The AI matching is incredible. Every person I connected with was genuinely compatible with my travel style.`,
-              initials: "MR",
-              gradient: "from-emerald-500 to-teal-500",
-            },
-            {
-              name: "Emma Wilson",
-              location: "New York, USA",
-              text: `Safety features gave me peace of mind. I felt secure meeting new people and exploring together.`,
-              initials: "EW",
-              gradient: "from-emerald-500 to-teal-500",
-            },
-            {
-              name: "Raj Patel",
-              location: "Mumbai, India",
-              text: `Made lifelong friends through Travio. Now we are planning our third trip together, awesome!`,
-              initials: "RP",
-              gradient: "from-blue-500 to-cyan-500",
-            },
-          ].map((review, i) => (
+          {communityTestimonials.map((review: { gradient: any; initials: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; name: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; location: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; text: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; }, i: Key | null | undefined) => (
             <div key={i} className="group relative overflow-hidden">
               {/* Card with gradient border effect */}
               <div
@@ -157,24 +131,7 @@ export default function CommunitySection({
         <div className="max-w-6xl mx-auto mt-16">
           <div className="shadow-xl p-4 md:p-6 -mt-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12">
-              {[
-                {
-                  value: "50K+",
-                  label: "Active Travelers",
-                },
-                {
-                  value: "150+",
-                  label: "Countries",
-                },
-                {
-                  value: "100K+",
-                  label: "Trips Planned",
-                },
-                {
-                  value: "4.9/5",
-                  label: "User Rating",
-                },
-              ].map((stat, i) => (
+              {communityStats.map((stat, i) => (
                 <div key={i} className="text-center group cursor-default">
                   <h3
                     className="text-2xl md:text-2xl font-bold transform transition-transform duration-300 group-hover:scale-110"

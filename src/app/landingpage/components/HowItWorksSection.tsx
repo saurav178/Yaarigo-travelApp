@@ -2,40 +2,16 @@
 
 import Image from "next/image";
 import { useState, useRef } from "react";
+import { howItWorksSteps } from "../data";
 
 interface HowItWorksSectionProps {
   isVisible: boolean;
   setIsVisible: (visible: boolean) => void;
 }
 
-type Step = {
-  step: number;
-  title: string;
-  image: string;
-};
-
 export default function HowItWorksSection({ isVisible, setIsVisible }: HowItWorksSectionProps) {
-  const steps: Step[] = [
-    { step: 1, title: "Plan smarter with AI", image: "/images/how1.jpg" },
-    {
-      step: 2,
-      title: "Meet verified, like-minded travelers",
-      image: "/images/how2.jpg",
-    },
-    {
-      step: 3,
-      title: "Stay safe with built-in protection",
-      image: "/images/how3.jpg",
-    },
-    {
-      step: 4,
-      title: "Earn rewards and discover authentic experiences",
-      image: "/images/how4.jpg",
-    },
-  ];
-
   const [activeStep, setActiveStep] = useState<number>(1);
-  const [imageSrc, setImageSrc] = useState<string>(steps[0].image);
+  const [imageSrc, setImageSrc] = useState<string>(howItWorksSteps[0].image);
   const titleRef = useRef(null);
 
   return (
@@ -89,13 +65,13 @@ export default function HowItWorksSection({ isVisible, setIsVisible }: HowItWork
             <div
               className="absolute left-3.5 w-2 h-18 bg-gradient-to-tr from-[#0073B9] to-[#1B3F72] rounded-full transition-all duration-500"
               style={{
-                top: `${(activeStep - 1) * (100 / (steps.length - 1))}%`,
+                top: `${(activeStep - 1) * (100 / (howItWorksSteps.length - 1))}%`,
                 transform: "translateY(-50%)",
               }}
             />
 
             <div className="flex flex-col gap-8 ml-10 relative">
-              {steps.map(({ step, title, image }) => (
+              {howItWorksSteps.map(({ step, title, image }) => (
                 <button
                   key={step}
                   onClick={() => {

@@ -3,49 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ProfileDropdown from "./ProfileDropdown";
+import { navItems } from "../data";
 
 export default function DashboardHeader() {
   const pathname = usePathname();
-
-  const navItems = [
-    { 
-      href: "/dashboard", 
-      label: "My Trips",
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-        </svg>
-      )
-    },
-    { 
-      href: "/searchtrip", 
-      label: "Explore",
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      )
-    },
-    { 
-      href: "/dashboard/nearby", 
-      label: "Nearby",
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
-      )
-    },
-    { 
-      href: "/community", 
-      label: "Community",
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-        </svg>
-      )
-    }
-  ];
 
   return (
     <header className="w-full fixed top-0 z-50 backdrop-blur-lg bg-white/80 border-b border-gray-200/50">
@@ -75,7 +36,9 @@ export default function DashboardHeader() {
                   }`}
                 >
                   <span className={isActive ? 'text-[#1DA69B]' : 'text-gray-400'}>
-                    {item.icon}
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.iconPath} />
+                    </svg>
                   </span>
                   <span>{item.label}</span>
                 </Link>
@@ -85,8 +48,6 @@ export default function DashboardHeader() {
 
           {/* Right Section: Notifications + Profile */}
           <div className="flex items-center space-x-4">
-            {/* Notification Bell */}
-            
             {/* Profile Dropdown */}
             <ProfileDropdown />
           </div>
