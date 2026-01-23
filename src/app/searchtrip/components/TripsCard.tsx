@@ -28,7 +28,6 @@ import { ROUTES } from "../../../lib/routes";
 import type { Trip } from "../types/types";
 import { TRIPS_DEMO } from "../data/data";
 
-
 type TripCardProps = {
   trips?: Trip[];
   compact?: boolean;
@@ -48,7 +47,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
 
   const toggleLike = (id: number) => {
     setLikedTrips((prev) =>
-      prev.includes(id) ? prev.filter((tid) => tid !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((tid) => tid !== id) : [...prev, id],
     );
   };
 
@@ -100,23 +99,22 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
               <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-44 sm:h-auto lg:h-auto">
                 <div className="relative w-full h-full overflow-hidden group">
                   {trip.image?.trim() ? (
-  <Image
-    src={trip.image}
-    alt={trip.title || "Trip image"}
-    width={640}
-    height={360}
-    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-  />
-) : (
-  <Image
-    src="/fallback.jpg"
-    alt="Fallback image"
-    width={640}
-    height={360}
-    className="w-full h-full object-cover"
-  />
-)}
-
+                    <Image
+                      src={trip.image}
+                      alt={trip.title || "Trip image"}
+                      width={640}
+                      height={360}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                  ) : (
+                    <Image
+                      src="/fallback.jpg"
+                      alt="Fallback image"
+                      width={640}
+                      height={360}
+                      className="w-full h-full object-cover"
+                    />
+                  )}
                 </div>
 
                 {/* <button
@@ -247,7 +245,7 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
                     <div
                       className={`relative flex items-center justify-center text-xl sm:text-2xl rounded-full font-semibold border ${catStyle.avatarBg} w-12 h-12 sm:w-14 sm:h-14 shrink-0`}
                     >
-                    {/* <div
+                      {/* <div
                       className={`relative flex items-center justify-center text-white text-lg sm:text-2xl rounded-full font-semibold border ${
                         catStyle.avatarBg || "bg-blue-700"
                       } w-10 h-10 sm:w-14 sm:h-14 shrink-0`}
