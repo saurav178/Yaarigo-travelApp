@@ -28,6 +28,7 @@ import { ROUTES } from "../../../lib/routes";
 import type { Trip } from "../types/types";
 import { TRIPS_DEMO } from "../data/data";
 
+
 type TripCardProps = {
   trips?: Trip[];
   compact?: boolean;
@@ -88,23 +89,34 @@ export default function TripCard({ trips = TRIPS_DEMO }: TripCardProps) {
   return (
     <main className="w-full flex justify-center px-3 lg:px-0">
       <div className="w-full  mx-auto flex flex-col gap-3">
-        {trips.map((trip) => {
+        {trips.map((trip, index) => {
           const catStyle = getCategoryStyle(trip.host.category);
           return (
             <article
-              key={trip.id}
+              key={`${trip.id}-${index}`}
               className="bg-white shadow-sm border border-gray-200 flex flex-col sm:flex-row overflow-hidden  transition-shadow duration-300 hover:shadow-[0_12px_20px_-6px_rgba(0,0,0,0.25)]  lg:h-80 w-full"
             >
               {/* Image */}
               <div className="relative flex shrink-0 w-full sm:w-64 md:w-72 h-44 sm:h-auto lg:h-auto">
                 <div className="relative w-full h-full overflow-hidden group">
-                  <Image
-                    src={trip.image}
-                    alt={trip.title}
-                    width={640}
-                    height={360}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
+                  {trip.image?.trim() ? (
+  <Image
+    src={trip.image}
+    alt={trip.title || "Trip image"}
+    width={640}
+    height={360}
+    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+  />
+) : (
+  <Image
+    src="/fallback.jpg"
+    alt="Fallback image"
+    width={640}
+    height={360}
+    className="w-full h-full object-cover"
+  />
+)}
+
                 </div>
 
                 {/* <button

@@ -32,6 +32,19 @@ type Props = {
   setTripType?: (s: string) => void;
   foodPref?: string;
   setFoodPref?: (s: string) => void;
+  // Combined filter props
+  selectedTripStyles?: string[];
+  setSelectedTripStyles?: (v: string[]) => void;
+  priceMin?: number;
+  setPriceMin?: (n: number) => void;
+  priceMax?: number;
+  setPriceMax?: (n: number) => void;
+  selectedFromLocation?: string;
+  setSelectedFromLocation?: (s: string) => void;
+  selectedToLocation?: string;
+  setSelectedToLocation?: (s: string) => void;
+  selectedTravelMode?: string;
+  setSelectedTravelMode?: (s: string) => void;
   onClear?: () => void;
   onApply?: (payload: FilterPayload) => void;
 };
@@ -59,6 +72,18 @@ export default function Filters({
   setTripType,
   foodPref = "All",
   setFoodPref,
+  selectedTripStyles = [],
+  setSelectedTripStyles,
+  priceMin = 0,
+  setPriceMin,
+  priceMax = 50000,
+  setPriceMax,
+  selectedFromLocation = "",
+  setSelectedFromLocation,
+  selectedToLocation = "",
+  setSelectedToLocation,
+  selectedTravelMode = "",
+  setSelectedTravelMode,
   onClear,
   onApply,
 }: Props) {
@@ -94,6 +119,10 @@ export default function Filters({
   const [safeOpen, setSafeOpen] = useState<boolean>(true);
   const [tripTypeOpen, setTripTypeOpen] = useState<boolean>(true);
   const [foodPrefOpen, setFoodPrefOpen] = useState<boolean>(true);
+  const [tripStylesOpen, setTripStylesOpen] = useState<boolean>(false);
+  const [priceRangeOpen, setPriceRangeOpen] = useState<boolean>(false);
+  const [locationsOpen, setLocationsOpen] = useState<boolean>(false);
+  const [travelModeOpen, setTravelModeOpen] = useState<boolean>(false);
 
   const percentOptions = [90, 80, 70, 60, 50, 0] as const;
   const tripTypeOptions = [
@@ -110,6 +139,15 @@ export default function Filters({
     "+ Halal",
     "+ All",
   ] as const;
+  const tripStyleOptions = [
+    "adventure",
+    "backpacking",
+    "luxury",
+    "mountain",
+    "beach",
+    "cultural",
+  ] as const;
+  const travelModeOptions = ["GROUP", "SOLO", "COUPLE", "FAMILY"] as const;
   const ALL_TRIP = "+ All";
   const ALL_FOOD = "+ All";
 
@@ -268,6 +306,14 @@ export default function Filters({
     setLanguages(["English"]);
     setInputLang("");
     setLikesInput("");
+
+    // Clear combined filter states
+    setSelectedTripStyles?.([]);
+    setPriceMin?.(0);
+    setPriceMax?.(50000);
+    setSelectedFromLocation?.("");
+    setSelectedToLocation?.("");
+    setSelectedTravelMode?.("");
 
     setQuery(cleared.query);
     setAge(cleared.age);
@@ -746,6 +792,176 @@ export default function Filters({
                   </button>
                 );
               })}
+            </div>
+          )}
+        </div>
+
+        {/* Trip Styles Filter */}
+        <div className="mb-3">
+          <button
+            onClick={() => setTripStylesOpen((o) => !o)}
+            aria-expanded={tripStylesOpen}
+            className="w-full flex items-center justify-between text-xs font-medium text-gray-700"
+          >
+            <span>Trip Styles</span>
+            <FaChevronDown
+              className={`transition-transform duration-300 ${
+                tripStylesOpen ? "rotate-180" : "rotate-0"
+              }`}
+            />
+          </button>
+
+          {tripStylesOpen && (
+            <div className="grid grid-cols-2 gap-2 mt-3">
+              {tripStyleOptions.map((style) => (
+                <label
+                  key={style}
+                  className="flex items-center gap-2 p-2 cursor-pointer hover:bg-gray-50 transition"
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedTripStyles?.includes(style) || false}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedTripStyles?.([...(selectedTripStyles || []), style]);
+                      } else {
+                        setSelectedTripStyles?.(
+                          (selectedTripStyles || []).filter((s) => s !== style)
+                        );
+                      }
+                    }}
+                    className="h-4 w-4 cursor-pointer accent-[#1D4350]"
+                  />
+                  <span className="text-sm text-gray-700 capitalize">{style}</span>
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Travel Mode Filter */}
+        <div className="mb-3">
+          <button
+            onClick={() => setTravelModeOpen((o) => !o)}
+            aria-expanded={travelModeOpen}
+            className="w-full flex items-center justify-between text-xs font-medium text-gray-700"
+          >
+            <span>Travel Mode</span>
+            <FaChevronDown
+              className={`transition-transform duration-300 ${
+                travelModeOpen ? "rotate-180" : "rotate-0"
+              }`}
+            />
+          </button>
+
+          {travelModeOpen && (
+            <div className="grid grid-cols-2 gap-2 mt-3">
+              {travelModeOptions.map((mode) => (
+                <label
+                  key={mode}
+                  className="flex items-center gap-2 p-2 cursor-pointer hover:bg-gray-50 transition"
+                >
+                  <input
+                    type="radio"
+                    name="travelMode"
+                    value={mode}
+                    checked={selectedTravelMode === mode}
+                    onChange={() => setSelectedTravelMode?.(mode)}
+                    className="h-4 w-4 cursor-pointer accent-[#1D4350]"
+                  />
+                  <span className="text-sm text-gray-700">{mode}</span>
+                </label>
+              ))}
+              <button
+                onClick={() => setSelectedTravelMode?.("")}
+                className="col-span-2 text-xs text-gray-600 underline cursor-pointer"
+              >
+                Clear
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Price Range Filter */}
+        <div className="mb-3">
+          <button
+            onClick={() => setPriceRangeOpen((o) => !o)}
+            aria-expanded={priceRangeOpen}
+            className="w-full flex items-center justify-between text-xs font-medium text-gray-700"
+          >
+            <span>Price Range</span>
+            <FaChevronDown
+              className={`transition-transform duration-300 ${
+                priceRangeOpen ? "rotate-180" : "rotate-0"
+              }`}
+            />
+          </button>
+
+          {priceRangeOpen && (
+            <div className="mt-3 space-y-3">
+              <div>
+                <label className="text-xs text-gray-500 block mb-1">
+                  Min: ₹{(priceMin || 0).toLocaleString()}
+                </label>
+                <input
+                  type="range"
+                  min={0}
+                  max={50000}
+                  step={1000}
+                  value={priceMin || 0}
+                  onChange={(e) => setPriceMin?.(Number(e.target.value))}
+                  className="w-full accent-[#1D4350]"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-gray-500 block mb-1">
+                  Max: ₹{(priceMax || 50000).toLocaleString()}
+                </label>
+                <input
+                  type="range"
+                  min={0}
+                  max={50000}
+                  step={1000}
+                  value={priceMax || 50000}
+                  onChange={(e) => setPriceMax?.(Number(e.target.value))}
+                  className="w-full accent-[#1D4350]"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Locations Filter */}
+        <div className="mb-3">
+          <button
+            onClick={() => setLocationsOpen((o) => !o)}
+            aria-expanded={locationsOpen}
+            className="w-full flex items-center justify-between text-xs font-medium text-gray-700"
+          >
+            <span>From/To Location</span>
+            <FaChevronDown
+              className={`transition-transform duration-300 ${
+                locationsOpen ? "rotate-180" : "rotate-0"
+              }`}
+            />
+          </button>
+
+          {locationsOpen && (
+            <div className="mt-3 space-y-2">
+              <input
+                type="text"
+                placeholder="From location..."
+                value={selectedFromLocation || ""}
+                onChange={(e) => setSelectedFromLocation?.(e.target.value)}
+                className="w-full px-3 py-2 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-[#1D4350]"
+              />
+              <input
+                type="text"
+                placeholder="To location..."
+                value={selectedToLocation || ""}
+                onChange={(e) => setSelectedToLocation?.(e.target.value)}
+                className="w-full px-3 py-2 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-[#1D4350]"
+              />
             </div>
           )}
         </div>

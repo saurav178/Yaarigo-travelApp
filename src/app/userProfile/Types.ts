@@ -2,15 +2,40 @@ export type TripStatus = "confirmed" | "planning" | "completed";
 
 export interface Trip {
   id: string;
+
   title: string;
-  location: string;
-  start: string;
-  end: string;
+  description: string;
   image: string;
-  status: TripStatus;
-  participants: string[];
-  rating: number | null;
+
+  tags: string[];
+
+  from: string;
+  to: string;
+
+  date: string;
+
+  travelersNeeded: number;
+  spotsLeft: number;
+
+  price?: string; // optional if backend may not send
+  rating?: number | null;
+
+  host: {
+    name: string;
+    age: number;
+    verified: boolean;
+    location: string;
+    rating: number;
+    match: number;
+    safeScore: number;
+    category:
+      | "Travel Enthusiast"
+      | "Trip Agency"
+      | "Featured Trip Leader"
+      | "Featured Trip Agency";
+  };
 }
+
 
 export interface Review {
   id: string;
