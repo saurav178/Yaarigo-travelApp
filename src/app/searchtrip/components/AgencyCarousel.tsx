@@ -4,11 +4,11 @@
 
 import AgencyCard from "./AgencyCard";
 import type { Agency } from "../types/types";
-import { AGENCIES_DEMO } from "../data/data";
 
-type Props = { agencies?: Agency[] };
-
-export default function AgencyCarousel({ agencies = AGENCIES_DEMO }: Props) {
+type Props = { 
+  agencies: Agency[]; // Changed: No default value
+};
+export default function AgencyCarousel({ agencies}: Props) {
   return (
     <div className="flex flex-col gap-3 w-full   mx-auto">
       {agencies.map((agency) => (

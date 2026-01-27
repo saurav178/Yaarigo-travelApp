@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { MapPin, Heart } from "lucide-react";
-import { filterPackages } from "../lib/filterUtils";
+import { fetchAllData } from "../lib/api";
 import type { CombinedFilterPayload } from "../types/combinedFilters";
 
 interface PackageProps {
@@ -11,23 +11,14 @@ interface PackageProps {
 
 export default function Package({ filters = {} }: PackageProps) {
   const [packages, setPackages] = useState<any[]>([]);
-  const [filteredPackages, setFilteredPackages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          "https://api.business.travio.cepialabs.com/api/packages/search",
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const result = await response.json();
-        setPackages(result.data || []);
+        const response = await fetchAllData();
+        setPackages(response.packages || []);
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -37,31 +28,6 @@ export default function Package({ filters = {} }: PackageProps) {
 
     fetchData();
   }, []);
-
-  // Apply filters when packages or filters change
-  useEffect(() => {
-    if (packages.length === 0) {
-      setFilteredPackages([]);
-      return;
-    }
-
-    let filtered = [...packages];
-
-    // Apply filter criteria
-    const filterCriteria = {
-      priceRange: filters.priceRange,
-      tripStyles: filters.tripStyles,
-      fromLocation: filters.fromLocation,
-      toLocation: filters.toLocation,
-      totalDays: filters.totalDays,
-      totalNights: filters.totalNights,
-      category: filters.category,
-      creatorType: filters.creatorType,
-    };
-
-    filtered = filterPackages(filtered, filterCriteria);
-    setFilteredPackages(filtered);
-  }, [packages, filters]);
 
   const getLowestPrice = (plans: any[]) => {
     if (!plans || plans.length === 0) return "Price on request";
@@ -104,31 +70,23 @@ export default function Package({ filters = {} }: PackageProps) {
     );
   }
 
-  if (filteredPackages.length === 0) {
-    return (
-      <div className="flex items-center justify-center py-8">
-        <div className="text-lg text-gray-600">No packages match your filters</div>
-      </div>
-    );
-  }
-
   return (
     <div className="mb-8">
       <div className="relative mb-4">
         {/* Decorative background elements */}
         <div className="absolute -top-2 -left-2 w-24 h-24 bg-blue-400/20 rounded-full blur-3xl"></div>
         <div className="absolute -top-1 right-10 w-16 h-16 bg-purple-400/20 rounded-full blur-2xl"></div>
-        
+
         {/* Header content */}
         <div className="relative flex items-center gap-3">
           {/* Accent line */}
           <div className="w-1.5 h-6 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></div>
-          
+
           {/* Title with gradient */}
           <h3 className="text-lg font-bold bg-gradient-to-r from-gray-800 via-blue-700 to-purple-700 bg-clip-text text-transparent">
             Available Trip Packages
           </h3>
-          
+
           {/* Decorative badge */}
           <div className="flex items-center gap-1.5 px-2.5 py-0.5 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-full">
             <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
@@ -137,7 +95,7 @@ export default function Package({ filters = {} }: PackageProps) {
         </div>
       </div>
       <div className="flex gap-4 overflow-x-auto pb-4">
-        {filteredPackages.map((pkg, index) => {
+        {packages.map((pkg, index) => {
           const lowestPrice = getLowestPrice(pkg.plans);
           const planCategories = getPlanCategories(pkg.plans);
 

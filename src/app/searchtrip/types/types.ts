@@ -1,5 +1,3 @@
-
-
 // types
 
 export type HostCategory = "Travel Enthusiast" | "Featured Trip Leader" | "Featured Trip Agency";
