@@ -10,6 +10,7 @@ import LeaderTrips from "./components/LeaderTrips";
 import AgencyCarousel from "./components/AgencyCarousel";
 import Filters from "./components/Filters";
 import Package from "./components/Package";
+import CombinedContent from "./components/CombinedContent";
 import Loader from "../../components/Loader/Loader";
 
 // Hooks
@@ -21,7 +22,7 @@ type ActiveFilter = "all" | "best" | "agency" | "leader";
 
 export default function Page() {
   // Fetch data using custom hook
-  const { trips, leaders, agencies, similarTrips, loading } = useTripsData();
+  const { trips, leaders, agencies, packages, similarTrips, loading } = useTripsData();
   
   // Manage filters using custom hook
   const {
@@ -175,14 +176,10 @@ export default function Page() {
 
           {/* Best Match */}
           {(activeFilter === "all" || activeFilter === "best") &&
-            filteredTrips.length > 0 && (
+            (filteredTrips.length > 0 || packages.length > 0) && (
               <section className="mb-8">
                 <h3 className="text-lg font-semibold mb-4">Best Match</h3>
-                <TripCard trips={filteredTrips.slice(0, 2)} />
-                {filteredTrips.length >= 2 && <Package />}
-                {filteredTrips.length > 2 && (
-                  <TripCard trips={filteredTrips.slice(2)} />
-                )}
+                <CombinedContent trips={filteredTrips} packages={packages} />
               </section>
             )}
 

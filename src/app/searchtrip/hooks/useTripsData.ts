@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { apiService, mapApiTripToTrip }  from "../lib/api"; // ✅ Import mapper from api
+import { apiService, mapApiPackageToDisplay, mapApiTripToTrip }  from "../lib/api"; // ✅ Import mapper from api
 import type { Trip, SimilarTrip, Leader, Agency } from "../types/types";
 
 export const useTripsData = () => {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [agencies, setAgencies] = useState<Agency[]>([]);
+  const [packages, setPackages] = useState<any[]>([]);
   const [similarTrips, setSimilarTrips] = useState<SimilarTrip[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -17,21 +18,29 @@ export const useTripsData = () => {
       try {
         setLoading(true);
         
-        // Fetch trips from API
-        const response = await apiService.trips.search();
-        
-        if (!response.results || response.results.length === 0) {
+        // Fetch trips and packages from API
+        const [tripsResponse, packagesResponse] = await Promise.all([
+          apiService.trips.search(),
+          apiService.packages.search()
+        ]);
+
+        if (!tripsResponse.results || tripsResponse.results.length === 0) {
           console.warn("No trips found in API response");
           setTrips([]);
           setLeaders([]);
           setAgencies([]);
+          setPackages([]);
           setSimilarTrips([]);
           return;
         }
-        
+
         // Map API trips to app format
-        const mappedTrips = response.results.map(mapApiTripToTrip);
+        const mappedTrips = tripsResponse.results.map(mapApiTripToTrip);
         setTrips(mappedTrips);
+
+        // Map API packages to display format
+        const mappedPackages = packagesResponse.data?.map(mapApiPackageToDisplay) || [];
+        setPackages(mappedPackages);
         
         // Extract leaders (from trips with leader category)
         const leaderTrips = mappedTrips.filter(
@@ -65,6 +74,7 @@ export const useTripsData = () => {
         setTrips([]);
         setLeaders([]);
         setAgencies([]);
+        setPackages([]);
         setSimilarTrips([]);
       } finally {
         setLoading(false);
@@ -74,5 +84,5 @@ export const useTripsData = () => {
     fetchData();
   }, []);
 
-  return { trips, leaders, agencies, similarTrips, loading, error };
+  return { trips, leaders, agencies, packages, similarTrips, loading, error };
 };
