@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { apiService, mapApiPackageToDisplay, mapApiTripToTrip }  from "../lib/api"; // ✅ Import mapper from api
+import { apiService } from "../lib/api";
+import { mapApiPackageToDisplay, mapApiTripToTrip } from "../lib/mappers";
 import type { Trip, SimilarTrip, Leader, Agency } from "../types/types";
 
 export const useTripsData = () => {

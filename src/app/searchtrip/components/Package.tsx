@@ -90,15 +90,10 @@ export default function Package({ packages: propPackages, filters = {} }: Packag
           <div className="w-1.5 h-6 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></div>
 
           {/* Title with gradient */}
-          <h3 className="text-lg font-bold bg-gradient-to-r from-gray-800 via-blue-700 to-purple-700 bg-clip-text text-transparent">
+          <h3 className="text-lg font-bold text-black">
             Available Trip Packages
           </h3>
-
-          {/* Decorative badge */}
-          {/* <div className="flex items-center gap-1.5 px-2.5 py-0.5 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-full"> */}
-            {/* <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
-            <span className="text-xs font-semibold text-blue-700">New</span> */}
-          {/* </div> */}
+          
         </div>
       </div>
       <div className="flex gap-4 overflow-x-auto pb-4">

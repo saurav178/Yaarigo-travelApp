@@ -19,6 +19,7 @@ import { GoDotFill } from "react-icons/go";
 import { PiMedalDuotone } from "react-icons/pi";
 
 import type { SimilarTrip } from "../types/types";
+import { getInitials, getCategoryStyle, getSafeScoreStyle } from "../lib/utils";
 import dots from "../../../../public/searchpageimg/Line 1.png";
 import TripImg from "../../../../public/searchpageimg/view_trips.png";
 import Join from "../../../../public/searchpageimg/join_trips.png";
@@ -34,46 +35,6 @@ export default function Similar({ trips }: Props) {
     setLikedTrips((p) =>
       p.includes(id) ? p.filter((x) => x !== id) : [...p, id]
     );
-
-  const getInitials = (name: string) =>
-    name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase();
-
-  const getCategoryStyle = (category: string) => {
-    switch (category) {
-      case "Travel Enthusiast":
-        return {
-          bg: "bg-blue-100 text-blue-800",
-          avatarBg: "bg-blue-500 text-white",
-        };
-      case "Featured Trip Leader":
-        return {
-          bg: "bg-yellow-100 text-yellow-800",
-          avatarBg: "bg-yellow-500 text-white",
-        };
-      case "Featured Trip Agency":
-        return {
-          bg: "bg-orange-100 text-orange-800",
-          avatarBg: "bg-orange-500 text-white",
-        };
-      default:
-        return {
-          bg: "bg-gray-100 text-gray-800",
-          avatarBg: "bg-gray-500 text-white",
-        };
-    }
-  };
-
-  const getSafeScoreStyle = (score: number) => {
-    if (score < 50)
-      return "bg-red-100 text-red-700 border border-red-300 px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
-    if (score < 75)
-      return "bg-yellow-100 text-yellow-800 border border-yellow-300 px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
-    return "bg-green-100 text-green-700 border border-green-300 px-2 py-[2px] rounded-md flex items-center gap-1 text-xs";
-  };
 
   // Handle empty trips
   if (!trips || trips.length === 0) {

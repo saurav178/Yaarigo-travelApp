@@ -12,6 +12,7 @@ import Filters from "./components/Filters";
 import Package from "./components/Package";
 import CombinedContent from "./components/CombinedContent";
 import Loader from "../../components/Loader/Loader";
+import InlineLoader from "../../components/Loader/InlineLoader";
 
 // Hooks
 import { useTripsData } from "./hooks/useTripsData";
@@ -96,6 +97,13 @@ export default function Page() {
         {/* LEFT: Filters Panel */}
         <aside className="col-span-12 lg:col-span-4 xl:col-span-3">
           <div className="lg:sticky lg:top-21">
+            {/* Show inline loader inside filters when API is loading after initial load */}
+            {loading && !showLoader && (
+              <div className="mb-4 p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                <InlineLoader message="Loading filters..." />
+              </div>
+            )}
+
             <Filters
               // Basic filters
               query={query}
@@ -110,7 +118,7 @@ export default function Page() {
               setMinRating={setMinRating}
               minSafeScore={minSafeScore}
               setMinSafeScore={setMinSafeScore}
-              
+
               // Combined filters
               selectedTripStyles={selectedTripStyles}
               setSelectedTripStyles={setSelectedTripStyles}
@@ -124,7 +132,7 @@ export default function Page() {
               setSelectedToLocation={setSelectedToLocation}
               selectedTravelMode={selectedTravelMode}
               setSelectedTravelMode={setSelectedTravelMode}
-              
+
               // Actions
               onApply={handleApplyFilters}
               onClear={handleClearFilters}
@@ -134,6 +142,11 @@ export default function Page() {
 
         {/* RIGHT: Main Content */}
         <main className="col-span-12 lg:col-span-8 xl:col-span-9">
+          {/* Show inline loader when initial loader is done but API is still loading */}
+          {loading && !showLoader && (
+            <InlineLoader message="Fetching latest trips and packages..." className="mb-8" />
+          )}
+
           {/* Top row: Trending + chips */}
           <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6">
             <div className="flex items-center gap-2 bg-orange-50 text-orange-700 px-3 py-1 rounded-full font-medium cursor-pointer w-fit">

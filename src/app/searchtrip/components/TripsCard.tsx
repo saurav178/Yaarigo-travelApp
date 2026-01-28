@@ -22,6 +22,7 @@ import { PiMedalDuotone } from "react-icons/pi";
 import { GoDotFill } from "react-icons/go";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "../../../lib/routes";
+import { getInitials, getCategoryStyle, getSafeScoreStyle } from "../lib/utils";
 
 import type { Trip } from "../types/types";
 
@@ -225,11 +226,7 @@ export default function TripCard({ trips }: TripCardProps) {
                       className={`relative flex items-center justify-center text-xl sm:text-2xl rounded-full font-semibold border ${catStyle.avatarBg} w-12 h-12 sm:w-14 sm:h-14 shrink-0`}
                     >
                       <span className="select-none truncate">
-                        {trip.host.name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")
-                          .toUpperCase()}
+                        {getInitials(trip.host.name)}
                       </span>
 
                       {trip.host.category !== "Travel Enthusiast" && (
