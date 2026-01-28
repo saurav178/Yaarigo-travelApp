@@ -8,7 +8,7 @@ import Similar from "./components/Similar";
 import TripCard from "./components/TripsCard";
 import LeaderTrips from "./components/LeaderTrips";
 import AgencyCarousel from "./components/AgencyCarousel";
-import Filters from "./components/Filters";
+import FilterSidebar from "./components/filters/FilterSidebar";
 import Package from "./components/Package";
 import CombinedContent from "./components/CombinedContent";
 import Loader from "../../components/Loader/Loader";
@@ -104,7 +104,7 @@ export default function Page() {
               </div>
             )}
 
-            <Filters
+            <FilterSidebar
               // Basic filters
               query={query}
               setQuery={setQuery}
@@ -120,18 +120,18 @@ export default function Page() {
               setMinSafeScore={setMinSafeScore}
 
               // Combined filters
-              selectedTripStyles={selectedTripStyles}
-              setSelectedTripStyles={setSelectedTripStyles}
+              tripStyles={selectedTripStyles}
+              setTripStyles={setSelectedTripStyles}
               priceMin={priceMin}
               setPriceMin={setPriceMin}
               priceMax={priceMax}
               setPriceMax={setPriceMax}
-              selectedFromLocation={selectedFromLocation}
-              setSelectedFromLocation={setSelectedFromLocation}
-              selectedToLocation={selectedToLocation}
-              setSelectedToLocation={setSelectedToLocation}
-              selectedTravelMode={selectedTravelMode}
-              setSelectedTravelMode={setSelectedTravelMode}
+              fromLocation={selectedFromLocation}
+              setFromLocation={setSelectedFromLocation}
+              toLocation={selectedToLocation}
+              setToLocation={setSelectedToLocation}
+              travelMode={selectedTravelMode}
+              setTravelMode={setSelectedTravelMode}
 
               // Actions
               onApply={handleApplyFilters}
