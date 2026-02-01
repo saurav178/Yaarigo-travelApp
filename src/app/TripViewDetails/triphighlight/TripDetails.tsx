@@ -6,7 +6,7 @@ import SafetyInformation from "./SafetyInformation";
 import ShareThisTrip from "./ShareThisTrip";
 import CancellationPolicy from "./CancellationPolicy";
 import { TRIPS_DEMO } from "@/app/searchtrip/data/data";
-import TripsCard from "@/app/searchtrip/components/TripsCard";
+import TripsCard from "@/app/searchtrip/components/TripCard";
 
 const TripDetails = () => {
   return (

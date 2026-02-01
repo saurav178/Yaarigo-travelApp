@@ -1,4 +1,4 @@
-import type { ApiTripResponse, ApiPackageResponse } from '../api';
+import type { ApiTripResponse, ApiPackageResponse } from '../../types/types';
 
 /**
  * Maps API trip response to internal Trip format
@@ -53,8 +53,8 @@ export const mapApiPackageToDisplay = (apiPackage: ApiPackageResponse): any => {
   let lowestPrice = 0;
   if (plans.length > 0) {
     const prices = plans
-      .map(p => p.discountedPrice || p.pricePerPerson || 0)
-      .filter(p => p > 0);
+      .map((p: { discountedPrice: any; pricePerPerson: any; }) => p.discountedPrice || p.pricePerPerson || 0)
+      .filter((p: number) => p > 0);
     lowestPrice = prices.length > 0 ? Math.min(...prices) : 0;
   }
 

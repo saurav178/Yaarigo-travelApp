@@ -74,3 +74,67 @@ export type FilterPayload = {
   tripType: string;
   foodPref: string;
 };
+
+// API Response Types
+export interface ApiTripResponse {
+  _id: string;
+  title: string;
+  description: string;
+  category: string;
+  tripStyles: string[];
+  createdBy: {
+    name: string;
+    age: number;
+    verified: boolean;
+    rating: number;
+  };
+  creatorType: 'AGENCY' | 'LEADER' | 'USER';
+  startDate: string;
+  endDate: string;
+  fromLocation: {
+    city: string;
+    country: string;
+  };
+  toLocation: {
+    city: string;
+    country: string;
+  };
+  totalSeats: number;
+  bookedSeats: number;
+  totalPrice?: number;
+  gallery: string[];
+  partnerPreferences?: {
+    ageRange: { min: number; max: number };
+    travelMode: string;
+  };
+  matchPercentage?: number;
+  safetyScore?: number;
+}
+
+export interface ApiPackageResponse {
+  _id: string;
+  title: string;
+  description: string;
+  totalDays: number;
+  totalNights: number;
+  tripStyles: string[];
+  fromLocation: {
+    city: string;
+  };
+  toLocation: {
+    city: string;
+  };
+  plans: Array<{
+    name: string;
+    category: string;
+    discountedPrice: number;
+    pricePerPerson: number;
+  }>;
+  createdBy: {
+    name: string;
+    age: number;
+    verified: boolean;
+    rating: number;
+  };
+  creatorType: string;
+}

@@ -1,229 +1,112 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Flame } from "lucide-react";
-
-// Components
-import Similar from "./components/Similar";
-import TripCard from "./components/TripsCard";
-import LeaderTrips from "./components/LeaderTrips";
-import AgencyCarousel from "./components/AgencyCarousel";
+import { useMemo } from "react";
 import FilterSidebar from "./components/filters/FilterSidebar";
-import Package from "./components/Package";
 import CombinedContent from "./components/CombinedContent";
-import Loader from "../../components/Loader/Loader";
-import InlineLoader from "../../components/Loader/InlineLoader";
+import { useCombinedFilters } from "./hooks/useCombinedFilters";
+import { useSearchData } from "./hooks/useSearchData";
+import { mapApiTripToTrip } from "./lib/mappers/mapApiTripToTrip";
+import { mapApiPackageToDisplay } from "./lib/mappers/mapApiPackageToDisplay";
+import Loader from "@/components/Loader/Loader";
 
-// Hooks
-import { useTripsData } from "./hooks/useTripsData";
-import { useFilters } from "./hooks/useFilters";
+export default function SearchTripPage() {
+  const { filters, updateFilter, resetFilters } = useCombinedFilters();
+  const { rawTrips, rawPackages, loading, error } = useSearchData();
 
-// Types
-type ActiveFilter = "all" | "best" | "agency" | "leader";
+ const trips = useMemo(() => rawTrips, [rawTrips]);
+const packages = useMemo(() => rawPackages, [rawPackages]);
 
-export default function Page() {
-  // Fetch data using custom hook
-  const { trips, leaders, agencies, packages, similarTrips, loading } = useTripsData();
-  
-  // Manage filters using custom hook
-  const {
-    query,
-    setQuery,
-    age,
-    setAge,
-    duration,
-    setDuration,
-    budget,
-    setBudget,
-    minRating,
-    setMinRating,
-    minSafeScore,
-    setMinSafeScore,
-    selectedTripStyles,
-    setSelectedTripStyles,
-    priceMin,
-    setPriceMin,
-    priceMax,
-    setPriceMax,
-    selectedFromLocation,
-    setSelectedFromLocation,
-    selectedToLocation,
-    setSelectedToLocation,
-    selectedTravelMode,
-    setSelectedTravelMode,
-    hasAppliedFilters,
-    filteredTrips,
-    filteredLeaders,
-    filteredAgencies,
-    filteredSimilarTrips,
-    handleApplyFilters,
-    handleClearFilters,
-  } = useFilters(trips, leaders, agencies, similarTrips);
 
-  // UI state
-  const [activeFilter, setActiveFilter] = useState<ActiveFilter>("all");
-  const [showLoader, setShowLoader] = useState(true);
+  // ✅ Filtered Trips
+  const filteredTrips = useMemo(() => {
+    return trips.filter(trip => {
+      if (filters.keyword && !trip.title?.toLowerCase().includes(filters.keyword.toLowerCase()))
+        return false;
 
-  // Chip style helper
-  const chipClass = (type: ActiveFilter) =>
-    `px-3 py-1.5 rounded-full text-sm font-medium border transition cursor-pointer
-     ${
-       activeFilter === type
-         ? "bg-[#1D4350] text-white border-[#0A4D4A]"
-         : "bg-white text-gray-700 border-gray-200 hover:bg-[#E8F1F1]"
-     }`;
+      if (filters.fromCity && trip.fromCity !== filters.fromCity)
+        return false;
 
-  // Hide loader after data loads
-  useEffect(() => {
-    if (!loading) {
-      const timer = setTimeout(() => setShowLoader(false), 500);
-      return () => clearTimeout(timer);
-    }
-  }, [loading]);
+      if (filters.toCity && trip.toCity !== filters.toCity)
+        return false;
 
-  // Show loader
-  if (showLoader || loading) {
+      if (filters.minPrice && trip.price < filters.minPrice)
+        return false;
+
+      if (filters.maxPrice && trip.price > filters.maxPrice)
+        return false;
+
+      if (filters.travelMode && trip.travelMode !== filters.travelMode)
+        return false;
+
+      return true;
+    });
+  }, [trips, filters]);
+
+  // ✅ Filtered Packages
+  const filteredPackages = useMemo(() => {
+    return packages.filter(pkg => {
+      if (filters.keyword && !pkg.title?.toLowerCase().includes(filters.keyword.toLowerCase()))
+        return false;
+
+      if (filters.category && pkg.category !== filters.category)
+        return false;
+
+      if (filters.minDays && pkg.days < filters.minDays)
+        return false;
+
+      if (filters.maxDays && pkg.days > filters.maxDays)
+        return false;
+
+      if (filters.minPrice && pkg.price < filters.minPrice)
+        return false;
+
+      if (filters.maxPrice && pkg.price > filters.maxPrice)
+        return false;
+
+      return true;
+    });
+  }, [packages, filters]);
+
+  if (loading) {
     return (
-      <div className="w-full h-screen flex items-center justify-center bg-white">
+      <div className="min-h-screen flex items-center justify-center">
         <Loader />
       </div>
     );
   }
 
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-red-600">
+        {error}
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen p-4 sm:p-6 md:p-10 mt-11">
-      <div className="w-full mx-auto grid grid-cols-12 gap-6">
-        
-        {/* LEFT: Filters Panel */}
-        <aside className="col-span-12 lg:col-span-4 xl:col-span-3">
-          <div className="lg:sticky lg:top-21">
-            {/* Show inline loader inside filters when API is loading after initial load */}
-            {loading && !showLoader && (
-              <div className="mb-4 p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-                <InlineLoader message="Loading filters..." />
-              </div>
-            )}
+    <div className="min-h-screen px-4 py-6 md:px-10 md:py-12">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-7xl mx-auto">
 
-            <FilterSidebar
-              // Basic filters
-              query={query}
-              setQuery={setQuery}
-              age={age}
-              setAge={setAge}
-              duration={duration}
-              setDuration={setDuration}
-              budget={budget}
-              setBudget={setBudget}
-              minRating={minRating}
-              setMinRating={setMinRating}
-              minSafeScore={minSafeScore}
-              setMinSafeScore={setMinSafeScore}
-
-              // Combined filters
-              tripStyles={selectedTripStyles}
-              setTripStyles={setSelectedTripStyles}
-              priceMin={priceMin}
-              setPriceMin={setPriceMin}
-              priceMax={priceMax}
-              setPriceMax={setPriceMax}
-              fromLocation={selectedFromLocation}
-              setFromLocation={setSelectedFromLocation}
-              toLocation={selectedToLocation}
-              setToLocation={setSelectedToLocation}
-              travelMode={selectedTravelMode}
-              setTravelMode={setSelectedTravelMode}
-
-              // Actions
-              onApply={handleApplyFilters}
-              onClear={handleClearFilters}
-            />
-          </div>
+        <aside className="lg:col-span-3">
+          <FilterSidebar
+            filters={filters}
+            updateFilter={updateFilter}
+            resetFilters={resetFilters}
+            trips={trips}
+            packages={packages}
+          />
         </aside>
 
-        {/* RIGHT: Main Content */}
-        <main className="col-span-12 lg:col-span-8 xl:col-span-9">
-          {/* Show inline loader when initial loader is done but API is still loading */}
-          {loading && !showLoader && (
-            <InlineLoader message="Fetching latest trips and packages..." className="mb-8" />
-          )}
-
-          {/* Top row: Trending + chips */}
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6">
-            <div className="flex items-center gap-2 bg-orange-50 text-orange-700 px-3 py-1 rounded-full font-medium cursor-pointer w-fit">
-              <Flame className="w-4 h-4 text-orange-500" />
-              <span>Trending</span>
+        <main className="lg:col-span-9 pt-12">
+          {filteredTrips.length === 0 && filteredPackages.length === 0 ? (
+            <div className="text-center py-20 text-gray-500 text-lg">
+              No trips or packages found. Try adjusting filters.
             </div>
-
-            <button
-              onClick={() => setActiveFilter("all")}
-              className={chipClass("all")}
-              aria-pressed={activeFilter === "all"}
-            >
-              All
-            </button>
-
-            <button
-              onClick={() => setActiveFilter("best")}
-              className={chipClass("best")}
-              aria-pressed={activeFilter === "best"}
-            >
-              Best Match
-            </button>
-
-            <button
-              onClick={() => setActiveFilter("agency")}
-              className={chipClass("agency")}
-              aria-pressed={activeFilter === "agency"}
-            >
-              Featured Trip Agency
-            </button>
-
-            <button
-              onClick={() => setActiveFilter("leader")}
-              className={chipClass("leader")}
-              aria-pressed={activeFilter === "leader"}
-            >
-              Featured Trip Leader
-            </button>
-          </div>
-
-          {/* Best Match */}
-          {(activeFilter === "all" || activeFilter === "best") &&
-            (filteredTrips.length > 0 || packages.length > 0) && (
-              <section className="mb-8">
-                <h3 className="text-lg font-semibold mb-4">Best Match</h3>
-                <CombinedContent trips={filteredTrips} packages={packages} />
-              </section>
-            )}
-
-          {/* Featured Trip Leaders */}
-          {(activeFilter === "all" || activeFilter === "leader") &&
-            filteredLeaders.length > 0 && (
-              <section className="mb-8">
-                <h3 className="text-lg font-semibold mb-4">
-                  Featured Trip Leaders
-                </h3>
-                <LeaderTrips leaders={filteredLeaders} />
-              </section>
-            )}
-
-          {/* Featured Travel Agencies */}
-          {(activeFilter === "all" || activeFilter === "agency") &&
-            filteredAgencies.length > 0 && (
-              <section className="mb-8">
-                <h3 className="text-lg font-semibold mb-4">
-                  Featured Travel Agencies
-                </h3>
-                <AgencyCarousel agencies={filteredAgencies} />
-              </section>
-            )}
-
-          {/* Similar Trips */}
-          {filteredSimilarTrips.length > 0 && (
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Similar Trips</h3>
-              <Similar trips={filteredSimilarTrips} />
-            </div>
+          ) : (
+            <CombinedContent
+              trips={filteredTrips}
+              packages={filteredPackages}
+            />
           )}
         </main>
       </div>

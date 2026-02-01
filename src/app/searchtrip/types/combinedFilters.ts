@@ -1,116 +1,117 @@
-// Combined filter types for both Trips and Packages
+export interface CombinedFilters {
+  // Pagination
+  page: number;
+  limit: number;
 
-export type CombinedFilterPayload = {
   // Search
-  query: string;
+  keyword?: string;
+  fromCity?: string;
+  toCity?: string;
+  country?: string;
 
-  // Person-related
-  age: number;
+  // Pricing
+  minPrice?: number;
+  maxPrice?: number;
 
-  // Duration & Travel
-  duration: number;
-  travelMode?: string; // GROUP, SOLO, COUPLE, etc.
+  // Common
+  tripStyles?: string[];
 
-  // Budget & Price
-  budget: number;
-  priceRange?: {
-    min: number;
-    max: number;
-  };
+  // Package specific
+  creatorType?: "AGENCY" | "LEADER";
+  category?: string;
+  minDays?: number;
+  maxDays?: number;
+  currency?: string;
 
-  // Trip Styles/Interests
-  tripStyles?: string[]; // e.g., ["adventure", "mountain", "backpacking"]
-  interest?: string;
-
-  // Preferences
-  tripType?: string;
-  foodPref?: string;
+  // Trip specific
+  travelMode?: string;
   gender?: string;
-  costPreference?: string;
   languages?: string[];
+  minAge?: number;
+  maxAge?: number;
+  startDateFrom?: string;
+  startDateTo?: string;
+  genderPreference?: string;
 
-  // Location
-  fromLocation?: string;
-  toLocation?: string;
+  // UI-only (not sent to API)
+  activeFilter?: "all" | "best" | "agency" | "leader";
+}
 
-  // Rating & Safety
-  minRating: number;
-  minSafeScore: number;
-  matchPercent: number;
-  scorePercent: number;
 
-  // Package-specific
-  category?: string; // COUPLE, SOLO, FAMILY, GROUP
-  totalDays?: number;
-  totalNights?: number;
-  creatorType?: string; // AGENCY, LEADER
-};
 
-export type AvailableFilters = {
-  // Trip search filters
-  fromCities?: string[];
-  toCities?: string[];
-  genders?: string[];
-  travelModes?: string[];
-  costPreferences?: string[];
-  languages?: string[];
-  categories?: string[];
-  tripStyles?: string[];
-  ageRange?: {
-    min: number;
-    max: number;
-  };
-  budgetRange?: {
-    min: number;
-    max: number;
-  };
-  priceRange?: {
-    min: number;
-    max: number;
-  };
-  durationRange?: {
-    min: number;
-    max: number;
-  };
-  availableSeatsRange?: {
-    min: number;
-    max: number;
-  };
+// // types/combinedFilters.ts
 
-  // Package search filters
-  fromLocations?: string[];
-  toLocations?: string[];
-  totalDays?: number[];
-  totalNights?: number[];
-  creatorTypes?: string[];
-};
+// /** -----------------------------
+//  *  Base / Shared Filters
+//  *  ----------------------------- */
+// interface PaginationFilters {
+//   page: number;
+//   limit: number;
+// }
 
-// Combined available filters from both sources
-export type MergedAvailableFilters = {
-  locations?: string[]; // Combined from cities
-  tripStyles?: string[];
-  travelModes?: string[];
-  categories?: string[];
-  languages?: string[];
-  genders?: string[];
-  costPreferences?: string[];
-  priceRange?: {
-    min: number;
-    max: number;
-  };
-  durationRange?: {
-    min: number;
-    max: number;
-  };
-  ageRange?: {
-    min: number;
-    max: number;
-  };
-  budgetRange?: {
-    min: number;
-    max: number;
-  };
-  creatorTypes?: string[];
-  totalDays?: number[];
-  totalNights?: number[];
-};
+// interface PriceFilters {
+//   minPrice?: number;
+//   maxPrice?: number;
+// }
+
+// interface LocationFilters {
+//   fromCity?: string;
+//   toCity?: string;
+//   country?: string;
+// }
+
+// interface CommonFilters {
+//   keyword?: string;
+//   tripStyles?: string[];
+// }
+
+// /** -----------------------------
+//  *  Trip-specific Filters
+//  *  ----------------------------- */
+// interface TripFilters {
+//   travelMode?: string;
+//   languages?: string[];
+//   minAge?: number;
+//   maxAge?: number;
+//   startDateFrom?: string;
+//   startDateTo?: string;
+
+//   // backend expects this, NOT "gender"
+//   genderPreference?: string;
+// }
+
+// /** -----------------------------
+//  *  Package-specific Filters
+//  *  ----------------------------- */
+// interface PackageFilters {
+//   category?: string;
+//   minDays?: number;
+//   maxDays?: number;
+//   currency?: string;
+// }
+
+// /** -----------------------------
+//  *  Creator / Ownership
+//  *  ----------------------------- */
+// type CreatorType = "AGENCY" | "LEADER";
+
+// /** -----------------------------
+//  *  UI-only Filters (NEVER sent to API)
+//  *  ----------------------------- */
+// interface UIFilters {
+//   activeFilter?: "all" | "best" | "agency" | "leader";
+// }
+
+// /** -----------------------------
+//  *  Combined Filters (FINAL)
+//  *  ----------------------------- */
+// export interface CombinedFilters
+//   extends PaginationFilters,
+//     PriceFilters,
+//     LocationFilters,
+//     CommonFilters,
+//     TripFilters,
+//     PackageFilters,
+//     UIFilters {
+//   creatorType?: CreatorType;
+// }
