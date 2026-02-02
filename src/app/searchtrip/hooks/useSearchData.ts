@@ -3,13 +3,11 @@
 
 import { useState, useEffect } from "react";
 import { apiService } from "../lib/api";
-import { mapApiTripToTrip } from "../lib/mappers/mapApiTripToTrip";
-import { mapApiPackageToDisplay } from "../lib/mappers/mapApiPackageToDisplay";
+import { CombinedFilters } from "../types/combinedFilters";
 
-export function useSearchData() {
+export function useSearchData(filters: CombinedFilters) {
   const [rawTrips, setRawTrips] = useState<any[]>([]);
   const [rawPackages, setRawPackages] = useState<any[]>([]);
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,27 +18,21 @@ export function useSearchData() {
         setError(null);
 
         const [tripRes, packageRes] = await Promise.all([
-          apiService.trips.search(),
-          apiService.packages.search(),
+          apiService.trips.search(filters),
+          apiService.packages.search(filters),
         ]);
 
         setRawTrips(tripRes?.results || []);
         setRawPackages(packageRes?.data || []);
-      } catch (err) {
-        console.error("Search data fetch failed:", err);
-        setError("Failed to load trips and packages");
+      } catch (e) {
+        setError("Failed to load data");
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, []); // ✅ fetch ONCE
+  }, [filters]); // 🔥 THIS is the key
 
-  return {
-    rawTrips,
-    rawPackages,
-    loading,
-    error,
-  };
+  return { rawTrips, rawPackages, loading, error };
 }

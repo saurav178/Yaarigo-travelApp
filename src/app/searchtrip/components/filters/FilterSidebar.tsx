@@ -378,74 +378,54 @@
 
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { Filter, X } from "lucide-react";
 import { CombinedFilters } from "../../types/combinedFilters";
+
+/* =========================
+   STATIC FILTER OPTIONS
+   (API DRIVEN – NOT UI DATA)
+========================= */
+
+const TRIP_STYLES = ["adventure", "leisure", "spiritual", "wildlife"];
+const CREATOR_TYPES = [
+  "AGENCY",
+  "HOST",
+  "GUIDE",
+  "TRIP_LEADER",
+  "INDIVIDUAL",
+];
+const TRAVEL_MODES = ["SOLO", "GROUP", "COUPLE"];
+const LANGUAGES = ["English", "Hindi", "Odia"];
+const GENDERS = ["ANY", "MALE_ONLY", "FEMALE_ONLY"];
 
 interface FilterSidebarProps {
   filters: CombinedFilters;
   updateFilter: <K extends keyof CombinedFilters>(
     key: K,
-    value: CombinedFilters[K],
+    value: CombinedFilters[K]
   ) => void;
   resetFilters: () => void;
-  trips: any[];
-  packages: any[];
 }
-
-const unique = (arr: any[]) => Array.from(new Set(arr)).filter(Boolean);
 
 const FilterSidebar: React.FC<FilterSidebarProps> = ({
   filters,
   updateFilter,
   resetFilters,
-  trips,
-  packages,
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [tempFilters, setTempFilters] = useState(filters);
-
-  /* =======================
-     🔥 DYNAMIC OPTIONS
-  ======================= */
-
-  const tripStyleOptions = useMemo(
-    () => unique(trips.flatMap((t) => t.tripStyles || [])),
-    [trips],
-  );
-
-  const creatorTypeOptions = useMemo(
-    () => unique(packages.map((p) => p.creatorType)),
-    [packages],
-  );
-
-  const categoryOptions = useMemo(
-    () => unique(packages.map((p) => p.category)),
-    [packages],
-  );
-
-  const travelModeOptions = useMemo(
-    () => unique(trips.map((t) => t.travelMode)),
-    [trips],
-  );
-
-  const languageOptions = useMemo(
-    () => unique(trips.flatMap((t) => t.languages || [])),
-    [trips],
-  );
-
-  /* ======================= */
+  const [tempFilters, setTempFilters] = useState<CombinedFilters>(filters);
 
   const handleTempUpdate = <K extends keyof CombinedFilters>(
     key: K,
-    value: CombinedFilters[K],
+    value: CombinedFilters[K]
   ) => {
     setTempFilters((prev) => ({ ...prev, [key]: value }));
   };
 
   const applyFilters = () => {
-    Object.keys(tempFilters).forEach((key) => {
-      updateFilter(key as keyof CombinedFilters, tempFilters[key as keyof CombinedFilters]);
+    Object.entries(tempFilters).forEach(([key, value]) => {
+      updateFilter(key as keyof CombinedFilters, value as any);
     });
   };
 
@@ -453,651 +433,195 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
     return (
       <button
         onClick={() => setIsCollapsed(false)}
-        className="sticky top-24 p-4 text-white shadow-lg hover:shadow-xl transition-all duration-300"
-        style={{
-          backgroundColor: "#1d4350",
-        }}
+        className="sticky top-24 p-4 bg-[#1d4350] text-white shadow-lg"
       >
         <Filter className="w-6 h-6" />
-        <span className="block mt-2 text-sm font-medium">Show Filters</span>
+        <span className="block mt-2 text-sm">Show Filters</span>
       </button>
     );
   }
 
   return (
-    <div
-      className="shadow-lg sticky top-24"
-      style={{
-        backgroundColor: "#f8f9fa",
-        border: "1px solid #e0e0e0",
-      }}
-    >
+    <div className="sticky top-24 bg-[#f8f9fa] border shadow-lg">
       {/* Header */}
-      <div
-        className="flex items-center justify-between p-4"
-        style={{
-          backgroundColor: "#ffffff",
-          borderBottom: "1px solid #e0e0e0",
-        }}
-      >
+      <div className="flex items-center justify-between p-4 bg-white border-b">
         <div className="flex items-center gap-2">
-          <Filter className="w-5 h-5" style={{ color: "#1d4350" }} />
-          <h2
-            className="text-lg font-bold"
-            style={{ color: "#1d4350" }}
-          >
-            Filters
-          </h2>
+          <Filter className="w-5 h-5 text-[#1d4350]" />
+          <h2 className="font-bold text-[#1d4350]">Filters</h2>
         </div>
-        <button
-          onClick={() => setIsCollapsed(true)}
-          className="p-1 hover:bg-gray-100 transition"
-        >
+        <button onClick={() => setIsCollapsed(true)}>
           <X className="w-5 h-5 text-gray-500" />
         </button>
       </div>
 
-      {/* Scrollable Content */}
-      <div
-        className="p-4 space-y-4 overflow-y-auto custom-scrollbar"
-        style={{
-          maxHeight: "calc(100vh - 250px)",
-        }}
-      >
-        {/* Search Keyword */}
-        <div>
-          <label
-            className="block text-sm font-semibold mb-2"
-            style={{ color: "#1d4350" }}
-          >
-            Search
-          </label>
-          <input
-            type="text"
-            value={tempFilters.keyword || ""}
-            onChange={(e) => handleTempUpdate("keyword", e.target.value)}
-            placeholder="Search trips & packages..."
-            className="w-full px-3 py-2.5 bg-white transition-all duration-200"
-            style={{
-              border: "1px solid #d1d5db",
-              outline: "none",
-            }}
-            onFocus={(e) => {
-              e.target.style.borderColor = "#1d4350";
-            }}
-            onBlur={(e) => {
-              e.target.style.borderColor = "#d1d5db";
-            }}
-          />
-        </div>
+      {/* Body */}
+      <div className="p-4 space-y-4 max-h-[calc(100vh-260px)] overflow-y-auto">
+        {/* Keyword */}
+        <input
+          placeholder="Search keyword"
+          value={tempFilters.keyword || ""}
+          onChange={(e) => handleTempUpdate("keyword", e.target.value)}
+          className="w-full p-2 border"
+        />
 
-        {/* From City */}
-        <div>
-          <label
-            className="block text-sm font-semibold mb-2"
-            style={{ color: "#1d4350" }}
-          >
-            From City
-          </label>
-          <input
-            type="text"
-            value={tempFilters.fromCity || ""}
-            onChange={(e) => handleTempUpdate("fromCity", e.target.value)}
-            placeholder="Departure city"
-            className="w-full px-3 py-2.5 bg-white transition-all duration-200"
-            style={{
-              border: "1px solid #d1d5db",
-              outline: "none",
-            }}
-            onFocus={(e) => {
-              e.target.style.borderColor = "#1d4350";
-            }}
-            onBlur={(e) => {
-              e.target.style.borderColor = "#d1d5db";
-            }}
-          />
-        </div>
+        {/* From / To */}
+        <input
+          placeholder="From city"
+          value={tempFilters.fromCity || ""}
+          onChange={(e) => handleTempUpdate("fromCity", e.target.value)}
+          className="w-full p-2 border"
+        />
 
-        {/* To City */}
-        <div>
-          <label
-            className="block text-sm font-semibold mb-2"
-            style={{ color: "#1d4350" }}
-          >
-            To City
-          </label>
-          <input
-            type="text"
-            value={tempFilters.toCity || ""}
-            onChange={(e) => handleTempUpdate("toCity", e.target.value)}
-            placeholder="Destination city"
-            className="w-full px-3 py-2.5 bg-white transition-all duration-200"
-            style={{
-              border: "1px solid #d1d5db",
-              outline: "none",
-            }}
-            onFocus={(e) => {
-              e.target.style.borderColor = "#1d4350";
-            }}
-            onBlur={(e) => {
-              e.target.style.borderColor = "#d1d5db";
-            }}
-          />
-        </div>
+        <input
+          placeholder="To city"
+          value={tempFilters.toCity || ""}
+          onChange={(e) => handleTempUpdate("toCity", e.target.value)}
+          className="w-full p-2 border"
+        />
 
-        {/* Country */}
-        <div>
-          <label
-            className="block text-sm font-semibold mb-2"
-            style={{ color: "#1d4350" }}
-          >
-            Country
-          </label>
+        {/* Price */}
+        <div className="grid grid-cols-2 gap-2">
           <input
-            type="text"
-            value={tempFilters.country || ""}
-            onChange={(e) => handleTempUpdate("country", e.target.value)}
-            placeholder="Country"
-            className="w-full px-3 py-2.5 bg-white transition-all duration-200"
-            style={{
-              border: "1px solid #d1d5db",
-              outline: "none",
-            }}
-            onFocus={(e) => {
-              e.target.style.borderColor = "#1d4350";
-            }}
-            onBlur={(e) => {
-              e.target.style.borderColor = "#d1d5db";
-            }}
+            type="number"
+            placeholder="Min ₹"
+            value={tempFilters.minPrice || ""}
+            onChange={(e) =>
+              handleTempUpdate("minPrice", Number(e.target.value))
+            }
+            className="p-2 border"
           />
-        </div>
-
-        {/* Price Range */}
-        <div>
-          <label
-            className="block text-sm font-semibold mb-2"
-            style={{ color: "#1d4350" }}
-          >
-            Price Range (₹)
-          </label>
-          <div className="grid grid-cols-2 gap-2">
-            <input
-              type="number"
-              value={tempFilters.minPrice || ""}
-              onChange={(e) => handleTempUpdate("minPrice", Number(e.target.value))}
-              placeholder="Min"
-              className="w-full px-3 py-2.5 bg-white transition-all duration-200"
-              style={{
-                border: "1px solid #d1d5db",
-                outline: "none",
-              }}
-              onFocus={(e) => {
-                e.target.style.borderColor = "#1d4350";
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = "#d1d5db";
-              }}
-            />
-            <input
-              type="number"
-              value={tempFilters.maxPrice || ""}
-              onChange={(e) => handleTempUpdate("maxPrice", Number(e.target.value))}
-              placeholder="Max"
-              className="w-full px-3 py-2.5 bg-white transition-all duration-200"
-              style={{
-                border: "1px solid #d1d5db",
-                outline: "none",
-              }}
-              onFocus={(e) => {
-                e.target.style.borderColor = "#1d4350";
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = "#d1d5db";
-              }}
-            />
-          </div>
+          <input
+            type="number"
+            placeholder="Max ₹"
+            value={tempFilters.maxPrice || ""}
+            onChange={(e) =>
+              handleTempUpdate("maxPrice", Number(e.target.value))
+            }
+            className="p-2 border"
+          />
         </div>
 
         {/* Trip Styles */}
-        <div>
-          <label
-            className="block text-sm font-semibold mb-2"
-            style={{ color: "#1d4350" }}
-          >
-            Trip Styles
-          </label>
-          <select
-            multiple
-            value={tempFilters.tripStyles || []}
-            onChange={(e) => {
-              const selected = Array.from(
-                e.target.selectedOptions,
-                (option) => option.value,
-              );
-              handleTempUpdate("tripStyles", selected);
-            }}
-            className="w-full px-3 py-2.5 bg-white transition-all duration-200"
-            style={{
-              border: "1px solid #d1d5db",
-              outline: "none",
-              minHeight: "100px",
-            }}
-            onFocus={(e) => {
-              e.target.style.borderColor = "#1d4350";
-            }}
-            onBlur={(e) => {
-              e.target.style.borderColor = "#d1d5db";
-            }}
-          >
-            {tripStyleOptions.map((style) => (
-              <option key={style} value={style} className="py-1">
-                {style}
-              </option>
-            ))}
-          </select>
-        </div>
+        <select
+          multiple
+          value={tempFilters.tripStyles || []}
+          onChange={(e) =>
+            handleTempUpdate(
+              "tripStyles",
+              Array.from(e.target.selectedOptions, (o) => o.value)
+            )
+          }
+          className="w-full p-2 border"
+        >
+          {TRIP_STYLES.map((s) => (
+            <option key={s} value={s}>
+              {s}
+            </option>
+          ))}
+        </select>
 
         {/* Creator Type */}
-        <div>
-          <label
-            className="block text-sm font-semibold mb-2"
-            style={{ color: "#1d4350" }}
-          >
-            Creator Type
-          </label>
-          <select
-            value={tempFilters.creatorType || ""}
-            onChange={(e) =>
-              handleTempUpdate(
-                "creatorType",
-                e.target.value ? (e.target.value as any) : undefined,
-              )
-            }
-            className="w-full px-3 py-2.5 bg-white transition-all duration-200 appearance-none cursor-pointer"
-            style={{
-              border: "1px solid #d1d5db",
-              outline: "none",
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%231d4350'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "right 0.75rem center",
-              backgroundSize: "1.25em 1.25em",
-              paddingRight: "2.5rem",
-            }}
-            onFocus={(e) => {
-              e.target.style.borderColor = "#1d4350";
-            }}
-            onBlur={(e) => {
-              e.target.style.borderColor = "#d1d5db";
-            }}
-          >
-            <option value="">All</option>
-            {creatorTypeOptions.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-        </div>
+        <select
+          value={tempFilters.creatorType || ""}
+          onChange={(e) =>
+            handleTempUpdate("creatorType", e.target.value as any)
+          }
+          className="w-full p-2 border"
+        >
+          <option value="">All Creators</option>
+          {CREATOR_TYPES.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
+        </select>
 
-        {/* Category (Package) */}
-        <div>
-          <label
-            className="block text-sm font-semibold mb-2"
-            style={{ color: "#1d4350" }}
-          >
-            Category
-          </label>
-          <select
-            value={tempFilters.category || ""}
-            onChange={(e) => handleTempUpdate("category", e.target.value)}
-            className="w-full px-3 py-2.5 bg-white transition-all duration-200 appearance-none cursor-pointer"
-            style={{
-              border: "1px solid #d1d5db",
-              outline: "none",
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%231d4350'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "right 0.75rem center",
-              backgroundSize: "1.25em 1.25em",
-              paddingRight: "2.5rem",
-            }}
-            onFocus={(e) => {
-              e.target.style.borderColor = "#1d4350";
-            }}
-            onBlur={(e) => {
-              e.target.style.borderColor = "#d1d5db";
-            }}
-          >
-            <option value="">All</option>
-            {categoryOptions.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
-        </div>
+        {/* Travel Mode */}
+        <select
+          value={tempFilters.travelMode || ""}
+          onChange={(e) =>
+            handleTempUpdate("travelMode", e.target.value as any)
+          }
+          className="w-full p-2 border"
+        >
+          <option value="">All Modes</option>
+          {TRAVEL_MODES.map((m) => (
+            <option key={m} value={m}>
+              {m}
+            </option>
+          ))}
+        </select>
 
-        {/* Travel Mode (Trip) */}
-        <div>
-          <label
-            className="block text-sm font-semibold mb-2"
-            style={{ color: "#1d4350" }}
-          >
-            Travel Mode
-          </label>
-          <select
-            value={tempFilters.travelMode || ""}
-            onChange={(e) => handleTempUpdate("travelMode", e.target.value)}
-            className="w-full px-3 py-2.5 bg-white transition-all duration-200 appearance-none cursor-pointer"
-            style={{
-              border: "1px solid #d1d5db",
-              outline: "none",
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%231d4350'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "right 0.75rem center",
-              backgroundSize: "1.25em 1.25em",
-              paddingRight: "2.5rem",
-            }}
-            onFocus={(e) => {
-              e.target.style.borderColor = "#1d4350";
-            }}
-            onBlur={(e) => {
-              e.target.style.borderColor = "#d1d5db";
-            }}
-          >
-            <option value="">All</option>
-            {travelModeOptions.map((mode) => (
-              <option key={mode} value={mode}>
-                {mode}
-              </option>
-            ))}
-          </select>
-        </div>
+        {/* Gender */}
+        <select
+          value={tempFilters.genderPreference || "ANY"}
+          onChange={(e) =>
+            handleTempUpdate("genderPreference", e.target.value as any)
+          }
+          className="w-full p-2 border"
+        >
+          {GENDERS.map((g) => (
+            <option key={g} value={g}>
+              {g}
+            </option>
+          ))}
+        </select>
 
-        {/* Gender Preference (Trip) */}
-        <div>
-          <label
-            className="block text-sm font-semibold mb-2"
-            style={{ color: "#1d4350" }}
-          >
-            Gender Preference
-          </label>
-          <select
-            value={tempFilters.genderPreference || "ANY"}
-            onChange={(e) =>
-              handleTempUpdate(
-                "genderPreference",
-                e.target.value ? (e.target.value as any) : undefined,
-              )
-            }
-            className="w-full px-3 py-2.5 bg-white transition-all duration-200 appearance-none cursor-pointer"
-            style={{
-              border: "1px solid #d1d5db",
-              outline: "none",
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%231d4350'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "right 0.75rem center",
-              backgroundSize: "1.25em 1.25em",
-              paddingRight: "2.5rem",
-            }}
-            onFocus={(e) => {
-              e.target.style.borderColor = "#1d4350";
-            }}
-            onBlur={(e) => {
-              e.target.style.borderColor = "#d1d5db";
-            }}
-          >
-            <option value="ANY">Any</option>
-            <option value="MALE">Male</option>
-            <option value="FEMALE">Female</option>
-            <option value="OTHER">Other</option>
-          </select>
-        </div>
+        {/* Languages */}
+        <select
+          multiple
+          value={tempFilters.languages || []}
+          onChange={(e) =>
+            handleTempUpdate(
+              "languages",
+              Array.from(e.target.selectedOptions, (o) => o.value)
+            )
+          }
+          className="w-full p-2 border"
+        >
+          {LANGUAGES.map((l) => (
+            <option key={l} value={l}>
+              {l}
+            </option>
+          ))}
+        </select>
 
-        {/* Languages (Trip) */}
-        <div>
-          <label
-            className="block text-sm font-semibold mb-2"
-            style={{ color: "#1d4350" }}
-          >
-            Languages
-          </label>
-          <select
-            multiple
-            value={tempFilters.languages || []}
-            onChange={(e) => {
-              const selected = Array.from(
-                e.target.selectedOptions,
-                (option) => option.value,
-              );
-              handleTempUpdate("languages", selected);
-            }}
-            className="w-full px-3 py-2.5 bg-white transition-all duration-200"
-            style={{
-              border: "1px solid #d1d5db",
-              outline: "none",
-              minHeight: "80px",
-            }}
-            onFocus={(e) => {
-              e.target.style.borderColor = "#1d4350";
-            }}
-            onBlur={(e) => {
-              e.target.style.borderColor = "#d1d5db";
-            }}
-          >
-            {languageOptions.map((lang) => (
-              <option key={lang} value={lang} className="py-1">
-                {lang}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Age Range (Trip) */}
-        <div>
-          <label
-            className="block text-sm font-semibold mb-2"
-            style={{ color: "#1d4350" }}
-          >
-            Age Range
-          </label>
-          <div className="grid grid-cols-2 gap-2">
-            <input
-              type="number"
-              min="18"
-              value={tempFilters.minAge || ""}
-              onChange={(e) => handleTempUpdate("minAge", Number(e.target.value))}
-              placeholder="Min Age"
-              className="w-full px-3 py-2.5 bg-white transition-all duration-200"
-              style={{
-                border: "1px solid #d1d5db",
-                outline: "none",
-              }}
-              onFocus={(e) => {
-                e.target.style.borderColor = "#1d4350";
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = "#d1d5db";
-              }}
-            />
-            <input
-              type="number"
-              min="18"
-              value={tempFilters.maxAge || ""}
-              onChange={(e) => handleTempUpdate("maxAge", Number(e.target.value))}
-              placeholder="Max Age"
-              className="w-full px-3 py-2.5 bg-white transition-all duration-200"
-              style={{
-                border: "1px solid #d1d5db",
-                outline: "none",
-              }}
-              onFocus={(e) => {
-                e.target.style.borderColor = "#1d4350";
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = "#d1d5db";
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Date Range (Trip) */}
-        <div>
-          <label
-            className="block text-sm font-semibold mb-2"
-            style={{ color: "#1d4350" }}
-          >
-            Trip Dates
-          </label>
-          <div className="space-y-2">
-            <div>
-              <label className="block text-xs text-gray-600 mb-1">
-                Start From
-              </label>
-              <input
-                type="date"
-                value={tempFilters.startDateFrom || ""}
-                onChange={(e) => handleTempUpdate("startDateFrom", e.target.value)}
-                className="w-full px-3 py-2.5 bg-white transition-all duration-200"
-                style={{
-                  border: "1px solid #d1d5db",
-                  outline: "none",
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = "#1d4350";
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = "#d1d5db";
-                }}
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-600 mb-1">
-                Start To
-              </label>
-              <input
-                type="date"
-                value={tempFilters.startDateTo || ""}
-                onChange={(e) => handleTempUpdate("startDateTo", e.target.value)}
-                className="w-full px-3 py-2.5 bg-white transition-all duration-200"
-                style={{
-                  border: "1px solid #d1d5db",
-                  outline: "none",
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = "#1d4350";
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = "#d1d5db";
-                }}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Duration Days (Package) */}
-        <div>
-          <label
-            className="block text-sm font-semibold mb-2"
-            style={{ color: "#1d4350" }}
-          >
-            Duration (Days)
-          </label>
-          <div className="grid grid-cols-2 gap-2">
-            <input
-              type="number"
-              min="1"
-              value={tempFilters.minDays || ""}
-              onChange={(e) => handleTempUpdate("minDays", Number(e.target.value))}
-              placeholder="Min Days"
-              className="w-full px-3 py-2.5 bg-white transition-all duration-200"
-              style={{
-                border: "1px solid #d1d5db",
-                outline: "none",
-              }}
-              onFocus={(e) => {
-                e.target.style.borderColor = "#1d4350";
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = "#d1d5db";
-              }}
-            />
-            <input
-              type="number"
-              min="1"
-              value={tempFilters.maxDays || ""}
-              onChange={(e) => handleTempUpdate("maxDays", Number(e.target.value))}
-              placeholder="Max Days"
-              className="w-full px-3 py-2.5 bg-white transition-all duration-200"
-              style={{
-                border: "1px solid #d1d5db",
-                outline: "none",
-              }}
-              onFocus={(e) => {
-                e.target.style.borderColor = "#1d4350";
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = "#d1d5db";
-              }}
-            />
-          </div>
-        </div>
+        {/* Dates */}
+        <input
+          type="date"
+          value={tempFilters.startDateFrom || ""}
+          onChange={(e) =>
+            handleTempUpdate("startDateFrom", e.target.value)
+          }
+          className="w-full p-2 border"
+        />
+        <input
+          type="date"
+          value={tempFilters.startDateTo || ""}
+          onChange={(e) =>
+            handleTempUpdate("startDateTo", e.target.value)
+          }
+          className="w-full p-2 border"
+        />
       </div>
 
-      {/* Footer with Action Buttons */}
-      <div
-        className="p-4 space-y-2"
-        style={{
-          backgroundColor: "#ffffff",
-          borderTop: "1px solid #e0e0e0",
-        }}
-      >
-        {/* Apply Filter Button */}
+      {/* Footer */}
+      <div className="p-4 bg-white border-t space-y-2">
         <button
           onClick={applyFilters}
-          className="w-full py-3 text-white font-semibold transition-all duration-200 hover:opacity-90"
-          style={{
-            backgroundColor: "#1d4350",
-          }}
+          className="w-full bg-[#1d4350] text-white py-2"
         >
           Apply Filters
         </button>
-
-        {/* Reset Button */}
         <button
           onClick={() => {
             resetFilters();
-            setTempFilters({});
           }}
-          className="w-full py-3 font-medium transition-all duration-200"
-          style={{
-            backgroundColor: "#e5e7eb",
-            color: "#374151",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = "#d1d5db";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = "#e5e7eb";
-          }}
+          className="w-full bg-gray-200 py-2"
         >
-          Reset All Filters
+          Reset
         </button>
       </div>
-
-      <style jsx>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 5px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: #e5e7eb;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #1d4350;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #2d5360;
-        }
-      `}</style>
     </div>
   );
 };
