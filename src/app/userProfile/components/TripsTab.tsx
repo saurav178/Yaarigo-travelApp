@@ -290,12 +290,12 @@ function TripCard({ trip }: TripCardProps) {
             <h4 className="text-lg font-semibold">{trip.title}</h4>
             <p className="text-sm text-gray-500 mt-1">{trip.location}</p>
 
-            <div className="mt-3 text-sm text-gray-600 flex flex-wrap gap-4">
+            {/* <div className="mt-3 text-sm text-gray-600 flex flex-wrap gap-4">
               <div>
                 📅 {trip.start} - {trip.end}
               </div>
               <div>👥 {trip.participants.length} people</div>
-            </div>
+            </div> */}
           </div>
 
           <div className="text-right w-full sm:w-auto">

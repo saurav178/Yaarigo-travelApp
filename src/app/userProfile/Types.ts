@@ -201,11 +201,11 @@ import { ReactNode } from "react";
 
 export type TripStatus = "confirmed" | "planning" | "completed";
 
-export interface TripParticipant {
-  id: string;
-  name: string;
-  image?: string;
-}
+// export interface TripParticipant {
+//   id: string;
+//   name: string;
+//   image?: string;
+// }
 
 export interface Trip {
   id: string;
@@ -219,7 +219,7 @@ export interface Trip {
   start: ReactNode;
   end: ReactNode;
 
-  participants: TripParticipant[];
+  // participants: TripParticipant[];
 
   tags: string[];
 
