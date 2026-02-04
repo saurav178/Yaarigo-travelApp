@@ -4,11 +4,11 @@ import Image from "next/image";
 import { 
   MapPin, 
   Heart, 
-  Calendar, 
+  // Calendar, 
   Users, 
   Star,
-  TrendingUp,
-  Award,
+  // TrendingUp,
+  // Award,
   Clock
 } from "lucide-react";
 import { useState } from "react";
@@ -40,7 +40,7 @@ export default function PackageCard({ pkg }: PackageCardProps) {
   const rating = 4.5;
   const reviews =  128;
   const category = pkg?.category || "Adventure";
-  const isPopular =  discount > 20;
+  // const isPopular =  discount > 20;
   const totalDays = pkg?.totalDays || 5;
   const totalNights = pkg?.totalNights || 4;
   const maxGroupSize =  15;
