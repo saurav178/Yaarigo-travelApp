@@ -1,9 +1,9 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import ProfileHeader from "./components/ProfileHeader";
 import AboutSection from "./components/AboutSection";
 import TabsSection from "./components/TabsSection";
-import Leader from "./components/Leader";
 import ChatWindow from "./components/ChatWindow";
 import Loader from "@/components/Loader/Loader";
 
@@ -18,7 +18,6 @@ export default function LeaderProfilePage() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Show loader if either loading data or 2-second timer is active
   if (showLoader) {
     return (
       <div className="w-full h-screen flex items-center justify-center bg-white">
@@ -28,18 +27,14 @@ export default function LeaderProfilePage() {
   }
 
   const handleFollowToggle = () => {
-    const newFollowing = !isFollowing;
-    setIsFollowing(newFollowing);
-    setFollowersCount((prev) => (newFollowing ? prev + 1 : prev - 1));
+    setIsFollowing((prev) => {
+      setFollowersCount((count) => (prev ? count - 1 : count + 1));
+      return !prev;
+    });
   };
 
-  const handleChatOpen = () => {
-    setIsChatOpen(true);
-  };
-
-  const handleChatClose = () => {
-    setIsChatOpen(false);
-  };
+  const handleChatOpen = () => setIsChatOpen(true);
+  const handleChatClose = () => setIsChatOpen(false);
 
   return (
     <div className="min-h-screen bg-gray-50 pt-18">
@@ -50,14 +45,10 @@ export default function LeaderProfilePage() {
         onChatOpen={handleChatOpen}
       />
 
-      {/* About + Tabs Section */}
       <div className="mt-8 px-4 flex flex-col md:flex-row md:items-start gap-8">
         <AboutSection />
         <TabsSection />
       </div>
-
-      <Leader />
-      
 
       <ChatWindow isOpen={isChatOpen} onClose={handleChatClose} />
     </div>

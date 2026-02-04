@@ -5,8 +5,7 @@ import TripRoadmap from "./TripRoadmap";
 import SafetyInformation from "./SafetyInformation";
 import ShareThisTrip from "./ShareThisTrip";
 import CancellationPolicy from "./CancellationPolicy";
-import { TRIPS_DEMO } from "@/app/searchtrip/data/data";
-import TripsCard from "@/app/searchtrip/components/TripCard";
+// import { TRIPS_DEMO } from "@/app/searchtrip/data/data";
 
 const TripDetails = () => {
   return (
@@ -29,13 +28,13 @@ const TripDetails = () => {
       {/* Featured Travel Agencies */}
       <div className="w-full mt-12 px-4">
         <h2 className="text-xl font-semibold mb-4">Featured Travel Agencies</h2>
-        <div className="flex space-x-4 overflow-x-auto pb-3">
+        {/* <div className="flex space-x-4 overflow-x-auto pb-3">
           {TRIPS_DEMO.map((trip) => (
             <div key={trip.id} className="flex-shrink-0 min-w-[300px]">
               <TripsCard trips={[trip]} />
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
     </div>
   );

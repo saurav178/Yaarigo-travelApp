@@ -10,7 +10,7 @@ export default function SearchTripPage() {
   const { filters, updateFilter, resetFilters } = useCombinedFilters();
 
   // ✅ PASS FILTERS
-  const { rawTrips, rawPackages, loading, error } = useSearchData(filters);
+  const { trips, packages, loading, error } = useSearchData(filters);
 
   if (loading) {
     return (
@@ -29,7 +29,7 @@ export default function SearchTripPage() {
   }
 
   const noResults =
-    rawTrips.length === 0 && rawPackages.length === 0;
+    trips.length === 0 && packages.length === 0;
 
   return (
     <div className="min-h-screen px-4 py-6 md:px-10 md:py-12">
@@ -52,8 +52,8 @@ export default function SearchTripPage() {
             </div>
           ) : (
             <CombinedContent
-              trips={rawTrips}
-              packages={rawPackages}
+              trips={trips}
+              packages={packages}
             />
           )}
         </main>

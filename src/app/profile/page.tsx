@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 import ProfileHeader from "./components/ProfileHeader";
 import AboutSection from "./components/AboutSection";
 import TabsSection from "./components/TabsSection";
-import Similar from "./components/Similar";
-
 
 import ChatWindow from "./components/ChatWindow";
 import Loader from "@/components/Loader/Loader";
@@ -59,7 +57,6 @@ export default function ProfilePage() {
         <AboutSection />
         <TabsSection />
       </div>
-      <Similar   />
 
       <ChatWindow isOpen={isChatOpen} onClose={handleChatClose} />
     </div>

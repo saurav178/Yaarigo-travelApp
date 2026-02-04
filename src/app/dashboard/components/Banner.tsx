@@ -1,9 +1,13 @@
+"use client"
+
+import Image from "next/image";
+
 export default function Banner() {
   return (
     <div className="relative overflow-hidden text-white shadow-2xl mb-8 h-[200px] md:h-[400px]">
       {/* Full Background Image */}
       <div className="absolute inset-0">
-        <img 
+        <Image 
           src="/banner.jpg" 
           alt="Travel Banner" 
           className="w-full h-full object-cover"

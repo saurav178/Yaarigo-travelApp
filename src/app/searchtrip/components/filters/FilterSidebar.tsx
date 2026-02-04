@@ -297,11 +297,19 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
     setTempFilters((prev) => ({ ...prev, [key]: value }));
   };
 
+  // const applyFilters = () => {
+  //   Object.entries(tempFilters).forEach(([key, value]) => {
+  //     updateFilter(key as keyof CombinedFilters, value as any);
+  //   });
+  // };
+
+
   const applyFilters = () => {
-    Object.entries(tempFilters).forEach(([key, value]) => {
-      updateFilter(key as keyof CombinedFilters, value as any);
-    });
-  };
+  (Object.keys(tempFilters) as (keyof CombinedFilters)[]).forEach((key) => {
+    updateFilter(key, tempFilters[key]);
+  });
+};
+
 
   const toggleArrayValue = (key: "tripStyles" | "languages", value: string) => {
     const currentArray = tempFilters[key] || [];
@@ -442,7 +450,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
             <label className="text-xs font-semibold text-gray-700">Creator</label>
             <select
               value={tempFilters.creatorType || ""}
-              onChange={(e) => handleTempUpdate("creatorType", e.target.value as any)}
+              onChange={(e) => handleTempUpdate("creatorType", e.target.value as CombinedFilters["creatorType"])}
               className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#1d4350] focus:border-transparent transition-all bg-white"
             >
               <option value="">All</option>
@@ -457,7 +465,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
             <label className="text-xs font-semibold text-gray-700">Mode</label>
             <select
               value={tempFilters.travelMode || ""}
-              onChange={(e) => handleTempUpdate("travelMode", e.target.value as any)}
+              onChange={(e) => handleTempUpdate("travelMode", e.target.value as CombinedFilters["travelMode"])}
               className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#1d4350] focus:border-transparent transition-all bg-white"
             >
               <option value="">All</option>
@@ -480,7 +488,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
             {GENDERS.map((gender) => (
               <button
                 key={gender}
-                onClick={() => handleTempUpdate("genderPreference", gender as any)}
+                onClick={() => handleTempUpdate("genderPreference", gender as CombinedFilters["genderPreference"])}
                 className={`flex-1 px-3 py-2 text-xs font-medium rounded-lg transition-all duration-200 ${
                   tempFilters.genderPreference === gender
                     ? "bg-gradient-to-r from-[#1d4350] to-[#2a5d6d] text-white shadow-md"

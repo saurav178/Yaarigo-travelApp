@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 import {
-  MdVerified,
   MdLocationOn,
   MdMedicalServices,
   MdSmsFailed,
 } from "react-icons/md";
-import { FaRegIdBadge, FaRegClock, FaRegHospital } from "react-icons/fa6";
+import { FaRegIdBadge, FaRegClock} from "react-icons/fa6";
 import { AiOutlineCheckCircle, AiOutlineAlert } from "react-icons/ai";
 
  
@@ -16,15 +15,15 @@ export default function TrustSafetySection() {
   const [idVerified, setIdVerified] = useState<boolean>(false);
   const [hasPublishedTrips, setHasPublishedTrips] = useState<boolean>(true);
   const [liveLocation, setLiveLocation] = useState<boolean>(false);
-  const [sosActivated, setSosActivated] = useState<boolean>(false);
+  // const [sosActivated, setSosActivated] = useState<boolean>(false);
   const [riskScore, setRiskScore] = useState<number | null>(null);
   const [offlineSOS, setOfflineSOS] = useState<boolean>(false);
   const [panicMode, setPanicMode] = useState<boolean>(false);
 
-  const handleSOS = () => {
-    setSosActivated(true);
-    alert("🚨 SOS Activated! Authorities + Emergency Contacts Notified.");
-  };
+  // const handleSOS = () => {
+  //   setSosActivated(true);
+  //   alert("🚨 SOS Activated! Authorities + Emergency Contacts Notified.");
+  // };
 
   const runRiskCheck = () => {
     const score = Math.floor(Math.random() * 100);
@@ -69,12 +68,12 @@ export default function TrustSafetySection() {
         <div className="flex flex-col gap-4">
 
           {/* SOS BUTTON */}
-          <button
+          {/* <button
             onClick={handleSOS}
             className="px-4 py-4 bg-red-500 text-white font-bold text-lg  hover:bg-red-600 cursor-pointer"
           >
             🚨 SOS — Trigger Emergency Alert
-          </button>
+          </button> */}
 
           <ToggleRow
             title="Live Location Sharing"

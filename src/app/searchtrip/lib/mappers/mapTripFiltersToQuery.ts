@@ -1,4 +1,6 @@
-export const mapTripFiltersToQuery = (filters: any) => {
+import type { TripFilterPayload } from '../../types/types';
+
+export const mapTripFiltersToQuery = (filters: TripFilterPayload) => {
   const q: Record<string, string> = {};
 
   if (filters.page) q.page = String(filters.page);
