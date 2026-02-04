@@ -5,8 +5,8 @@
 import { useState } from "react";
 import { useModal } from "@/context/ModalContext";
 import { useRouter } from "next/navigation";
-import { ROUTES } from "@/lib/routes"; // Path check kar lena
-import { authService } from "../../../services/auth-service"; // Centralized index se import
+import { ROUTES } from "@/lib/routes"; 
+import { authService } from "../../../services/auth-service"; 
 
 export default function RegisterForm() {
   // States
@@ -191,7 +191,7 @@ export default function RegisterForm() {
         {/* Login Link */}
         <div className="text-center pt-2 animate-slideUp" style={{ animationDelay: "0.5s" }}>
           <span className="text-xs text-gray-600">
-            Already have an account?{" "}
+            Already have an accounttttt?{" "}
             <button
               type="button"
               onClick={() => openModal("login")}

@@ -1,82 +1,61 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { usePathname} from "next/navigation";
-import { useModal } from "@/context/ModalContext"; // Add this import
+import { useState, useEffect, useRef } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import UserDropdown from "./UserDropdown";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
-  const { openModal } = useModal(); // Add this hook
+  const router = useRouter();
+  
+  const { isAuthenticated, loading } = useAuth();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const isHeroPage = pathname === "/" || pathname === "/landingpage";
 
-  // Update handleLogin to use modal
-  const handleLogin = () => {
-    openModal("login"); // Open login modal instead of navigating
-  };
-
-  // Add handleSignUp for the signup button
-  // const handleSignUp = () => {
-  //   openModal('register'); // Open register modal
-  // };
+  const headerStyles = isHeroPage && !isScrolled
+    ? "bg-gradient-to-b from-black/40 to-transparent text-white"
+    : "bg-white text-gray-800 shadow-md border-b border-gray-100";
 
   return (
-    <header
-      className={`w-full fixed top-0 z-50 transition-all duration-300 ${
-        isHeroPage && !isScrolled
-          ? "bg-gradient-to-b from-black/40 to-transparent text-white"
-          : "bg-white text-gray-800 shadow-md border-b border-gray-100"
-      }`}
-    >
+    <header className={`w-full fixed top-0 z-50 transition-all duration-300 ${headerStyles}`}>
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Logo */}
-        <Link
-          href="/"
-          className={`text-xl font-bold tracking-tight ${
-            isHeroPage && !isScrolled
-              ? "text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]"
-              : "text-[#1D4350]"
-          }`}
-        >
-          Travio.
+        
+        <Link href="/" className="text-xl font-bold tracking-tight">
+          Travio<span className={isHeroPage && !isScrolled ? "text-white" : "text-blue-500"}>.</span>
         </Link>
 
-        {/* Navigation */}
-        <nav
-          className={`hidden md:flex items-center space-x-24 text-sm font-medium ${
-            isHeroPage && !isScrolled
-              ? "text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]"
-              : "text-gray-800"
-          }`}
-        >
-          <Link href="/my-trips">About Us</Link>
-          <Link href="/explore">Explore Trips</Link>
-          <Link href="/community">How it Works</Link>
+        <nav className="hidden md:flex items-center space-x-12 text-sm font-medium">
+          <Link href="/about" className="hover:opacity-70 transition">About Us</Link>
+          <Link href="/explore" className="hover:opacity-70 transition">Explore Trips</Link>
+          <Link href="/how-it-works" className="hover:opacity-70 transition">How it Works</Link>
         </nav>
 
-        {/* Auth Buttons */}
-        <div className="flex items-center space-x-3">
-          {/* Login Button */}
-          <button
-            onClick={handleLogin}
-            className={`text-sm px-4 py-2 rounded-full shadow-md transition font-semibold ${
-              isHeroPage && !isScrolled
-                ? "bg-white text-[#0073B9] hover:bg-gray-100"
-                : "bg-[#1D4350] hover:bg-[#1DA69B] text-white"
-            }`}
-          >
-            Log In
-          </button>
+        <div className="flex items-center space-x-3 min-w-[100px] justify-end">
+          {loading ? (
+            <div className="h-9 w-24 bg-gray-200/20 animate-pulse rounded-full" />
+          ) : isAuthenticated ? (
+            <UserDropdown isHeroPage={isHeroPage} isScrolled={isScrolled} />
+          ) : (
+            <button
+              onClick={() => router.push("/login")}
+              className={`text-sm px-6 py-2.5 rounded-full shadow-sm transition font-bold transform active:scale-95 ${
+                isHeroPage && !isScrolled
+                  ? "bg-white text-[#1D4350] hover:bg-gray-100"
+                  : "bg-[#1D4350] text-white hover:bg-[#15323b]"
+              }`}
+            >
+              Log In
+            </button>
+          )}
         </div>
       </div>
     </header>

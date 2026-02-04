@@ -4,7 +4,7 @@
 
 const axiosClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
-  withCredentials: true, // ZAROORI: Taaki cookies automatically send hon
+  withCredentials: true, 
   headers: {
     'Content-Type': 'application/json',
     'Accept': '*/*', 
