@@ -9,12 +9,9 @@ export const initialProfile: Profile = {
   dob: "1995-06-15",
   gender: "female",
   occupation: "Digital Marketing Specialist",
-  about:
-    "Passionate traveler seeking adventure and authentic cultural experiences. Love hiking, photography, and trying local cuisine.",
-  profilePhoto:
-    "https://images.unsplash.com/photo-1500534623283-312aade485b7",
-  coverPhoto:
-    "https://images.unsplash.com/photo-1500534623283-312aade485b7",
+  about: "Passionate traveler seeking adventure and authentic cultural experiences. Love hiking, photography, and trying local cuisine.",
+  profilePhoto: "https://images.unsplash.com/photo-1500534623283-312aade485b7",
+  coverPhoto: "https://images.unsplash.com/photo-1500534623283-312aade485b7",
 
   travelStyles: ["Adventure", "Culture", "Photography"],
 
@@ -30,45 +27,44 @@ export const initialProfile: Profile = {
     contactPhone: "+1 (555) 987-6543",
   },
 
-  trips: [
-    {
-      id: "t1",
-      title: "Paris Adventure",
-      location: "Paris, France",
-      start: "2025-12-15",
-      end: "2025-12-22",
-      image:
-        "https://images.unsplash.com/photo-1500534623283-312aade485b7",
-      status: "confirmed",
-      participants: ["You", "Alice", "Bob"],
-      rating: 5.0,
-    },
-    {
-      id: "t2",
-      title: "London Travel",
-      location: "London, United Kingdom",
-      start: "2026-02-10",
-      end: "2026-02-15",
-      image:
-        "https://images.unsplash.com/photo-1500534623283-312aade485b7",
-      status: "planning",
-      participants: ["You", "Charlie"],
-      rating: null,
-    },
-    {
-      id: "t3",
-      title: "Iceland Escape",
-      location: "Reykjavik, Iceland",
-      start: "2024-08-01",
-      end: "2024-08-10",
-      image:
-        "https://images.unsplash.com/photo-1500534623283-312aade485b7",
-      status: "completed",
-      participants: ["You", "John"],
-      rating: 4.9,
-    },
-  ],
-
+  // trips: [
+  //   {
+  //     id: "t1",
+  //     title: "Paris Adventure",
+  //     location: "Paris, France",
+  //     start: "2025-12-15",
+  //     end: "2025-12-22",
+  //     image:
+  //       "https://images.unsplash.com/photo-1500534623283-312aade485b7",
+  //     status: "confirmed",
+  //     participants: ["You", "Alice", "Bob"],
+  //     rating: 5.0,
+  //   },
+  //   {
+  //     id: "t2",
+  //     title: "London Travel",
+  //     location: "London, United Kingdom",
+  //     start: "2026-02-10",
+  //     end: "2026-02-15",
+  //     image:
+  //       "https://images.unsplash.com/photo-1500534623283-312aade485b7",
+  //     status: "planning",
+  //     participants: ["You", "Charlie"],
+  //     rating: null,
+  //   },
+  //   {
+  //     id: "t3",
+  //     title: "Iceland Escape",
+  //     location: "Reykjavik, Iceland",
+  //     start: "2024-08-01",
+  //     end: "2024-08-10",
+  //     image:
+  //       "https://images.unsplash.com/photo-1500534623283-312aade485b7",
+  //     status: "completed",
+  //     participants: ["You", "John"],
+  //     rating: 4.9,
+  //   },
+  // ],
   gallery: [
     "https://image2url.com/images/1764150430906-6eb57ad0-bfca-451c-9fe-98dc64cd99a2.jpg".replace(
       "fe-",
@@ -85,54 +81,46 @@ export const initialProfile: Profile = {
   ],
   showAllGallery: false,
 
-  reviews:  [
+  reviews: [
     {
       id: "r1",
       name: "John Davis",
       title: "Seoul Food & Culture Trip",
-      text:
-        "Sarah was an amazing travel companion! She's adventurous, respectful, and always up for trying new experiences. Her photography skills meant we got incredible shots on our trip. Highly recommend traveling with her!",
+      text: "Sarah was an amazing travel companion! She's adventurous, respectful, and always up for trying new experiences. Her photography skills meant we got incredible shots on our trip. Highly recommend traveling with her!",
       tags: ["Adventurous", "Respectful", "Fun"],
       date: "August 2024",
       rating: 5,
-      image:
-        "https://image2url.com/images/1764151322305-1bf3fa50-3256-4304-b882-d47e247246ab.jpg",
+      image: "https://image2url.com/images/1764151322305-1bf3fa50-3256-4304-b882-d47e247246ab.jpg",
     },
     {
       id: "r2",
       name: "Jenny Wilson",
       title: "Seoul Food & Culture Trip",
-      text:
-        "Sarah was an amazing travel companion! She's adventurous, respectful, and always up for trying new experiences. Her photography skills meant we got incredible shots on our trip. Highly recommend traveling with her!",
+      text: "Sarah was an amazing travel companion! She's adventurous, respectful, and always up for trying new experiences. Her photography skills meant we got incredible shots on our trip. Highly recommend traveling with her!",
       tags: ["Adventurous", "Respectful", "Fun"],
       date: "August 2024",
       rating: 4.8,
-      image:
-        "https://image2url.com/images/1764151081021-1b8e9ce1-9be0-40c4-9cff-b93d88058010.jpg",
+      image: "https://image2url.com/images/1764151081021-1b8e9ce1-9be0-40c4-9cff-b93d88058010.jpg",
     },
     {
       id: "r3",
       name: "John Davis",
       title: "Seoul Food & Culture Trip",
-      text:
-        "Sarah was an amazing travel companion! She's adventurous, respectful, and always up for trying new experiences. Her photography skills meant we got incredible shots on our trip. Highly recommend traveling with her!",
+      text: "Sarah was an amazing travel companion! She's adventurous, respectful, and always up for trying new experiences. Her photography skills meant we got incredible shots on our trip. Highly recommend traveling with her!",
       tags: ["Adventurous", "Respectful", "Fun"],
       date: "August 2024",
       rating: 5,
-      image:
-        "https://image2url.com/images/1764151322305-1bf3fa50-3256-4304-b882-d47e247246ab.jpg",
+      image: "https://image2url.com/images/1764151322305-1bf3fa50-3256-4304-b882-d47e247246ab.jpg",
     },
     {
       id: "r4",
       name: "Jenny Wilson",
       title: "Seoul Food & Culture Trip",
-      text:
-        "Sarah was an amazing travel companion! She's adventurous, respectful, and always up for trying new experiences. Her photography skills meant we got incredible shots on our trip. Highly recommend traveling with her!",
+      text: "Sarah was an amazing travel companion! She's adventurous, respectful, and always up for trying new experiences. Her photography skills meant we got incredible shots on our trip. Highly recommend traveling with her!",
       tags: ["Adventurous", "Respectful", "Fun"],
       date: "August 2024",
       rating: 4.8,
-      image:
-        "https://image2url.com/images/1764151081021-1b8e9ce1-9be0-40c4-9cff-b93d88058010.jpg",
+      image: "https://image2url.com/images/1764151081021-1b8e9ce1-9be0-40c4-9cff-b93d88058010.jpg",
     },
   ],
   showAllReviews: false,
@@ -145,21 +133,18 @@ export const initialProfile: Profile = {
     {
       name: "khushiii056",
       username: "khushii04",
-      image:
-        "https://image2url.com/images/1764151081021-1b8e9ce1-9be0-40c4-9cff-b93d88058010.jpg",
+      image: "https://image2url.com/images/1764151081021-1b8e9ce1-9be0-40c4-9cff-b93d88058010.jpg",
     },
     {
       name: "gajendarsingh_sodha",
       username: "gajendar singh sodha",
-      image:
-        "https://image2url.com/images/1764151322305-1bf3fa50-3256-4304-b882-d47e247246ab.jpg",
+      image: "https://image2url.com/images/1764151322305-1bf3fa50-3256-4304-b882-d47e247246ab.jpg",
       isFollowing: true,
     },
     {
       name: "hemanggour",
       username: "Hemang Gour",
-      image:
-        "https://image2url.com/images/1764151081021-1b8e9ce1-9be0-40c4-9cff-b93d88058010.jpg",
+      image: "https://image2url.com/images/1764151081021-1b8e9ce1-9be0-40c4-9cff-b93d88058010.jpg",
     },
   ],
 
@@ -167,18 +152,17 @@ export const initialProfile: Profile = {
     {
       name: "johncarter",
       username: "John Carter",
-      image:
-        "https://image2url.com/images/1764151322305-1bf3fa50-3256-4304-b882-d47e247246ab.jpg",
+      image: "https://image2url.com/images/1764151322305-1bf3fa50-3256-4304-b882-d47e247246ab.jpg",
       isFollowing: true,
     },
     {
       name: "emilydoe",
       username: "Emily Doe",
-      image:
-        "https://image2url.com/images/1764151081021-1b8e9ce1-9be0-40c4-9cff-b93d88058010.jpg",
+      image: "https://image2url.com/images/1764151081021-1b8e9ce1-9be0-40c4-9cff-b93d88058010.jpg",
       isFollowing: true,
     },
   ],
+  trips: []
 };
 
 export const ALL_TRAVEL_STYLES: string[] = [
