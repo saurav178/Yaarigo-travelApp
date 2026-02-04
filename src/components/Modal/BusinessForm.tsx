@@ -6,7 +6,7 @@ import { useAuth } from "@/context/AuthContext";
 import { X, Building2, Loader2, Globe } from "lucide-react";
 
 export default function BusinessForm({ onClose }: { onClose: () => void }) {
-  const { token, user } = useAuth(); 
+  const {token} = useAuth(); 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({

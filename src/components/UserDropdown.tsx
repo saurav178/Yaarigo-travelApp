@@ -143,7 +143,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { User, ChevronDown, Building2, UserPlus, LogOut, ArrowLeft } from "lucide-react";
+import {ChevronDown, Building2, UserPlus, LogOut, ArrowLeft } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import BusinessForm from "../components/Modal/BusinessForm"; // Import the form
 

@@ -5,7 +5,7 @@
 import { useState } from "react";
 import { useModal } from "@/context/ModalContext";
 import { useRouter } from "next/navigation";
-import { ROUTES } from "@/lib/routes"; 
+// import { ROUTES } from "@/lib/routes"; 
 import { authService } from "../../../services/auth-service"; 
 
 export default function RegisterForm() {
@@ -20,7 +20,7 @@ export default function RegisterForm() {
   const [errorMsg, setErrorMsg] = useState("");
 
   const { openModal, closeModal } = useModal();
-  const router = useRouter();
+  // const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

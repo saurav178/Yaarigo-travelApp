@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useState } from "react";
@@ -52,7 +50,6 @@ export default function RegisterForm() {
   //   }
   // };
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -81,11 +78,20 @@ export default function RegisterForm() {
           setTimeout(() => {
             openModal("login");
           }, 300);
-
         }, 2000);
       }
-    } catch (error: any) {
-      const message = error.response?.data?.message || "Registration Failed. Please try again.";
+    } catch (error: unknown) {
+      let message = "Registration Failed. Please try again.";
+
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error &&
+        typeof (error as any).response?.data?.message === "string"
+      ) {
+        message = (error as any).response.data.message;
+      }
+
       setErrorMsg(message);
     } finally {
       setIsLoading(false);
@@ -94,17 +100,30 @@ export default function RegisterForm() {
 
   return (
     <div className="fixed inset-0 z-[999] flex w-screen h-screen bg-white overflow-hidden animate-in fade-in duration-300">
-
       {showSuccessToast && (
         <div className="absolute inset-0 z-[100] flex items-center justify-center bg-white/90 backdrop-blur-md animate-fadeIn">
           <div className="text-center p-12 rounded-3xl bg-white shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-gray-50 flex flex-col items-center max-w-sm">
             <div className="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6 animate-bounce">
-              <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+              <svg
+                className="w-12 h-12"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={3}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
             </div>
-            <h3 className="text-3xl font-bold text-gray-800 tracking-tight">Account Created!</h3>
-            <p className="text-gray-500 mt-3 text-lg">Redirecting you to login...</p>
+            <h3 className="text-3xl font-bold text-gray-800 tracking-tight">
+              Account Created!
+            </h3>
+            <p className="text-gray-500 mt-3 text-lg">
+              Redirecting you to login...
+            </p>
           </div>
         </div>
       )}
@@ -116,7 +135,9 @@ export default function RegisterForm() {
           <h1 className="text-5xl font-bold tracking-tighter">Travio.</h1>
           <h2 className="mt-12 text-4xl font-light leading-tight">
             Start your journey <br />
-            <span className="font-bold text-[#A43931]">to the extraordinary.</span>
+            <span className="font-bold text-[#A43931]">
+              to the extraordinary.
+            </span>
           </h2>
         </div>
 
@@ -125,14 +146,18 @@ export default function RegisterForm() {
             <div className="p-3 bg-white/10 rounded-2xl text-2xl">🌍</div>
             <div>
               <h4 className="font-bold text-xl">Global Destinations</h4>
-              <p className="text-white/60 mt-1">Access to 500+ premium tours worldwide.</p>
+              <p className="text-white/60 mt-1">
+                Access to 500+ premium tours worldwide.
+              </p>
             </div>
           </div>
           <div className="flex items-start gap-6">
             <div className="p-3 bg-white/10 rounded-2xl text-2xl">🛡️</div>
             <div>
               <h4 className="font-bold text-xl">Secure Booking</h4>
-              <p className="text-white/60 mt-1">Your data and payments are always protected.</p>
+              <p className="text-white/60 mt-1">
+                Your data and payments are always protected.
+              </p>
             </div>
           </div>
         </div>
@@ -145,20 +170,33 @@ export default function RegisterForm() {
       </div>
 
       <div className="w-full lg:w-[60%] h-full bg-white flex flex-col items-center justify-center relative overflow-y-auto">
-
         <button
           onClick={closeModal}
           className="absolute top-8 right-8 p-2 text-gray-400 hover:text-gray-800 transition-colors"
         >
-          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          <svg
+            className="w-8 h-8"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
 
         <div className="w-full max-w-lg px-8 md:px-12 py-12">
           <div className="mb-10 text-center lg:text-left">
-            <h2 className="text-4xl font-extrabold text-gray-900 tracking-tight">Create Account</h2>
-            <p className="text-gray-500 mt-3 text-lg">Join thousands of travelers around the world.</p>
+            <h2 className="text-4xl font-extrabold text-gray-900 tracking-tight">
+              Create Account
+            </h2>
+            <p className="text-gray-500 mt-3 text-lg">
+              Join thousands of travelers around the world.
+            </p>
 
             {errorMsg && (
               <div className="mt-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-xl animate-shake flex items-center gap-3">
@@ -170,7 +208,9 @@ export default function RegisterForm() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] ml-1">Full Name</label>
+              <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] ml-1">
+                Full Name
+              </label>
               <input
                 type="text"
                 required
@@ -183,7 +223,9 @@ export default function RegisterForm() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] ml-1">Email</label>
+                <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] ml-1">
+                  Email
+                </label>
                 <input
                   type="email"
                   required
@@ -194,7 +236,9 @@ export default function RegisterForm() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] ml-1">Phone</label>
+                <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] ml-1">
+                  Phone
+                </label>
                 <input
                   type="tel"
                   required
@@ -207,7 +251,9 @@ export default function RegisterForm() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] ml-1">Password</label>
+              <label className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] ml-1">
+                Password
+              </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -253,10 +299,32 @@ export default function RegisterForm() {
       </div>
 
       <style jsx>{`
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
-        .animate-fadeIn { animation: fadeIn 0.3s ease-out; }
-        .animate-shake { animation: shake 0.2s ease-in-out 0s 2; }
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+        @keyframes shake {
+          0%,
+          100% {
+            transform: translateX(0);
+          }
+          25% {
+            transform: translateX(-4px);
+          }
+          75% {
+            transform: translateX(4px);
+          }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out;
+        }
+        .animate-shake {
+          animation: shake 0.2s ease-in-out 0s 2;
+        }
       `}</style>
     </div>
   );
