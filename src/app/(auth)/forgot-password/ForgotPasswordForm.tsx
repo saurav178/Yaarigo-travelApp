@@ -23,7 +23,7 @@ export default function ForgotPasswordForm() {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto animate-fadeIn">
+    <div className="w-full max-w-md mx-auto animate-fadeIn mt-10" >
       <div className="glassmorphism-card">
         {/* Header */}
         <div className="text-center mb-5 animate-slideDown">

@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ModalProvider } from "@/context/ModalContext"; 
+import { AuthProvider } from "@/context/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,17 +20,22 @@ export const metadata: Metadata = {
   title: "Travio",
   description: "Find your perfect travel companions",
 };
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ModalProvider>
-          <Header />
-          {children}
-          <Footer />
-        </ModalProvider>
+      <body
+        suppressHydrationWarning
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <AuthProvider>
+          <ModalProvider>
+            <Header />
+            {children}
+          </ModalProvider>
+        </AuthProvider>
       </body>
     </html>
   );
 }
+
+

@@ -1,48 +1,84 @@
-"use client";
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
-type AuthContextType = {
-  isLoggedIn: boolean;
-  token: string | null;
-  login: (token: string) => void;
-  logout: () => void;
-};
+"use client";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { authService } from "@/services/auth-service";
+
+interface AuthContextType {
+  user: any;
+  loading: boolean;
+  isAuthenticated: boolean;
+  organization: any[];
+  login: (credentials: any) => Promise<void>;
+  logout: () => Promise<void>;
+}
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [token, setToken] = useState<string | null>(null);
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState<any>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const stored = localStorage.getItem("auth_token");
-    if (stored) {
-      setToken(stored);
-      setIsLoggedIn(true);
+  const checkSession = async () => {
+    try {
+     
+      const data = await authService.getMe();
+      
+      if (data) {
+        setUser(data.user || data);
+        setIsAuthenticated(true);
+      }
+    } catch (err) {
+      setIsAuthenticated(false);
+      setUser(null);
+    } finally {
+      setLoading(false); 
     }
-  }, []);
-
-  const login = (t: string) => {
-    setIsLoggedIn(true);
-    setToken(t);
-    localStorage.setItem("auth_token", t);
   };
 
-  const logout = () => {
-    setIsLoggedIn(false);
-    setToken(null);
-    localStorage.removeItem("auth_token");
+  useEffect(() => {
+    checkSession();
+  }, []);
+
+  const login = async (credentials: any) => {
+    setLoading(true);
+    try {
+      await authService.login(credentials);
+      await checkSession(); 
+    } catch (error) {
+      setLoading(false);
+      throw error;
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await authService.logout(); 
+    } finally {
+      setUser(null);
+      setIsAuthenticated(false);
+      setLoading(false);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, token, login, logout }}>
-      {children}
+<AuthContext.Provider value={{ 
+    user, 
+    loading, 
+    isAuthenticated, 
+    organization: user?.organizations || [], 
+    login, 
+    logout 
+  }}>
+          {children}
     </AuthContext.Provider>
   );
-}
+};
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth must be used within AuthProvider");
-  return context;
+  const ctx = useContext(AuthContext);
+  console.log("AuthContext:", ctx);
+  if (!ctx) throw new Error("useAuth must be used inside AuthProvider");
+  return ctx;
 };
+
