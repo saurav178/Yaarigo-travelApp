@@ -93,15 +93,15 @@
   import PackageCard from "./PackageCard";
   import { ApiPackage, ApiTrip } from "../types/types";
 
-  type Trip = {
-    _id: string;
-    // other fields
-  };
+  // type Trip = {
+  //   _id: string;
+  //   // other fields
+  // };
 
-  type Package = {
-    _id: string;
-    // other fields
-  };
+  // type Package = {
+  //   _id: string;
+  //   // other fields
+  // };
 
  type Props = {
   trips: ApiTrip[];
