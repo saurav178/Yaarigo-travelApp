@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect} from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import UserDropdown from "./UserDropdown";
 
 export default function Header() {
@@ -11,8 +11,7 @@ export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
   
-  const { isAuthenticated, loading } = useAuth();
-
+const { isAuthenticated ,isLoading} = useAuth(); 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
@@ -40,7 +39,7 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center space-x-3 min-w-[100px] justify-end">
-          {loading ? (
+          {isLoading ? (
             <div className="h-9 w-24 bg-gray-200/20 animate-pulse rounded-full" />
           ) : isAuthenticated ? (
             <UserDropdown isHeroPage={isHeroPage} isScrolled={isScrolled} />

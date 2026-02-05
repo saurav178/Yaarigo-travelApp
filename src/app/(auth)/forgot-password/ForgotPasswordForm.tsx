@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useModal } from '@/context/ModalContext';
+import { useModal } from '../../../context/ModalContext';
 
 export default function ForgotPasswordForm() {
   const [emailOrPhone, setEmailOrPhone] = useState('');

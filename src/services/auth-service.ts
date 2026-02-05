@@ -1,136 +1,92 @@
 
-// import { LoginRequest, LoginResponse, UserProfile } from "react-date-range";
-// import axiosClient from "../../src/lib/axios-client";
-// import { RegisterRequest, RegisterResponse } from "../../src/types/react-date-range";
+
+// import { User } from '../types/auth';
+
+// const BASE_URL = 'http://localhost:3017/api';
+
+// const handleResponse = async <T>(response: Response): Promise<T> => {
+//   if (!response.ok) {
+//     const errorData = await response.json().catch(() => ({}));
+//     throw new Error(errorData.message || 'Authentication failed');
+//   }
+//   return response.json() as Promise<T>;
+// };
 
 // export const authService = {
-//   register: async (data: RegisterRequest): Promise<RegisterResponse> => {
-//     const response = await axiosClient.post('/api/users/register', data);
-//     return response.data;
+//   async register(data: Record<string, string>): Promise<void> {
+//     const res = await fetch(`${BASE_URL}/users/register`, {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json', 'accept': '*/*' },
+//       body: JSON.stringify(data),
+//     });
+//     await handleResponse(res);
 //   },
 
-//   login: async (credentials: LoginRequest): Promise<any> => {
-//     try {
-//       const response = await axiosClient.post('/api/auth/login', credentials);
-      
-//       if (response.data?.access_token) {
-//         localStorage.setItem('token', response.data.access_token);
-//       }
-//       const fullProfile = await authService.getMe();
-      
-//       return {
-//         ...response.data,
-//         user: fullProfile 
-//       };
-//     } catch (error: any) {
-//       throw error.response?.data || { message: "Login failed" };
-//     }
+//   async login(credentials: Record<string, string>): Promise<void> {
+//     const res = await fetch(`${BASE_URL}/auth/login`, {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json', 'accept': '*/*' },
+//       body: JSON.stringify(credentials),
+//       credentials: 'include',
+//     });
+//     await handleResponse(res);
 //   },
 
-//   getMe: async (): Promise<any> => {
-//     try {
-//       const response = await axiosClient.get('/api/auth/me'); 
-//       return response.data;
-//     } catch (error: any) {
-//       console.error("Error fetching user details:", error);
-//       throw error;
-//     }
-//   },
-
-//  logout: async (): Promise<void> => {
-//   await axiosClient.post("/api/auth/logout");
-//   localStorage.removeItem("token"); 
-// }
+//   async getMe(): Promise<User> {
+//     const res = await fetch(`${BASE_URL}/auth/me`, {
+//       method: 'GET',
+//       headers: { 'accept': '*/*' },
+//       credentials: 'include',
+//     });
+//     return handleResponse<User>(res);
+//   }
 // };
 
 
+import { RegisterData, LoginCredentials, User ,RegisterResponse} from '../types/auth';
 
-
-
-import axiosClient from "@/lib/axios-client";
-
-/* =======================
-   Types (REAL ONES)
-======================= */
-
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
-
-export interface RegisterRequest {
-  email: string;
-  full_name: string;
-  password: string;
-  phone_number: string;
-  role: "INDIVIDUAL" | "BUSINESS";
-  organization_name?: string;
-}
-
-export interface Organization {
-  id: string;
-  name: string;
-  slug: string;
-}
-
-export interface User {
-  id: string;
-  email: string;
-  full_name?: string;
-  organizations?: Organization[];
-}
-
-export interface LoginResponse {
-  access_token: string;
-}
-
-export interface MeResponse {
-  user: User;
-}
-
-/* =======================
-   Service
-======================= */
+const USER_API = 'http://localhost:3017/api';
+const AUTH_API = 'http://localhost:3016/api';
 
 export const authService = {
-  register: async (data: RegisterRequest): Promise<void> => {
-    await axiosClient.post("/api/users/register", data);
+  async register(data: RegisterData): Promise<RegisterResponse> {
+    const res = await fetch(`${USER_API}/users/register`, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'accept': '*/*' 
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.message || 'Registration failed');
+    }
+    return res.json();
   },
 
-  login: async (
-    credentials: LoginRequest
-  ): Promise<{ token: string; user: User }> => {
-    try {
-      const response = await axiosClient.post<LoginResponse>(
-        "/api/auth/login",
-        credentials
-      );
-
-      const token = response.data.access_token;
-      localStorage.setItem("token", token);
-
-      const me = await authService.getMe();
-
-      return {
-        token,
-        user: me.user,
-      };
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        throw error;
-      }
-      throw new Error("Login failed");
+async login(credentials: LoginCredentials): Promise<void> {
+    const res = await fetch(`${AUTH_API}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'accept': '*/*' },
+      body: JSON.stringify(credentials), 
+      credentials: 'include', 
+    });
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({}));
+      throw new Error(error.message || 'Login failed');
     }
   },
 
-  getMe: async (): Promise<MeResponse> => {
-    const response = await axiosClient.get<MeResponse>("/api/auth/me");
-    return response.data;
-  },
-
-  logout: async (): Promise<void> => {
-    await axiosClient.post("/api/auth/logout");
-    localStorage.removeItem("token");
-  },
+  async getMe(): Promise<User> {
+    const res = await fetch(`${AUTH_API}/auth/me`, {
+      method: 'GET',
+      headers: { 'accept': '*/*' },
+      credentials: 'include',
+    });
+    
+    if (!res.ok) throw new Error('Unauthorized');
+    return res.json();
+  }
 };
-

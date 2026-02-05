@@ -1,220 +1,247 @@
 
 // "use client";
-// import React, { createContext, useContext, useEffect, useState } from "react";
-// import { authService } from "@/services/auth-service";
 
-// interface AuthContextType {
-//   user: any;
-//   loading: boolean;
-//   isAuthenticated: boolean;
-//   organization: any[];
-//   login: (credentials: any) => Promise<void>;
-//   logout: () => Promise<void>;
+// import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+// import { User, AuthState, LoginCredentials, RegisterData } from '../types/auth';
+// import { authService } from '../services/auth-service';
+
+// interface AuthContextType extends AuthState {
+//   login: (credentials: LoginCredentials) => Promise<void>;
+//   register: (data: RegisterData) => Promise<void>;
+//   refreshUser: () => Promise<void>;
+//   logout: () => void;
 // }
 
 // const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-//   const [user, setUser] = useState<any>(null);
-//   const [isAuthenticated, setIsAuthenticated] = useState(false);
-//   const [loading, setLoading] = useState(true);
+// export const AuthProvider = ({ children }: { children: ReactNode }) => {
+//   const [state, setState] = useState<AuthState>({
+//     user: null,
+//     isAuthenticated: false,
+//     isLoading: true,
+//   });
 
-//   const checkSession = async () => {
+
+//   const refreshUser = async () => {
 //     try {
-     
-//       const data = await authService.getMe();
-      
-//       if (data) {
-//         setUser(data.user || data);
-//         setIsAuthenticated(true);
-//       }
-//     } catch (err) {
-//       setIsAuthenticated(false);
-//       setUser(null);
-//     } finally {
-//       setLoading(false); 
+//       const userData = await authService.getMe();
+//       setState({ user: userData, isAuthenticated: true, isLoading: false });
+//     } catch {
+//       setState({ user: null, isAuthenticated: false, isLoading: false });
 //     }
 //   };
 
+  
 //   useEffect(() => {
-//     checkSession();
+//     refreshUser();
 //   }, []);
 
-//   const login = async (credentials: any) => {
-//     setLoading(true);
-//     try {
-//       await authService.login(credentials);
-//       await checkSession(); 
-//     } catch (error) {
-//       setLoading(false);
-//       throw error;
-//     }
+  
+//   const login = async (credentials: LoginCredentials) => {
+//     // Note: authService.login sets the HttpOnly cookie automatically
+//     await authService.login(credentials);
+//     // Fetch the actual user data using that cookie
+//     const userData = await authService.getMe();
+//     setState({ user: userData, isAuthenticated: true, isLoading: false });
 //   };
 
-//   const logout = async () => {
-//     try {
-//       await authService.logout(); 
-//     } finally {
-//       setUser(null);
-//       setIsAuthenticated(false);
-//       setLoading(false);
-//     }
+
+//   const register = async (data: RegisterData) => {
+//     await authService.register(data);
+   
+//   };
+
+//   const logout = () => {
+   
+//     setState({ user: null, isAuthenticated: false, isLoading: false });
 //   };
 
 //   return (
-// <AuthContext.Provider value={{ 
-//     user, 
-//     loading, 
-//     isAuthenticated, 
-//     organization: user?.organizations || [], 
-//     login, 
-//     logout 
-//   }}>
-//           {children}
+//     <AuthContext.Provider value={{ ...state, login, register, refreshUser, logout }}>
+//       {children}
 //     </AuthContext.Provider>
 //   );
 // };
 
 // export const useAuth = () => {
-//   const ctx = useContext(AuthContext);
-//   console.log("AuthContext:", ctx);
-//   if (!ctx) throw new Error("useAuth must be used inside AuthProvider");
-//   return ctx;
+//   const context = useContext(AuthContext);
+//   if (!context) {
+//     throw new Error("useAuth must be used within an AuthProvider");
+//   }
+//   return context;
 // };
 
+
+// "use client";
+
+// import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+// import { User, AuthState, LoginCredentials, RegisterData } from '../types/auth';
+// import { authService } from '../services/auth-service';
+
+// interface AuthContextType extends AuthState {
+//   login: (credentials: LoginCredentials) => Promise<void>;
+//   register: (data: RegisterData) => Promise<void>;
+//   refreshUser: () => Promise<void>;
+//   logout: () => void;
+// }
+
+// const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// export const AuthProvider = ({ children }: { children: ReactNode }) => {
+//   // State is already strictly typed with AuthState (which includes User | null)
+//   const [state, setState] = useState<AuthState>({
+//     user: null,
+//     isAuthenticated: false,
+//     isLoading: true,
+//   });
+
+//   const refreshUser = async () => {
+//     try {
+//       // getMe() now returns 'User' type (as defined in auth-service)
+//       const userData: User = await authService.getMe();
+//       setState({ user: userData, isAuthenticated: true, isLoading: false });
+//     } catch {
+//       setState({ user: null, isAuthenticated: false, isLoading: false });
+//     }
+//   };
+
+//   useEffect(() => {
+//     refreshUser();
+//   }, []);
+
+//   const login = async (credentials: LoginCredentials) => {
+//     await authService.login(credentials);
+    
+//     // Yahan hum explicitly bata rahe hain ki data 'User' format mein hai
+//     const userData: User = await authService.getMe();
+    
+//     setState({ 
+//       user: userData, 
+//       isAuthenticated: true, 
+//       isLoading: false 
+//     });
+//   };
+
+//   const register = async (data: RegisterData) => {
+//     // Register sirf call hota hai, response context mein save nahi hota 
+//     // kyunki login flow alag hai
+//     await authService.register(data);
+//   };
+
+//   const logout = () => {
+//     // State reset
+//     setState({ user: null, isAuthenticated: false, isLoading: false });
+//   };
+
+//   return (
+//     <AuthContext.Provider value={{ ...state, login, register, refreshUser, logout }}>
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
+
+// export const useAuth = () => {
+//   const context = useContext(AuthContext);
+//   if (!context) throw new Error("useAuth must be used within an AuthProvider");
+//   return context;
+// };
 
 
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { authService } from "@/services/auth-service";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { User, AuthState, LoginCredentials, RegisterData, Organization } from '../types/auth';
+import { authService } from '../services/auth-service';
 
-/* =======================
-   Types
-======================= */
-
-export interface Organization {
-  id: string;
-  name: string;
-  slug: string;
-}
-
-export interface User {
-  id: string;
-  email: string;
-  full_name?: string;
-  organizations?: Organization[];
-}
-
-export interface LoginCredentials {
-  email: string;
-  password: string;
-}
-
-interface AuthContextType {
-  user: User | null;
-  token: string | null;
-
-  loading: boolean;
-  isAuthenticated: boolean;
-
-  organizations: Organization[];
-
+interface AuthContextType extends AuthState {
   login: (credentials: LoginCredentials) => Promise<void>;
-  logout: () => Promise<void>;
+  register: (data: RegisterData) => Promise<void>;
+  refreshUser: () => Promise<void>;
+  logout: () => void;
 }
-
-/* =======================
-   Context
-======================= */
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-/* =======================
-   Provider
-======================= */
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [state, setState] = useState<AuthState>({
+    user: null,
+    organization: [], // Error 1 fix: Initial state add ki
+    isAuthenticated: false,
+    isLoading: true,
+  });
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  // const refreshUser = async () => {
+  //   try {
+  //     // Maan lijiye aapka getMe user aur orgs dono bhejta hai
+  //     const userData: User = await authService.getMe();
+      
+  //     setState({ 
+  //       user: userData, 
+  //       organization: userData.organizations || [], // Error 2 fix: Mapping
+  //       isAuthenticated: true, 
+  //       isLoading: false 
+  //     });
+  //   } catch {
+  //     setState({ user: null, organization: [], isAuthenticated: false, isLoading: false });
+  //   }
+  // };
 
-  const checkSession = async () => {
-    try {
-      const data = await authService.getMe();
+  const refreshUser = async () => {
+  try {
+    const userData: User = await authService.getMe();
+    
+    // Yahan hum Organization type ka fayda utha sakte hain
+    const orgs: Organization[] = userData.organizations || []; 
 
-      if (data) {
-        setUser(data.user ?? data);
-        setToken(localStorage.getItem("token"));
-      }
-    } catch {
-      setUser(null);
-      setToken(null);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+    setState({ 
+      user: userData, 
+      organization: orgs, 
+      isAuthenticated: true, 
+      isLoading: false 
+    });
+  } catch {
+    setState({ user: null, organization: [], isAuthenticated: false, isLoading: false });
+  }
+};
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      setToken(storedToken);
-    }
-    checkSession();
+    refreshUser();
   }, []);
 
   const login = async (credentials: LoginCredentials) => {
-    setLoading(true);
-    try {
-      const res = await authService.login(credentials);
-
-      if (res?.token) {
-        localStorage.setItem("token", res.token);
-        setToken(res.token);
-      }
-
-      await checkSession();
-    } finally {
-      setLoading(false);
-    }
+    await authService.login(credentials);
+    const userData: User = await authService.getMe();
+    
+    setState({ 
+      user: userData, 
+      organization: userData.organizations || [], // Error 3 fix
+      isAuthenticated: true, 
+      isLoading: false 
+    });
   };
 
-  const logout = async () => {
-    try {
-      await authService.logout();
-    } finally {
-      localStorage.removeItem("token");
-      setUser(null);
-      setToken(null);
-      setLoading(false);
-    }
+  const register = async (data: RegisterData) => {
+    await authService.register(data);
+  };
+
+  const logout = () => {
+    setState({ 
+      user: null, 
+      organization: [], // Error 4 fix
+      isAuthenticated: false, 
+      isLoading: false 
+    });
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        token,
-        loading,
-        isAuthenticated: Boolean(token),
-        organizations: user?.organizations ?? [],
-        login,
-        logout,
-      }}
-    >
+    // Error 5 fix: Ab organization value provider mein pass ho rahi hai
+    <AuthContext.Provider value={{ ...state, login, register, refreshUser, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-/* =======================
-   Hook
-======================= */
-
 export const useAuth = () => {
-  const ctx = useContext(AuthContext);
-  if (!ctx) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return ctx;
+  const context = useContext(AuthContext);
+  if (!context) throw new Error("useAuth must be used within an AuthProvider");
+  return context;
 };

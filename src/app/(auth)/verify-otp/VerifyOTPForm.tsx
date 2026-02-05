@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { useModal } from '@/context/ModalContext';
+import { useModal } from '../../../context/ModalContext';
 import { useRouter } from 'next/navigation';
 
 export default function VerifyOTPForm() {

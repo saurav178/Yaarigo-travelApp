@@ -5,7 +5,7 @@ import ProfileHeader from "./components/ProfileHeader";
 import AboutSection from "./components/AboutSection";
 import TabsSection from "./components/TabsSection";
 import ChatWindow from "./components/ChatWindow";
-import Loader from "@/components/Loader/Loader";
+import Loader from "../../components/Loader/Loader";
 
 export default function LeaderProfilePage() {
   const [isChatOpen, setIsChatOpen] = useState(false);

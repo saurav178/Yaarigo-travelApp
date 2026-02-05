@@ -1,10 +1,10 @@
 "use client";
 
-import { useModal } from "@/context/ModalContext";
-import LoginForm from "@/app/(auth)/login/LoginForm";
-import RegisterForm from "@/app/(auth)/register/RegisterForm";
-import ForgotPasswordForm from "@/app/(auth)/forgot-password/ForgotPasswordForm";
-import VerifyOTPForm from "@/app/(auth)/verify-otp/VerifyOTPForm";
+import { useModal } from "../../context/ModalContext";
+import LoginForm from "../../app/(auth)/login/LoginForm";
+import RegisterForm from "../../app/(auth)/register/RegisterForm";
+import ForgotPasswordForm from "../../app/(auth)/forgot-password/ForgotPasswordForm";
+import VerifyOTPForm from "../../app/(auth)/verify-otp/VerifyOTPForm";
 
 export default function AuthModal() {
   const { activeModal, closeModal } = useModal();
