@@ -251,7 +251,7 @@ import Link from "next/link";
 import { ChevronDown, Building2, UserPlus, LogOut, ArrowLeft } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import BusinessForm from "../components/Modal/BusinessForm";
-import { Organization } from "../types/auth"; 
+import { Organization } from "../types/auth";
 
 export default function UserDropdown({ isHeroPage, isScrolled }: { isHeroPage: boolean, isScrolled: boolean }) {
   const { user, organization, logout } = useAuth();
@@ -309,7 +309,10 @@ export default function UserDropdown({ isHeroPage, isScrolled }: { isHeroPage: b
                 </button>
 
                 <div className="h-[1px] bg-gray-100 my-1 mx-4" />
-                <button onClick={logout} className="w-full flex items-center space-x-3 px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors font-semibold">
+                <button
+                  onClick={logout} // Ye context wala logout trigger karega
+                  className="w-full flex items-center space-x-3 px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors font-semibold"
+                >
                   <LogOut size={18} />
                   <span>Logout</span>
                 </button>
@@ -339,7 +342,7 @@ export default function UserDropdown({ isHeroPage, isScrolled }: { isHeroPage: b
                       </div>
                     </Link>
                   ))}
-                  
+
                   {organization?.length === 0 && (
                     <p className="text-center py-4 text-xs text-gray-400 font-medium">No business found</p>
                   )}
