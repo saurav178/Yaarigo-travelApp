@@ -28,15 +28,19 @@ jobs:
             git reset --hard origin/develop
             git clean -fd
 
-            echo "Updating environment variables (.env.production)..."
-            cat > .env.production <<EOL
+            echo "Updating environment variables (.env.production) safely..."
+            TMP_FILE=$(mktemp)
+
+            cat > $TMP_FILE <<EOL
             NODE_ENV=production
             NEXT_PUBLIC_USER_SERVICE_URL=${{ secrets.NEXT_PUBLIC_USER_SERVICE_URL }}
             NEXT_PUBLIC_AUTH_SERVICE_URL=${{ secrets.NEXT_PUBLIC_AUTH_SERVICE_URL }}
             NEXT_PUBLIC_API_BASE_URL=${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
             EOL
-            chmod 600 .env.production
-            chown devops:devops .env.production || true
+
+            sudo mv $TMP_FILE /var/www/yaarigo/yaarigo-fe/.env.production
+            sudo chown devops:devops /var/www/yaarigo/yaarigo-fe/.env.production
+            sudo chmod 600 /var/www/yaarigo/yaarigo-fe/.env.production
 
             echo "Installing dependencies..."
             npm ci || npm install
