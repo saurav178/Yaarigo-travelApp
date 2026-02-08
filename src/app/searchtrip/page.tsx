@@ -10,7 +10,7 @@ export default function SearchTripPage() {
   const { filters, updateFilter, resetFilters } = useCombinedFilters();
 
   // ✅ PASS FILTERS
-  const { trips, packages, loading, error } = useSearchData(filters);
+  const { trips, packages, loading, error ,hasFetched  } = useSearchData(filters);
 
   if (loading) {
     return (
@@ -20,27 +20,42 @@ export default function SearchTripPage() {
     );
   }
 
-  if (error) {
+  // Loader
+  if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-red-600">
-        {error}
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader />
       </div>
     );
   }
 
+  // Real error only
+  if (error === "SERVER_ERROR") {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-gray-500">
+        Something went wrong. Please try again later.
+      </div>
+    );
+  }
+
+  // const noResults = trips.length === 0 && packages.length === 0;
+
   const noResults =
-    trips.length === 0 && packages.length === 0;
+  hasFetched &&
+  !loading &&
+  trips.length === 0 &&
+  packages.length === 0;
+
 
   return (
     <div className="min-h-screen px-4 py-6 md:px-10 md:py-12">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-7xl mx-auto">
-
         {/* Sidebar */}
         <aside className="lg:col-span-3">
           <FilterSidebar
             filters={filters}
             updateFilter={updateFilter}
-            resetFilters={resetFilters}
+            // resetFilters={resetFilters}
           />
         </aside>
 
@@ -51,10 +66,7 @@ export default function SearchTripPage() {
               No trips or packages found. Try adjusting filters.
             </div>
           ) : (
-            <CombinedContent
-              trips={trips}
-              packages={packages}
-            />
+            <CombinedContent trips={trips} packages={packages} />
           )}
         </main>
       </div>

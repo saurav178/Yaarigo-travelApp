@@ -251,25 +251,24 @@
 // export default FilterSidebar;
 
 
-
-
 "use client";
-import React, { useState } from "react";
-import { Filter, X, Search, MapPin, DollarSign, Calendar, Users, Globe } from "lucide-react";
+
+import React from "react";
+import {
+  Filter,
+  Search,
+  MapPin,
+  DollarSign,
+  Calendar,
+  Users,
+  Globe,
+} from "lucide-react";
 import { CombinedFilters } from "../../types/combinedFilters";
 
-/* ========================= 
-   STATIC FILTER OPTIONS (API DRIVEN – NOT UI DATA) 
-   ========================= */
+/* ===== STATIC OPTIONS ===== */
 const TRIP_STYLES = ["adventure", "leisure", "spiritual", "wildlife"];
-const CREATOR_TYPES = [
-  "AGENCY",
-  "HOST",
-  "GUIDE",
-  "TRIP_LEADER",
-  "INDIVIDUAL",
-];
-const TRAVEL_MODES = ["SOLO", "GROUP", "COUPLE"];
+const CREATOR_TYPES = ["AGENCY", "TRIP_LEADER", "USER"];
+const TRAVEL_MODES = ["SOLO", "GROUP"];
 const LANGUAGES = ["English", "Hindi", "Odia"];
 const GENDERS = ["ANY", "MALE_ONLY", "FEMALE_ONLY"];
 
@@ -279,163 +278,113 @@ interface FilterSidebarProps {
     key: K,
     value: CombinedFilters[K]
   ) => void;
-  resetFilters: () => void;
 }
 
 const FilterSidebar: React.FC<FilterSidebarProps> = ({
   filters,
   updateFilter,
-  resetFilters,
 }) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [tempFilters, setTempFilters] = useState(filters);
-
-  const handleTempUpdate = <K extends keyof CombinedFilters>(
-    key: K,
-    value: CombinedFilters[K]
+  const toggleArrayValue = (
+    key: "tripStyles" | "languages",
+    value: string
   ) => {
-    setTempFilters((prev) => ({ ...prev, [key]: value }));
+    const current = filters[key] || [];
+    const updated = current.includes(value)
+      ? current.filter((v) => v !== value)
+      : [...current, value];
+
+    updateFilter(key, updated);
   };
-
-  // const applyFilters = () => {
-  //   Object.entries(tempFilters).forEach(([key, value]) => {
-  //     updateFilter(key as keyof CombinedFilters, value as any);
-  //   });
-  // };
-
-
-  const applyFilters = () => {
-  (Object.keys(tempFilters) as (keyof CombinedFilters)[]).forEach((key) => {
-    updateFilter(key, tempFilters[key]);
-  });
-};
-
-
-  const toggleArrayValue = (key: "tripStyles" | "languages", value: string) => {
-    const currentArray = tempFilters[key] || [];
-    const newArray = currentArray.includes(value)
-      ? currentArray.filter((v) => v !== value)
-      : [...currentArray, value];
-    handleTempUpdate(key, newArray);
-  };
-
-  if (isCollapsed) {
-    return (
-      <button
-        onClick={() => setIsCollapsed(false)}
-        className="fixed left-0 top-24 z-50 bg-gradient-to-br from-[#1d4350] to-[#2a5d6d] text-white p-3 rounded-r-xl shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105"
-      >
-        <Filter className="w-6 h-6" />
-      </button>
-    );
-  }
 
   return (
-    <div className="sticky top-24 w-80 bg-white shadow-2xl border border-gray-100 overflow-hidden">
-      {/* Header with Gradient */}
-      <div className="bg-gradient-to-br from-[#1d4350] via-[#2a5d6d] to-[#1d4350] p-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-5 rounded-full -mr-16 -mt-16"></div>
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white opacity-5 rounded-full -ml-12 -mb-12"></div>
-        
-        <div className="flex items-center justify-between relative z-10">
-          <div className="flex items-center gap-3">
-            <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
-              <Filter className="w-5 h-5 text-white" />
-            </div>
-            <h2 className="text-xl font-bold text-white">Filters</h2>
-          </div>
-          <button
-            onClick={() => setIsCollapsed(true)}
-            className="text-white/80 hover:text-white hover:bg-white/20 p-2 rounded-lg transition-all duration-200"
-          >
-            <X className="w-5 h-5" />
-          </button>
+    <aside className="sticky top-24 h-[calc(100vh-120px)] w-80 bg-white border border-gray-200 shadow-lg overflow-y-auto">
+      {/* Header */}
+      <div className="px-6 py-4 border-b bg-gradient-to-r from-[#1d4350] to-[#2a5d6d] text-white">
+        <div className="flex items-center gap-2">
+          <Filter className="w-5 h-5" />
+          <h2 className="font-semibold text-lg">Filters</h2>
         </div>
       </div>
 
-      {/* Body - Compact Grid Layout */}
-      <div className="p-5 space-y-4 max-h-[calc(100vh-280px)] overflow-y-auto custom-scrollbar">
-        {/* Search Keyword */}
-        <div className="space-y-2">
-          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-            <Search className="w-4 h-4 text-[#1d4350]" />
-            Search
+      <div className="p-5 space-y-5">
+        {/* Keyword */}
+        <div>
+          <label className="text-sm font-semibold flex items-center gap-2">
+            <Search className="w-4 h-4" /> Search
           </label>
           <input
             type="text"
-            placeholder="Keywords..."
-            value={tempFilters.keyword || ""}
-            onChange={(e) => handleTempUpdate("keyword", e.target.value)}
-            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#1d4350] focus:border-transparent transition-all"
+            value={filters.keyword || ""}
+            onChange={(e) => updateFilter("keyword", e.target.value)}
+            className="w-full mt-2 px-3 py-2 border rounded-lg"
           />
         </div>
 
-        {/* Location Row */}
+        {/* Location */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-2">
-            <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-700">
-              <MapPin className="w-3.5 h-3.5 text-[#1d4350]" />
-              From
+          <div>
+            <label className="text-xs font-semibold flex gap-1">
+              <MapPin className="w-3 h-3" /> From
             </label>
             <input
               type="text"
-              placeholder="City"
-              value={tempFilters.fromCity || ""}
-              onChange={(e) => handleTempUpdate("fromCity", e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#1d4350] focus:border-transparent transition-all"
+              value={filters.fromCity || ""}
+              onChange={(e) => updateFilter("fromCity", e.target.value)}
+              className="w-full mt-1 px-3 py-2 border rounded-lg"
             />
           </div>
-          <div className="space-y-2">
-            <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-700">
-              <MapPin className="w-3.5 h-3.5 text-[#1d4350]" />
-              To
+          <div>
+            <label className="text-xs font-semibold flex gap-1">
+              <MapPin className="w-3 h-3" /> To
             </label>
             <input
               type="text"
-              placeholder="City"
-              value={tempFilters.toCity || ""}
-              onChange={(e) => handleTempUpdate("toCity", e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#1d4350] focus:border-transparent transition-all"
+              value={filters.toCity || ""}
+              onChange={(e) => updateFilter("toCity", e.target.value)}
+              className="w-full mt-1 px-3 py-2 border rounded-lg"
             />
           </div>
         </div>
 
-        {/* Price Range */}
-        <div className="space-y-2">
-          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-            <DollarSign className="w-4 h-4 text-[#1d4350]" />
-            Price Range
+        {/* Price */}
+        <div>
+          <label className="text-sm font-semibold flex gap-2">
+            <DollarSign className="w-4 h-4" /> Budget
           </label>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 mt-2">
             <input
               type="number"
               placeholder="Min"
-              value={tempFilters.minPrice || ""}
-              onChange={(e) => handleTempUpdate("minPrice", Number(e.target.value))}
-              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#1d4350] focus:border-transparent transition-all"
+              value={filters.minPrice || ""}
+              onChange={(e) =>
+                updateFilter("minPrice", Number(e.target.value))
+              }
+              className="px-3 py-2 border rounded-lg"
             />
             <input
               type="number"
               placeholder="Max"
-              value={tempFilters.maxPrice || ""}
-              onChange={(e) => handleTempUpdate("maxPrice", Number(e.target.value))}
-              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#1d4350] focus:border-transparent transition-all"
+              value={filters.maxPrice || ""}
+              onChange={(e) =>
+                updateFilter("maxPrice", Number(e.target.value))
+              }
+              className="px-3 py-2 border rounded-lg"
             />
           </div>
         </div>
 
-        {/* Trip Styles - Chip Selection */}
-        <div className="space-y-2">
-          <label className="text-sm font-semibold text-gray-700">Trip Style</label>
-          <div className="flex flex-wrap gap-2">
+        {/* Trip Styles */}
+        <div>
+          <label className="text-sm font-semibold">Trip Style</label>
+          <div className="flex flex-wrap gap-2 mt-2">
             {TRIP_STYLES.map((style) => (
               <button
                 key={style}
                 onClick={() => toggleArrayValue("tripStyles", style)}
-                className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
-                  tempFilters.tripStyles?.includes(style)
-                    ? "bg-gradient-to-r from-[#1d4350] to-[#2a5d6d] text-white shadow-md scale-105"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                className={`px-3 py-1.5 rounded-full text-xs ${
+                  filters.tripStyles?.includes(style)
+                    ? "bg-[#1d4350] text-white"
+                    : "bg-gray-100"
                 }`}
               >
                 {style}
@@ -444,78 +393,69 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           </div>
         </div>
 
-        {/* Creator & Mode Row */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-2">
-            <label className="text-xs font-semibold text-gray-700">Creator</label>
-            <select
-              value={tempFilters.creatorType || ""}
-              onChange={(e) => handleTempUpdate("creatorType", e.target.value as CombinedFilters["creatorType"])}
-              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#1d4350] focus:border-transparent transition-all bg-white"
-            >
-              <option value="">All</option>
-              {CREATOR_TYPES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="space-y-2">
-            <label className="text-xs font-semibold text-gray-700">Mode</label>
-            <select
-              value={tempFilters.travelMode || ""}
-              onChange={(e) => handleTempUpdate("travelMode", e.target.value as CombinedFilters["travelMode"])}
-              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#1d4350] focus:border-transparent transition-all bg-white"
-            >
-              <option value="">All</option>
-              {TRAVEL_MODES.map((m) => (
-                <option key={m} value={m}>
-                  {m}
-                </option>
-              ))}
-            </select>
-          </div>
+        {/* Creator */}
+        <div>
+          <label className="text-sm font-semibold">Creator</label>
+          <select
+            value={filters.creatorType || ""}
+            onChange={(e) =>
+              updateFilter(
+                "creatorType",
+                e.target.value as CombinedFilters["creatorType"]
+              )
+            }
+            className="w-full mt-2 px-3 py-2 border rounded-lg"
+          >
+            <option value="">All</option>
+            {CREATOR_TYPES.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
         </div>
 
-        {/* Gender Selection - Compact Chips */}
-        <div className="space-y-2">
-          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-            <Users className="w-4 h-4 text-[#1d4350]" />
-            Gender
+        {/* Gender */}
+        <div>
+          <label className="text-sm font-semibold flex gap-2">
+            <Users className="w-4 h-4" /> Gender
           </label>
-          <div className="flex gap-2">
-            {GENDERS.map((gender) => (
+          <div className="flex gap-2 mt-2">
+            {GENDERS.map((g) => (
               <button
-                key={gender}
-                onClick={() => handleTempUpdate("genderPreference", gender as CombinedFilters["genderPreference"])}
-                className={`flex-1 px-3 py-2 text-xs font-medium rounded-lg transition-all duration-200 ${
-                  tempFilters.genderPreference === gender
-                    ? "bg-gradient-to-r from-[#1d4350] to-[#2a5d6d] text-white shadow-md"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                key={g}
+                onClick={() =>
+                  updateFilter(
+                    "genderPreference",
+                    g as CombinedFilters["genderPreference"]
+                  )
+                }
+                className={`flex-1 py-2 rounded-lg text-xs ${
+                  filters.genderPreference === g
+                    ? "bg-[#1d4350] text-white"
+                    : "bg-gray-100"
                 }`}
               >
-                {gender === "ANY" ? "Any" : gender.replace("_", " ")}
+                {g === "ANY" ? "Any" : g.replace("_", " ")}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Languages - Chip Selection */}
-        <div className="space-y-2">
-          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-            <Globe className="w-4 h-4 text-[#1d4350]" />
-            Languages
+        {/* Languages */}
+        <div>
+          <label className="text-sm font-semibold flex gap-2">
+            <Globe className="w-4 h-4" /> Languages
           </label>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mt-2">
             {LANGUAGES.map((lang) => (
               <button
                 key={lang}
                 onClick={() => toggleArrayValue("languages", lang)}
-                className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
-                  tempFilters.languages?.includes(lang)
-                    ? "bg-gradient-to-r from-[#1d4350] to-[#2a5d6d] text-white shadow-md scale-105"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                className={`px-3 py-1.5 rounded-full text-xs ${
+                  filters.languages?.includes(lang)
+                    ? "bg-[#1d4350] text-white"
+                    : "bg-gray-100"
                 }`}
               >
                 {lang}
@@ -524,66 +464,32 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           </div>
         </div>
 
-        {/* Date Range */}
-        <div className="space-y-2">
-          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-            <Calendar className="w-4 h-4 text-[#1d4350]" />
-            Travel Dates
+        {/* Dates */}
+        <div>
+          <label className="text-sm font-semibold flex gap-2">
+            <Calendar className="w-4 h-4" /> Dates
           </label>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 mt-2">
             <input
               type="date"
-              value={tempFilters.startDateFrom || ""}
-              onChange={(e) => handleTempUpdate("startDateFrom", e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#1d4350] focus:border-transparent transition-all"
+              value={filters.startDateFrom || ""}
+              onChange={(e) =>
+                updateFilter("startDateFrom", e.target.value)
+              }
+              className="px-3 py-2 border rounded-lg"
             />
             <input
               type="date"
-              value={tempFilters.startDateTo || ""}
-              onChange={(e) => handleTempUpdate("startDateTo", e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#1d4350] focus:border-transparent transition-all"
+              value={filters.startDateTo || ""}
+              onChange={(e) =>
+                updateFilter("startDateTo", e.target.value)
+              }
+              className="px-3 py-2 border rounded-lg"
             />
           </div>
         </div>
       </div>
-
-      {/* Footer Actions */}
-      <div className="p-5 bg-gray-50 border-t border-gray-100 flex gap-3">
-        <button
-          onClick={applyFilters}
-          className="flex-1 bg-gradient-to-r from-[#1d4350] to-[#2a5d6d] text-white py-3 rounded-xl font-semibold hover:shadow-lg transform hover:scale-[1.02] transition-all duration-200"
-        >
-          Apply Filters
-        </button>
-        <button
-          onClick={() => {
-            resetFilters();
-            setTempFilters(filters);
-          }}
-          className="px-5 bg-white border-2 border-gray-200 text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-all duration-200"
-        >
-          Reset
-        </button>
-      </div>
-
-      {/* Custom Scrollbar Styles */}
-      <style jsx>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: #f1f1f1;
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #1d4350;
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #2a5d6d;
-        }
-      `}</style>
-    </div>
+    </aside>
   );
 };
 

@@ -275,8 +275,8 @@ export interface PackagePlan {
   description: string;
 
   pricePerPerson: number;
-  discountedPrice: number;
-  currency: string;
+  discountedPrice?: number;
+  currency: "INR" | "USD" | string;
 
   minPeople: number;
   maxPeople: number;
@@ -295,11 +295,13 @@ export interface PackagePlan {
   active: boolean;
 }
 export interface ApiPackage {
+  slug: string;
+  coverImage: string;
   _id: string;
-category?: string;
+// category?: string;
   title: string;
   description: string;
-  shortSummary: string;
+  shortSummary?: string;
 
   totalDays: number;
   totalNights: number;
@@ -309,7 +311,7 @@ category?: string;
 
   createdBy: string; // USER ID
   creatorType: CreatorType;
-  organizationId: string;
+  // organizationId: string;
 
   fromLocation: Location;
   toLocation: Location;
@@ -322,6 +324,8 @@ category?: string;
   gallery: string[];
   videos: string[];
   seoKeywords: string[];
+  seoTitle: string;   
+  seoDescription: string; 
 
   status: TripStatus;
   active: boolean;
@@ -339,7 +343,7 @@ export type TripStatus = "DRAFT" | "PUBLISHED" | "ARCHIVED";
 export type PlanCategory = "SOLO" | "COUPLE" | "GROUP";
 export type RefundType = "REFUNDABLE" | "PARTIAL" | "NON_REFUNDABLE";
 export type PaymentTrigger = "ON_BOOKING" | "BEFORE_DAYS";
-export type ComponentType = "HOTEL" | "ACTIVITY" | "MEAL" | "STAY";
+export type ComponentType = "HOTEL" | "ACTIVITY" | "MEAL" | "STAY" | "TRANSFER";
 
 export type AvailableFilters = {
   categories: string[];          // e.g. ["SOLO", "GROUP"]
