@@ -9,16 +9,27 @@ export default function HeroSection() {
   const [date, setDate] = useState("");
   const router = useRouter();
 
-  const handleGoToTrip = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    if (!location || !date) {
-      alert("Please select both location and date!");
-      return;
-    }
+  // const handleGoToTrip = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   e.preventDefault();
+  //   if (!location || !date) {
+  //     alert("Please select both location and date!");
+  //     return;
+  //   }
 
-    const query = new URLSearchParams({ location, date }).toString();
-    router.push(`/searchtrip?${query}`);
-  };
+  //   const query = new URLSearchParams({ location, date }).toString();
+  //   router.push(`/searchtrip?${query}`);
+  // };
+
+  const handleGoToTrip = () => {
+  if (!location || !date) return;
+
+  const query = new URLSearchParams({
+    fromCity: location,
+    startDateFrom: date,
+  }).toString();
+
+  router.push(`/searchtrip?${query}`);
+};
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
