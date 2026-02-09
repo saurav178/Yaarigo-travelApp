@@ -618,17 +618,33 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   /* ===============================
      HELPERS
   =============================== */
-  const toggleArrayValue = (
-    key: "tripStyles" | "languages",
-    value: string
-  ) => {
-    const current = filters[key] || [];
-    const updated = current.includes(value)
-      ? current.filter((v) => v !== value)
-      : [...current, value];
+  // const toggleArrayValue = (
+  //   key: "tripStyles" | "languages",
+  //   value: string
+  // ) => {
+  //   const current = filters[key] || [];
+  //   const updated = current.includes(value)
+  //     ? current.filter((v) => v !== value)
+  //     : [...current, value];
 
-    updateFilter(key, updated as any);
-  };
+  //   updateFilter(key, updated as any);
+  // };
+
+
+  type ArrayFilterKeys = "tripStyles" | "languages";
+
+const toggleArrayValue = <K extends ArrayFilterKeys>(
+  key: K,
+  value: string
+) => {
+  const current = (filters[key] ?? []) as string[];
+
+  const updated = current.includes(value)
+    ? current.filter((v) => v !== value)
+    : [...current, value];
+
+  updateFilter(key, updated as CombinedFilters[K]);
+};
 
   /* ===============================
      UI
