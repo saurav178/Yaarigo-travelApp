@@ -108,7 +108,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { User, AuthState, LoginCredentials, RegisterData, Organization, RegisterOrgPayload, RegisterOrgResponse } from '../types/auth';
+import {  AuthState, LoginCredentials, RegisterData, RegisterOrgPayload, RegisterOrgResponse } from '../types/auth';
 import { authService } from '../services/auth-service';
 import { useRouter } from "next/navigation";
 
@@ -149,19 +149,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isLoading: false 
       });
     } catch (error) {
+      console.log("Error fetching user profile", error);
       localStorage.removeItem('isLoggedIn');
       setState({ user: null, organization: [], isAuthenticated: false, isLoading: false });
     }
   };
 
   useEffect(() => {
-    // 1. Sirf tab hit karein jab localStorage mein flag ho
     const isLoggedInFlag = localStorage.getItem('isLoggedIn') === 'true';
     
     if (isLoggedInFlag) {
       refreshUser();
     } else {
-      // Agar flag nahi hai, toh seedha loading false kar dein bina API hit kiye
       setState(prev => ({ ...prev, isLoading: false }));
     }
   }, []);

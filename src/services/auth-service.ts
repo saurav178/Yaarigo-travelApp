@@ -79,7 +79,7 @@
 
 
 
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { 
   RegisterData, 
   LoginCredentials, 
@@ -146,6 +146,7 @@ export const authService = {
     try {
       await apiClient.post(`${AUTH_API}/auth/logout`);
     } catch (error) {
+      console.log("Logout API failed", error);
       throw new Error('Logout failed on server');
     }
   },
