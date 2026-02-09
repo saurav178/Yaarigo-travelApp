@@ -1,0 +1,22 @@
+name: Restart YaariGo App
+
+on:
+  workflow_dispatch:
+
+jobs:
+  restart:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Restart PM2 Process
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+
+          script: |
+            echo "Restarting yaarigo-dev-web..."
+            pm2 restart yaarigo-dev-web
+            pm2 save
+            pm2 status
