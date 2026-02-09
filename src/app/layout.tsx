@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
-import { ModalProvider } from "@/context/ModalContext"; 
+import Header from "../components/Header";
+import { ModalProvider } from "../context/ModalContext"; 
 import { AuthProvider } from "../context/AuthContext";
+import Footer from "../components/Footer";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -29,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ModalProvider>
             <Header />
             {children}
-         
+            <Footer/>
           </ModalProvider>
         </AuthProvider>
       </body>

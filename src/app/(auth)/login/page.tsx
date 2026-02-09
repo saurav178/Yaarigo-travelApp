@@ -5,7 +5,8 @@ import { useModal } from "../../../context/ModalContext";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../../context/AuthContext";
 import { X, Mail, Lock } from "lucide-react";
-import Image from "next/image"; // Image import kiya
+import Image from "next/image"; 
+import { motion } from "framer-motion";
 
 export default function LoginForm() {
   const [emailOrPhone, setEmailOrPhone] = useState("");
@@ -42,30 +43,63 @@ export default function LoginForm() {
       setIsLoading(false);
     }
   };
+  const handleClose = () => {
+  closeModal(); 
+ if (window.history.length > 2) {
+    router.back();
+  } else {
+    router.push("/");
+  }
+};
 
   return (
     <div className="fixed inset-0 z-[1000] flex w-screen h-screen bg-white overflow-hidden animate-in fade-in duration-300">
      
-      <div className="hidden lg:flex lg:w-[40%] bg-[#1D4350] relative p-16 flex-col justify-between text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/world-map.png')]"></div>
-        <div className="relative z-10">
-          <h1 className="text-5xl font-extrabold tracking-tighter">Travio.</h1>
-          <p className="mt-6 text-xl text-blue-100 font-light leading-relaxed max-w-sm">
-            Experience the world like never before.
+     <div className="hidden lg:flex lg:w-[42%] bg-[#1D4350] relative p-16 flex-col justify-between text-white overflow-hidden">
+         {/* Animated Background Gradients */}
+         <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px] animate-pulse" />
+         <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-emerald-500/10 rounded-full blur-[100px]" />
+
+         <motion.div 
+          initial={{ x: -20, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="relative z-10"
+        >
+          <h1 className="text-6xl font-black tracking-tighter italic">Travio<span className="text-red-00">.</span></h1>
+          <p className="mt-6 text-lg text-slate-400 font-light leading-relaxed max-w-xs">
+            The next generation of travel management. Simple. Aesthetic. Fast.
           </p>
-        </div>
-        <div className="relative z-10 text-sm font-mono text-white/30 uppercase tracking-[0.3em]">
-          Secure Access Protocol v2.0
+        </motion.div>
+
+        {/* Glassmorphism Quote Card */}
+        <motion.div 
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="relative z-10 p-8 bg-white/[0.03] border border-white/10 backdrop-blur-2xl shadow-2xl"
+        >
+          <p className="text-xl font-medium leading-relaxed italic text-slate-200">
+            &quot;Travel is the only thing you buy that makes you <span className="text-red-400">richer.</span>&quot;
+          </p>
+          <div className="mt-6 flex items-center gap-3">
+            <div className="h-[2px] w-12 bg-red-500" />
+            <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Curated Experience</span>
+          </div>
+        </motion.div>
+
+        <div className="relative z-10 text-[9px] font-mono text-white/20 uppercase tracking-[0.4em]">
+          System Status: Optimal / Auth v2.4
         </div>
       </div>
 
       <div className="w-full lg:w-[60%] h-full flex flex-col items-center justify-center relative bg-white overflow-y-auto">
-        <button 
-          onClick={closeModal}
-          className="absolute top-10 right-10 p-2 text-gray-400 hover:text-gray-900 transition-colors z-50"
-        >
-          <X size={32} />
-        </button>
+     <button 
+  onClick={handleClose} 
+  className="absolute top-10 right-10 p-2 text-gray-400 hover:text-gray-900 transition-colors z-50"
+>
+  <X size={32} />
+</button>
 
         <div className="w-full max-w-md px-10 py-12">
           <div className="mb-12">
@@ -124,12 +158,12 @@ export default function LoginForm() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-[#1D4350] hover:bg-[#15323b] text-white font-black py-5 rounded-2xl transition-all shadow-xl shadow-blue-900/10 flex items-center justify-center gap-3 active:scale-[0.99] disabled:opacity-50 text-lg"
+              className="w-full bg-[#1D4350] hover:bg-[#15323b] text-white font-black py-5 transition-all shadow-xl shadow-blue-900/10 flex items-center justify-center gap-3 active:scale-[0.99] disabled:opacity-50 text-lg"
             >
               {isLoading ? (
                 <div className="h-6 w-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
               ) : (
-                "Continue to Dashboard"
+                "Login"
               )}
             </button>
             
@@ -163,3 +197,4 @@ export default function LoginForm() {
     </div>
   );
 }
+

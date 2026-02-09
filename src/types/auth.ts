@@ -132,17 +132,34 @@ export interface RegisterOrgPayload {
   slug: string;
 }
 
-export interface RegisterOrgResponse {
-  organization?: {
-    slug: string;
-    id: string;
-  };
-  slug?: string;
-  message?: string;
-}
+// export interface RegisterOrgResponse {
+//   organization?: {
+//     slug: string;
+//     id: string;
+//   };
+//   slug?: string;
+//   message?: string;
+// }
 
 export interface ApiErrorResponse {
   message: string | string[];
   error?: string;
   statusCode?: number;
+}
+
+export interface RegisterOrgPayload {
+  legal_name: string;
+  display_name: string;
+  slug: string;
+}
+
+export interface RegisterOrgResponse {
+  message: string;
+  organization: {
+    id: string;
+    aegixa_org_id: string;
+    legal_name: string;
+    slug: string;
+    status: string;
+  };
 }
