@@ -209,11 +209,7 @@ const INITIAL_TRIPS = 10; // First load: 10 trips
 const LOAD_MORE_TRIPS = 10; // Each scroll: +10 trips
 const PACKAGES_PER_BLOCK = 4; // Show 4 packages with each block of 2 trips
 
-export default function CombinedContent({
-  trips,
-  packages,
-  loading,
-}: Props) {
+export default function CombinedContent({ trips, packages, loading }: Props) {
   const [visibleTripsCount, setVisibleTripsCount] = useState(INITIAL_TRIPS);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
@@ -224,7 +220,7 @@ export default function CombinedContent({
 
   // Get only the visible trips
   const visibleTrips = trips.slice(0, visibleTripsCount);
-  
+
   // Calculate how many blocks we need (2 trips per block)
   const totalBlocks = Math.ceil(visibleTripsCount / 2);
 
@@ -241,10 +237,10 @@ export default function CombinedContent({
           });
         }
       },
-      { 
+      {
         threshold: 0.1,
-        rootMargin: "100px" // Trigger 100px before reaching the bottom
-      }
+        rootMargin: "100px", // Trigger 100px before reaching the bottom
+      },
     );
 
     const currentRef = loadMoreRef.current;
@@ -265,10 +261,13 @@ export default function CombinedContent({
       {Array.from({ length: totalBlocks }).map((_, blockIndex) => {
         const tripStart = blockIndex * 2;
         const tripSlice = visibleTrips.slice(tripStart, tripStart + 2);
-        
+
         // For packages: show 4 packages after each block of 2 trips
         const packageStart = blockIndex * PACKAGES_PER_BLOCK;
-        const packageSlice = packages.slice(packageStart, packageStart + PACKAGES_PER_BLOCK);
+        const packageSlice = packages.slice(
+          packageStart,
+          packageStart + PACKAGES_PER_BLOCK,
+        );
 
         return (
           <div key={blockIndex} className="space-y-10">
@@ -278,7 +277,9 @@ export default function CombinedContent({
             <div className="space-y-4">
               {loading && blockIndex === totalBlocks - 1
                 ? Array.from({ length: 2 }).map((_, i) => (
-                    <TripCardSkeleton key={`trip-skeleton-${blockIndex}-${i}`} />
+                    <TripCardSkeleton
+                      key={`trip-skeleton-${blockIndex}-${i}`}
+                    />
                   ))
                 : tripSlice.map((trip) => (
                     <TripCard key={trip._id} trip={trip} />
@@ -306,14 +307,15 @@ export default function CombinedContent({
                 <div className="relative">
                   <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
                     {loading && blockIndex === totalBlocks - 1
-                      ? Array.from({ length: PACKAGES_PER_BLOCK }).map((_, i) => (
-                          <PackageCardSkeleton key={`package-skeleton-${blockIndex}-${i}`} />
-                        ))
+                      ? Array.from({ length: PACKAGES_PER_BLOCK }).map(
+                          (_, i) => (
+                            <PackageCardSkeleton
+                              key={`package-skeleton-${blockIndex}-${i}`}
+                            />
+                          ),
+                        )
                       : packageSlice.map((pkg) => (
-                          <div
-                            key={pkg._id}
-                            className="flex-shrink-0 w-80"
-                          >
+                          <div key={pkg._id} className="flex-shrink-0 w-80">
                             <PackageCard pkg={pkg} />
                           </div>
                         ))}
@@ -350,7 +352,7 @@ export default function CombinedContent({
       {/* End of results */}
       {!loading && visibleTripsCount >= trips.length && trips.length > 0 && (
         <div className="text-center py-8 border-t">
-          <p className="text-gray-500">You've seen all {trips.length} trips!</p>
+          <p className="text-gray-500">You&apos;ve seen all trips!</p>
         </div>
       )}
 
