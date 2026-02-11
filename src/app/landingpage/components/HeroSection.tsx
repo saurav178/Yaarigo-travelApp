@@ -166,8 +166,6 @@
 //   );
 // }
 
-
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -182,6 +180,11 @@ export default function HeroSection() {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const router = useRouter();
+
+  interface PlacePrediction {
+    description: string;
+    place_id: string;
+  }
 
   /* ===============================
      AUTOCOMPLETE FETCH
@@ -205,8 +208,8 @@ export default function HeroSection() {
       const data = await res.json();
 
       if (data.predictions) {
-        const cities = data.predictions.map(
-          (item: any) => item.description
+        const cities = (data.predictions as PlacePrediction[]).map(
+          (item) => item.description,
         );
 
         setSuggestions(cities);
@@ -222,24 +225,23 @@ export default function HeroSection() {
      SEARCH NAVIGATION
   =============================== */
   const handleGoToTrip = () => {
-  // ❗ Must select from suggestions (India only)
-  const isValid = suggestions.includes(location);
+    // ❗ Must select from suggestions (India only)
+    const isValid = suggestions.includes(location);
 
-  if (!isValid) {
-    toast.error("Please select a valid Indian location from suggestions");
-    return; // 🚫 STOP REDIRECT
-  }
+    if (!isValid) {
+      toast.error("Please select a valid Indian location from suggestions");
+      return; // 🚫 STOP REDIRECT
+    }
 
-  if (!location && !date) return;
+    if (!location && !date) return;
 
-  const query = new URLSearchParams();
+    const query = new URLSearchParams();
 
-  if (location) query.append("fromCity", location);
-  if (date) query.append("startDateFrom", date);
+    if (location) query.append("fromCity", location);
+    if (date) query.append("startDateFrom", date);
 
-  router.push(`/searchtrip?${query.toString()}`);
-};
-
+    router.push(`/searchtrip?${query.toString()}`);
+  };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -276,7 +278,6 @@ export default function HeroSection() {
           {/* Search card */}
           <div className="mt-10 flex justify-center">
             <div className="bg-white/75 backdrop-blur-md p-3 shadow-2xl flex flex-col sm:flex-row gap-3 sm:gap-4 items-center">
-              
               {/* ================= LOCATION INPUT ================= */}
               <div className="flex-1 min-w-[200px] relative">
                 <label htmlFor="location" className="sr-only">
