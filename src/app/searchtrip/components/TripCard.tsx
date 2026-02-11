@@ -35,28 +35,27 @@ export default function TripCard({ trip }: TripCardProps) {
     ? `${trip.toLocation.city}${trip.toLocation.country ? ", " + trip.toLocation.country : ""}`
     : "N/A";
 
-  const startDate = trip.startDate ;
+  const startDate = trip.startDate;
   const endDate = trip.endDate;
 
-  const minBudget =  10000;
-  const maxBudget =  50000;
+  const minBudget = 10000;
+  const maxBudget = 50000;
 
-  const tripsCompleted =  30;
-  const matchPercentage =  "90%";
-  const spotsLeft =  1;
+  const tripsCompleted = 30;
+  const matchPercentage = "90%";
+  const spotsLeft = 1;
 
   // Agency info
   const agencyName = "Trip Agency";
-  const agencyRating =  4.5;
-  const isVerified =  true;
-  const isFeatured =  false;
-  const safetyScore =  "85%";
+  const agencyRating = 4.5;
+  const isVerified = true;
+  const isFeatured = false;
+  const safetyScore = "85%";
   const agencyInitials = agencyName.substring(0, 2).toUpperCase();
 
   // Image
   const imageUrl =
-    trip.ogImage ||
-    "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600&auto=format&fit=crop";
+    trip.ogImage || trip.coverImage
 
   // Date formatting
   const formatDate = (date: string) => {
@@ -117,7 +116,10 @@ export default function TripCard({ trip }: TripCardProps) {
 
       {/* Content */}
       <div className="flex-1 p-4 flex flex-col">
-        <h3 className="font-bold text-lg mb-1 line-clamp-1" style={{ color: "#1d4350" }}>
+        <h3
+          className="font-bold text-lg mb-1 line-clamp-1"
+          style={{ color: "#1d4350" }}
+        >
           {title}
         </h3>
 
@@ -167,7 +169,10 @@ export default function TripCard({ trip }: TripCardProps) {
 
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
-                <h4 className="font-semibold text-xs truncate" style={{ color: "#1d4350" }}>
+                <h4
+                  className="font-semibold text-xs truncate"
+                  style={{ color: "#1d4350" }}
+                >
                   {agencyName}
                 </h4>
                 {isVerified && (
@@ -180,24 +185,39 @@ export default function TripCard({ trip }: TripCardProps) {
 
           <div className="flex gap-1.5">
             {isFeatured && (
-              <span className="px-2 py-0.5 text-xs rounded" style={{ backgroundColor: "#fff7ed", color: "#c2410c" }}>
+              <span
+                className="px-2 py-0.5 text-xs rounded"
+                style={{ backgroundColor: "#fff7ed", color: "#c2410c" }}
+              >
                 🏆 Featured
               </span>
             )}
-            <span className="px-2 py-0.5 text-xs rounded" style={{ backgroundColor: "#d1fae5", color: "#065f46" }}>
+            <span
+              className="px-2 py-0.5 text-xs rounded"
+              style={{ backgroundColor: "#d1fae5", color: "#065f46" }}
+            >
               🛡️ {safetyScore} Safe
             </span>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-2 mt-auto">
-          <button className="py-2 text-white text-xs font-semibold" style={{ backgroundColor: "#1d4350" }}>
+          <button
+            className="py-2 text-white text-xs font-semibold"
+            style={{ backgroundColor: "#1d4350" }}
+          >
             View Trip
           </button>
-          <button className="py-2 text-white text-xs font-semibold" style={{ backgroundColor: "#1d4350" }}>
+          <button
+            className="py-2 text-white text-xs font-semibold"
+            style={{ backgroundColor: "#1d4350" }}
+          >
             Join Trip
           </button>
-          <button className="py-2 text-white text-xs font-semibold" style={{ backgroundColor: "#1d4350" }}>
+          <button
+            className="py-2 text-white text-xs font-semibold"
+            style={{ backgroundColor: "#1d4350" }}
+          >
             View Profile
           </button>
         </div>

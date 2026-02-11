@@ -16,24 +16,21 @@ export default function SearchTripPage() {
   ---------------------------------- */
   const fromCity = searchParams.get("fromCity") || undefined;
   const toCity = searchParams.get("toCity") || undefined;
-  const startDateFrom =
-    searchParams.get("startDateFrom") || undefined;
+  const startDateFrom = searchParams.get("startDateFrom") || undefined;
 
   /* ----------------------------------
      2️⃣ DRAFT FILTERS (typing state)
   ---------------------------------- */
-  const { filters: draftFilters, updateFilter } =
-    useCombinedFilters({
-      fromCity,
-      toCity,
-      startDateFrom,
-    });
+  const { filters: draftFilters, updateFilter } = useCombinedFilters({
+    fromCity,
+    toCity,
+    startDateFrom,
+  });
 
   /* ----------------------------------
      3️⃣ APPLIED FILTERS (API only)
   ---------------------------------- */
-  const [appliedFilters, setAppliedFilters] =
-    useState(draftFilters);
+  const [appliedFilters, setAppliedFilters] = useState(draftFilters);
 
   /* ----------------------------------
      4️⃣ DEBOUNCE APPLY (KEY FIX)
@@ -49,13 +46,16 @@ export default function SearchTripPage() {
   /* ----------------------------------
      5️⃣ FETCH DATA
   ---------------------------------- */
-  const {
-    trips,
-    packages,
-    loading,
-    error,
-    hasFetched,
-  } = useSearchData(appliedFilters);
+  // const {
+  //   trips,
+  //   packages,
+  //   loading,
+  //   error,
+  //   hasFetched,
+  // } = useSearchData(appliedFilters);
+
+  const { trips, packages, loading, error, hasFetched, loadMore, canLoadMore } =
+    useSearchData(appliedFilters);
 
   /* ----------------------------------
      6️⃣ REAL SERVER ERROR ONLY
@@ -69,40 +69,37 @@ export default function SearchTripPage() {
   }
 
   const noResults =
-    hasFetched &&
-    !loading &&
-    trips.length === 0 &&
-    packages.length === 0;
+    hasFetched && !loading && trips.length === 0 && packages.length === 0;
 
   /* ----------------------------------
      7️⃣ UI (NO PAGE BLINKING)
   ---------------------------------- */
-  return (
-    <div className="min-h-screen px-4 py-6 md:px-10 md:py-12">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-7xl mx-auto">
-        {/* Sidebar */}
-        <aside className="lg:col-span-3">
-          <FilterSidebar
-            filters={draftFilters}
-            updateFilter={updateFilter}
-          />
-        </aside>
+ return (
+  <div className="min-h-screen px-4 md:px-10 pt-20">
+    <div className="grid grid-cols-1 lg:grid-cols-12 max-w-7xl mx-auto gap-6">
 
-        {/* Content */}
-        <main className="lg:col-span-9 pt-12">
-          {noResults ? (
-            <div className="text-center py-20 text-gray-500 text-lg">
-              No trips or packages found. Try adjusting filters.
-            </div>
-          ) : (
-            <CombinedContent
-              trips={trips}
-              packages={packages}
-              loading={loading}
-            />
-          )}
-        </main>
-      </div>
+      <aside className="lg:col-span-4">
+        <FilterSidebar filters={draftFilters} updateFilter={updateFilter} />
+      </aside>
+
+      <main className="lg:col-span-8">
+        {noResults ? (
+          <div className="text-center py-20 text-gray-500 text-lg">
+            No trips or packages found. Try adjusting filters.
+          </div>
+        ) : (
+          <CombinedContent
+            trips={trips}
+            packages={packages}
+            loading={loading}
+            loadMore={loadMore}
+            canLoadMore={canLoadMore}
+          />
+        )}
+      </main>
+
     </div>
-  );
+  </div>
+);
+
 }
