@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
-import { ModalProvider } from "@/context/ModalContext"; 
+import { ModalProvider } from "@/context/ModalContext";
 import { AuthProvider } from "../context/AuthContext";
 import Footer from "@/components/Footer";
+import { Toaster } from "react-hot-toast";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -19,7 +21,11 @@ export const metadata: Metadata = {
   title: "Travio",
   description: "Find your perfect travel companions",
 };
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body
@@ -30,6 +36,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ModalProvider>
             <Header />
             {children}
+            <Toaster position="top-right" />
+
             <Footer />
           </ModalProvider>
         </AuthProvider>
@@ -37,5 +45,3 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
-
-

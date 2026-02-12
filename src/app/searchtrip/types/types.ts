@@ -204,6 +204,7 @@ export type ApiTrip = {
 
   seoKeywords: string[];
   ogImage: string;
+  coverImage: string;
   seoTitle: string;
   seoDescription: string;
   slug: string;
