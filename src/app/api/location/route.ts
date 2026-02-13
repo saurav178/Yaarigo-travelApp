@@ -10,7 +10,7 @@ export async function GET(req: Request) {
 
   try {
     const res = await fetch(
-      `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&components=country:in&key=${process.env.GMAP_LOC}`,
+      `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&types=(cities)&components=country:in&key=${process.env.GMAP_LOC}`,
     );
 
     const data = await res.json();

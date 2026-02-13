@@ -12,6 +12,7 @@ import {
 import { HiLocationMarker } from "react-icons/hi";
 import { useState } from "react";
 import { ApiTrip } from "../types/types";
+import { useRouter } from "next/navigation";
 
 /* ================= TYPES ================= */
 
@@ -54,8 +55,7 @@ export default function TripCard({ trip }: TripCardProps) {
   const agencyInitials = agencyName.substring(0, 2).toUpperCase();
 
   // Image
-  const imageUrl =
-    trip.ogImage || trip.coverImage
+  const imageUrl = trip.ogImage || trip.coverImage;
 
   // Date formatting
   const formatDate = (date: string) => {
@@ -73,10 +73,11 @@ export default function TripCard({ trip }: TripCardProps) {
       ? `${formatDate(startDate)} - ${formatDate(endDate)}`
       : "Date TBD";
 
+  const router = useRouter();
   return (
-    <div className="bg-white shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden flex">
+    <div className="bg-white shadow-sm transition-all duration-300 overflow-hidden flex border border-[#e1e1e1]">
       {/* Image Section */}
-      <div className="relative w-80 h-64 bg-gradient-to-br from-teal-400 to-blue-500 flex-shrink-0">
+      <div className="relative w-80 h-66 bg-gradient-to-br from-teal-400 to-blue-500 flex-shrink-0">
         <Image
           src={imageUrl}
           alt={title}
@@ -171,7 +172,7 @@ export default function TripCard({ trip }: TripCardProps) {
               <div className="flex items-center gap-1.5">
                 <h4
                   className="font-semibold text-xs truncate"
-                  style={{ color: "#1d4350" }}
+                  style={{ color: "#276074" }}
                 >
                   {agencyName}
                 </h4>
@@ -204,19 +205,20 @@ export default function TripCard({ trip }: TripCardProps) {
         <div className="grid grid-cols-3 gap-2 mt-auto">
           <button
             className="py-2 text-white text-xs font-semibold"
-            style={{ backgroundColor: "#1d4350" }}
+            style={{ backgroundColor: "#276074" }}
           >
             View Trip
           </button>
           <button
             className="py-2 text-white text-xs font-semibold"
-            style={{ backgroundColor: "#1d4350" }}
+            style={{ backgroundColor: "#276074" }}
           >
             Join Trip
           </button>
           <button
-            className="py-2 text-white text-xs font-semibold"
-            style={{ backgroundColor: "#1d4350" }}
+            onClick={() => router.push("/profile")}
+            className="py-2 text-white text-xs font-semibold cursor-pointer"
+            style={{ backgroundColor: "#276074" }}
           >
             View Profile
           </button>
