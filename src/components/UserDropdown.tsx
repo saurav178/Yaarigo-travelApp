@@ -287,15 +287,15 @@ export default function UserDropdown({ isHeroPage, isScrolled }: { isHeroPage: b
         </button>
 
         {isOpen && (
-          <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 text-gray-800 z-[70] animate-in zoom-in-95 duration-200">
+          <div className="absolute right-0 mt-3 w-64 bg-white shadow-2xl border border-gray-100 py-2 text-gray-800 z-[70] animate-in zoom-in-95 duration-200">
             {view === "menu" ? (
               <div className="flex flex-col">
                 <button onClick={() => setView("orgs")} className="w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-blue-50 transition-colors group">
                   <div className="flex items-center space-x-3 text-blue-600">
-                    <Building2 size={18} />
+                    <Building2 size={18} className="text-gray-500" />
                     <span className="font-semibold">My Organisations</span>
                   </div>
-                  <span className="bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full text-[10px] font-bold">
+                  <span className="bg-blue-100 text-blue-600 px-2 py-0.5  text-[10px] font-bold">
                     {organization?.length || 0}
                   </span>
                 </button>
@@ -304,16 +304,16 @@ export default function UserDropdown({ isHeroPage, isScrolled }: { isHeroPage: b
                   onClick={() => { setShowBusinessForm(true); setIsOpen(false); }}
                   className="w-full flex items-center space-x-3 px-4 py-3 text-sm hover:bg-green-50 transition-colors"
                 >
-                  <UserPlus size={18} className="text-green-500" />
+                  <UserPlus size={18} className="text-gray-500" />
                   <span className="font-medium">Register Business</span>
                 </button>
 
                 <div className="h-[1px] bg-gray-100 my-1 mx-4" />
                 <button
                   onClick={logout} // Ye context wala logout trigger karega
-                  className="w-full flex items-center space-x-3 px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors font-semibold"
+                  className="w-full flex items-center space-x-3 px-4 py-3 text-sm text-gray-500 hover:bg-red-50 transition-colors font-semibold"
                 >
-                  <LogOut size={18} />
+                  <LogOut size={18} className="text-gray-500" />
                   <span>Logout</span>
                 </button>
               </div>
@@ -321,7 +321,7 @@ export default function UserDropdown({ isHeroPage, isScrolled }: { isHeroPage: b
               <div className="animate-in slide-in-from-right-4 duration-200">
                 <div className="px-4 py-2 border-b flex items-center gap-2">
                   <button onClick={() => setView("menu")} className="p-1 hover:bg-gray-100 rounded-full">
-                    <ArrowLeft size={16} className="text-blue-600" />
+                    <ArrowLeft size={16} className="text-gray-500" />
                   </button>
                   <span className="text-xs font-bold text-gray-400 uppercase tracking-tighter">Your Organizations</span>
                 </div>
@@ -330,7 +330,8 @@ export default function UserDropdown({ isHeroPage, isScrolled }: { isHeroPage: b
                   {organization?.map((org: Organization) => (
                     <Link
                       key={org.id}
-                      href={`/dashboard/${org.slug}`}
+                      href={`https://business.dev.yaarigo.com/`}
+                      //${org.slug} remove here add link to business page
                       className="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 mb-1 border border-transparent transition-all"
                     >
                       <div className="w-8 h-8 rounded bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-[10px]">
