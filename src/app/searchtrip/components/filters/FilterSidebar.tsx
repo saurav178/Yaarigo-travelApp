@@ -442,7 +442,6 @@ import React, { useState, useEffect } from "react";
 import {
   Filter,
   Search,
-  MapPin,
   Calendar,
   Users,
   Globe,
