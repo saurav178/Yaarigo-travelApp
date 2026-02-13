@@ -330,7 +330,8 @@ export default function UserDropdown({ isHeroPage, isScrolled }: { isHeroPage: b
                   {organization?.map((org: Organization) => (
                     <Link
                       key={org.id}
-                      href={`/dashboard/${org.slug}`}
+                      href={`https://business.dev.yaarigo.com/`}
+                      //${org.slug} remove here add link to business page
                       className="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 mb-1 border border-transparent transition-all"
                     >
                       <div className="w-8 h-8 rounded bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-[10px]">
