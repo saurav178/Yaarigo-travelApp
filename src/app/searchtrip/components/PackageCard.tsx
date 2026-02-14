@@ -56,9 +56,9 @@ export default function PackageCard({ pkg }: PackageCardProps) {
 
   return (
     <Link href={`/packages/${pkg.slug}`}>
-      <div className="bg-white shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group w-80 rounded-lg cursor-pointer">
+      <div className="bg-white shadow-md transition-all duration-300 overflow-hidden group w-80 cursor-pointer border border-[#e1e1e1]">
         {/* IMAGE */}
-        <div className="relative h-40">
+        <div className="relative h-35">
           <Image
             src={image}
             alt={title}
@@ -153,7 +153,7 @@ export default function PackageCard({ pkg }: PackageCardProps) {
           </div>
 
           {/* CTA */}
-          <button className="w-full py-2 text-sm font-semibold text-white rounded bg-[#1d4350] hover:opacity-90">
+          <button className="w-full py-2 text-sm font-semibold text-white rounded bg-[#276074] hover:opacity-90">
             View Details
           </button>
         </div>

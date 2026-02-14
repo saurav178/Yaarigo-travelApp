@@ -1,38 +1,165 @@
 // "use client";
 
-// import { useState } from "react";
+// import { useState, useEffect } from "react";
 // import { useRouter } from "next/navigation";
 // import Image from "next/image";
+// import toast from "react-hot-toast";
+// import { DayPicker } from "react-day-picker";
+// import "react-day-picker/dist/style.css";
+// import { format } from "date-fns";
 
 // export default function HeroSection() {
-//   const [location, setLocation] = useState("");
-//   const [date, setDate] = useState("");
+//   const [fromCity, setFromCity] = useState("");
+//   const [toCity, setToCity] = useState("");
+
+//   const [fromSuggestions, setFromSuggestions] = useState<CityOption[]>([]);
+//   const [toSuggestions, setToSuggestions] = useState<CityOption[]>([]);
+
+//   const [showFromDropdown, setShowFromDropdown] = useState(false);
+//   const [showToDropdown, setShowToDropdown] = useState(false);
+
+//   // const [date, setDate] = useState("");
+//   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+//   const [showCalendar, setShowCalendar] = useState(false);
+
+//   const [fromPlaceId, setFromPlaceId] = useState<string | null>(null);
+//   const [toPlaceId, setToPlaceId] = useState<string | null>(null);
+
 //   const router = useRouter();
 
-//   // const handleGoToTrip = (e: React.MouseEvent<HTMLButtonElement>) => {
-//   //   e.preventDefault();
-//   //   if (!location || !date) {
-//   //     alert("Please select both location and date!");
-//   //     return;
-//   //   }
+//   interface CityOption {
+//     mainText: string;
+//     fullText: string;
+//     placeId: string;
+//   }
 
-//   //   const query = new URLSearchParams({ location, date }).toString();
-//   //   router.push(`/searchtrip?${query}`);
-//   // };
+//   const popularCities: CityOption[] = [
+//     { mainText: "Delhi", fullText: "Delhi, India", placeId: "1" },
+//     { mainText: "Mumbai", fullText: "Mumbai, India", placeId: "2" },
+//     { mainText: "Bangalore", fullText: "Bangalore, India", placeId: "3" },
+//     { mainText: "Hyderabad", fullText: "Hyderabad, India", placeId: "4" },
+//     { mainText: "Chennai", fullText: "Chennai, India", placeId: "5" },
+//   ];
 
-//   const handleGoToTrip = () => {
-//     if (!location && !date) return;
+//   /* ===============================
+//      AUTOCOMPLETE FETCH
+//   =============================== */
+//   const fetchSuggestions = async (value: string, type: "from" | "to") => {
+//     try {
+//       const res = await fetch(`/api/location?input=${value}`);
+//       const data = await res.json();
 
-//     const query = new URLSearchParams();
+//       if (data.predictions) {
+//         const cities = data.predictions.map((item: any) => ({
+//           mainText: item.structured_formatting.main_text,
+//           fullText: item.description,
+//           placeId: item.place_id,
+//         }));
 
-//     if (location) query.append("fromCity", location);
-//     if (date) query.append("startDateFrom", date);
-
-//     router.push(`/searchtrip?${query.toString()}`);
+//         if (type === "from") {
+//           setFromSuggestions(cities);
+//           setShowFromDropdown(true);
+//         } else {
+//           setToSuggestions(cities);
+//           setShowToDropdown(true);
+//         }
+//       }
+//     } catch {
+//       if (type === "from") {
+//         setFromSuggestions([]);
+//         setShowFromDropdown(false);
+//       } else {
+//         setToSuggestions([]);
+//         setShowToDropdown(false);
+//       }
+//     }
 //   };
+//   //Close drop down on outside click
+
+//   useEffect(() => {
+//     const handleClickOutside = (event: MouseEvent) => {
+//       const target = event.target as HTMLElement;
+
+//       if (!target.closest("#fromWrapper")) {
+//         setShowFromDropdown(false);
+//       }
+
+//       if (!target.closest("#toWrapper")) {
+//         setShowToDropdown(false);
+//       }
+//       if (!target.closest("#dateWrapper")) {
+//         setShowCalendar(false);
+//       }
+//     };
+
+//     document.addEventListener("mousedown", handleClickOutside);
+//     return () => document.removeEventListener("mousedown", handleClickOutside);
+//   }, []);
+
+//   useEffect(() => {
+//     const delay = setTimeout(() => {
+//       if (fromCity.length > 2) {
+//         fetchSuggestions(fromCity, "from");
+//       } else {
+//         setFromSuggestions([]);
+//         setShowFromDropdown(false);
+//       }
+//     }, 400);
+
+//     return () => clearTimeout(delay);
+//   }, [fromCity]);
+
+//   useEffect(() => {
+//     const delay = setTimeout(() => {
+//       if (toCity.length > 2) {
+//         fetchSuggestions(toCity, "to");
+//       } else {
+//         setToSuggestions([]);
+//         setShowToDropdown(false);
+//       }
+//     }, 400);
+
+//     return () => clearTimeout(delay);
+//   }, [toCity]);
+
+//   /* ===============================
+//      SEARCH NAVIGATION
+//   =============================== */
+//  const handleGoToTrip = () => {
+//   // If nothing is selected
+//   if (!fromPlaceId && !toPlaceId && !selectedDate) {
+//     toast.error("Please select at least one search option");
+//     return;
+//   }
+
+//   // Prevent same city only if both exist
+//   if (fromPlaceId && toPlaceId && fromPlaceId === toPlaceId) {
+//     toast.error("Departure and destination cannot be the same");
+//     return;
+//   }
+
+//   const query = new URLSearchParams();
+
+//   if (fromPlaceId) {
+//     query.append("fromCity", fromCity);
+//     query.append("fromPlaceId", fromPlaceId);
+//   }
+
+//   if (toPlaceId) {
+//     query.append("toCity", toCity);
+//     query.append("toPlaceId", toPlaceId);
+//   }
+
+//   if (selectedDate) {
+//     query.append("startDateFrom", selectedDate.toISOString());
+//   }
+
+//   router.push(`/searchtrip?${query.toString()}`);
+// };
+
 
 //   return (
-//     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+//     <section className="relative min-h-screen flex items-center justify-center">
 //       <div className="absolute inset-0">
 //         <Image
 //           src="/images/travell-people.jpg"
@@ -64,13 +191,15 @@
 //           </p>
 
 //           {/* Search card */}
-//           <div className="mt-10 flex justify-center">
+//           <div className="mt-[20px] flex justify-center">
 //             <div className="bg-white/75 backdrop-blur-md p-3 shadow-2xl flex flex-col sm:flex-row gap-3 sm:gap-4 items-center">
-//               {/* Location Input */}
-//               <div className="flex-1 min-w-[200px]">
-//                 <label htmlFor="location" className="sr-only">
-//                   Location
+//               {" "}
+//               {/* ================= LOCATION INPUT ================= */}
+//               <div id="fromWrapper" className="flex-1 min-w-[200px] relative">
+//                 <label htmlFor="fromCity" className="sr-only">
+//                   From City
 //                 </label>
+
 //                 <div className="flex items-center border-2 border-gray-200 px-3 py-2.5 focus-within:border-[#008ECF] transition-colors h-12">
 //                   <svg
 //                     className="w-5 h-5 mr-2 text-[#1D4350]"
@@ -91,30 +220,127 @@
 //                       d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
 //                     />
 //                   </svg>
-//                   <input
-//                     id="location"
-//                     name="location"
-//                     placeholder="Simla"
-//                     value={location}
-//                     onChange={(e) => {
-//                       const value = e.target.value;
 
-//                       // Allow only letters and spaces
-//                       if (/^[a-zA-Z\s]*$/.test(value)) {
-//                         setLocation(value);
-//                       }
+//                   <input
+//                     id="fromCity"
+//                     name="fromCity"
+//                     placeholder="From City"
+//                     value={fromCity}
+//                     onFocus={() => {
+//                       setFromSuggestions(popularCities);
+//                       setShowFromDropdown(true);
+//                     }}
+//                     onChange={(e) => {
+//                       setFromCity(e.target.value);
+//                       setFromPlaceId(null);
 //                     }}
 //                     className="bg-transparent outline-none placeholder-gray-600 text-gray-700 w-full font-medium"
+//                     autoComplete="off"
 //                   />
 //                 </div>
-//               </div>
 
-//               {/* Date Input */}
-//               <div className="flex-1 min-w-[200px]">
+//                 {showFromDropdown && (
+//                   <div className="absolute top-full left-0 right-0 bg-white/85 backdrop-blur-md border-2 border-t-0 border-gray-200 shadow-xl max-h-64 overflow-y-auto z-50">
+//                     {/* {fromSuggestions.length === 0 && (
+                      
+//                     )} */}
+
+//                     {fromSuggestions.map((item) => (
+//                       <div
+//                         key={item.placeId}
+//                         onMouseDown={() => {
+//                           setFromCity(item.mainText);
+//                           setFromPlaceId(item.placeId);
+//                           setShowFromDropdown(false);
+//                         }}
+//                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700"
+//                       >
+//                         {item.mainText}
+//                       </div>
+//                     ))}
+//                   </div>
+//                 )}
+//               </div>
+//               <div id="toWrapper" className="flex-1 min-w-[200px] relative">
+//                 <label htmlFor="toCity" className="sr-only">
+//                   To City
+//                 </label>
+
+//                 <div className="flex items-center border-2 border-gray-200 px-3 py-2.5 focus-within:border-[#008ECF] transition-colors h-12">
+//                   <svg
+//                     className="w-5 h-5 mr-2 text-[#1D4350]"
+//                     fill="none"
+//                     stroke="currentColor"
+//                     viewBox="0 0 24 24"
+//                   >
+//                     <path
+//                       strokeLinecap="round"
+//                       strokeLinejoin="round"
+//                       strokeWidth={2}
+//                       d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+//                     />
+//                     <path
+//                       strokeLinecap="round"
+//                       strokeLinejoin="round"
+//                       strokeWidth={2}
+//                       d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+//                     />
+//                   </svg>
+
+//                   <input
+//                     id="toCity"
+//                     name="toCity"
+//                     placeholder="To City"
+//                     value={toCity}
+//                     onFocus={() => {
+//                       setToSuggestions(popularCities);
+//                       setShowToDropdown(true);
+//                     }}
+//                     onChange={(e) => {
+//                       setToCity(e.target.value);
+//                       setToPlaceId(null);
+//                     }}
+//                     className="bg-transparent outline-none placeholder-gray-600 text-gray-700 w-full font-medium"
+//                     autoComplete="off"
+//                   />
+//                 </div>
+
+//                 {showToDropdown && (
+//                   <div className="absolute top-full left-0 right-0 bg-white/85 backdrop-blur-md border-2 border-t-0 border-gray-200 shadow-xl max-h-64 overflow-y-auto z-50">
+//                     {toSuggestions.length === 0 && (
+//                       <div className="px-4 py-3 text-sm text-gray-400">
+//                         Start typing to search cities
+//                       </div>
+//                     )}
+
+//                     {toSuggestions.map((item) => (
+//                       <div
+//                         key={item.placeId}
+//                         onMouseDown={() => {
+//                           setToCity(item.mainText);
+//                           setToPlaceId(item.placeId); // ✅ CORRECT
+//                           setShowToDropdown(false);
+//                         }}
+//                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700"
+//                       >
+//                         {item.mainText}
+//                       </div>
+//                     ))}
+//                   </div>
+//                 )}
+//               </div>
+//               {/* ================= DATE INPUT ================= */}
+//               <div id="dateWrapper" className="flex-1 min-w-[200px] relative">
 //                 <label htmlFor="date" className="sr-only">
 //                   Date
 //                 </label>
-//                 <div className="flex items-center border-2 border-gray-200 px-3 py-2.5 focus-within:border-[#008ECF] transition-colors h-12 relative">
+
+//                 <div
+//                   onClick={() => setShowCalendar((prev) => !prev)}
+//                   className="flex items-center border-2 border-gray-200 
+//                px-3 py-2.5 h-12 cursor-pointer 
+//                focus-within:border-[#008ECF] transition-colors"
+//                 >
 //                   <svg
 //                     className="w-5 h-5 mr-2 text-[#1D4350]"
 //                     fill="none"
@@ -128,35 +354,57 @@
 //                       d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
 //                     />
 //                   </svg>
-//                   <input
-//                     id="date"
-//                     name="date"
-//                     type="date"
-//                     value={date}
-//                     onChange={(e) => setDate(e.target.value)}
-//                     className="w-full bg-transparent outline-none text-gray-700 text-sm font-medium cursor-pointer
-//                       [&::-webkit-calendar-picker-indicator]:opacity-0
-//                       [&::-webkit-calendar-picker-indicator]:absolute
-//                       [&::-webkit-calendar-picker-indicator]:inset-0
-//                       [&::-webkit-calendar-picker-indicator]:w-full
-//                       [&::-webkit-calendar-picker-indicator]:h-full"
-//                     placeholder="Select date"
-//                   />
-//                 </div>
-//               </div>
 
-//               {/* Submit Button */}
+//                   <span className="text-gray-700 text-sm font-medium">
+//                     {selectedDate ? format(selectedDate, "PPP") : "Select date"}
+//                   </span>
+//                 </div>
+
+//                 {showCalendar && (
+//                   <div
+//                     className="absolute top-full mt-3 
+//   left-1/2 -translate-x-1/2
+//   bg-white shadow-2xl border
+//   z-50 p-3 w-[680px] max-w-[95vw]"
+//                   >
+//                     <DayPicker
+//                       mode="single"
+//                       selected={selectedDate}
+//                       onSelect={(date) => {
+//                         setSelectedDate(date);
+//                         setShowCalendar(false);
+//                       }}
+//                       numberOfMonths={2}
+//                       pagedNavigation
+//                       disabled={{ before: new Date() }}
+//                       className="text-xs"
+//                       classNames={{
+//                         months: "flex gap-2",
+//                         month: "space-y-2",
+//                         caption: "flex justify-between items-center mb-1",
+//                         caption_label: "text-sm font-semibold",
+//                         nav_button: "h-6 w-6",
+//                         head_row: "flex",
+//                         head_cell: "w-8 text-[11px] text-gray-500",
+//                         row: "flex w-full mt-1",
+//                         cell: "w-8 h-8 text-center p-0",
+//                         day: "h-8 w-8 rounded-full hover:bg-gray-200 text-xs",
+//                       }}
+//                     />
+//                   </div>
+//                 )}
+//               </div>
+//               {/* ================= BUTTON ================= */}
 //               <button
 //                 type="button"
 //                 onClick={handleGoToTrip}
 //                 className="bg-[#1D4350] hover:bg-[#006DA3] text-white font-semibold px-6 py-2.5 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 cursor-pointer h-12"
 //               >
-//                 Find Trips →
+//                 Search Trips →
 //               </button>
 //             </div>
 //           </div>
 
-//           {/* Stats Line Below */}
 //           <p className="mt-6 text-white/85 text-sm drop-shadow-2xl max-w-2xl mx-auto font-medium">
 //             100k+ Verified Travelers ★ 98% Safety Rating ★ AI-Powered Matching
 //           </p>
@@ -166,85 +414,248 @@
 //   );
 // }
 
+
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import toast from "react-hot-toast";
+import { DayPicker } from "react-day-picker";
+import "react-day-picker/dist/style.css";
+import { format } from "date-fns";
 
 export default function HeroSection() {
-  const [location, setLocation] = useState("");
-  const [date, setDate] = useState("");
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [fromCity, setFromCity] = useState("");
+  const [toCity, setToCity] = useState("");
+
+  const [fromSuggestions, setFromSuggestions] = useState<CityOption[]>([]);
+  const [toSuggestions, setToSuggestions] = useState<CityOption[]>([]);
+
+  const [showFromDropdown, setShowFromDropdown] = useState(false);
+  const [showToDropdown, setShowToDropdown] = useState(false);
+
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+  const [showCalendar, setShowCalendar] = useState(false);
+
+  const [fromPlaceId, setFromPlaceId] = useState<string | null>(null);
+  const [toPlaceId, setToPlaceId] = useState<string | null>(null);
+
+  // 🔥 AbortController refs for canceling previous requests
+  const fromAbortControllerRef = useRef<AbortController | null>(null);
+  const toAbortControllerRef = useRef<AbortController | null>(null);
 
   const router = useRouter();
 
-  interface PlacePrediction {
-    description: string;
-    place_id: string;
+  interface CityOption {
+    mainText: string;
+    fullText: string;
+    placeId: string;
   }
+  interface PlacePrediction {
+  description: string;
+  place_id: string;
+  structured_formatting: {
+    main_text: string;
+    secondary_text?: string;
+  };
+}
+
+  const popularCities: CityOption[] = [
+    { mainText: "Delhi", fullText: "Delhi, India", placeId: "1" },
+    { mainText: "Mumbai", fullText: "Mumbai, India", placeId: "2" },
+    { mainText: "Bangalore", fullText: "Bangalore, India", placeId: "3" },
+    { mainText: "Hyderabad", fullText: "Hyderabad, India", placeId: "4" },
+    { mainText: "Chennai", fullText: "Chennai, India", placeId: "5" },
+  ];
 
   /* ===============================
-     AUTOCOMPLETE FETCH
+     AUTOCOMPLETE FETCH WITH ABORT
+     ✅ Fetches on EVERY keystroke
+     ✅ Cancels previous request
+     ✅ 400ms debounce
+  =============================== */
+  const fetchSuggestions = async (value: string, type: "from" | "to") => {
+    // 🔥 Don't fetch if less than 2 characters
+    if (value.length < 2) {
+      if (type === "from") {
+        setFromSuggestions([]);
+        setShowFromDropdown(false);
+      } else {
+        setToSuggestions([]);
+        setShowToDropdown(false);
+      }
+      return;
+    }
+
+    try {
+      // 🔥 Cancel previous request for this type
+      if (type === "from" && fromAbortControllerRef.current) {
+        fromAbortControllerRef.current.abort();
+      }
+      if (type === "to" && toAbortControllerRef.current) {
+        toAbortControllerRef.current.abort();
+      }
+
+      // 🔥 Create new AbortController
+      const controller = new AbortController();
+      if (type === "from") {
+        fromAbortControllerRef.current = controller;
+      } else {
+        toAbortControllerRef.current = controller;
+      }
+
+      const res = await fetch(`/api/location?input=${value}`, {
+        signal: controller.signal, // 🔥 Attach abort signal
+      });
+      
+      const data = await res.json();
+
+      // 🔥 Don't update if request was aborted
+      if (controller.signal.aborted) return;
+
+      if (data.predictions) {
+        const cities = data.predictions.map((item: PlacePrediction) => ({
+          mainText: item.structured_formatting.main_text,
+          fullText: item.description,
+          placeId: item.place_id,
+        }));
+
+        if (type === "from") {
+          setFromSuggestions(cities);
+          setShowFromDropdown(true);
+        } else {
+          setToSuggestions(cities);
+          setShowToDropdown(true);
+        }
+      }
+    } catch (error) {
+      // 🔥 Ignore abort errors
+      if (error instanceof DOMException && error.name === "AbortError") {
+        return;
+      }
+      
+      // Handle other errors
+      if (type === "from") {
+        setFromSuggestions([]);
+        setShowFromDropdown(false);
+      } else {
+        setToSuggestions([]);
+        setShowToDropdown(false);
+      }
+    }
+  };
+
+  // Close drop down on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+
+      if (!target.closest("#fromWrapper")) {
+        setShowFromDropdown(false);
+      }
+
+      if (!target.closest("#toWrapper")) {
+        setShowToDropdown(false);
+      }
+      if (!target.closest("#dateWrapper")) {
+        setShowCalendar(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  /* ===============================
+     FROM CITY DEBOUNCE
+     ✅ 400ms debounce
+     ✅ Fetches on every keystroke after delay
+     ✅ Cancels previous request
   =============================== */
   useEffect(() => {
     const delay = setTimeout(() => {
-      if (location.length > 2) {
-        fetchSuggestions(location);
-      } else {
-        setSuggestions([]);
-        setShowDropdown(false);
-      }
+      fetchSuggestions(fromCity, "from");
     }, 400);
 
-    return () => clearTimeout(delay);
-  }, [location]);
-
-  const fetchSuggestions = async (value: string) => {
-    try {
-      const res = await fetch(`/api/location?input=${value}`);
-      const data = await res.json();
-
-      if (data.predictions) {
-        const cities = (data.predictions as PlacePrediction[]).map(
-          (item) => item.description,
-        );
-
-        setSuggestions(cities);
-        setShowDropdown(true);
+    return () => {
+      clearTimeout(delay);
+      // 🔥 Cancel any pending request when user types again
+      if (fromAbortControllerRef.current) {
+        fromAbortControllerRef.current.abort();
       }
-    } catch {
-      setSuggestions([]);
-      setShowDropdown(false);
-    }
-  };
+    };
+  }, [fromCity]);
+
+  /* ===============================
+     TO CITY DEBOUNCE
+     ✅ 400ms debounce
+     ✅ Fetches on every keystroke after delay
+     ✅ Cancels previous request
+  =============================== */
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      fetchSuggestions(toCity, "to");
+    }, 400);
+
+    return () => {
+      clearTimeout(delay);
+      // 🔥 Cancel any pending request when user types again
+      if (toAbortControllerRef.current) {
+        toAbortControllerRef.current.abort();
+      }
+    };
+  }, [toCity]);
 
   /* ===============================
      SEARCH NAVIGATION
   =============================== */
   const handleGoToTrip = () => {
-    // ❗ Must select from suggestions (India only)
-    const isValid = suggestions.includes(location);
-
-    if (!isValid) {
-      toast.error("Please select a valid Indian location from suggestions");
-      return; // 🚫 STOP REDIRECT
+    // If nothing is selected
+    if (!fromPlaceId && !toPlaceId && !selectedDate) {
+      toast.error("Please select at least one search option");
+      return;
     }
 
-    if (!location && !date) return;
+    // Prevent same city only if both exist
+    if (fromPlaceId && toPlaceId && fromPlaceId === toPlaceId) {
+      toast.error("Departure and destination cannot be the same");
+      return;
+    }
 
     const query = new URLSearchParams();
 
-    if (location) query.append("fromCity", location);
-    if (date) query.append("startDateFrom", date);
+    if (fromPlaceId) {
+      query.append("fromCity", fromCity);
+      query.append("fromPlaceId", fromPlaceId);
+    }
+
+    if (toPlaceId) {
+      query.append("toCity", toCity);
+      query.append("toPlaceId", toPlaceId);
+    }
+
+    if (selectedDate) {
+      query.append("startDateFrom", selectedDate.toISOString());
+    }
 
     router.push(`/searchtrip?${query.toString()}`);
   };
 
+  // 🔥 Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (fromAbortControllerRef.current) {
+        fromAbortControllerRef.current.abort();
+      }
+      if (toAbortControllerRef.current) {
+        toAbortControllerRef.current.abort();
+      }
+    };
+  }, []);
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center">
       <div className="absolute inset-0">
         <Image
           src="/images/travell-people.jpg"
@@ -276,12 +687,12 @@ export default function HeroSection() {
           </p>
 
           {/* Search card */}
-          <div className="mt-10 flex justify-center">
+          <div className="mt-[20px] flex justify-center">
             <div className="bg-white/75 backdrop-blur-md p-3 shadow-2xl flex flex-col sm:flex-row gap-3 sm:gap-4 items-center">
               {/* ================= LOCATION INPUT ================= */}
-              <div className="flex-1 min-w-[200px] relative">
-                <label htmlFor="location" className="sr-only">
-                  Location
+              <div id="fromWrapper" className="flex-1 min-w-[200px] relative">
+                <label htmlFor="fromCity" className="sr-only">
+                  From City
                 </label>
 
                 <div className="flex items-center border-2 border-gray-200 px-3 py-2.5 focus-within:border-[#008ECF] transition-colors h-12">
@@ -306,42 +717,117 @@ export default function HeroSection() {
                   </svg>
 
                   <input
-                    id="location"
-                    name="location"
-                    placeholder="Simla"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
+                    id="fromCity"
+                    name="fromCity"
+                    placeholder="From City"
+                    value={fromCity}
+                    onFocus={() => {
+                      setFromSuggestions(popularCities);
+                      setShowFromDropdown(true);
+                    }}
+                    onChange={(e) => {
+                      setFromCity(e.target.value);
+                      setFromPlaceId(null);
+                    }}
                     className="bg-transparent outline-none placeholder-gray-600 text-gray-700 w-full font-medium"
                     autoComplete="off"
                   />
                 </div>
 
-                {/* Dropdown */}
-                {showDropdown && suggestions.length > 0 && (
-                  <div className="absolute top-14 left-0 right-0 bg-white shadow-lg border max-h-60 overflow-y-auto z-50 rounded-md">
-                    {suggestions.map((item, index) => (
+                {showFromDropdown && (
+                  <div className="absolute top-full left-0 right-0 bg-white/85 backdrop-blur-md border-2 border-t-0 border-gray-200 shadow-xl max-h-64 overflow-y-auto z-50">
+                    {fromSuggestions.map((item) => (
                       <div
-                        key={index}
-                        onClick={() => {
-                          setLocation(item);
-                          setShowDropdown(false);
+                        key={item.placeId}
+                        onMouseDown={() => {
+                          setFromCity(item.mainText);
+                          setFromPlaceId(item.placeId);
+                          setShowFromDropdown(false);
                         }}
-                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-left"
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700"
                       >
-                        {item}
+                        {item.mainText}
                       </div>
                     ))}
                   </div>
                 )}
               </div>
+              
+              <div id="toWrapper" className="flex-1 min-w-[200px] relative">
+                <label htmlFor="toCity" className="sr-only">
+                  To City
+                </label>
 
+                <div className="flex items-center border-2 border-gray-200 px-3 py-2.5 focus-within:border-[#008ECF] transition-colors h-12">
+                  <svg
+                    className="w-5 h-5 mr-2 text-[#1D4350]"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+
+                  <input
+                    id="toCity"
+                    name="toCity"
+                    placeholder="To City"
+                    value={toCity}
+                    onFocus={() => {
+                      setToSuggestions(popularCities);
+                      setShowToDropdown(true);
+                    }}
+                    onChange={(e) => {
+                      setToCity(e.target.value);
+                      setToPlaceId(null);
+                    }}
+                    className="bg-transparent outline-none placeholder-gray-600 text-gray-700 w-full font-medium"
+                    autoComplete="off"
+                  />
+                </div>
+
+                {showToDropdown && (
+                  <div className="absolute top-full left-0 right-0 bg-white/85 backdrop-blur-md border-2 border-t-0 border-gray-200 shadow-xl max-h-64 overflow-y-auto z-50">
+                    {toSuggestions.map((item) => (
+                      <div
+                        key={item.placeId}
+                        onMouseDown={() => {
+                          setToCity(item.mainText);
+                          setToPlaceId(item.placeId);
+                          setShowToDropdown(false);
+                        }}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700"
+                      >
+                        {item.mainText}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
               {/* ================= DATE INPUT ================= */}
-              <div className="flex-1 min-w-[200px]">
+              <div id="dateWrapper" className="flex-1 min-w-[200px] relative">
                 <label htmlFor="date" className="sr-only">
                   Date
                 </label>
 
-                <div className="flex items-center border-2 border-gray-200 px-3 py-2.5 focus-within:border-[#008ECF] transition-colors h-12 relative">
+                <div
+                  onClick={() => setShowCalendar((prev) => !prev)}
+                  className="flex items-center border-2 border-gray-200 
+               px-3 py-2.5 h-12 cursor-pointer 
+               focus-within:border-[#008ECF] transition-colors"
+                >
                   <svg
                     className="w-5 h-5 mr-2 text-[#1D4350]"
                     fill="none"
@@ -356,29 +842,53 @@ export default function HeroSection() {
                     />
                   </svg>
 
-                  <input
-                    id="date"
-                    name="date"
-                    type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    className="w-full bg-transparent outline-none text-gray-700 text-sm font-medium cursor-pointer
-                      [&::-webkit-calendar-picker-indicator]:opacity-0
-                      [&::-webkit-calendar-picker-indicator]:absolute
-                      [&::-webkit-calendar-picker-indicator]:inset-0
-                      [&::-webkit-calendar-picker-indicator]:w-full
-                      [&::-webkit-calendar-picker-indicator]:h-full"
-                  />
+                  <span className="text-gray-700 text-sm font-medium">
+                    {selectedDate ? format(selectedDate, "PPP") : "Select date"}
+                  </span>
                 </div>
-              </div>
 
+                {showCalendar && (
+                  <div
+                    className="absolute top-full mt-3 
+  left-1/2 -translate-x-1/2
+  bg-white shadow-2xl border
+  z-50 p-3 w-[680px] max-w-[95vw]"
+                  >
+                    <DayPicker
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={(date) => {
+                        setSelectedDate(date);
+                        setShowCalendar(false);
+                      }}
+                      numberOfMonths={2}
+                      pagedNavigation
+                      disabled={{ before: new Date() }}
+                      className="text-xs"
+                      classNames={{
+                        months: "flex gap-2",
+                        month: "space-y-2",
+                        caption: "flex justify-between items-center mb-1",
+                        caption_label: "text-sm font-semibold",
+                        nav_button: "h-6 w-6",
+                        head_row: "flex",
+                        head_cell: "w-8 text-[11px] text-gray-500",
+                        row: "flex w-full mt-1",
+                        cell: "w-8 h-8 text-center p-0",
+                        day: "h-8 w-8 rounded-full hover:bg-gray-200 text-xs",
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+              
               {/* ================= BUTTON ================= */}
               <button
                 type="button"
                 onClick={handleGoToTrip}
                 className="bg-[#1D4350] hover:bg-[#006DA3] text-white font-semibold px-6 py-2.5 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 cursor-pointer h-12"
               >
-                Find Trips →
+                Search Trips →
               </button>
             </div>
           </div>
