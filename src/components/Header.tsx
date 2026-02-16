@@ -29,7 +29,7 @@ const { isAuthenticated ,isLoading} = useAuth();
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         
         <Link href="/" className="text-xl font-bold tracking-tight">
-          Travio<span className={isHeroPage && !isScrolled ? "text-white" : "text-blue-500"}>.</span>
+          Yaarigo<span className={isHeroPage && !isScrolled ? "text-white" : "text-blue-500"}>.</span>
         </Link>
 
         <nav className="hidden md:flex items-center space-x-12 text-sm font-medium">

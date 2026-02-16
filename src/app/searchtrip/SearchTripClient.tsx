@@ -104,7 +104,6 @@
 
 // }
 
-
 // "use client";
 
 // import { useEffect, useState } from "react";
@@ -209,8 +208,6 @@
 //   );
 // }
 
-
-
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
@@ -220,7 +217,7 @@ import FilterSidebar from "./components/filters/FilterSidebar";
 import CombinedContent from "./components/CombinedContent";
 import { useCombinedFilters } from "./hooks/useCombinedFilters";
 import { useSearchData } from "./hooks/useSearchData";
-import stringify from 'fast-json-stable-stringify';
+import stringify from "fast-json-stable-stringify";
 
 export default function SearchTripPage() {
   const searchParams = useSearchParams();
@@ -266,9 +263,12 @@ export default function SearchTripPage() {
   /* ----------------------------------
      5️⃣ MEMOIZE FILTERS WITH STABLE STRINGIFY
   ---------------------------------- */
-  const stableFilters = useMemo(() => appliedFilters, [
-    stringify(appliedFilters) // 🔥 Only changes when values actually change
-  ]);
+  const stableFilters = useMemo(
+    () => appliedFilters,
+    [
+      stringify(appliedFilters), // 🔥 Only changes when values actually change
+    ],
+  );
 
   /* ----------------------------------
      6️⃣ FETCH DATA WITH STABLE FILTERS
@@ -294,13 +294,21 @@ export default function SearchTripPage() {
      8️⃣ UI
   ---------------------------------- */
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pt-16">
       {/* 🔥 Sticky Search Section with typing indicator */}
-      <div className="sticky top-0 z-50 bg-white shadow-md">
+      {/* <div className="sticky top-0 z-50 bg-white shadow-md">
         <SearchTripSection 
           filters={draftFilters} 
           updateFilter={updateFilter} 
         />
+        {isTyping && (
+          <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500 animate-pulse" />
+        )}
+      </div> */}
+
+      <div className="sticky top-18 z-40 bg-white shadow-md">
+        <SearchTripSection filters={draftFilters} updateFilter={updateFilter} />
+
         {isTyping && (
           <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500 animate-pulse" />
         )}
