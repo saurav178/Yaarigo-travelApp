@@ -70,7 +70,7 @@
 import { useEffect, useState, CSSProperties } from "react";
 
 export default function TravioLoader() {
-  const text = "Travio.";
+  const text = "Yaarigo.";
   const [startAnimation, setStartAnimation] = useState(false);
 
   useEffect(() => {
