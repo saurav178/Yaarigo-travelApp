@@ -32,7 +32,7 @@ export default function WhyChooseSection({ isVisible, setIsVisible }: WhyChooseS
         <h2
           className="text-3xl md:text-3xl font-bold text-gray-900 inline-block relative cursor-default"
         >
-          Why Choose Travio
+          Why Choose Yaarigo
           <span
             className={`absolute bottom-[-8px] left-1/2 h-[4px] transition-all duration-700 ease-out rounded-full ${
               isVisible ? "w-[150%]" : "w-0"
