@@ -218,7 +218,6 @@ export function useSearchData(filters: CombinedFilters) {
           apiService.packages.search(filters, controller.signal),
         ]);
 
-        // ✅ Only update if not aborted
         if (!controller.signal.aborted) {
           // Replace on page 1, append on page 2+
           setTrips(prev => 
@@ -258,7 +257,7 @@ export function useSearchData(filters: CombinedFilters) {
       fetchingRef.current = false;
     };
   }, [
-    stringify(filters), // 🔥 Stable string comparison
+    stringify(filters),
     page
   ]);
 
