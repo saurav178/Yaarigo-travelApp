@@ -1,6 +1,6 @@
 // "use client";
 
-// import { useState, useEffect } from "react";
+// import { useState, useEffect, useRef } from "react";
 // import { useRouter } from "next/navigation";
 // import Image from "next/image";
 // import toast from "react-hot-toast";
@@ -18,39 +18,86 @@
 //   const [showFromDropdown, setShowFromDropdown] = useState(false);
 //   const [showToDropdown, setShowToDropdown] = useState(false);
 
-//   // const [date, setDate] = useState("");
 //   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
 //   const [showCalendar, setShowCalendar] = useState(false);
 
 //   const [fromPlaceId, setFromPlaceId] = useState<string | null>(null);
 //   const [toPlaceId, setToPlaceId] = useState<string | null>(null);
 
+//   // 🔥 AbortController refs for canceling previous requests
+//   const fromAbortControllerRef = useRef<AbortController | null>(null);
+//   const toAbortControllerRef = useRef<AbortController | null>(null);
+
 //   const router = useRouter();
 
 //   interface CityOption {
 //     mainText: string;
 //     fullText: string;
-//     placeId: string;
 //   }
+//   interface PlacePrediction {
+//   description: string;
+//   place_id: string;
+//   structured_formatting: {
+//     main_text: string;
+//     secondary_text?: string;
+//   };
+// }
 
 //   const popularCities: CityOption[] = [
-//     { mainText: "Delhi", fullText: "Delhi, India", placeId: "1" },
-//     { mainText: "Mumbai", fullText: "Mumbai, India", placeId: "2" },
-//     { mainText: "Bangalore", fullText: "Bangalore, India", placeId: "3" },
-//     { mainText: "Hyderabad", fullText: "Hyderabad, India", placeId: "4" },
-//     { mainText: "Chennai", fullText: "Chennai, India", placeId: "5" },
+//     { mainText: "Delhi", fullText: "Delhi, India" },
+//     { mainText: "Mumbai", fullText: "Mumbai, India"},
+//     { mainText: "Bangalore", fullText: "Bangalore, India"},
+//     { mainText: "Hyderabad", fullText: "Hyderabad, India"},
+//     { mainText: "Chennai", fullText: "Chennai, India"},
 //   ];
 
 //   /* ===============================
-//      AUTOCOMPLETE FETCH
+//      AUTOCOMPLETE FETCH WITH ABORT
+//      ✅ Fetches on EVERY keystroke
+//      ✅ Cancels previous request
+//      ✅ 400ms debounce
 //   =============================== */
 //   const fetchSuggestions = async (value: string, type: "from" | "to") => {
+//     // 🔥 Don't fetch if less than 2 characters
+//     if (value.length < 2) {
+//       if (type === "from") {
+//         setFromSuggestions([]);
+//         setShowFromDropdown(false);
+//       } else {
+//         setToSuggestions([]);
+//         setShowToDropdown(false);
+//       }
+//       return;
+//     }
+
 //     try {
-//       const res = await fetch(`/api/location?input=${value}`);
+//       // 🔥 Cancel previous request for this type
+//       if (type === "from" && fromAbortControllerRef.current) {
+//         fromAbortControllerRef.current.abort();
+//       }
+//       if (type === "to" && toAbortControllerRef.current) {
+//         toAbortControllerRef.current.abort();
+//       }
+
+//       // 🔥 Create new AbortController
+//       const controller = new AbortController();
+//       if (type === "from") {
+//         fromAbortControllerRef.current = controller;
+//       } else {
+//         toAbortControllerRef.current = controller;
+//       }
+
+//       const res = await fetch(`/api/location?input=${value}`, {
+//         signal: controller.signal, // 🔥 Attach abort signal
+//       });
+
 //       const data = await res.json();
 
+//       // 🔥 Don't update if request was aborted
+//       if (controller.signal.aborted) return;
+
 //       if (data.predictions) {
-//         const cities = data.predictions.map((item: any) => ({
+//         const cities = data.predictions.map((item: PlacePrediction) => ({
 //           mainText: item.structured_formatting.main_text,
 //           fullText: item.description,
 //           placeId: item.place_id,
@@ -64,7 +111,13 @@
 //           setShowToDropdown(true);
 //         }
 //       }
-//     } catch {
+//     } catch (error) {
+//       // 🔥 Ignore abort errors
+//       if (error instanceof DOMException && error.name === "AbortError") {
+//         return;
+//       }
+
+//       // Handle other errors
 //       if (type === "from") {
 //         setFromSuggestions([]);
 //         setShowFromDropdown(false);
@@ -74,8 +127,8 @@
 //       }
 //     }
 //   };
-//   //Close drop down on outside click
 
+//   // Close drop down on outside click
 //   useEffect(() => {
 //     const handleClickOutside = (event: MouseEvent) => {
 //       const target = event.target as HTMLElement;
@@ -96,67 +149,86 @@
 //     return () => document.removeEventListener("mousedown", handleClickOutside);
 //   }, []);
 
+//   /* ===============================
+//      FROM CITY DEBOUNCE
+//      ✅ 400ms debounce
+//      ✅ Fetches on every keystroke after delay
+//      ✅ Cancels previous request
+//   =============================== */
 //   useEffect(() => {
 //     const delay = setTimeout(() => {
-//       if (fromCity.length > 2) {
-//         fetchSuggestions(fromCity, "from");
-//       } else {
-//         setFromSuggestions([]);
-//         setShowFromDropdown(false);
-//       }
+//       fetchSuggestions(fromCity, "from");
 //     }, 400);
 
-//     return () => clearTimeout(delay);
+//     return () => {
+//       clearTimeout(delay);
+//       // 🔥 Cancel any pending request when user types again
+//       if (fromAbortControllerRef.current) {
+//         fromAbortControllerRef.current.abort();
+//       }
+//     };
 //   }, [fromCity]);
 
+//   /* ===============================
+//      TO CITY DEBOUNCE
+//      ✅ 400ms debounce
+//      ✅ Fetches on every keystroke after delay
+//      ✅ Cancels previous request
+//   =============================== */
 //   useEffect(() => {
 //     const delay = setTimeout(() => {
-//       if (toCity.length > 2) {
-//         fetchSuggestions(toCity, "to");
-//       } else {
-//         setToSuggestions([]);
-//         setShowToDropdown(false);
-//       }
+//       fetchSuggestions(toCity, "to");
 //     }, 400);
 
-//     return () => clearTimeout(delay);
+//     return () => {
+//       clearTimeout(delay);
+//       // 🔥 Cancel any pending request when user types again
+//       if (toAbortControllerRef.current) {
+//         toAbortControllerRef.current.abort();
+//       }
+//     };
 //   }, [toCity]);
 
 //   /* ===============================
 //      SEARCH NAVIGATION
 //   =============================== */
-//  const handleGoToTrip = () => {
-//   // If nothing is selected
-//   if (!fromPlaceId && !toPlaceId && !selectedDate) {
-//     toast.error("Please select at least one search option");
-//     return;
-//   }
+//   const handleGoToTrip = () => {
+//     // If nothing is selected
+//     if (!fromPlaceId && !toPlaceId && !selectedDate) {
+//       toast.error("Please select at least one search option");
+//       return;
+//     }
 
-//   // Prevent same city only if both exist
-//   if (fromPlaceId && toPlaceId && fromPlaceId === toPlaceId) {
-//     toast.error("Departure and destination cannot be the same");
-//     return;
-//   }
+//     const query = new URLSearchParams();
 
-//   const query = new URLSearchParams();
+//     if (fromPlaceId) {
+//       query.append("fromCity", fromCity);
+//       query.append("fromPlaceId", fromPlaceId);
+//     }
 
-//   if (fromPlaceId) {
-//     query.append("fromCity", fromCity);
-//     query.append("fromPlaceId", fromPlaceId);
-//   }
+//     if (toPlaceId) {
+//       query.append("toCity", toCity);
+//       query.append("toPlaceId", toPlaceId);
+//     }
 
-//   if (toPlaceId) {
-//     query.append("toCity", toCity);
-//     query.append("toPlaceId", toPlaceId);
-//   }
+//     if (selectedDate) {
+//       query.append("startDateFrom", selectedDate.toISOString());
+//     }
 
-//   if (selectedDate) {
-//     query.append("startDateFrom", selectedDate.toISOString());
-//   }
+//     router.push(`/searchtrip?${query.toString()}`);
+//   };
 
-//   router.push(`/searchtrip?${query.toString()}`);
-// };
-
+//   // 🔥 Cleanup on unmount
+//   useEffect(() => {
+//     return () => {
+//       if (fromAbortControllerRef.current) {
+//         fromAbortControllerRef.current.abort();
+//       }
+//       if (toAbortControllerRef.current) {
+//         toAbortControllerRef.current.abort();
+//       }
+//     };
+//   }, []);
 
 //   return (
 //     <section className="relative min-h-screen flex items-center justify-center">
@@ -193,7 +265,6 @@
 //           {/* Search card */}
 //           <div className="mt-[20px] flex justify-center">
 //             <div className="bg-white/75 backdrop-blur-md p-3 shadow-2xl flex flex-col sm:flex-row gap-3 sm:gap-4 items-center">
-//               {" "}
 //               {/* ================= LOCATION INPUT ================= */}
 //               <div id="fromWrapper" className="flex-1 min-w-[200px] relative">
 //                 <label htmlFor="fromCity" className="sr-only">
@@ -241,10 +312,6 @@
 
 //                 {showFromDropdown && (
 //                   <div className="absolute top-full left-0 right-0 bg-white/85 backdrop-blur-md border-2 border-t-0 border-gray-200 shadow-xl max-h-64 overflow-y-auto z-50">
-//                     {/* {fromSuggestions.length === 0 && (
-                      
-//                     )} */}
-
 //                     {fromSuggestions.map((item) => (
 //                       <div
 //                         key={item.placeId}
@@ -261,6 +328,7 @@
 //                   </div>
 //                 )}
 //               </div>
+
 //               <div id="toWrapper" className="flex-1 min-w-[200px] relative">
 //                 <label htmlFor="toCity" className="sr-only">
 //                   To City
@@ -307,18 +375,12 @@
 
 //                 {showToDropdown && (
 //                   <div className="absolute top-full left-0 right-0 bg-white/85 backdrop-blur-md border-2 border-t-0 border-gray-200 shadow-xl max-h-64 overflow-y-auto z-50">
-//                     {toSuggestions.length === 0 && (
-//                       <div className="px-4 py-3 text-sm text-gray-400">
-//                         Start typing to search cities
-//                       </div>
-//                     )}
-
 //                     {toSuggestions.map((item) => (
 //                       <div
 //                         key={item.placeId}
 //                         onMouseDown={() => {
 //                           setToCity(item.mainText);
-//                           setToPlaceId(item.placeId); // ✅ CORRECT
+//                           setToPlaceId(item.placeId);
 //                           setShowToDropdown(false);
 //                         }}
 //                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700"
@@ -329,6 +391,7 @@
 //                   </div>
 //                 )}
 //               </div>
+
 //               {/* ================= DATE INPUT ================= */}
 //               <div id="dateWrapper" className="flex-1 min-w-[200px] relative">
 //                 <label htmlFor="date" className="sr-only">
@@ -337,8 +400,8 @@
 
 //                 <div
 //                   onClick={() => setShowCalendar((prev) => !prev)}
-//                   className="flex items-center border-2 border-gray-200 
-//                px-3 py-2.5 h-12 cursor-pointer 
+//                   className="flex items-center border-2 border-gray-200
+//                px-3 py-2.5 h-12 cursor-pointer
 //                focus-within:border-[#008ECF] transition-colors"
 //                 >
 //                   <svg
@@ -362,7 +425,7 @@
 
 //                 {showCalendar && (
 //                   <div
-//                     className="absolute top-full mt-3 
+//                     className="absolute top-full mt-3
 //   left-1/2 -translate-x-1/2
 //   bg-white shadow-2xl border
 //   z-50 p-3 w-[680px] max-w-[95vw]"
@@ -394,6 +457,7 @@
 //                   </div>
 //                 )}
 //               </div>
+
 //               {/* ================= BUTTON ================= */}
 //               <button
 //                 type="button"
@@ -414,13 +478,11 @@
 //   );
 // }
 
-
 "use client";
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import toast from "react-hot-toast";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { format } from "date-fns";
@@ -438,8 +500,8 @@ export default function HeroSection() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [showCalendar, setShowCalendar] = useState(false);
 
-  const [fromPlaceId, setFromPlaceId] = useState<string | null>(null);
-  const [toPlaceId, setToPlaceId] = useState<string | null>(null);
+  // 🔥 New state for showing suggestion message
+  const [showSuggestion, setShowSuggestion] = useState(false);
 
   // 🔥 AbortController refs for canceling previous requests
   const fromAbortControllerRef = useRef<AbortController | null>(null);
@@ -447,36 +509,34 @@ export default function HeroSection() {
 
   const router = useRouter();
 
+  // 🔥 Updated interface - no placeId
   interface CityOption {
     mainText: string;
     fullText: string;
-    placeId: string;
   }
-  interface PlacePrediction {
-  description: string;
-  place_id: string;
-  structured_formatting: {
-    main_text: string;
-    secondary_text?: string;
-  };
-}
 
+  interface PlacePrediction {
+    description: string;
+    place_id: string;
+    structured_formatting: {
+      main_text: string;
+      secondary_text?: string;
+    };
+  }
+
+  // 🔥 Updated popular cities - no placeId
   const popularCities: CityOption[] = [
-    { mainText: "Delhi", fullText: "Delhi, India", placeId: "1" },
-    { mainText: "Mumbai", fullText: "Mumbai, India", placeId: "2" },
-    { mainText: "Bangalore", fullText: "Bangalore, India", placeId: "3" },
-    { mainText: "Hyderabad", fullText: "Hyderabad, India", placeId: "4" },
-    { mainText: "Chennai", fullText: "Chennai, India", placeId: "5" },
+    { mainText: "Delhi", fullText: "Delhi, India" },
+    { mainText: "Mumbai", fullText: "Mumbai, India" },
+    { mainText: "Bangalore", fullText: "Bangalore, India" },
+    { mainText: "Hyderabad", fullText: "Hyderabad, India" },
+    { mainText: "Chennai", fullText: "Chennai, India" },
   ];
 
   /* ===============================
      AUTOCOMPLETE FETCH WITH ABORT
-     ✅ Fetches on EVERY keystroke
-     ✅ Cancels previous request
-     ✅ 400ms debounce
   =============================== */
   const fetchSuggestions = async (value: string, type: "from" | "to") => {
-    // 🔥 Don't fetch if less than 2 characters
     if (value.length < 2) {
       if (type === "from") {
         setFromSuggestions([]);
@@ -489,7 +549,6 @@ export default function HeroSection() {
     }
 
     try {
-      // 🔥 Cancel previous request for this type
       if (type === "from" && fromAbortControllerRef.current) {
         fromAbortControllerRef.current.abort();
       }
@@ -497,7 +556,6 @@ export default function HeroSection() {
         toAbortControllerRef.current.abort();
       }
 
-      // 🔥 Create new AbortController
       const controller = new AbortController();
       if (type === "from") {
         fromAbortControllerRef.current = controller;
@@ -506,19 +564,19 @@ export default function HeroSection() {
       }
 
       const res = await fetch(`/api/location?input=${value}`, {
-        signal: controller.signal, // 🔥 Attach abort signal
+        signal: controller.signal,
       });
-      
+
       const data = await res.json();
 
-      // 🔥 Don't update if request was aborted
       if (controller.signal.aborted) return;
 
       if (data.predictions) {
+        // 🔥 Updated mapping - no placeId
         const cities = data.predictions.map((item: PlacePrediction) => ({
           mainText: item.structured_formatting.main_text,
           fullText: item.description,
-          placeId: item.place_id,
+          // placeId is removed
         }));
 
         if (type === "from") {
@@ -530,12 +588,10 @@ export default function HeroSection() {
         }
       }
     } catch (error) {
-      // 🔥 Ignore abort errors
       if (error instanceof DOMException && error.name === "AbortError") {
         return;
       }
-      
-      // Handle other errors
+
       if (type === "from") {
         setFromSuggestions([]);
         setShowFromDropdown(false);
@@ -569,9 +625,6 @@ export default function HeroSection() {
 
   /* ===============================
      FROM CITY DEBOUNCE
-     ✅ 400ms debounce
-     ✅ Fetches on every keystroke after delay
-     ✅ Cancels previous request
   =============================== */
   useEffect(() => {
     const delay = setTimeout(() => {
@@ -580,18 +633,15 @@ export default function HeroSection() {
 
     return () => {
       clearTimeout(delay);
-      // 🔥 Cancel any pending request when user types again
       if (fromAbortControllerRef.current) {
         fromAbortControllerRef.current.abort();
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fromCity]);
 
   /* ===============================
      TO CITY DEBOUNCE
-     ✅ 400ms debounce
-     ✅ Fetches on every keystroke after delay
-     ✅ Cancels previous request
   =============================== */
   useEffect(() => {
     const delay = setTimeout(() => {
@@ -600,39 +650,39 @@ export default function HeroSection() {
 
     return () => {
       clearTimeout(delay);
-      // 🔥 Cancel any pending request when user types again
       if (toAbortControllerRef.current) {
         toAbortControllerRef.current.abort();
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toCity]);
 
   /* ===============================
-     SEARCH NAVIGATION
+     SEARCH NAVIGATION - UPDATED
   =============================== */
   const handleGoToTrip = () => {
-    // If nothing is selected
-    if (!fromPlaceId && !toPlaceId && !selectedDate) {
-      toast.error("Please select at least one search option");
-      return;
-    }
+    // If nothing is selected, show suggestion message
+    if (!fromCity && !toCity && !selectedDate) {
+      setShowSuggestion(true);
 
-    // Prevent same city only if both exist
-    if (fromPlaceId && toPlaceId && fromPlaceId === toPlaceId) {
-      toast.error("Departure and destination cannot be the same");
+      // Auto-hide suggestion after 3 seconds
+      setTimeout(() => {
+        setShowSuggestion(false);
+      }, 3000);
+
       return;
     }
 
     const query = new URLSearchParams();
 
-    if (fromPlaceId) {
+    // 🔥 Only append if fromCity has a value
+    if (fromCity && fromCity.trim() !== "") {
       query.append("fromCity", fromCity);
-      query.append("fromPlaceId", fromPlaceId);
     }
 
-    if (toPlaceId) {
+    // 🔥 Only append if toCity has a value
+    if (toCity && toCity.trim() !== "") {
       query.append("toCity", toCity);
-      query.append("toPlaceId", toPlaceId);
     }
 
     if (selectedDate) {
@@ -727,7 +777,7 @@ export default function HeroSection() {
                     }}
                     onChange={(e) => {
                       setFromCity(e.target.value);
-                      setFromPlaceId(null);
+                      // 🔥 Remove setFromPlaceId
                     }}
                     className="bg-transparent outline-none placeholder-gray-600 text-gray-700 w-full font-medium"
                     autoComplete="off"
@@ -736,12 +786,13 @@ export default function HeroSection() {
 
                 {showFromDropdown && (
                   <div className="absolute top-full left-0 right-0 bg-white/85 backdrop-blur-md border-2 border-t-0 border-gray-200 shadow-xl max-h-64 overflow-y-auto z-50">
-                    {fromSuggestions.map((item) => (
+                    {fromSuggestions.map((item, index) => (
                       <div
-                        key={item.placeId}
+                        // 🔥 Use index as key since no placeId
+                        key={index}
                         onMouseDown={() => {
                           setFromCity(item.mainText);
-                          setFromPlaceId(item.placeId);
+                          // 🔥 Remove setFromPlaceId
                           setShowFromDropdown(false);
                         }}
                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700"
@@ -752,7 +803,7 @@ export default function HeroSection() {
                   </div>
                 )}
               </div>
-              
+
               <div id="toWrapper" className="flex-1 min-w-[200px] relative">
                 <label htmlFor="toCity" className="sr-only">
                   To City
@@ -790,7 +841,7 @@ export default function HeroSection() {
                     }}
                     onChange={(e) => {
                       setToCity(e.target.value);
-                      setToPlaceId(null);
+                      // 🔥 Remove setToPlaceId
                     }}
                     className="bg-transparent outline-none placeholder-gray-600 text-gray-700 w-full font-medium"
                     autoComplete="off"
@@ -799,12 +850,13 @@ export default function HeroSection() {
 
                 {showToDropdown && (
                   <div className="absolute top-full left-0 right-0 bg-white/85 backdrop-blur-md border-2 border-t-0 border-gray-200 shadow-xl max-h-64 overflow-y-auto z-50">
-                    {toSuggestions.map((item) => (
+                    {toSuggestions.map((item, index) => (
                       <div
-                        key={item.placeId}
+                        // 🔥 Use index as key since no placeId
+                        key={index}
                         onMouseDown={() => {
                           setToCity(item.mainText);
-                          setToPlaceId(item.placeId);
+                          // 🔥 Remove setToPlaceId
                           setShowToDropdown(false);
                         }}
                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700"
@@ -815,7 +867,7 @@ export default function HeroSection() {
                   </div>
                 )}
               </div>
-              
+
               {/* ================= DATE INPUT ================= */}
               <div id="dateWrapper" className="flex-1 min-w-[200px] relative">
                 <label htmlFor="date" className="sr-only">
@@ -881,7 +933,7 @@ export default function HeroSection() {
                   </div>
                 )}
               </div>
-              
+
               {/* ================= BUTTON ================= */}
               <button
                 type="button"
@@ -892,6 +944,16 @@ export default function HeroSection() {
               </button>
             </div>
           </div>
+
+          {/* 🔥 Suggestion message below the search card */}
+          {showSuggestion && (
+            <div className="mt-3 text-center animate-pulse">
+              <span className="inline-block text-sm text-amber-600 bg-amber-50/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-md border border-amber-200">
+                ⚠️ Please select at least one option (From City, To City, or
+                Date) to search for trips
+              </span>
+            </div>
+          )}
 
           <p className="mt-6 text-white/85 text-sm drop-shadow-2xl max-w-2xl mx-auto font-medium">
             100k+ Verified Travelers ★ 98% Safety Rating ★ AI-Powered Matching

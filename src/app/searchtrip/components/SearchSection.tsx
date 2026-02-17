@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback  } from "react";
 import { CombinedFilters } from "../types/combinedFilters";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
@@ -87,7 +87,7 @@ interface PlacePrediction {
      FETCH SUGGESTIONS
   ------------------------------ */
 
-  const fetchSuggestions = async (value: string, type: "from" | "to") => {
+  const fetchSuggestions = useCallback(async (value: string, type: "from" | "to") => {
     try {
       const res = await fetch(`/api/location?input=${value}`);
       const data = await res.json();
@@ -106,7 +106,8 @@ interface PlacePrediction {
       if (type === "from") setFromSuggestions([]);
       else setToSuggestions([]);
     }
-  };
+  },
+  [])
 
   /* -----------------------------
      AUTOCOMPLETE DEBOUNCE
@@ -122,7 +123,7 @@ interface PlacePrediction {
     }, 400);
 
     return () => clearTimeout(delay);
-  }, [fromCity]);
+  }, [fromCity, fetchSuggestions]);
 
   useEffect(() => {
     const delay = setTimeout(() => {
@@ -134,7 +135,7 @@ interface PlacePrediction {
     }, 400);
 
     return () => clearTimeout(delay);
-  }, [toCity]);
+  }, [toCity,  fetchSuggestions]);
 
   /* -----------------------------
      OUTSIDE CLICK HANDLER

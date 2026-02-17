@@ -58,7 +58,7 @@ export default function Footer() {
                 height={22}
               />
             </div>
-            Travio.
+            Yaarigo.
           </h3>
 
           <p className="text-white/80 mb-4">

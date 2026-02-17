@@ -1,243 +1,751 @@
-
-
-// "use client";
-
-// import { useState } from "react";
-// import { useModal } from "@/context/ModalContext";
-// import { useRouter } from "next/navigation";
-// // import { ROUTES } from "@/lib/routes"; 
-// import { authService } from "../../../services/auth-service"; 
-
-// export default function RegisterForm() {
-//   // States
-//   const [fullName, setFullName] = useState("");
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [phoneNumber, setPhoneNumber] = useState("");
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [showPassword, setShowPassword] = useState(false);
-//   const [showSuccessToast, setShowSuccessToast] = useState(false);
-//   const [errorMsg, setErrorMsg] = useState("");
-
-//   const { openModal, closeModal } = useModal();
-//   // const router = useRouter();
-
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault();
-//     setIsLoading(true);
-//     setErrorMsg("");
-
-//     const payload = {
-//       email,
-//       full_name: fullName,
-//       password,
-//       phone_number: phoneNumber || "+910000000000",
-//       role: "INDIVIDUAL" as const,
-//       organization_name: "Travio User",
-//     };
-
-//     try {
-//       // Professional approach: calling from centralized service
-//       const response = await authService.register(payload);
-      
-//       if (response) {
-//         setShowSuccessToast(true);
-        
-//         // Auto-hide toast -> close modal -> open login modal
-//         setTimeout(() => {
-//           setShowSuccessToast(false);
-//           closeModal();
-//           // User experience ke liye login modal open kar rahe hain
-//           setTimeout(() => openModal("login"), 300);
-//         }, 3000);
-//       }
-//     } catch (error: any) {
-//       // Axios error handle kar rahe hain jo service se throw hua
-//       const message = error.response?.data?.message || error.message || "Registration Failed";
-//       setErrorMsg(message);
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div className="w-full max-w-md mx-auto animate-fadeIn">
-//       {/* SUCCESS TOAST — TOP PE SHOW HOGA */}
-//       {showSuccessToast && (
-//         <div className="fixed inset-x-0 top-0 flex justify-center pt-6 px-4 z-[100] pointer-events-none">
-//           <div className="max-w-sm w-full animate-slideDownFast">
-//             <div className="glassmorphism-card p-5 rounded-2xl shadow-2xl border border-white/40 flex items-center gap-4 backdrop-blur-xl bg-white/90">
-//               <div className="p-3 bg-green-100 rounded-full animate-bounce">
-//                 <svg className="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-//                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-//                 </svg>
-//               </div>
-//               <div className="flex-1">
-//                 <p className="font-bold text-gray-900 text-lg">Welcome to Travio!</p>
-//                 <p className="text-sm text-gray-600">Account created successfully</p>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       )}
-
-//       {/* Header */}
-//       <div className="text-center mb-6 animate-slideDown">
-//         <div className="inline-block p-2.5 bg-gradient-to-r from-[#1D4350] to-[#A43931] rounded-full mb-3 animate-bounce-slow">
-//           <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-//             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-//           </svg>
-//         </div>
-//         <h2 className="text-xl font-bold bg-gradient-to-r from-[#1D4350] to-[#A43931] bg-clip-text text-transparent">
-//           Create Account
-//         </h2>
-//         {errorMsg && (
-//           <div className="mt-2 p-2 bg-red-50 border border-red-100 rounded text-red-600 text-xs font-medium animate-shake">
-//             {errorMsg}
-//           </div>
-//         )}
-//       </div>
-
-//       {/* Form */}
-//       <form className="space-y-4" onSubmit={handleSubmit}>
-//         {/* Full Name */}
-//         <div className="animate-slideUp" style={{ animationDelay: "0.1s" }}>
-//           <label className="block text-xs font-semibold text-gray-700 mb-1">Full Name</label>
-//           <input
-//             type="text"
-//             required
-//             className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1D4350] transition-all"
-//             placeholder="Enter your full name"
-//             value={fullName}
-//             onChange={(e) => setFullName(e.target.value)}
-//           />
-//         </div>
-
-//         {/* Email */}
-//         <div className="animate-slideUp" style={{ animationDelay: "0.2s" }}>
-//           <label className="block text-xs font-semibold text-gray-700 mb-1">Email</label>
-//           <input
-//             type="email"
-//             required
-//             className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1D4350] transition-all"
-//             placeholder="Enter your email"
-//             value={email}
-//             onChange={(e) => setEmail(e.target.value)}
-//           />
-//         </div>
-
-//         {/* Phone Number */}
-//         <div className="animate-slideUp" style={{ animationDelay: "0.25s" }}>
-//           <label className="block text-xs font-semibold text-gray-700 mb-1">Phone Number</label>
-//           <input
-//             type="tel"
-//             required
-//             className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1D4350] transition-all"
-//             placeholder="+91 999999999"
-//             value={phoneNumber}
-//             onChange={(e) => setPhoneNumber(e.target.value)}
-//           />
-//         </div>
-
-//         {/* Password */}
-//         <div className="animate-slideUp" style={{ animationDelay: "0.3s" }}>
-//           <label className="block text-xs font-semibold text-gray-700 mb-1">Password</label>
-//           <div className="relative">
-//             <input
-//               type={showPassword ? "text" : "password"}
-//               required
-//               className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1D4350] pr-10"
-//               placeholder="••••••••"
-//               value={password}
-//               onChange={(e) => setPassword(e.target.value)}
-//             />
-//             <button
-//               type="button"
-//               onClick={() => setShowPassword(!showPassword)}
-//               className="absolute inset-y-0 right-0 pr-3 flex items-center hover:scale-110 transition-transform"
-//             >
-//               {showPassword ? (
-//                 <svg className="h-4 w-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-//                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-//                 </svg>
-//               ) : (
-//                 <svg className="h-4 w-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-//                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-//                 </svg>
-//               )}
-//             </button>
-//           </div>
-//         </div>
-
-//         {/* Submit Button */}
-//         <div className="animate-slideUp pt-2" style={{ animationDelay: "0.4s" }}>
-//           <button
-//             type="submit"
-//             disabled={isLoading}
-//             className="w-full py-3 px-4 bg-gradient-to-r from-[#1D4350] to-[#A43931] text-white font-semibold rounded-lg hover:from-[#A43931] hover:to-[#1D4350] transition-all duration-300 transform hover:-translate-y-0.5 disabled:opacity-50 shadow-lg"
-//           >
-//             {isLoading ? (
-//               <div className="flex items-center justify-center gap-2">
-//                 <svg className="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
-//                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-//                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-//                 </svg>
-//                 Processing...
-//               </div>
-//             ) : "Create Account"}
-//           </button>
-//         </div>
-
-//         {/* Login Link */}
-//         <div className="text-center pt-2 animate-slideUp" style={{ animationDelay: "0.5s" }}>
-//           <span className="text-xs text-gray-600">
-//             Already have an accounttttt?{" "}
-//             <button
-//               type="button"
-//               onClick={() => openModal("login")}
-//               className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#1D4350] to-[#A43931] hover:scale-105 transition-all"
-//             >
-//               Login
-//             </button>
-//           </span>
-//         </div>
-//       </form>
-
-//       <style jsx>{`
-//         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-//         @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-//         @keyframes slideDownFast { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-//         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-//         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-//         @keyframes bounce-slow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-//         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-        
-//         .animate-fadeIn { animation: fadeIn 0.5s ease-out; }
-//         .animate-slideDown { animation: slideDown 0.6s ease-out; }
-//         .animate-slideDownFast { animation: slideDownFast 0.6s ease-out; }
-//         .animate-slideUp { animation: slideUp 0.7s ease-out both; }
-//         .animate-bounce { animation: bounce 2s infinite; }
-//         .animate-bounce-slow { animation: bounce-slow 3s ease-in-out infinite; }
-//         .animate-shake { animation: shake 0.2s ease-in-out 0s 2; }
-
-//         .glassmorphism-card {
-//           background: rgba(255, 255, 255, 0.95);
-//           backdrop-filter: blur(20px);
-//           border-radius: 20px;
-//           box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-//         }
-//       `}</style>
-//     </div>
-//   );
-// }
-
 "use client";
 
+import { useState } from "react";
+import { useModal } from "../../../context/ModalContext";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../../../context/AuthContext";
+import { RegisterData } from "../../../types/auth";
+
 export default function RegisterForm() {
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const { register } = useAuth();
+  const { openModal, closeModal } = useModal();
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setErrorMsg("");
+
+    const payload: RegisterData = {
+      email: email.trim(),
+      full_name: fullName.trim(),
+      password: password,
+      phone_number: phoneNumber.trim() || "+910000000000",
+      role: "INDIVIDUAL",
+      organization_name: "Travio User",
+    };
+
+    try {
+      await register(payload);
+      setShowSuccessToast(true);
+      setTimeout(() => {
+        setShowSuccessToast(false);
+        closeModal();
+        router.push("/login");
+        setTimeout(() => openModal("login"), 400);
+      }, 2000);
+    } catch (error: unknown) {
+      let message = "Registration Failed. Please try again.";
+      if (error instanceof Error) message = error.message;
+      setErrorMsg(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div>
-      <h2>Register Form</h2>
-     
-    </div>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+        .register-root {
+          font-family: 'DM Sans', sans-serif;
+          min-height: 100vh;
+          display: flex;
+          background: #0e1c22;
+        }
+
+        /* ─── Left Panel ─── */
+        .register-left {
+          width: 42%;
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          padding: 3.5rem;
+          background: linear-gradient(160deg, #1a3340 0%, #0e1c22 60%, #0b1519 100%);
+        }
+
+        /* Subtle grid texture */
+        .register-left::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background-image:
+            linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+          background-size: 48px 48px;
+        }
+
+        /* Large decorative circle */
+        .register-left::after {
+          content: '';
+          position: absolute;
+          width: 520px;
+          height: 520px;
+          border-radius: 50%;
+          border: 1px solid rgba(255,255,255,0.05);
+          bottom: -160px;
+          right: -160px;
+        }
+
+        .circle-accent {
+          position: absolute;
+          width: 320px;
+          height: 320px;
+          border-radius: 50%;
+          border: 1px solid rgba(164,57,49,0.2);
+          bottom: -60px;
+          right: -60px;
+        }
+
+        .deco-dot {
+          position: absolute;
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: rgba(164,57,49,0.6);
+        }
+
+        .brand-name {
+          font-family: 'Playfair Display', serif;
+          font-size: 2.25rem;
+          font-weight: 900;
+          color: #ffffff;
+          letter-spacing: -0.03em;
+          text-decoration: none;
+          position: relative;
+          z-index: 1;
+        }
+
+        .brand-name span {
+          color: #A43931;
+        }
+
+        .left-headline {
+          position: relative;
+          z-index: 1;
+        }
+
+        .left-headline h2 {
+          font-family: 'Playfair Display', serif;
+          font-size: 3rem;
+          font-weight: 400;
+          color: rgba(255,255,255,0.9);
+          line-height: 1.2;
+          margin-bottom: 1.25rem;
+        }
+
+        .left-headline h2 strong {
+          font-weight: 900;
+          color: #ffffff;
+          font-style: italic;
+        }
+
+        .left-headline p {
+          font-size: 0.875rem;
+          color: rgba(255,255,255,0.4);
+          max-width: 260px;
+          line-height: 1.7;
+        }
+
+        .left-perks {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          margin-top: 3rem;
+        }
+
+        .perk-item {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+        }
+
+        .perk-icon {
+          width: 36px;
+          height: 36px;
+          border-radius: 10px;
+          background: rgba(255,255,255,0.06);
+          border: 1px solid rgba(255,255,255,0.08);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+
+        .perk-icon svg {
+          width: 16px;
+          height: 16px;
+          stroke: rgba(164,57,49,0.9);
+          fill: none;
+          stroke-width: 2;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+
+        .perk-text {
+          font-size: 0.8125rem;
+          color: rgba(255,255,255,0.55);
+          font-weight: 400;
+        }
+
+        .left-footer {
+          position: relative;
+          z-index: 1;
+          font-size: 0.6875rem;
+          color: rgba(255,255,255,0.2);
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+        }
+
+        /* ─── Right Panel ─── */
+        .register-right {
+          flex: 1;
+          background: #f7f5f2;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 3rem 2rem;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .register-right::before {
+          content: '';
+          position: absolute;
+          top: -200px;
+          right: -200px;
+          width: 500px;
+          height: 500px;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(29,67,80,0.04), transparent 70%);
+        }
+
+        .form-card {
+          width: 100%;
+          max-width: 480px;
+          position: relative;
+          z-index: 1;
+        }
+
+        .form-eyebrow {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: #e8e2db;
+          border: 1px solid #ddd8d2;
+          border-radius: 999px;
+          padding: 0.3rem 0.9rem;
+          font-size: 0.7rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: #7a6f66;
+          margin-bottom: 1.5rem;
+        }
+
+        .form-eyebrow-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #A43931;
+        }
+
+        .form-title {
+          font-family: 'Playfair Display', serif;
+          font-size: 2.75rem;
+          font-weight: 900;
+          color: #0e1c22;
+          line-height: 1.1;
+          margin-bottom: 0.5rem;
+        }
+
+        .form-subtitle {
+          font-size: 0.9375rem;
+          color: #8a8480;
+          margin-bottom: 2.25rem;
+          font-weight: 400;
+        }
+
+        /* Error */
+        .error-box {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.6rem;
+          background: #fff0ef;
+          border: 1px solid #f5c6c4;
+          border-radius: 12px;
+          padding: 0.875rem 1rem;
+          margin-bottom: 1.5rem;
+          font-size: 0.875rem;
+          color: #c0392b;
+          font-weight: 500;
+        }
+
+        /* Fields */
+        .field-group {
+          margin-bottom: 1.125rem;
+        }
+
+        .field-label {
+          display: block;
+          font-size: 0.6875rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: #a09890;
+          margin-bottom: 0.5rem;
+          padding-left: 2px;
+        }
+
+        .field-input {
+          width: 100%;
+          padding: 0.9rem 1.1rem;
+          background: #ffffff;
+          border: 1.5px solid #e8e3de;
+          border-radius: 14px;
+          font-size: 0.9375rem;
+          color: #0e1c22;
+          font-family: 'DM Sans', sans-serif;
+          outline: none;
+          transition: border-color 0.2s, box-shadow 0.2s;
+          box-sizing: border-box;
+        }
+
+        .field-input::placeholder {
+          color: #c8c4bf;
+        }
+
+        .field-input:focus {
+          border-color: #1D4350;
+          box-shadow: 0 0 0 4px rgba(29,67,80,0.08);
+        }
+
+        .field-input:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        .two-col {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1rem;
+        }
+
+        .password-wrap {
+          position: relative;
+        }
+
+        .password-wrap .field-input {
+          padding-right: 4.5rem;
+        }
+
+        .show-btn {
+          position: absolute;
+          right: 1rem;
+          top: 50%;
+          transform: translateY(-50%);
+          font-size: 0.65rem;
+          font-weight: 800;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: #1D4350;
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0;
+          opacity: 0.7;
+          transition: opacity 0.15s;
+        }
+
+        .show-btn:hover {
+          opacity: 1;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+          width: 100%;
+          margin-top: 0.75rem;
+          padding: 1.05rem 1.5rem;
+          background: #1D4350;
+          color: #ffffff;
+          font-family: 'DM Sans', sans-serif;
+          font-size: 1rem;
+          font-weight: 700;
+          border: none;
+          border-radius: 14px;
+          cursor: pointer;
+          transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+          box-shadow: 0 4px 24px rgba(29,67,80,0.25);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.6rem;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .submit-btn::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 60%);
+        }
+
+        .submit-btn:hover:not(:disabled) {
+          background: #15323b;
+          box-shadow: 0 6px 32px rgba(29,67,80,0.35);
+          transform: translateY(-1px);
+        }
+
+        .submit-btn:active:not(:disabled) {
+          transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        .btn-arrow {
+          width: 18px;
+          height: 18px;
+          stroke: white;
+          fill: none;
+          stroke-width: 2.5;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+          transition: transform 0.2s;
+        }
+
+        .submit-btn:hover .btn-arrow {
+          transform: translateX(3px);
+        }
+
+        /* Divider */
+        .divider {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin: 1.5rem 0;
+          color: #c8c4bf;
+          font-size: 0.75rem;
+          font-weight: 500;
+        }
+
+        .divider::before,
+        .divider::after {
+          content: '';
+          flex: 1;
+          height: 1px;
+          background: #e8e3de;
+        }
+
+        /* Sign In Link */
+        .signin-row {
+          text-align: center;
+          font-size: 0.875rem;
+          color: #9e9890;
+        }
+
+        .signin-row button {
+          background: none;
+          border: none;
+          cursor: pointer;
+          font-size: 0.875rem;
+          font-weight: 700;
+          color: #1D4350;
+          padding: 0;
+          text-decoration: none;
+          font-family: 'DM Sans', sans-serif;
+          transition: color 0.15s;
+        }
+
+        .signin-row button:hover {
+          color: #A43931;
+          text-decoration: underline;
+        }
+
+        /* Success Overlay */
+        .success-overlay {
+          position: fixed;
+          inset: 0;
+          z-index: 9999;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(14,28,34,0.7);
+          backdrop-filter: blur(12px);
+        }
+
+        .success-card {
+          text-align: center;
+          padding: 3rem 3.5rem;
+          border-radius: 24px;
+          background: #ffffff;
+          box-shadow: 0 32px 80px rgba(0,0,0,0.25);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          animation: successPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes successPop {
+          from { opacity: 0; transform: scale(0.85); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+
+        .success-icon {
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #1D4350, #2a6070);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 1.5rem;
+          box-shadow: 0 8px 32px rgba(29,67,80,0.35);
+        }
+
+        .success-icon svg {
+          width: 36px;
+          height: 36px;
+          stroke: white;
+          fill: none;
+          stroke-width: 2.5;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+
+        .success-card h3 {
+          font-family: 'Playfair Display', serif;
+          font-size: 1.75rem;
+          font-weight: 900;
+          color: #0e1c22;
+          margin-bottom: 0.4rem;
+        }
+
+        .success-card p {
+          font-size: 0.9rem;
+          color: #9e9890;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+          .register-root { flex-direction: column; }
+          .register-left { width: 100%; padding: 2.5rem 2rem; min-height: 260px; }
+          .left-perks { display: none; }
+          .two-col { grid-template-columns: 1fr; gap: 0; }
+        }
+      `}</style>
+
+      {/* Success Overlay */}
+      {showSuccessToast && (
+        <div className="success-overlay">
+          <div className="success-card">
+            <div className="success-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h3>Welcome to Travio!</h3>
+            <p>Account created. Opening login…</p>
+          </div>
+        </div>
+      )}
+
+      <div className="register-root">
+        {/* ── Left Panel ── */}
+        <div className="register-left">
+          <div className="circle-accent" />
+          <div className="deco-dot" style={{ top: "30%", left: "2.5rem" }} />
+          <div className="deco-dot" style={{ top: "60%", right: "3rem", opacity: 0.4 }} />
+
+    
+          <div className="left-headline pt-10">
+            <h2>
+              Explore the<br />
+              world <strong>boldly.</strong>
+            </h2>
+            <p>
+              Create your free account and unlock curated adventures, expert itineraries, and unforgettable experiences.
+            </p>
+
+            <div className="left-perks">
+              {[
+                {
+                  label: "Personalised trip recommendations",
+                  icon: (
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                    </svg>
+                  ),
+                },
+                {
+                  label: "Real-time availability & pricing",
+                  icon: (
+                    <svg viewBox="0 0 24 24">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                      <line x1="16" y1="2" x2="16" y2="6" />
+                      <line x1="8" y1="2" x2="8" y2="6" />
+                      <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                  ),
+                },
+                {
+                  label: "Secure bookings & 24/7 support",
+                  icon: (
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                  ),
+                },
+              ].map(({ label, icon }) => (
+                <div key={label} className="perk-item">
+                  <div className="perk-icon">{icon}</div>
+                  <span className="perk-text">{label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <p className="left-footer">© 2026 Travio Adventures</p>
+        </div>
+
+        {/* ── Right Panel ── */}
+        <div className="register-right">
+          <div className="form-card">
+            <span className="form-eyebrow">
+              <span className="form-eyebrow-dot" />
+              Free to join
+            </span>
+
+            <h1 className="form-title">Create Account</h1>
+            <p className="form-subtitle">Sign up to explore the world.</p>
+
+            {errorMsg && (
+              <div className="error-box">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 1 }}>
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                {errorMsg}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit}>
+              {/* Full Name */}
+              <div className="field-group">
+                <label className="field-label">Full Name</label>
+                <input
+                  type="text"
+                  required
+                  disabled={isLoading}
+                  className="field-input"
+                  placeholder="John Doe"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                />
+              </div>
+
+              {/* Email + Phone */}
+              <div className="two-col">
+                <div className="field-group">
+                  <label className="field-label">Email</label>
+                  <input
+                    type="email"
+                    required
+                    disabled={isLoading}
+                    className="field-input"
+                    placeholder="john@travio.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+                <div className="field-group">
+                  <label className="field-label">Phone</label>
+                  <input
+                    type="tel"
+                    required
+                    disabled={isLoading}
+                    className="field-input"
+                    placeholder="+91 98765 43210"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* Password */}
+              <div className="field-group">
+                <label className="field-label">Password</label>
+                <div className="password-wrap">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    required
+                    disabled={isLoading}
+                    className="field-input"
+                    placeholder="Min. 8 characters"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    className="show-btn"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? "HIDE" : "SHOW"}
+                  </button>
+                </div>
+              </div>
+
+              {/* Submit */}
+              <button type="submit" disabled={isLoading} className="submit-btn">
+                {isLoading ? (
+                  "Creating Account…"
+                ) : (
+                  <>
+                    Create Free Account
+                    <svg className="btn-arrow" viewBox="0 0 24 24">
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                      <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                  </>
+                )}
+              </button>
+            </form>
+
+            <div className="divider">or</div>
+
+            <p className="signin-row">
+              Already have an account?{" "}
+              <button
+                onClick={() => {
+                  closeModal();
+                  router.push("/login");
+                  setTimeout(() => openModal("login"), 100);
+                }}
+              >
+                Sign in
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
