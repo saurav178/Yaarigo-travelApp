@@ -10,3 +10,4 @@ export const APP_ROUTES = {
   VIEW_PACKAGE: "/viewPackage",
   PROFILE: "/profile",
 };
+
