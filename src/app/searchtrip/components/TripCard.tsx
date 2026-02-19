@@ -242,13 +242,13 @@ import {
   FaMoneyBillWave,
   FaFlag,
   FaCheckCircle,
-  FaRobot, // Add this import for chatbot
+  // FaRobot, // Add this import for chatbot
 } from "react-icons/fa";
 import { HiLocationMarker } from "react-icons/hi";
 import { useState } from "react";
 import { ApiTrip } from "../types/types";
 import { useRouter } from "next/navigation";
-import Chatbot from "../chatbot/Chatbot"; // 
+// import Chatbot from "../chatbot/Chatbot"; // 
 
 /* ================= TYPES ================= */
 
@@ -441,22 +441,22 @@ export default function TripCard({ trip }: TripCardProps) {
         </div>
 
         {/* 🤖 CHATBOT TOGGLE BUTTON - ADDED ABOVE BUTTON SECTION */}
-        <div className="mb-3">
+        {/* <div className="mb-3">
           <button
             onClick={() => setShowChatbot(!showChatbot)}
             className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg transition-colors text-sm font-medium border border-blue-200"
           >
             <FaRobot className="w-4 h-4" />
             {showChatbot ? "Hide Chat Assistant" : "Ask Trip Assistant"}
-          </button>
+          </button> */}
           
           {/* Chatbot Component - appears when showChatbot is true */}
-          {showChatbot && (
+          {/* {showChatbot && (
             <div className="mt-3">
               <Chatbot />
             </div>
           )}
-        </div>
+        </div> */}
 
         {/* BUTTON SECTION - ORIGINAL BUTTONS (unchanged) */}
         <div className="grid grid-cols-3 gap-2 mt-auto">

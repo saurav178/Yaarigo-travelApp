@@ -175,7 +175,7 @@ import CombinedContent from "./components/CombinedContent";
 import { useCombinedFilters } from "./hooks/useCombinedFilters";
 import { useSearchData } from "./hooks/useSearchData";
 import stringify from "fast-json-stable-stringify";
-import Loader from "@/components/Loader/Loader";
+// import Loader from "@/components/Loader/Loader";
 import { ApiTrip } from "./types/types";
 
 export default function SearchTripPage() {
@@ -289,13 +289,13 @@ export default function SearchTripPage() {
     hasFetched && !loading && trips.length === 0 && packages.length === 0;
 
   // 🔥 Show loader AFTER all hooks, but before the main return
-  if (showLoader) {
-    return (
-      <div className="w-full h-screen flex items-center justify-center bg-white">
-        <Loader />
-      </div>
-    );
-  }
+  // if (showLoader) {
+  //   return (
+  //     <div className="w-full h-screen flex items-center justify-center bg-white">
+  //       <Loader />
+  //     </div>
+  //   );
+  // }
 
   /* ----------------------------------
      8️⃣ UI
