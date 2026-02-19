@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { ApiPackage } from "../types/types";
+import { APP_ROUTES } from "@/utils/constants";
 type PackageCardProps = {
   pkg: ApiPackage;
 };
@@ -55,7 +56,7 @@ export default function PackageCard({ pkg }: PackageCardProps) {
     "General";
 
   return (
-    <Link href={`/packages/${pkg.slug}`}>
+    <Link href={`${APP_ROUTES.VIEW_PACKAGE}?packageId=${pkg._id}`}>
       <div className="bg-white shadow-md transition-all duration-300 overflow-hidden group w-80 cursor-pointer border border-[#e1e1e1]">
         {/* IMAGE */}
         <div className="relative h-35">

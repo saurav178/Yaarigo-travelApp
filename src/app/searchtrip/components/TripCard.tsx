@@ -13,6 +13,7 @@ import { HiLocationMarker } from "react-icons/hi";
 import { useState } from "react";
 import { ApiTrip } from "../types/types";
 import { useRouter } from "next/navigation";
+import { APP_ROUTES } from "@/utils/constants";
 
 /* ================= TYPES ================= */
 
@@ -216,7 +217,7 @@ export default function TripCard({ trip }: TripCardProps) {
             Join Trip
           </button>
           <button
-            onClick={() => router.push("/profile")}
+            onClick={() => router.push(APP_ROUTES.PROFILE)}
             className="py-2 text-white text-xs font-semibold cursor-pointer"
             style={{ backgroundColor: "#276074" }}
           >
