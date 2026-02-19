@@ -203,7 +203,7 @@ export type ApiTrip = {
   videos: string[];
 
   seoKeywords: string[];
-  ogImage: string;
+  // ogImage: string;
   coverImage: string;
   seoTitle: string;
   seoDescription: string;

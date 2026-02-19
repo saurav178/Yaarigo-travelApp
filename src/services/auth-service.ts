@@ -160,6 +160,19 @@ export const authService = {
     }
   },
 
+  //switch org context 
+
+ async switchContext(orgId: string) {
+  const res = await apiClient.post(
+    `${AUTH_API}/auth/switch-context`,
+    { orgId }
+  );
+
+  return res.data;
+},
+
+
+
   // Helper function to keep code DRY
   handleError(error: unknown, defaultMessage: string): never {
     if (axios.isAxiosError(error)) {
