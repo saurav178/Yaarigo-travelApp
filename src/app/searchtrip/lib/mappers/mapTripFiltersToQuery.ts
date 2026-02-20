@@ -16,7 +16,7 @@ export const mapTripFiltersToQuery = (filters: TripFilterPayload) => {
   // FIX: Send languages as array format
  if (filters.languages?.length) {
   filters.languages.forEach(lang => {
-    query.append('languages', lang); // Creates languages=Spanish&languages=Hindi
+    query.append('languages', lang);
   });
 }
   

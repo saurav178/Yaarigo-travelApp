@@ -2,13 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import {
-  MapPin,
-  Heart,
-  Users,
-  Star,
-  Clock,
-} from "lucide-react";
+import { MapPin, Heart, Users, Star, Clock } from "lucide-react";
 import { useState } from "react";
 import { ApiPackage } from "../types/types";
 import { APP_ROUTES } from "@/utils/constants";
@@ -38,22 +32,27 @@ export default function PackageCard({ pkg }: PackageCardProps) {
   const from = pkg.fromLocation;
   const to = pkg.toLocation;
 
+  // const originalPrice = plan.pricePerPerson;
+  // const discountedPrice = plan.discountedPrice ?? originalPrice;
+
+  // const discount =
+  //   originalPrice > discountedPrice
+  //     ? Math.round(((originalPrice - discountedPrice) / originalPrice) * 100)
+  //     : 0;
+
   const originalPrice = plan.pricePerPerson;
-  const discountedPrice = plan.discountedPrice ?? originalPrice;
+  const discountAmount = plan.discountedPrice ?? 0;
+
+  const finalPrice =
+    discountAmount > 0 ? originalPrice - discountAmount : originalPrice;
 
   const discount =
-    originalPrice > discountedPrice
-      ? Math.round(((originalPrice - discountedPrice) / originalPrice) * 100)
-      : 0;
+    discountAmount > 0 ? Math.round((discountAmount / originalPrice) * 100) : 0;
 
-  const currencySymbol =
-    plan.currency === "INR" ? "₹" : plan.currency;
+  const currencySymbol = plan.currency === "INR" ? "₹" : plan.currency;
 
   const category =
-    pkg.categories?.[0] ||
-    pkg.tripStyles?.[0] ||
-    plan.category ||
-    "General";
+    pkg.categories?.[0] || pkg.tripStyles?.[0] || plan.category || "General";
 
   return (
     <Link href={`${APP_ROUTES.VIEW_PACKAGE}?packageId=${pkg._id}`}>
@@ -80,9 +79,7 @@ export default function PackageCard({ pkg }: PackageCardProps) {
           >
             <Heart
               className={`w-4 h-4 ${
-                isFavorite
-                  ? "fill-red-500 text-red-500"
-                  : "text-gray-600"
+                isFavorite ? "fill-red-500 text-red-500" : "text-gray-600"
               }`}
             />
           </button>
@@ -96,16 +93,12 @@ export default function PackageCard({ pkg }: PackageCardProps) {
         {/* CONTENT */}
         <div className="p-3">
           {/* TITLE */}
-          <h3 className="font-bold text-base line-clamp-1 mb-1">
-            {title}
-          </h3>
+          <h3 className="font-bold text-base line-clamp-1 mb-1">{title}</h3>
 
           {/* RATING */}
           <div className="flex items-center gap-1 mb-2">
             <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
-            <span className="text-xs font-semibold">
-              {STATIC_RATING}
-            </span>
+            <span className="text-xs font-semibold">{STATIC_RATING}</span>
             <span className="text-xs text-gray-500">
               ({STATIC_REVIEWS} reviews)
             </span>
@@ -133,7 +126,7 @@ export default function PackageCard({ pkg }: PackageCardProps) {
           </div>
 
           {/* PRICE */}
-          <div className="mb-3">
+          {/* <div className="mb-3">
             <p className="text-xs text-gray-500">Starting from</p>
 
             <div className="flex items-center gap-2">
@@ -151,6 +144,34 @@ export default function PackageCard({ pkg }: PackageCardProps) {
             </div>
 
             <p className="text-xs text-gray-500">per person</p>
+          </div> */}
+
+          {/* PRICE */}
+          <div className="mb-3">
+            <p className="text-xs text-gray-500">Starting from</p>
+
+            <div className="flex items-end gap-3">
+              {discountAmount > 0 && (
+                <span className="text-sm line-through text-gray-400">
+                  {currencySymbol}
+                  {originalPrice.toLocaleString()}
+                </span>
+              )}
+
+              <span className="text-xl font-bold text-[#1d4350]">
+                {currencySymbol}
+                {finalPrice.toLocaleString()}
+              </span>
+            </div>
+
+            {discountAmount > 0 && (
+              <p className="text-xs font-semibold text-green-600 mt-1">
+                You save {currencySymbol}
+                {discountAmount.toLocaleString()} ({discount}% OFF)
+              </p>
+            )}
+
+            <p className="text-xs text-gray-500 mt-1">per person</p>
           </div>
 
           {/* CTA */}
@@ -162,9 +183,6 @@ export default function PackageCard({ pkg }: PackageCardProps) {
     </Link>
   );
 }
-
-
-
 
 // "use client";
 
