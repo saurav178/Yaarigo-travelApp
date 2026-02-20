@@ -206,6 +206,7 @@ function ViewPackageContent() {
               addOnsData={ADD_ONS}
               isFavorite={isFavorite}
               setIsFavorite={setIsFavorite}
+              travellers={travellers}
             />
           </div>
         </div>

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Users, XCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { Traveller } from "../types";
@@ -21,6 +22,50 @@ export default function TravellersSection({
   setCurrentTraveller,
   handleAddTraveller,
 }: TravellersSectionProps) {
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (!isTravellerModalOpen) {
+      setErrors({});
+    }
+  }, [isTravellerModalOpen]);
+
+  const handleSave = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!currentTraveller.name?.trim()) {
+      newErrors.name = "Name is required";
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!currentTraveller.email?.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!emailRegex.test(currentTraveller.email)) {
+      newErrors.email = "Invalid email format";
+    }
+
+    const phoneRegex = /^\d{10}$/;
+    if (!currentTraveller.contact?.trim()) {
+      newErrors.contact = "Contact is required";
+    } else if (!phoneRegex.test(currentTraveller.contact)) {
+      newErrors.contact = "Enter valid 10-digit number";
+    }
+
+    if (!currentTraveller.gender) newErrors.gender = "Gender is required";
+
+    if (!currentTraveller.age) {
+      newErrors.age = "Age is required";
+    } else if (Number(currentTraveller.age) <= 0 || Number(currentTraveller.age) > 120) {
+      newErrors.age = "Invalid age";
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      handleAddTraveller();
+    }
+  };
+
   return (
     <motion.div
       className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100"
@@ -53,6 +98,7 @@ export default function TravellersSection({
                 className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#276074] outline-none"
                 placeholder="Name"
               />
+              {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
@@ -63,6 +109,7 @@ export default function TravellersSection({
                 className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#276074] outline-none"
                 placeholder="Email"
               />
+              {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Contact</label>
@@ -73,6 +120,7 @@ export default function TravellersSection({
                 className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#276074] outline-none"
                 placeholder="Phone"
               />
+              {errors.contact && <p className="text-xs text-red-500 mt-1">{errors.contact}</p>}
             </div>
             <div className="flex gap-4">
               <div className="w-1/2">
@@ -87,6 +135,7 @@ export default function TravellersSection({
                   <option value="Female">Female</option>
                   <option value="Other">Other</option>
                 </select>
+                {errors.gender && <p className="text-xs text-red-500 mt-1">{errors.gender}</p>}
               </div>
               <div className="w-1/2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Age</label>
@@ -97,6 +146,7 @@ export default function TravellersSection({
                   className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#276074] outline-none"
                   placeholder="Age"
                 />
+                {errors.age && <p className="text-xs text-red-500 mt-1">{errors.age}</p>}
               </div>
             </div>
           </div>
@@ -108,7 +158,7 @@ export default function TravellersSection({
               Cancel
             </button>
             <button
-              onClick={handleAddTraveller}
+              onClick={handleSave}
               className="px-6 py-2 bg-[#276074] text-white font-semibold rounded-lg hover:opacity-90 transition-opacity shadow-md"
             >
               Save Traveller

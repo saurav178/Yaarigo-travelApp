@@ -1,6 +1,7 @@
 import { Calendar, Heart, Share2, Users } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Package, Plan, StaticAddOn } from "../types";
+import { Package, Plan, StaticAddOn, Traveller } from "../types";
 
 interface BookingCardProps {
   pkg: Package;
@@ -10,6 +11,7 @@ interface BookingCardProps {
   addOnsData: StaticAddOn[];
   isFavorite: boolean;
   setIsFavorite: (isFavorite: boolean) => void;
+  travellers: Traveller[];
 }
 
 export default function BookingCard({
@@ -20,7 +22,9 @@ export default function BookingCard({
   addOnsData,
   isFavorite,
   setIsFavorite,
+  travellers,
 }: BookingCardProps) {
+  const router = useRouter();
   const currencySymbol =
     selectedPlan?.currency === "INR" ? "₹" : selectedPlan?.currency || "₹";
   const originalPrice = selectedPlan?.pricePerPerson || 0;
@@ -37,6 +41,50 @@ export default function BookingCard({
   const GST_RATE = 0.18;
   const gstAmount = Math.round((discountedPrice + addOnsTotal) * GST_RATE);
   const finalTotal = discountedPrice + addOnsTotal + gstAmount;
+
+  const handleBookNow = () => {
+    if (!selectedPlan) return;
+
+    const params = new URLSearchParams();
+    params.set("packageTitle", pkg.title);
+    params.set("packageId", pkg._id || "");
+    params.set("planName", selectedPlan.name);
+    params.set("planPrice", selectedPlan.discountedPrice.toString());
+    params.set("currency", selectedPlan.currency || "INR");
+    
+    if (pkg.fromLocation) params.set("fromLocation", pkg.fromLocation.city || "");
+    if (pkg.toLocation) params.set("toLocation", pkg.toLocation.city || "");
+    params.set("totalDays", pkg.totalDays?.toString() || "0");
+    params.set("totalNights", pkg.totalNights?.toString() || "0");
+
+    const selectedAddOnsDetails = addOnsData.filter((addon) =>
+      selectedAddOns.includes(addon.id),
+    );
+    params.set("addOnsData", JSON.stringify(selectedAddOnsDetails));
+
+    if (travellers && travellers.length > 0) {
+      params.set("travellersData", JSON.stringify(travellers));
+    }
+
+    if (pkg.itineraryTemplate) {
+      params.set("itineraryData", JSON.stringify(pkg.itineraryTemplate));
+    }
+
+    if (selectedPlan.cancellationPolicy) {
+      params.set("cancellationPolicy", JSON.stringify(selectedPlan.cancellationPolicy));
+    }
+
+    const planData = {
+      name: selectedPlan.name,
+      category: selectedPlan.category,
+      description: selectedPlan.description,
+      inclusions: selectedPlan.inclusions,
+      exclusions: selectedPlan.exclusions,
+    };
+    params.set("planData", JSON.stringify(planData));
+
+    router.push(`/bookPackage?${params.toString()}`);
+  };
 
   return (
     <motion.div
@@ -102,9 +150,8 @@ export default function BookingCard({
         </span>
       </div>
 
-      {/* Add-ons Breakdown */}
-      {selectedAddOns.length > 0 && (
-        <div className="mb-4 pt-3 border-t border-dashed border-gray-200">
+      {/* Price Breakdown */}
+      <div className="mb-4 pt-3 border-t border-dashed border-gray-200">
           <div className="text-base font-bold text-gray-800 mb-3">
             Price Breakdown
           </div>
@@ -151,7 +198,6 @@ export default function BookingCard({
             </div>
           </div>
         </div>
-      )}
 
       {/* Slots Available */}
       <div className="flex items-center gap-2 mb-4 p-3 bg-blue-50 rounded-lg">
@@ -178,7 +224,10 @@ export default function BookingCard({
 
       {/* CTA Buttons */}
       <div className="space-y-3">
-        <button className="w-full py-3 px-4 bg-[#276074] text-white font-semibold rounded-lg hover:opacity-90 transition-opacity">
+        <button
+          onClick={handleBookNow}
+          className="w-full py-3 px-4 bg-[#276074] text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
+        >
           Book Now
         </button>
         <button className="w-full py-3 px-4 border-2 border-[#276074] text-[#276074] font-semibold rounded-lg hover:bg-[#276074] hover:text-white transition-colors">
