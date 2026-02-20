@@ -7,19 +7,6 @@ import TripLeader from "./TripLeader";
 import DetailedItinerary from "../triphighlight/DetailedItinerary";
 import TripHighlights from "../triphighlight/TripHighlights";
 
-// --- FIX: Define props interfaces ---
-interface TripProps {
-  trip: any;
-}
-
-interface LeaderProps {
-  leader: any;
-}
-
-interface ItineraryProps {
-  itinerary: any;
-}
-
 export default function TripDetailsPage() {
   const searchParams = useSearchParams();
   const tripId = searchParams.get("id"); // /TripViewDetails?id=101
@@ -33,17 +20,21 @@ export default function TripDetailsPage() {
 
     const fetchTripData = async () => {
       try {
-        const tripRes = await fetch(`https://api.dev.yaarigo.com/tpm-service/api/public/trips/69724330a38467c85cf1f531`);
+        const tripRes = await fetch(
+          `https://api.dev.yaarigo.com/tpm-service/api/public/trips/${tripId}`
+        );
         const tripJson = await tripRes.json();
         setTripData(tripJson);
 
-        const leaderRes = await fetch(`https://api.dev.yaarigo.com/tpm-service/api/public/leaders/${tripJson.leaderId}`);
+        const leaderRes = await fetch(
+          `https://api.dev.yaarigo.com/tpm-service/api/public/leaders/${tripJson.leaderId}`
+        );
         const leaderJson = await leaderRes.json();
         setLeaderData(leaderJson);
-
       } catch (err) {
         console.error("Error fetching trip or leader data:", err);
-        // fallback to dummy data
+
+        // Fallback dummy data (updated for TripLeader fields)
         setTripData({
           tripId: 101,
           title: "Trip Overview",
@@ -63,18 +54,37 @@ export default function TripDetailsPage() {
           lookingFor: "Any",
           foodPreference: "Veg",
           itinerary: [
-            { location: "Panaji", activities: ["Arrival & hotel check-in", "Evening beach walk", "Dinner by the sea"] },
-            { location: "Baga Beach", activities: ["Water sports", "Shopping", "Beach shack lunch"] },
-            { location: "Old Goa", activities: ["Visit Basilica of Bom Jesus", "Explore old churches", "Local market stroll"] },
+            {
+              location: "Panaji",
+              activities: [
+                "Arrival & hotel check-in",
+                "Evening beach walk",
+                "Dinner by the sea",
+              ],
+            },
+            {
+              location: "Baga Beach",
+              activities: ["Water sports", "Shopping", "Beach shack lunch"],
+            },
+            {
+              location: "Old Goa",
+              activities: [
+                "Visit Basilica of Bom Jesus",
+                "Explore old churches",
+                "Local market stroll",
+              ],
+            },
           ],
         });
+
         setLeaderData({
           leaderId: 1001,
-          name: "Courtney Henry",
+          fullName: "Courtney Henry",
           rating: 4.8,
-          reviewsCount: 56,
-          bio: "Adventurous, social and culture lover! Enjoys exploring off-beat destinations.",
-          photoUrl: "https://randomuser.me/api/portraits/women/68.jpg",
+          reviews: 56,
+          description:
+            "Adventurous, social and culture lover! Enjoys exploring off-beat destinations.",
+          photo: "https://randomuser.me/api/portraits/women/68.jpg",
         });
       } finally {
         setLoading(false);
@@ -84,7 +94,8 @@ export default function TripDetailsPage() {
     fetchTripData();
   }, [tripId]);
 
-  if (loading) return <div className="p-10 text-center">Loading trip details...</div>;
+  if (loading)
+    return <div className="p-10 text-center">Loading trip details...</div>;
 
   return (
     <div className="bg-gray-50 min-h-screen p-10">
@@ -92,8 +103,8 @@ export default function TripDetailsPage() {
         {/* Left Section */}
         <div className="lg:col-span-2 space-y-6">
           <TripOverview trip={tripData} />
-          <TripHighlights tripId={tripData} />
-          <DetailedItinerary itinerary={tripData.itinerary} />
+          <TripHighlights tripId={tripData?.tripId} />
+          <DetailedItinerary itinerary={tripData?.itinerary || []} />
         </div>
 
         {/* Right Section */}

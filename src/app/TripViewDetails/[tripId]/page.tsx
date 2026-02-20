@@ -7,9 +7,7 @@ import HeroSection from "../HeroSection";
 import TripOverview from "../TripDetails/TripOverview";
 import TripActions from "../TripDetails/TripActions";
 import TripLeader from "../TripDetails/TripLeader";
-
 import DetailedItinerary from "../triphighlight/DetailedItinerary";
-import TripHighlights from "../triphighlight/TripHighlights";
 import TripRoadmap from "../triphighlight/TripRoadmap";
 import JoinedTravelers from "../triphighlight/JoinedTravelers";
 import SafetyInformation from "../triphighlight/SafetyInformation";
@@ -50,10 +48,7 @@ export default function TripDetailsPage() {
         setTripData(trip);
 
         if (trip?.leaderId) {
-          const leaderRes = await fetch(
-            `${BASE_URL}/leaders/${trip.leaderId}`
-          );
-
+          const leaderRes = await fetch(`${BASE_URL}/leaders/${trip.leaderId}`);
           if (leaderRes.ok) {
             const leaderJson = await leaderRes.json();
             setLeaderData(leaderJson?.data || leaderJson);
@@ -61,15 +56,13 @@ export default function TripDetailsPage() {
         }
       } catch (error) {
         console.error("API failed. Using fallback.", error);
-
-        // Fallback
+        // Fallback data
         setTripData({
           title: "Goa Beach Adventure",
           description: "Relax and explore Goa.",
           from: "Mumbai",
           itinerary: [],
         });
-
         setLeaderData({
           name: "Courtney Henry",
           rating: 4.8,
@@ -100,37 +93,38 @@ export default function TripDetailsPage() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <HeroSection />
+      <HeroSection trip={tripData} />
 
       <div className="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        {/* LEFT SIDE */}
+        {/* LEFT COLUMN */}
         <div className="lg:col-span-2 space-y-6">
-
           <TripOverview trip={tripData} />
 
-          {tripId && <TripHighlights tripId={tripId} />}
+          {/* Itinerary & Roadmap Side by Side */}
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="md:w-1/2">
+              <DetailedItinerary itinerary={tripData?.itinerary || []} />
+            </div>
+            <div className="md:w-1/2">
+              <TripRoadmap itinerary={tripData?.itinerary || []} />
+            </div>
+          </div>
 
-          <DetailedItinerary itinerary={tripData?.itinerary || []} />
-
-          <TripRoadmap itinerary={tripData?.itinerary || []} />
-
-          <JoinedTravelers />
-
-          <SafetyInformation />
-
-          <CancellationPolicy />
-
-          <ShareThisTrip />
-
+          {/* Safety and Cancellation */}
+          <SafetyInformation trip={tripData} />
+          <CancellationPolicy trip={tripData} />
         </div>
 
-        {/* RIGHT SIDE */}
+        {/* RIGHT COLUMN */}
         <div className="flex flex-col gap-6">
           <TripActions trip={tripData} />
           {leaderData && <TripLeader leader={leaderData} />}
-        </div>
 
+          <div className="space-y-6">
+            <JoinedTravelers tripId={tripId!} />
+            <ShareThisTrip trip={tripData} />
+          </div>
+        </div>
       </div>
     </div>
   );

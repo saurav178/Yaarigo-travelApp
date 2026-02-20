@@ -2,11 +2,12 @@
 import Image from "next/image";
 
 interface Leader {
-  photoUrl: string;
-  name: string;
-  rating: number;
-  reviewsCount: number;
-  bio: string;
+  photo?: string;          // updated field name based on payload
+  fullName: string;
+  rating?: number;
+  reviews?: number;
+  description?: string;
+  contact?: string;        // optional extra field if payload has it
 }
 
 interface LeaderProps {
@@ -20,21 +21,25 @@ export default function TripLeader({ leader }: LeaderProps) {
 
       <div className="flex items-center gap-3 mb-3">
         <Image
-          src={leader.photoUrl}
-          alt={leader.name}
+          src={leader.photo || "/default-profile.png"} // fallback image
+          alt={leader.fullName}
           width={48}
           height={48}
           className="rounded-full object-cover"
         />
         <div>
-          <p className="font-medium">{leader.name}</p>
-          <p className="text-sm text-gray-500">
-            ⭐ {leader.rating} ({leader.reviewsCount} reviews)
-          </p>
+          <p className="font-medium">{leader.fullName}</p>
+          {leader.rating !== undefined && leader.reviews !== undefined && (
+            <p className="text-sm text-gray-500">
+              ⭐ {leader.rating.toFixed(1)} ({leader.reviews} reviews)
+            </p>
+          )}
         </div>
       </div>
 
-      <p className="text-sm text-gray-600">{leader.bio}</p>
+      <p className="text-sm text-gray-600">
+        {leader.description || "No bio available."}
+      </p>
     </div>
   );
 }
