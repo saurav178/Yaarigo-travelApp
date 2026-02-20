@@ -10,6 +10,7 @@ export const ROUTES = {
   PROFILESETUP : "/profilesetup",
   DASHBOARD : "/dashboard",
   USERPROFILE : "/userProfile",
-  COMMUNITY_PAGE : "/community"
+  COMMUNITY_PAGE : "/community",
+   TRIP_DETAILS_WITH_ID: (tripId: string) => `/TripViewDetails/${tripId}`,
 
 };

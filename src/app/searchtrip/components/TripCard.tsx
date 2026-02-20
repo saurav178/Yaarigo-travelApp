@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link"; 
 import {
   FaHeart,
   FaMapMarkerAlt,
@@ -13,6 +14,7 @@ import { HiLocationMarker } from "react-icons/hi";
 import { useState } from "react";
 import { ApiTrip } from "../types/types";
 import { useRouter } from "next/navigation";
+import { ROUTES } from "@/lib/routes";
 
 /* ================= TYPES ================= */
 
@@ -77,7 +79,7 @@ export default function TripCard({ trip }: TripCardProps) {
   return (
     <div className="bg-white shadow-sm transition-all duration-300 overflow-hidden flex border border-[#e1e1e1]">
       {/* Image Section */}
-      <div className="relative w-80 h-66 bg-gradient-to-br from-teal-400 to-blue-500 flex-shrink-0">
+      <div className="relative w-80 h-66 bg-linear-to-br from-teal-400 to-blue-500 shrink-0">
         <Image
           src={imageUrl}
           alt={title}
@@ -203,12 +205,14 @@ export default function TripCard({ trip }: TripCardProps) {
         </div>
 
         <div className="grid grid-cols-3 gap-2 mt-auto">
-          <button
-            className="py-2 text-white text-xs font-semibold"
-            style={{ backgroundColor: "#276074" }}
-          >
-            View Trip
-          </button>
+     <Link href={ROUTES.TRIP_DETAILS_WITH_ID(trip._id)}>
+  <button
+    className="py-2 text-white text-xs font-semibold w-full"
+    style={{ backgroundColor: "#276074" }}
+  >
+    View Trip
+  </button>
+</Link>
           <button
             className="py-2 text-white text-xs font-semibold"
             style={{ backgroundColor: "#276074" }}

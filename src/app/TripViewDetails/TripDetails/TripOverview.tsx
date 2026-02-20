@@ -1,97 +1,73 @@
 "use client";
-import Image from "next/image";
 
 import {
   CalendarDays,
   Wallet,
+  Users,
+  Users2,
   Car,
   Globe,
+  Handshake,
+  Utensils,
+  Clock,
 } from "lucide-react";
 
-interface Trip {
-  title: string;
-  description: string;
-  from: string;
-  startDate: string;
-  endDate: string;
-  budget: number;
-  joinedTravelers: number;
-  maxTravelers: number;
-  groupSize: string;
-  tripStyle: string;
-  travelStyle: string;
-  duration: string;
-  languages: string[];
-  splitCost: boolean;
-  lookingFor: string;
-  foodPreference: string;
-}
-
 interface TripProps {
-  trip: Trip;
+  trip: any;
 }
 
 export default function TripOverview({ trip }: TripProps) {
+  // Set safe defaults for optional fields
+  const languages = trip.languages || [];
+  const groupSize = trip.groupSize || "N/A";
+  const tripStyle = trip.tripStyle || "N/A";
+  const travelStyle = trip.travelStyle || "N/A";
+  const duration = trip.duration || "N/A";
+  const splitCost = trip.splitCost ?? false;
+  const lookingFor = trip.lookingFor || "N/A";
+  const foodPreference = trip.foodPreference || "N/A";
+
   return (
     <div className="p-6 bg-white w-full shadow-lg hover:shadow-2xl transition-all duration-300">
       {/* Title & Description */}
-      <h2 className="text-lg font-semibold mb-2">{trip.title}</h2>
-      <p className="text-sm text-gray-600 mb-6">{trip.description}</p>
+      <h2 className="text-lg font-semibold mb-2">{trip.title || "Trip Title"}</h2>
+      <p className="text-sm text-gray-600 mb-6">{trip.description || "Trip description not available."}</p>
 
+      {/* Top Section */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6 text-sm justify-center">
-        <div className="bg-gray-100 p-3 flex flex-col justify-between max-w-[180px] mx-auto">
+        <div className="bg-gray-100 p-3 flex flex-col justify-between max-w-45 mx-auto">
           <div className="flex items-center gap-2 text-black">
-            <Image
-              src="/icon/ic_baseline-route.png"
-              alt="route icon"
-              width={20}
-              height={20}
-              className="w-5 h-5 object-contain"
-            />
+            <img src="/icon/ic_baseline-route.png" alt="route icon" className="w-5 h-5 object-contain" />
             <p className="text-gray-700 font-semibold">Route</p>
           </div>
-          <p className="font-medium mt-2 text-gray-800">{trip.from}</p>
+          <p className="font-medium mt-2 text-gray-800">{trip.from || "N/A"}</p>
         </div>
 
-        <div className="bg-gray-100 p-3 flex flex-col justify-between max-w-[180px] mx-auto">
+        <div className="bg-gray-100 p-3 flex flex-col justify-between max-w-45 mx-auto">
           <div className="flex items-center gap-2 text-black">
             <CalendarDays size={18} strokeWidth={2.5} />
             <p className="text-gray-700 font-semibold">Dates</p>
           </div>
           <p className="font-medium mt-2 text-gray-800">
-            {trip.startDate} - {trip.endDate}
+            {trip.startDate || "N/A"} - {trip.endDate || "N/A"}
           </p>
         </div>
 
-        <div className="bg-gray-100 p-3 flex flex-col justify-between max-w-[180px] mx-auto">
+        <div className="bg-gray-100 p-3 flex flex-col justify-between max-w-45 mx-auto">
           <div className="flex items-center gap-2 text-black">
-            <Image
-              src="/icon/iconoir_wallet-solid.png"
-              alt="budget icon"
-              width={20}
-              height={20}
-              className="w-5 h-5 object-contain"
-            />
+            <img src="/icon/iconoir_wallet-solid.png" alt="budget icon" className="w-5 h-5 object-contain" />
             <p className="text-gray-700 font-semibold">Budget</p>
           </div>
-          <p className="font-medium mt-2 text-gray-800">
-            ₹{trip.budget} / person
-          </p>
+          <p className="font-medium mt-2 text-gray-800">₹{trip.budget ?? "N/A"} / person</p>
         </div>
 
-        <div className="bg-gray-100 p-3 flex flex-col justify-between shadow-sm max-w-[180px] mx-auto">
+        <div className="bg-gray-100 p-3 flex flex-col justify-between shadow-sm max-w-45 mx-auto">
           <div className="flex items-center gap-2 text-black">
-            <Image
-              src="/icon/ix_user-management-filled.png"
-              alt="travelers icon"
-              width={20}
-              height={20}
-              className="w-5 h-5 object-contain"
-            />
+            <img src="/icon/ix_user-management-filled.png" alt="travelers icon" className="w-5 h-5 object-contain" />
             <p className="text-gray-700 font-semibold">Travelers</p>
           </div>
           <p className="font-medium mt-2 text-gray-800">
-            {trip.joinedTravelers} / {trip.maxTravelers} joined
+            {trip.joinedTravelers ?? 0} / {trip.maxTravelers ?? 0} joined
           </p>
         </div>
       </div>
@@ -99,16 +75,10 @@ export default function TripOverview({ trip }: TripProps) {
       {/* Bottom Section Info */}
       <div className="grid grid-cols-2 gap-6 text-sm ml-10">
         <div className="flex items-start gap-3">
-          <Image
-            src="/icon/ix_user-management-filled.png"
-            alt="group size"
-            width={20}
-            height={20}            
-            className="w-5 h-5 object-contain"
-          />
+          <img src="/icon/ix_user-management-filled.png" alt="travelers icon" className="w-5 h-5 object-contain" />
           <div>
             <p className="text-gray-500">Group Size</p>
-            <p className="font-semibold">{trip.groupSize}</p>
+            <p className="font-semibold">{groupSize}</p>
           </div>
         </div>
 
@@ -116,21 +86,15 @@ export default function TripOverview({ trip }: TripProps) {
           <Car size={18} strokeWidth={2.5} />
           <div>
             <p className="text-gray-500">Trip Style</p>
-            <p className="font-semibold">{trip.tripStyle}</p>
+            <p className="font-semibold">{tripStyle}</p>
           </div>
         </div>
 
         <div className="flex items-start gap-3">
-          <Image
-            src="/icon/ix_car-filled.png"
-            alt="travel style"
-            width={20}
-            height={20}
-            className="w-5 h-5 object-contain"
-          />
+          <img src="/icon/ix_car-filled.png" alt="travelers icon" className="w-5 h-5 object-contain" />
           <div>
             <p className="text-gray-500">Travel Style</p>
-            <p className="font-semibold">{trip.travelStyle}</p>
+            <p className="font-semibold">{travelStyle}</p>
           </div>
         </div>
 
@@ -138,7 +102,7 @@ export default function TripOverview({ trip }: TripProps) {
           <CalendarDays size={18} strokeWidth={2.5} />
           <div>
             <p className="text-gray-500">Duration</p>
-            <p className="font-semibold">{trip.duration}</p>
+            <p className="font-semibold">{duration}</p>
           </div>
         </div>
 
@@ -146,7 +110,7 @@ export default function TripOverview({ trip }: TripProps) {
           <Globe size={18} strokeWidth={2.5} />
           <div>
             <p className="text-gray-500">Language</p>
-            <p className="font-semibold">{trip.languages.join(", ")}</p>
+            <p className="font-semibold">{languages.length > 0 ? languages.join(", ") : "N/A"}</p>
           </div>
         </div>
 
@@ -154,35 +118,23 @@ export default function TripOverview({ trip }: TripProps) {
           <Wallet size={18} strokeWidth={2.5} />
           <div>
             <p className="text-gray-500">Split Costs</p>
-            <p className="font-semibold">{trip.splitCost ? "Yes" : "No"}</p>
+            <p className="font-semibold">{splitCost ? "Yes" : "No"}</p>
           </div>
         </div>
 
         <div className="flex items-start gap-3">
-          <Image
-            src="/icon/ic_baseline-transgender.png"
-            alt="looking for"
-            width={20}
-            height={20}
-            className="w-5 h-5 object-contain"
-          />
+          <img src="/icon/ic_baseline-transgender.png" alt="travelers icon" className="w-5 h-5 object-contain" />
           <div>
             <p className="text-gray-500">Looking For</p>
-            <p className="font-semibold">{trip.lookingFor}</p>
+            <p className="font-semibold">{lookingFor}</p>
           </div>
         </div>
 
         <div className="flex items-start gap-3">
-          <Image
-            src="/icon/ic_baseline-no-meals.png"
-            alt="food preference"
-            width={20}
-            height={20}
-            className="w-5 h-5 object-contain"
-          />
+          <img src="/icon/ic_baseline-no-meals.png" alt="travelers icon" className="w-5 h-5 object-contain" />
           <div>
             <p className="text-gray-500">Food Preference</p>
-            <p className="font-semibold">{trip.foodPreference}</p>
+            <p className="font-semibold">{foodPreference}</p>
           </div>
         </div>
       </div>
