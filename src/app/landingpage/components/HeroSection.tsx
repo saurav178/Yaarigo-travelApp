@@ -483,16 +483,12 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { DayPicker } from "react-day-picker";
-import "react-day-picker/dist/style.css";
-import { format } from "date-fns";
 
 export default function HeroSection() {
   const [toCity, setToCity] = useState("");
   const [toSuggestions, setToSuggestions] = useState<CityOption[]>([]);
   const [showToDropdown, setShowToDropdown] = useState(false);
   // const [selectedDate, setSelectedDate] = useState<Date | undefined>();
-  const [showCalendar, setShowCalendar] = useState(false);
 
   // AbortController refs for canceling previous requests
   const toAbortControllerRef = useRef<AbortController | null>(null);
@@ -577,9 +573,6 @@ export default function HeroSection() {
 
       if (!target.closest("#toWrapper")) {
         setShowToDropdown(false);
-      }
-      if (!target.closest("#dateWrapper")) {
-        setShowCalendar(false);
       }
     };
 

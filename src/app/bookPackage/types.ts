@@ -9,10 +9,38 @@ export interface AddOnDetail {
 export interface Traveller {
   id: string;
   name: string;
-  email: string;
-  contact: string;
+  email?: string;
+  contact?: string;
   gender: string;
-  age: string | number;
+  age?: string | number;
+  firstName?: string;
+  lastName?: string;
+  dob?: string;
+  travelerType?: string;
+  isAddedToCart?: boolean;
+}
+
+export interface NewTraveller {
+  firstName: string;
+  lastName: string;
+  gender: string;
+  dob: string;
+  email: string;
+  phone: string;
+  nationality: string;
+}
+
+export interface TravelerProfile {
+  id?: string;
+  firstName: string;
+  lastName: string;
+  gender: string;
+  dob: string;
+  travelerType?: string;
+  nationality?: string;
+  phone?: string;
+  email?: string;
+  isDefault?: boolean;
 }
 
 export interface ItineraryItem {

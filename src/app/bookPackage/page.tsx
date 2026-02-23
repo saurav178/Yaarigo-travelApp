@@ -2,12 +2,11 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import Link from "next/link";
 import InlineLoader from "@/components/Loader/InlineLoader";
-import { ArrowLeft, Plus, UserPlus, X, Check, Trash2, User } from "lucide-react";
+import { ArrowLeft, Plus, UserPlus, Check, Trash2, User } from "lucide-react";
 import axiosClient from "@/lib/axios-client";
 import { APP_ROUTES } from "@/utils/constants";
-import { AddOnDetail, Traveller, ItineraryItem, CancellationPolicyItem, PlanData } from "./types";
+import { AddOnDetail, Traveller, ItineraryItem, CancellationPolicyItem, PlanData, NewTraveller, TravelerProfile } from "./types";
 import PackageDetailsCard from "./PackageDetailsCard";
 import SelectedAddOnsCard from "./SelectedAddOnsCard";
 import PlanDetailsCard from "./PlanDetailsCard";
@@ -22,7 +21,6 @@ function BookPackageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [packageId, setPackageId] = useState<string>("");
   const [cartId, setCartId] = useState<string>("");
   const [packageTitle, setPackageTitle] = useState<string>("");
   const [planName, setPlanName] = useState<string>("");
@@ -55,7 +53,7 @@ function BookPackageContent() {
   const [isCopied, setIsCopied] = useState(false);
 
   // New Traveller State
-  const [newTraveller, setNewTraveller] = useState({
+  const [newTraveller, setNewTraveller] = useState<NewTraveller>({
     firstName: "",
     lastName: "",
     gender: "MALE",
@@ -68,7 +66,7 @@ function BookPackageContent() {
   // Modal States
   const [showNewTravellerModal, setShowNewTravellerModal] = useState(false);
   const [showExistingTravellerModal, setShowExistingTravellerModal] = useState(false);
-  const [existingProfiles, setExistingProfiles] = useState<any[]>([]);
+  const [existingProfiles, setExistingProfiles] = useState<TravelerProfile[]>([]);
   const [selectedProfileIds, setSelectedProfileIds] = useState<string[]>([]);
   const [isFetchingProfiles, setIsFetchingProfiles] = useState(false);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
@@ -123,7 +121,7 @@ function BookPackageContent() {
       const created = (response.data?.data || response.data)?.[0] || {};
       
       const newTravellerId = created.id || Date.now().toString();
-      const travellerToAdd: any = {
+      const travellerToAdd: Traveller = {
         id: newTravellerId,
         name: `${newTraveller.firstName} ${newTraveller.lastName}`,
         gender: newTraveller.gender,
@@ -173,7 +171,7 @@ function BookPackageContent() {
       return;
     }
 
-    const selected = existingProfiles.filter(p => selectedProfileIds.includes(p.id));
+    const selected = existingProfiles.filter(p => p.id && selectedProfileIds.includes(p.id));
     if (selected.length === 0) return;
 
     setIsAddingExisting(true);
@@ -197,7 +195,7 @@ function BookPackageContent() {
       const addedTravelers = response.data?.data || response.data || [];
       const travelersList = Array.isArray(addedTravelers) ? addedTravelers : [];
 
-      const newTravellers = (travelersList.length > 0 ? travelersList : selected).map((p: any, index: number) => ({
+      const newTravellers = (travelersList.length > 0 ? travelersList : selected).map((p: TravelerProfile, index: number) => ({
         id: p.id || selected[index]?.id || Date.now().toString(),
         name: `${p.firstName} ${p.lastName}`,
         gender: p.gender,
@@ -248,7 +246,6 @@ function BookPackageContent() {
     const cancellationPolicyParam = searchParams.get("cancellationPolicy");
     const planDataParam = searchParams.get("planData");
 
-    setPackageId(pkgId);
     setCartId(cId);
     setPackageTitle(title);
     setPlanName(plan);
@@ -382,10 +379,10 @@ function BookPackageContent() {
 
     try {
       if (cartId && travellers.length > 0) {
-        const travelersToSync = travellers.filter((t: any) => !t.isAddedToCart);
+        const travelersToSync = travellers.filter((t: Traveller & { isAddedToCart?: boolean }) => !t.isAddedToCart);
 
         if (travelersToSync.length > 0) {
-          const travelersPayload = travelersToSync.map((t: any) => ({
+          const travelersPayload = travelersToSync.map((t: Traveller) => ({
           firstName: t.firstName || t.name?.split(" ")[0] || "Guest",
           lastName: t.lastName || t.name?.split(" ").slice(1).join(" ") || "User",
           gender: t.gender?.toUpperCase() || "MALE",
@@ -621,9 +618,9 @@ function BookPackageContent() {
                       existingProfiles.map((profile) => (
                         <div 
                           key={profile.id}
-                          onClick={() => toggleProfileSelection(profile.id)}
+                          onClick={() => profile.id && toggleProfileSelection(profile.id)}
                           className={`p-4 rounded-xl border cursor-pointer flex items-center justify-between transition-all ${
-                            selectedProfileIds.includes(profile.id) 
+                            profile.id && selectedProfileIds.includes(profile.id) 
                               ? "border-[#276074] bg-[#276074]/5" 
                               : "border-gray-200 hover:border-gray-300"
                           }`}
@@ -632,7 +629,7 @@ function BookPackageContent() {
                             <p className="font-semibold text-gray-900">{profile.firstName} {profile.lastName}</p>
                             <p className="text-sm text-gray-500">{profile.gender} • {profile.dob}</p>
                           </div>
-                          {selectedProfileIds.includes(profile.id) && (
+                          {profile.id && selectedProfileIds.includes(profile.id) && (
                             <div className="w-6 h-6 bg-[#276074] rounded-full flex items-center justify-center">
                               <Check className="w-4 h-4 text-white" />
                             </div>

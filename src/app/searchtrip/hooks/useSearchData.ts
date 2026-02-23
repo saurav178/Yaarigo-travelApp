@@ -190,6 +190,8 @@ export function useSearchData(filters: CombinedFilters) {
     }
   }, [filters]);
 
+  const filtersKey = stringify(filters);
+
   /* 🔥 Fetch data with abort controller */
   useEffect(() => {
     const controller = new AbortController();
@@ -257,7 +259,7 @@ export function useSearchData(filters: CombinedFilters) {
       fetchingRef.current = false;
     };
   }, [
-    stringify(filters),
+    filtersKey,
     page
   ]);
 
