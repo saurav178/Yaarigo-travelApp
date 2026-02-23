@@ -114,7 +114,7 @@ export const authService = {
 
   async login(credentials: LoginCredentials): Promise<void> {
     try {
-      await apiClient.post(`${AUTH_API}/auth/login`, credentials);
+      await apiClient.post(`${AUTH_API}/auth/login`,   credentials);
     } catch (error) {
       this.handleError(error, 'Login failed');
     }
