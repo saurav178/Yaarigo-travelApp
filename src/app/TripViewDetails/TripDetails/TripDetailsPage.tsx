@@ -33,6 +33,7 @@ interface TripData {
   splitCost?: boolean;
   lookingFor?: string;
   foodPreference?: string;
+  leaderId?: number;
 }
 
 interface LeaderData {
@@ -75,14 +76,13 @@ export default function TripDetailsPage() {
         const tripJson: TripData = await tripRes.json();
         setTripData(tripJson);
 
-        // Fetch Leader
-        if (tripJson && (tripJson as any).leaderId) {
-          const leaderRes = await fetch(
-            `${BASE_URL}/leaders/${(tripJson as any).leaderId}`
-          );
-          if (!leaderRes.ok) throw new Error("Failed to fetch leader data");
-          const leaderJson: LeaderData = await leaderRes.json();
-          setLeaderData(leaderJson);
+        // Fetch Leader if leaderId exists
+        if (tripJson?.leaderId) {
+          const leaderRes = await fetch(`${BASE_URL}/leaders/${tripJson.leaderId}`);
+          if (leaderRes.ok) {
+            const leaderJson: LeaderData = await leaderRes.json();
+            setLeaderData(leaderJson);
+          }
         }
       } catch (err: any) {
         console.error("Error fetching trip or leader data:", err);
@@ -97,15 +97,17 @@ export default function TripDetailsPage() {
     fetchTripData();
   }, [tripId, BASE_URL]);
 
-  if (loading)
-    return <div className="p-10 text-center">Loading trip details...</div>;
+  if (loading) {
+    return <div className="p-10 text-center text-lg font-medium">Loading trip details...</div>;
+  }
 
-  if (error)
+  if (error) {
     return (
       <div className="p-10 text-center text-red-500">
         {error || "Trip not found."}
       </div>
     );
+  }
 
   if (!tripData) return null; // Safeguard
 
@@ -115,15 +117,15 @@ export default function TripDetailsPage() {
         {/* Left Section */}
         <div className="lg:col-span-2 space-y-6">
           <TripOverview trip={tripData} />
-          {/* Pass only tripId */}
-          {tripData.tripId && <TripHighlights tripId={tripData.tripId.toString()} />}
+          {/* Conditionally render TripHighlights only if tripId exists */}
+          {tripData.tripId ? <TripHighlights tripId={tripData.tripId.toString()} /> : null}
           <DetailedItinerary itinerary={tripData.itinerary || []} />
         </div>
 
         {/* Right Section */}
         <div className="flex flex-col gap-6 -mt-1">
           <TripActions trip={tripData} />
-          {leaderData && <TripLeader leader={leaderData} />}
+          {leaderData ? <TripLeader leader={leaderData} /> : null}
         </div>
       </div>
     </div>
