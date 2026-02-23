@@ -8,7 +8,7 @@ import { FaIndianRupeeSign } from "react-icons/fa6";
 /* ===== STATIC OPTIONS ===== */
 // const TRIP_STYLES = ["adventure", "leisure", "spiritual", "wildlife"];
 const GENDERS = ["ANY", "MALE_ONLY", "FEMALE_ONLY"];
-
+const LANGUAGES = ["English", "Hindi", "Odia", "German", "Spanish", "Italian"];
 interface FilterSidebarProps {
   filters: CombinedFilters;
   updateFilter: <K extends keyof CombinedFilters>(
@@ -22,7 +22,7 @@ interface FilterSidebarProps {
 const FilterSidebar: React.FC<FilterSidebarProps> = ({
   filters,
   updateFilter,
-  availableLanguages = ["English", "Hindi", "Odia"], // Default fallback
+  // availableLanguages = ["English", "Hindi", "Odia"], // Default fallback
   // availableTripStyles = ["Advanture","Bagpacking","Nature"], // 🔥 Default fallback
 }) => {
   /* =============================== LOCAL INPUT STATE =============================== */
@@ -102,7 +102,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
   /* =============================== UI =============================== */
   return (
-    <div className="relative bg-white shadow-lg overflow-hidden">
+    <div className="relative bg-white shadow-lg">
       {/* Header with decorative corner circles matching the image */}
       <div className="sticky top-0 z-10 px-6 pt-6 pb-5 bg-gradient-to-br from-[#245766] via-[#2d6878] to-[#3a7a8a] relative overflow-hidden">
         {/* Decorative Circles */}
@@ -263,7 +263,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
             <Globe className="w-4 h-4 text-gray-500" />
             Languages
           </label>
-          {availableLanguages.length > 0 ? (
+          {/* {availableLanguages.length > 0 ? (
             <div className="flex flex-wrap gap-2">
               {availableLanguages.map((lang) => (
                 <button
@@ -278,10 +278,27 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
                   {lang}
                 </button>
               ))}
-            </div>
-          ) : (
+            </div> */}
+
+          {/* ) : (
             <p className="text-sm text-gray-500">No languages available</p>
-          )}
+          )} */}
+
+          <div className="flex flex-wrap gap-2">
+            {LANGUAGES.map((lang) => (
+              <button
+                key={lang}
+                onClick={() => toggleArrayValue("languages", lang)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  filters.languages?.includes(lang)
+                    ? "bg-[#1d4350] text-white shadow-sm"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                {lang}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Date Range */}
