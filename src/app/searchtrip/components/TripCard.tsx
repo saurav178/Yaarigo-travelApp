@@ -207,14 +207,14 @@ export default function TripCard({ trip }: TripCardProps) {
         <div className="grid grid-cols-3 gap-2 mt-auto">
      <Link href={ROUTES.TRIP_DETAILS_WITH_ID(trip._id)}>
   <button
-    className="py-2 text-white text-xs font-semibold w-full"
+    className="py-2 text-white text-xs font-semibold w-full cursor-pointer"
     style={{ backgroundColor: "#276074" }}
   >
     View Trip
   </button>
 </Link>
           <button
-            className="py-2 text-white text-xs font-semibold"
+            className="py-2 text-white text-xs font-semibold cursor-pointer"
             style={{ backgroundColor: "#276074" }}
           >
             Join Trip

@@ -8,6 +8,8 @@ interface DayPlan {
   dayTitle?: string;
   summary?: string;
   activities?: string[];
+  location?: string | { [key: string]: any }; // handle both string or object
+  startTime?: string;
 }
 
 interface DetailedItineraryProps {
@@ -17,6 +19,14 @@ interface DetailedItineraryProps {
 const DetailedItinerary: React.FC<DetailedItineraryProps> = ({ itinerary = [] }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  // Helper to safely render strings from objects
+  const formatValue = (val: any) => {
+    if (!val) return "";
+    if (typeof val === "string") return val;
+    if (typeof val === "object") return Object.values(val).join(", ");
+    return "";
+  };
 
   if (!itinerary || itinerary.length === 0) {
     return (
@@ -30,9 +40,11 @@ const DetailedItinerary: React.FC<DetailedItineraryProps> = ({ itinerary = [] })
   const activeDay = itinerary[activeIndex];
 
   const getTitle = (day: DayPlan, index: number) =>
-    day.dayTitle || `Day ${index + 1}`;
+    formatValue(day.dayTitle) || `Day ${index + 1}`;
   const getDescription = (day: DayPlan) =>
-    day.summary || "No description available.";
+    formatValue(day.summary) || "No description available.";
+  const getLocation = (day: DayPlan) => formatValue(day.location);
+  const getStartTime = (day: DayPlan) => formatValue(day.startTime);
 
   const visibleDaysCount = 3;
   const visibleDays = itinerary.slice(0, visibleDaysCount);
@@ -55,17 +67,13 @@ const DetailedItinerary: React.FC<DetailedItineraryProps> = ({ itinerary = [] })
 
               <div
                 className={`p-4 w-full rounded-lg transition-all ${
-                  activeIndex === index
-                    ? "bg-blue-50 shadow-xl"
-                    : "bg-white shadow-md"
+                  activeIndex === index ? "bg-blue-50 shadow-xl" : "bg-white shadow-md"
                 }`}
               >
-                <h3 className="font-semibold text-gray-900">
-                  {getTitle(day, index)}
-                </h3>
-                <p className="text-xs text-gray-500 mt-1">
-                  {getDescription(day)}
-                </p>
+                <h3 className="font-semibold text-gray-900">{getTitle(day, index)}</h3>
+                <p className="text-xs text-gray-500 mt-1">{getDescription(day)}</p>
+                {day.location && <p className="text-xs text-gray-400 mt-1">{getLocation(day)}</p>}
+                {day.startTime && <p className="text-xs text-gray-400 mt-1">{getStartTime(day)}</p>}
               </div>
             </div>
           ))}
@@ -94,9 +102,13 @@ const DetailedItinerary: React.FC<DetailedItineraryProps> = ({ itinerary = [] })
                         }}
                       >
                         <p className="font-medium">{getTitle(day, actualIndex)}</p>
-                        <p className="text-xs text-gray-500">
-                          {getDescription(day)}
-                        </p>
+                        <p className="text-xs text-gray-500">{getDescription(day)}</p>
+                        {day.location && (
+                          <p className="text-xs text-gray-400">{getLocation(day)}</p>
+                        )}
+                        {day.startTime && (
+                          <p className="text-xs text-gray-400">{getStartTime(day)}</p>
+                        )}
                       </div>
                     );
                   })}
@@ -108,19 +120,17 @@ const DetailedItinerary: React.FC<DetailedItineraryProps> = ({ itinerary = [] })
 
         {/* Day Details */}
         <div className="bg-gray-50 p-4 rounded-md shadow-md">
-          <h3 className="text-lg font-semibold mb-2">
-            {getTitle(activeDay, activeIndex)}
-          </h3>
-          <p className="text-sm text-gray-700 mb-3">
-            {getDescription(activeDay)}
-          </p>
+          <h3 className="text-lg font-semibold mb-2">{getTitle(activeDay, activeIndex)}</h3>
+          <p className="text-sm text-gray-700 mb-2">{getDescription(activeDay)}</p>
+          {activeDay.location && <p className="text-xs text-gray-500 mb-1">{getLocation(activeDay)}</p>}
+          {activeDay.startTime && <p className="text-xs text-gray-500 mb-3">{getStartTime(activeDay)}</p>}
 
           {activeDay.activities && activeDay.activities.length > 0 ? (
             <div>
               <h4 className="font-semibold mb-1">Activities</h4>
               <ul className="list-disc pl-5 text-sm text-gray-700 space-y-1">
                 {activeDay.activities.map((act, idx) => (
-                  <li key={idx}>{act}</li>
+                  <li key={idx}>{formatValue(act)}</li>
                 ))}
               </ul>
             </div>
