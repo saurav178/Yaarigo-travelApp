@@ -91,7 +91,7 @@ import {
 } from '../types/auth';
 
 const USER_API = process.env.NEXT_PUBLIC_USER_SERVICE_URL || 'http://localhost:3017/api';
-const AUTH_API = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || 'http://localhost:3016/api';
+const AUTH_API = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || 'https://api.dev.yaarigo.com/auth-service';
 
 // Axios Instance for common config (optional but recommended)
 const apiClient = axios.create({

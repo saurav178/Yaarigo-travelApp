@@ -15,6 +15,10 @@ interface PaymentSummaryCardProps {
   addOnsTotal: number;
   gstAmount: number;
   finalTotal: number;
+  travellerCount: number;
+  totalBasePrice: number;
+  advanceAmount: number;
+  remainingAmount: number;
   paymentMethod: "card" | "upi" | "netbanking";
   setPaymentMethod: (method: "card" | "upi" | "netbanking") => void;
   paymentError: string;
@@ -39,6 +43,10 @@ export default function PaymentSummaryCard({
   addOnsTotal,
   gstAmount,
   finalTotal,
+  travellerCount,
+  totalBasePrice,
+  advanceAmount,
+  remainingAmount,
   paymentMethod,
   setPaymentMethod,
   paymentError,
@@ -66,12 +74,12 @@ export default function PaymentSummaryCard({
           <div className="flex justify-between items-start mb-4">
             <div>
               <p className="text-blue-100 text-xs font-medium uppercase tracking-wider mb-1">
-                Total Payable
+                Payable Now (30%)
               </p>
               <div className="flex items-baseline gap-1">
                 <span className="text-3xl font-bold">
                   {currencySymbol}
-                  {finalTotal.toLocaleString()}
+                  {advanceAmount.toLocaleString()}
                 </span>
               </div>
             </div>
@@ -89,10 +97,13 @@ export default function PaymentSummaryCard({
       <div className="p-4 bg-gray-50 border-b border-gray-100">
         <div className="space-y-2 text-sm">
           <div className="flex justify-between text-gray-600">
-            <span className="text-gray-600">Base Price</span>
+            <span className="text-gray-600">
+              Base Price ({currencySymbol}
+              {planPrice.toLocaleString()} x {travellerCount})
+            </span>
             <span className="font-medium text-gray-900">
               {currencySymbol}
-              {planPrice.toLocaleString()}
+              {totalBasePrice.toLocaleString()}
             </span>
           </div>
           {selectedAddOnsLength > 0 && (
@@ -109,6 +120,20 @@ export default function PaymentSummaryCard({
             <span className="font-medium text-gray-900">
               {currencySymbol}
               {gstAmount.toLocaleString()}
+            </span>
+          </div>
+          <div className="pt-2 mt-2 border-t border-gray-200 flex justify-between font-bold text-gray-800">
+            <span>Total Amount</span>
+            <span>
+              {currencySymbol}
+              {finalTotal.toLocaleString()}
+            </span>
+          </div>
+          <div className="flex justify-between text-orange-600 text-xs mt-1">
+            <span>Remaining (70%) due in 7 days</span>
+            <span className="font-medium">
+              {currencySymbol}
+              {remainingAmount.toLocaleString()}
             </span>
           </div>
         </div>
@@ -306,7 +331,7 @@ export default function PaymentSummaryCard({
               <CreditCard className="w-5 h-5" />
               <span>
                 Pay {currencySymbol}
-                {finalTotal.toLocaleString()}
+                {advanceAmount.toLocaleString()}
               </span>
             </>
           )}
