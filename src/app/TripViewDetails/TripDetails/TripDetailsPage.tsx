@@ -1,101 +1,113 @@
 "use client";
+
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation"; // To get query params
+import { useSearchParams } from "next/navigation";
 import TripOverview from "./TripOverview";
 import TripActions from "./TripActions";
 import TripLeader from "./TripLeader";
 import DetailedItinerary from "../triphighlight/DetailedItinerary";
 import TripHighlights from "../triphighlight/TripHighlights";
 
+// ===== Interfaces =====
+interface ItineraryItem {
+  location?: string;
+  activities?: string[];
+}
+
+interface TripData {
+  tripId: number;
+  title: string;
+  description: string;
+  itinerary?: ItineraryItem[];
+  from?: string;
+  startDate?: string;
+  endDate?: string;
+  budget?: number;
+  maxTravelers?: number;
+  joinedTravelers?: number;
+  groupSize?: string;
+  tripStyle?: string;
+  travelStyle?: string;
+  duration?: string;
+  languages?: string[];
+  splitCost?: boolean;
+  lookingFor?: string;
+  foodPreference?: string;
+}
+
+interface LeaderData {
+  leaderId: number;
+  fullName: string;
+  rating: number;
+  reviews?: number;
+  description?: string;
+  photo?: string;
+}
+
 export default function TripDetailsPage() {
   const searchParams = useSearchParams();
   const tripId = searchParams.get("id"); // /TripViewDetails?id=101
 
-  const [tripData, setTripData] = useState<any>(null);
-  const [leaderData, setLeaderData] = useState<any>(null);
+  const [tripData, setTripData] = useState<TripData | null>(null);
+  const [leaderData, setLeaderData] = useState<LeaderData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const BASE_URL =
+    process.env.NEXT_PUBLIC_API_BASE_URL ||
+    "https://api.dev.yaarigo.com/tpm-service/api/public";
 
   useEffect(() => {
-    if (!tripId) return;
+    if (!tripId) {
+      setError("Trip ID not provided.");
+      setLoading(false);
+      return;
+    }
 
     const fetchTripData = async () => {
       try {
-        const tripRes = await fetch(
-          `https://api.dev.yaarigo.com/tpm-service/api/public/trips/${tripId}`
-        );
-        const tripJson = await tripRes.json();
+        setLoading(true);
+        setError(null);
+
+        // Fetch Trip
+        const tripRes = await fetch(`${BASE_URL}/trips/${tripId}`);
+        if (!tripRes.ok) throw new Error("Failed to fetch trip data");
+        const tripJson: TripData = await tripRes.json();
         setTripData(tripJson);
 
-        const leaderRes = await fetch(
-          `https://api.dev.yaarigo.com/tpm-service/api/public/leaders/${tripJson.leaderId}`
-        );
-        const leaderJson = await leaderRes.json();
-        setLeaderData(leaderJson);
-      } catch (err) {
+        // Fetch Leader
+        if (tripJson && (tripJson as any).leaderId) {
+          const leaderRes = await fetch(
+            `${BASE_URL}/leaders/${(tripJson as any).leaderId}`
+          );
+          if (!leaderRes.ok) throw new Error("Failed to fetch leader data");
+          const leaderJson: LeaderData = await leaderRes.json();
+          setLeaderData(leaderJson);
+        }
+      } catch (err: any) {
         console.error("Error fetching trip or leader data:", err);
-
-        // Fallback dummy data (updated for TripLeader fields)
-        setTripData({
-          tripId: 101,
-          title: "Trip Overview",
-          description: "Relax and explore the beaches of Goa with friends!",
-          from: "Mumbai, India",
-          startDate: "Nov-01",
-          endDate: "Nov-05, 2025",
-          budget: 1000,
-          maxTravelers: 6,
-          joinedTravelers: 4,
-          groupSize: "2–4 travelers",
-          tripStyle: "Beach & Adventure",
-          travelStyle: "Road Trip",
-          duration: "5 days",
-          languages: ["English", "Hindi"],
-          splitCost: true,
-          lookingFor: "Any",
-          foodPreference: "Veg",
-          itinerary: [
-            {
-              location: "Panaji",
-              activities: [
-                "Arrival & hotel check-in",
-                "Evening beach walk",
-                "Dinner by the sea",
-              ],
-            },
-            {
-              location: "Baga Beach",
-              activities: ["Water sports", "Shopping", "Beach shack lunch"],
-            },
-            {
-              location: "Old Goa",
-              activities: [
-                "Visit Basilica of Bom Jesus",
-                "Explore old churches",
-                "Local market stroll",
-              ],
-            },
-          ],
-        });
-
-        setLeaderData({
-          leaderId: 1001,
-          fullName: "Courtney Henry",
-          rating: 4.8,
-          reviews: 56,
-          description:
-            "Adventurous, social and culture lover! Enjoys exploring off-beat destinations.",
-          photo: "https://randomuser.me/api/portraits/women/68.jpg",
-        });
+        setError(err.message || "Failed to load trip details");
+        setTripData(null);
+        setLeaderData(null);
       } finally {
         setLoading(false);
       }
     };
 
     fetchTripData();
-  }, [tripId]);
+  }, [tripId, BASE_URL]);
 
   if (loading)
     return <div className="p-10 text-center">Loading trip details...</div>;
+
+  if (error)
+    return (
+      <div className="p-10 text-center text-red-500">
+        {error || "Trip not found."}
+      </div>
+    );
+
+  if (!tripData) return null; // Safeguard
 
   return (
     <div className="bg-gray-50 min-h-screen p-10">
@@ -103,14 +115,15 @@ export default function TripDetailsPage() {
         {/* Left Section */}
         <div className="lg:col-span-2 space-y-6">
           <TripOverview trip={tripData} />
-          <TripHighlights tripId={tripData?.tripId} />
-          <DetailedItinerary itinerary={tripData?.itinerary || []} />
+          {/* Pass only tripId */}
+          {tripData.tripId && <TripHighlights tripId={tripData.tripId.toString()} />}
+          <DetailedItinerary itinerary={tripData.itinerary || []} />
         </div>
 
         {/* Right Section */}
         <div className="flex flex-col gap-6 -mt-1">
           <TripActions trip={tripData} />
-          <TripLeader leader={leaderData} />
+          {leaderData && <TripLeader leader={leaderData} />}
         </div>
       </div>
     </div>

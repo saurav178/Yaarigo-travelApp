@@ -39,14 +39,14 @@ export default function TripDetailsPage() {
       try {
         setLoading(true);
 
+        // Fetch trip
         const tripRes = await fetch(`${BASE_URL}/trips/${tripId}`);
         if (!tripRes.ok) throw new Error("Trip not found");
-
         const tripJson = await tripRes.json();
         const trip = tripJson?.data || tripJson;
-
         setTripData(trip);
 
+        // Fetch leader
         if (trip?.leaderId) {
           const leaderRes = await fetch(`${BASE_URL}/leaders/${trip.leaderId}`);
           if (leaderRes.ok) {
@@ -56,7 +56,6 @@ export default function TripDetailsPage() {
         }
       } catch (error) {
         console.error("API failed. Using fallback.", error);
-        // Fallback data
         setTripData({
           title: "Goa Beach Adventure",
           description: "Relax and explore Goa.",
@@ -121,7 +120,7 @@ export default function TripDetailsPage() {
           {leaderData && <TripLeader leader={leaderData} />}
 
           <div className="space-y-6">
-            <JoinedTravelers tripId={tripId!} />
+            {tripId && <JoinedTravelers tripId={tripId} />}
             <ShareThisTrip trip={tripData} />
           </div>
         </div>
