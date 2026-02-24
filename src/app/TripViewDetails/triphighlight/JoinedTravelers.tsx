@@ -2,16 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-
-interface Traveler {
-  _id?: string;
-  name?: string;
-  fullName?: string;
-  profileImage?: string;
-  avatar?: string;
-  rating?: number;
-  safetyScore?: number;
-}
+import { fetchJoinedTravelers, Traveler } from "../api";
 
 interface JoinedTravelersProps {
   tripId: string;
@@ -20,37 +11,41 @@ interface JoinedTravelersProps {
 const JoinedTravelers: React.FC<JoinedTravelersProps> = ({ tripId }) => {
   const [travelers, setTravelers] = useState<Traveler[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const BASE_URL =
-    process.env.NEXT_PUBLIC_API_BASE_URL ||
-    "https://api.dev.yaarigo.com/tpm-service/api/public";
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!tripId) return;
 
-    const fetchTravelers = async () => {
+    const getTravelers = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`${BASE_URL}/trips/${tripId}/travelers`);
-        if (!res.ok) throw new Error("Failed to fetch travelers");
-        const json = await res.json();
-        const data = json?.data || json?.travelers || [];
-        setTravelers(Array.isArray(data) ? data : []);
-      } catch (error) {
-        console.error("Failed to load travelers", error);
+        setError(null);
+        const data = await fetchJoinedTravelers(tripId);
+        setTravelers(data);
+      } catch (err: any) {
+        console.error("Error fetching joined travelers:", err);
+        setError("Failed to load travelers.");
         setTravelers([]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTravelers();
+    getTravelers();
   }, [tripId]);
 
   if (loading) {
     return (
-      <div className="p-5 bg-white shadow-lg">
+      <div className="p-5 bg-white shadow-lg rounded-lg">
         <p className="text-gray-500">Loading travelers...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-5 bg-white shadow-lg rounded-lg">
+        <p className="text-red-500">{error}</p>
       </div>
     );
   }
@@ -66,7 +61,7 @@ const JoinedTravelers: React.FC<JoinedTravelersProps> = ({ tripId }) => {
       ) : (
         <div className="space-y-3">
           {travelers.map((t, index) => {
-            const name = t.name || t.fullName || "Traveler";
+            const name = t.fullName || t.name || "Traveler";
             const image = t.profileImage || t.avatar || "/default-avatar.png";
             const rating = t.rating ?? "N/A";
             const safety = t.safetyScore ?? "N/A";
@@ -84,7 +79,6 @@ const JoinedTravelers: React.FC<JoinedTravelersProps> = ({ tripId }) => {
                     height={40}
                     className="rounded-full object-cover"
                   />
-
                   <div>
                     <p className="font-medium text-gray-800">{name}</p>
                     <p className="text-xs text-gray-500">
@@ -92,7 +86,6 @@ const JoinedTravelers: React.FC<JoinedTravelersProps> = ({ tripId }) => {
                     </p>
                   </div>
                 </div>
-
                 <button className="px-3 py-1 bg-[#1D4350] text-white hover:bg-[#16333b] transition-colors duration-300">
                   View
                 </button>

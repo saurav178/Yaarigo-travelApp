@@ -8,7 +8,7 @@ interface DayPlan {
   dayTitle?: string;
   summary?: string;
   activities?: string[];
-  location?: string | { [key: string]: any }; // handle both string or object
+  location?: string | { [key: string]: any };
   startTime?: string;
 }
 
@@ -20,7 +20,7 @@ const DetailedItinerary: React.FC<DetailedItineraryProps> = ({ itinerary = [] })
   const [activeIndex, setActiveIndex] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  // Helper to safely render strings from objects
+  // Helper to safely extract strings from object or string
   const formatValue = (val: any) => {
     if (!val) return "";
     if (typeof val === "string") return val;
@@ -78,7 +78,7 @@ const DetailedItinerary: React.FC<DetailedItineraryProps> = ({ itinerary = [] })
             </div>
           ))}
 
-          {/* Dropdown for More Days */}
+          {/* Dropdown for more days */}
           {hiddenDays.length > 0 && (
             <div className="relative">
               <button
@@ -103,12 +103,8 @@ const DetailedItinerary: React.FC<DetailedItineraryProps> = ({ itinerary = [] })
                       >
                         <p className="font-medium">{getTitle(day, actualIndex)}</p>
                         <p className="text-xs text-gray-500">{getDescription(day)}</p>
-                        {day.location && (
-                          <p className="text-xs text-gray-400">{getLocation(day)}</p>
-                        )}
-                        {day.startTime && (
-                          <p className="text-xs text-gray-400">{getStartTime(day)}</p>
-                        )}
+                        {day.location && <p className="text-xs text-gray-400">{getLocation(day)}</p>}
+                        {day.startTime && <p className="text-xs text-gray-400">{getStartTime(day)}</p>}
                       </div>
                     );
                   })}
@@ -118,7 +114,7 @@ const DetailedItinerary: React.FC<DetailedItineraryProps> = ({ itinerary = [] })
           )}
         </div>
 
-        {/* Day Details */}
+        {/* Active Day Details */}
         <div className="bg-gray-50 p-4 rounded-md shadow-md">
           <h3 className="text-lg font-semibold mb-2">{getTitle(activeDay, activeIndex)}</h3>
           <p className="text-sm text-gray-700 mb-2">{getDescription(activeDay)}</p>

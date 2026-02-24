@@ -1,25 +1,14 @@
 "use client";
 
-interface Trip {
-  startDate?: string;
-  endDate?: string;
-  totalSeats?: number;       // maximum travelers
-  bookedSeats?: number;      // already joined travelers
-  partnerPreferences?: {
-    budget?: {
-      min?: number;
-      max?: number;
-    };
-  };
-}
+import { TripData } from "../api";
 
 interface TripActionsProps {
-  trip?: Trip;
+  trip?: TripData;
 }
 
 export default function TripActions({ trip }: TripActionsProps) {
   if (!trip) {
-    // If trip data hasn't loaded yet
+    // While API data is loading
     return (
       <div className="p-6 bg-white w-full shadow-lg mt-2 text-center text-gray-500">
         Loading trip details...
@@ -29,15 +18,17 @@ export default function TripActions({ trip }: TripActionsProps) {
 
   const handleJoinTrip = async () => {
     try {
-      alert("Joined trip successfully! (dummy response)");
+      // TODO: Replace with actual API call to join trip
+      alert("Join trip action triggered");
     } catch {
-      alert("Error joining trip.");
+      alert("Failed to join trip.");
     }
   };
 
   const handleChat = async () => {
     try {
-      alert("Chat started with organizer! (dummy response)");
+      // TODO: Replace with actual chat initiation
+      alert("Chat with organizer triggered");
     } catch {
       alert("Failed to start chat.");
     }
@@ -54,7 +45,7 @@ export default function TripActions({ trip }: TripActionsProps) {
       ? Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24))
       : 0;
 
-  // Budget display with defaults
+  // Budget display
   const minBudget = trip.partnerPreferences?.budget?.min ?? 0;
   const maxBudget = trip.partnerPreferences?.budget?.max ?? 0;
 
@@ -72,12 +63,12 @@ export default function TripActions({ trip }: TripActionsProps) {
       <div className="text-sm space-y-2 mb-4">
         <p className="flex justify-between">
           <span className="text-gray-500">Start Date:</span>
-          <span>{trip.startDate ?? "-"}</span>
+          <span>{trip.startDate ? new Date(trip.startDate).toLocaleDateString() : "-"}</span>
         </p>
 
         <p className="flex justify-between">
           <span className="text-gray-500">End Date:</span>
-          <span>{trip.endDate ?? "-"}</span>
+          <span>{trip.endDate ? new Date(trip.endDate).toLocaleDateString() : "-"}</span>
         </p>
 
         <p className="flex justify-between">

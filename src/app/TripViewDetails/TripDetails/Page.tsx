@@ -12,8 +12,8 @@ export default function Page({ params }: PageProps) {
 
   return (
     <div className="relative min-h-screen overflow-visible">
-      <TripDetailsPage tripId={tripId} />
-      <TripDetails />
+     
+      <TripDetailsPage />
     </div>
   );
 }

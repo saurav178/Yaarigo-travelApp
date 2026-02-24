@@ -14,6 +14,13 @@ import SafetyInformation from "../triphighlight/SafetyInformation";
 import ShareThisTrip from "../triphighlight/ShareThisTrip";
 import CancellationPolicy from "../triphighlight/CancellationPolicy";
 
+import {
+  fetchTripById,
+  fetchLeaderById,
+  TripData,
+  LeaderData,
+} from "../api";
+
 export default function TripDetailsPage() {
   const params = useParams();
 
@@ -24,60 +31,56 @@ export default function TripDetailsPage() {
       ? params.tripId[0]
       : undefined;
 
-  const [tripData, setTripData] = useState<any>(null);
-  const [leaderData, setLeaderData] = useState<any>(null);
+  const [tripData, setTripData] = useState<TripData | null>(null);
+  const [leaderData, setLeaderData] = useState<LeaderData | null>(null);
   const [loading, setLoading] = useState(true);
-
-  const BASE_URL =
-    process.env.NEXT_PUBLIC_API_BASE_URL ||
-    "https://api.dev.yaarigo.com/tpm-service/api/public";
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!tripId) return;
 
-    const fetchTripData = async () => {
+    const loadTripDetails = async () => {
       try {
         setLoading(true);
+        setError(null);
 
-        // Fetch trip
-        const tripRes = await fetch(`${BASE_URL}/trips/${tripId}`);
-        if (!tripRes.ok) throw new Error("Trip not found");
-        const tripJson = await tripRes.json();
-        const trip = tripJson?.data || tripJson;
+        // Fetch Trip
+        const trip = await fetchTripById(tripId);
         setTripData(trip);
 
-        // Fetch leader
-        if (trip?.leaderId) {
-          const leaderRes = await fetch(`${BASE_URL}/leaders/${trip.leaderId}`);
-          if (leaderRes.ok) {
-            const leaderJson = await leaderRes.json();
-            setLeaderData(leaderJson?.data || leaderJson);
+        // Fetch Leader (if exists)
+        if (trip?.createdBy) {
+          try {
+            const leader = await fetchLeaderById(trip.createdBy);
+            setLeaderData(leader);
+          } catch {
+            // If leader endpoint fails (404 etc.), ignore gracefully
+            setLeaderData(null);
           }
         }
-      } catch (error) {
-        console.error("API failed. Using fallback.", error);
-        setTripData({
-          title: "Goa Beach Adventure",
-          description: "Relax and explore Goa.",
-          from: "Mumbai",
-          itinerary: [],
-        });
-        setLeaderData({
-          name: "Courtney Henry",
-          rating: 4.8,
-        });
+      } catch (err) {
+        console.error("Failed to fetch trip details", err);
+        setError("Unable to load trip details. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTripData();
+    loadTripDetails();
   }, [tripId]);
 
   if (loading) {
     return (
       <div className="p-10 text-center text-lg font-medium">
         Loading trip details...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-10 text-center text-red-500">
+        {error}
       </div>
     );
   }
@@ -90,6 +93,28 @@ export default function TripDetailsPage() {
     );
   }
 
+  // Normalize itinerary location
+  const itineraryForDisplay =
+    tripData.itinerary?.map((day) => ({
+      ...day,
+      location:
+        typeof day.location === "string"
+          ? day.location
+          : day.location?.name || "Unknown location",
+    })) || [];
+
+  // Safety data (API only)
+  const safetyProps = {
+    safetyRating: tripData.partnerPreferences?.safetyRating,
+    safetyInfo: tripData.partnerPreferences?.safetyInfo,
+    verifiedTravelers:
+      tripData.partnerPreferences?.verifiedTravelers,
+  };
+
+  // Cancellation policy (may be undefined)
+  const cancellationPolicy =
+    tripData.commitments?.cancellationPolicy;
+
   return (
     <div className="bg-gray-50 min-h-screen">
       <HeroSection trip={tripData} />
@@ -99,24 +124,29 @@ export default function TripDetailsPage() {
         <div className="lg:col-span-2 space-y-6">
           <TripOverview trip={tripData} />
 
-          {/* Itinerary & Roadmap Side by Side */}
           <div className="flex flex-col md:flex-row gap-6">
             <div className="md:w-1/2">
-              <DetailedItinerary itinerary={tripData?.itinerary || []} />
+              <DetailedItinerary itinerary={itineraryForDisplay} />
             </div>
             <div className="md:w-1/2">
-              <TripRoadmap itinerary={tripData?.itinerary || []} />
+              <TripRoadmap itinerary={itineraryForDisplay} />
             </div>
           </div>
 
-          {/* Safety and Cancellation */}
-          <SafetyInformation trip={tripData} />
-          <CancellationPolicy trip={tripData} />
+          <SafetyInformation trip={safetyProps} />
+
+          {/* ✅ ALWAYS SHOW Cancellation Section */}
+          <CancellationPolicy
+            trip={{
+              cancellationPolicy: cancellationPolicy,
+            }}
+          />
         </div>
 
         {/* RIGHT COLUMN */}
         <div className="flex flex-col gap-6">
           <TripActions trip={tripData} />
+
           {leaderData && <TripLeader leader={leaderData} />}
 
           <div className="space-y-6">

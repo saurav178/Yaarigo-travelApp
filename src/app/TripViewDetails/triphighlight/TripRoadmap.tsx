@@ -8,23 +8,23 @@ import type { LatLngExpression } from "leaflet";
 const MapContainer = dynamic(
   () => import("react-leaflet").then((mod) => mod.MapContainer),
   { ssr: false }
-) as any;
+);
 const TileLayer = dynamic(
   () => import("react-leaflet").then((mod) => mod.TileLayer),
   { ssr: false }
-) as any;
+);
 const Marker = dynamic(
   () => import("react-leaflet").then((mod) => mod.Marker),
   { ssr: false }
-) as any;
+);
 const Popup = dynamic(
   () => import("react-leaflet").then((mod) => mod.Popup),
   { ssr: false }
-) as any;
+);
 const Polyline = dynamic(
   () => import("react-leaflet").then((mod) => mod.Polyline),
   { ssr: false }
-) as any;
+);
 
 interface TripRoadmapProps {
   itinerary?: { location: string }[];
@@ -39,6 +39,12 @@ const locationCoords: Record<string, LatLngExpression> = {
 export default function TripRoadmap({ itinerary = [] }: TripRoadmapProps) {
   const [routePoints, setRoutePoints] = useState<LatLngExpression[]>([]);
   const [customIcon, setCustomIcon] = useState<any>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Prevent hydration issues
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -60,19 +66,20 @@ export default function TripRoadmap({ itinerary = [] }: TripRoadmapProps) {
     setRoutePoints(coords);
   }, [itinerary]);
 
-  if (!customIcon) return <p className="p-4">Loading map...</p>;
+  if (!isMounted || !customIcon) {
+    return <p className="p-4">Loading map...</p>;
+  }
 
   return (
-    <section className="bg-white p-6 rounded-lg shadow-md flex flex-col h-full">
+    <section className="bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-4">Trip Roadmap</h2>
 
-      {/* Make this div flex-grow so map expands without overlapping */}
-      <div className="flex-1 min-h-[400px] w-full border rounded-md overflow-hidden">
+      <div className="sticky top-24 h-[400px] w-full border rounded-md overflow-hidden">
         <MapContainer
           center={routePoints[0] || [15.4909, 73.8278]}
           zoom={8}
           scrollWheelZoom={false}
-          style={{ height: "100%", width: "100%" }}
+          className="h-full w-full"
         >
           <TileLayer
             attribution="&copy; OpenStreetMap contributors"
@@ -88,7 +95,7 @@ export default function TripRoadmap({ itinerary = [] }: TripRoadmapProps) {
           {routePoints.length > 1 && (
             <Polyline
               positions={routePoints}
-              pathOptions={{ color: "red", weight: 3, opacity: 0.8 }}
+              pathOptions={{ color: "red", weight: 3 }}
             />
           )}
         </MapContainer>
