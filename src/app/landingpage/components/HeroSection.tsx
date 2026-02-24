@@ -663,150 +663,144 @@ export default function HeroSection() {
             journey, and explore the world safely with AI-powered matches.
           </p>
 
-          {/* Search card - Simplified with only To City and Date */}
-          <div className="mt-[20px] flex justify-center">
-            <div className="bg-white/75 backdrop-blur-md p-3 shadow-2xl flex flex-col sm:flex-row gap-3 sm:gap-4 items-center overflow-visible">
+          {/* Search card - Full width minimal style */}
+          <div className="mt-[20px] w-full max-w-2xl mx-auto">
+            <div className="flex items-stretch shadow-[0_8px_32px_rgba(0,0,0,0.25)]">
               {/* ================= TO CITY INPUT ================= */}
-              <div id="toWrapper" className="flex-1 min-w-[500px] relative">
-                <label htmlFor="toCity" className="sr-only">
-                  Destination City
-                </label>
-
-                <div className="flex items-center border-2 border-gray-200 px-3 py-2.5 focus-within:border-[#008ECF] transition-colors h-12">
+              <div id="toWrapper" className="flex-1 relative group">
+                <div className="flex items-center h-[60px] bg-white/95 px-5 gap-3 border-2 border-transparent focus-within:border-[#008ECF] transition-all duration-300">
+                  {/* Search icon */}
                   <svg
-                    className="w-5 h-5 mr-2 text-[#1D4350]"
+                    className="w-[18px] h-[18px] text-gray-400 group-focus-within:text-[#008ECF] shrink-0 transition-colors duration-300"
                     fill="none"
                     stroke="currentColor"
+                    strokeWidth={2.5}
                     viewBox="0 0 24 24"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
+                    <circle cx="11" cy="11" r="8" />
+                    <path strokeLinecap="round" d="m21 21-4.35-4.35" />
                   </svg>
 
                   <input
                     id="toCity"
                     name="toCity"
-                    placeholder="Where do you want to go?"
+                    placeholder="Where do you want to go."
                     value={toCity}
                     onFocus={() => {
                       setToSuggestions(popularCities);
                       setShowToDropdown(true);
                     }}
-                    onChange={(e) => {
-                      setToCity(e.target.value);
-                    }}
-                    className="bg-transparent outline-none placeholder-gray-600 text-gray-700 w-full font-medium"
+                    onChange={(e) => setToCity(e.target.value)}
+                    className="bg-transparent outline-none placeholder-gray-450 text-gray-800 w-full text-[15px] font-medium tracking-[-0.01em]"
                     autoComplete="off"
                   />
+
+                  {/* Clear button */}
+                  {toCity && (
+                    <button
+                      onMouseDown={() => {
+                        setToCity("");
+                        setToSuggestions(popularCities);
+                      }}
+                      className="text-gray-300 hover:text-gray-500 transition-colors shrink-0"
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  )}
                 </div>
 
+                {/* Dropdown */}
                 {showToDropdown && (
-                  <div className="absolute top-full left-0 right-0 bg-white/90 backdrop-blur-md border-2 border-t-0 border-gray-200 shadow-xl max-h-48 overflow-y-auto z-50">
-                    {toSuggestions.map((item, index) => (
-                      <div
-                        key={index}
-                        onMouseDown={() => {
-                          setToCity(item.mainText);
-                          setShowToDropdown(false);
-                        }}
-                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700"
-                      >
-                        <span className="font-medium">{item.mainText}</span>
-                        <span className="text-xs text-gray-500 ml-2">
-                          {item.fullText}
-                        </span>
-                      </div>
-                    ))}
+                  <div className="absolute top-full left-0 w-full bg-white/95 border border-gray-100 shadow-[0_16px_40px_rgba(0,0,0,0.12)] max-h-48 z-50 overflow-hidden">
+                    {/* <div className="px-5 py-2 border-b border-gray-50">
+                      <span className="text-[10px] uppercase tracking-[0.15em] text-gray-400 font-semibold">
+                        Popular Destinations
+                      </span>
+                    </div> */}
+                    <div className="max-h-[220px] overflow-y-auto">
+                      {toSuggestions.map((item, index) => (
+                        <div
+                          key={index}
+                          onMouseDown={() => {
+                            setToCity(item.mainText);
+                            setShowToDropdown(false);
+                          }}
+                          className="flex items-center gap-3 px-5 py-3 hover:bg-[#F0F9FF] cursor-pointer transition-colors duration-150 border-b border-gray-50 last:border-0 group/item"
+                        >
+                          <div className="w-7 h-7 rounded-full bg-[#EBF7FF] flex items-center justify-center shrink-0">
+                            <svg
+                              className="w-3.5 h-3.5 text-[#008ECF]"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                              />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                              />
+                            </svg>
+                          </div>
+                          <div className="flex flex-col min-w-0">
+                            <span className="text-sm font-semibold text-gray-800 leading-tight">
+                              {item.mainText}
+                            </span>
+                            <span className="text-xs text-gray-400 truncate leading-tight">
+                              {item.fullText}
+                            </span>
+                          </div>
+                          <svg
+                            className="w-3.5 h-3.5 text-gray-300 ml-auto shrink-0 group-hover/item:text-[#008ECF] transition-colors"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" d="M9 18l6-6-6-6" />
+                          </svg>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
-
-              {/* ================= DATE INPUT ================= */}
-              {/* <div id="dateWrapper" className="flex-1 min-w-[200px] relative">
-                <label htmlFor="date" className="sr-only">
-                  Date
-                </label>
-
-                <div
-                  onClick={() => setShowCalendar((prev) => !prev)}
-                  className="flex items-center border-2 border-gray-200 
-               px-3 py-2.5 h-12 cursor-pointer 
-               focus-within:border-[#008ECF] transition-colors"
-                >
-                  <svg
-                    className="w-5 h-5 mr-2 text-[#1D4350]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
-
-                  <span className="text-gray-700 text-sm font-medium">
-                    {selectedDate ? format(selectedDate, "PPP") : "Select date (optional)"}
-                  </span>
-                </div>
-
-                {showCalendar && (
-                  <div
-                    className="absolute top-full mt-3 
-  left-1/2 -translate-x-1/2
-  bg-white shadow-2xl border
-  z-50 p-3 w-[680px] max-w-[95vw]"
-                  >
-                    <DayPicker
-                      mode="single"
-                      selected={selectedDate}
-                      onSelect={(date) => {
-                        setSelectedDate(date);
-                        setShowCalendar(false);
-                      }}
-                      numberOfMonths={2}
-                      pagedNavigation
-                      disabled={{ before: new Date() }}
-                      className="text-xs"
-                      classNames={{
-                        months: "flex gap-2",
-                        month: "space-y-2",
-                        caption: "flex justify-between items-center mb-1",
-                        caption_label: "text-sm font-semibold",
-                        nav_button: "h-6 w-6",
-                        head_row: "flex",
-                        head_cell: "w-8 text-[11px] text-gray-500",
-                        row: "flex w-full mt-1",
-                        cell: "w-8 h-8 text-center p-0",
-                        day: "h-8 w-8 rounded-full hover:bg-gray-200 text-xs",
-                      }}
-                    />
-                  </div>
-                )}
-              </div> */}
 
               {/* ================= SEARCH BUTTON ================= */}
               <button
                 type="button"
                 onClick={handleGoToTrip}
-                className="bg-[#1D4350] hover:bg-[#006DA3] text-white font-semibold px-8 py-2.5 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 cursor-pointer h-12 whitespace-nowrap"
+                className="bg-[#1D4350] hover:bg-[#006DA3] text-white font-semibold px-8 h-[60px] whitespace-nowrap transition-all duration-200 cursor-pointer text-sm tracking-wide shrink-0 group/btn"
               >
-                Search Trips →
+                <span className="flex items-center gap-2">
+                  Discover Journeys
+                  <svg
+                    className="w-4 h-4 transition-transform duration-200 group-hover/btn:translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2.5}
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </span>
               </button>
             </div>
           </div>
+
           <p className="mt-6 text-white/85 text-sm drop-shadow-2xl max-w-2xl mx-auto font-medium">
             100k+ Verified Travelers ★ 98% Safety Rating ★ AI-Powered Matching
           </p>
