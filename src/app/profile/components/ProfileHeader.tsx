@@ -31,22 +31,22 @@ export default function ProfileHeader({
   };
 
   return (
-    <div className="relative mx-6">
-      {/* Cover Image Section */}
-      <div className="w-full h-64 overflow-hidden relative">
-        <Image
-          src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
-          alt="Cover"
-          fill
-          className="object-cover"
-        />
-        <button
-          onClick={() => router.back()}
-          className="absolute top-4 left-4 text-white bg-black/40 px-3 py-1 hover:bg-black/60 transition z-10"
-        >
-          ← Back
-        </button>
-      </div>
+   <div className="relative  pt-35 md:pt-18">
+  {/* Cover Image Section */}
+  <div className="w-full h-40 md:h-48 overflow-hidden relative">
+    <Image
+      src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
+      alt="Cover"
+      fill
+      className="object-cover"
+    />
+    <button
+      onClick={() => router.back()}
+      className="absolute top-4 left-4 text-white bg-black/40 px-3 py-1 hover:bg-black/60 transition z-10"
+    >
+      ← Back
+    </button>
+    </div>
 
       {/* Profile Section */}
       <div
