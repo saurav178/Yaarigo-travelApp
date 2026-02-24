@@ -313,7 +313,7 @@ export default function SearchTripPage() {
       {/* Page Content */}
       <div className="px-4 md:px-10 pt-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 max-w-7xl mx-auto gap-6">
-          <aside className="lg:col-span-3">
+          <aside className="lg:col-span-3 sticky top-32 h-fit max-h-[calc(100vh-9rem)] overflow-y-auto">
             <FilterSidebar
               filters={draftFilters}
               updateFilter={updateFilter}
