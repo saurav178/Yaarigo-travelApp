@@ -174,7 +174,7 @@ import CombinedContent from "./components/CombinedContent";
 import { useCombinedFilters } from "./hooks/useCombinedFilters";
 import { useSearchData } from "./hooks/useSearchData";
 import stringify from "fast-json-stable-stringify";
-// import Loader from "@/components/Loader/Loader";
+import Loader from "@/components/Loader/Loader";
 import { ApiTrip } from "./types/types";
 
 export default function SearchTripPage() {
@@ -203,6 +203,7 @@ export default function SearchTripPage() {
     fromCity,
     toCity,
     startDateFrom,
+    gender: "Any",
   });
 
   /* ----------------------------------
@@ -248,8 +249,8 @@ export default function SearchTripPage() {
     useSearchData(stableFilters);
 
   useEffect(() => {
-    if (trips.length > 0) {
-      // Extract unique languages from trips
+    if (trips.length > 0 || packages.length > 0) {
+      // Extract unique languages from trips and packages
       const languagesSet = new Set<string>();
 
       trips.forEach((trip: ApiTrip) => {
@@ -260,9 +261,17 @@ export default function SearchTripPage() {
         }
       });
 
+      packages.forEach((pkg: any) => {
+        if (pkg.partnerPreferences?.languages?.length) {
+          pkg.partnerPreferences.languages.forEach((lang: string) => {
+            languagesSet.add(lang);
+          });
+        }
+      });
+
       setAvailableLanguages(Array.from(languagesSet).sort());
     }
-  }, [trips]);
+  }, [trips, packages]);
 
   /* ----------------------------------
      7️⃣ REAL SERVER ERROR ONLY
@@ -294,9 +303,8 @@ export default function SearchTripPage() {
       {/* Page Content */}
       <div className="px-4 md:px-10 pt-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 max-w-7xl mx-auto gap-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           <div className="lg:col-span-3">
-            <div className="sticky top-32">
+            <div className="sticky top-52 z-30 max-h-[calc(100vh-14rem)] overflow-y-auto overscroll-contain [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               <FilterSidebar
                 filters={draftFilters}
                 updateFilter={updateFilter}
@@ -306,7 +314,7 @@ export default function SearchTripPage() {
           </div>
 
           {/* <div className="lg:col-span-9 max-h-170 overflow-y-auto scrollbar-hide"> */}
-          <div className="lg:col-span-9 max-h-170 overflow-y-auto hide-scrollbar">
+          <div className="lg:col-span-9">
             {noResults ? (
               <div className="text-center py-20 text-gray-500 text-lg">
                 No trips or packages found. Try adjusting filters.
