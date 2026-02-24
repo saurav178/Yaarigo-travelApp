@@ -67,7 +67,7 @@ export default function CombinedContent({
   const totalBlocks = Math.ceil(trips.length / 2);
 
   return (
-    <div className="space-y-14 overflow-x-hidden">
+    <div className="space-y-14 ">
       {Array.from({ length: totalBlocks }).map((_, blockIndex) => {
         const tripStart = blockIndex * 2;
         const tripSlice = trips.slice(tripStart, tripStart + 2);

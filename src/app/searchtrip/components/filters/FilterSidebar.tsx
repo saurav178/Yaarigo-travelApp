@@ -102,7 +102,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
   /* =============================== UI =============================== */
   return (
-    <div className="relative bg-white shadow-lg">
+    <div className="relative bg-white shadow-lg  ">
       {/* Header with decorative corner circles matching the image */}
       <div className="sticky top-0 z-10 px-6 pt-6 pb-5 bg-gradient-to-br from-[#245766] via-[#2d6878] to-[#3a7a8a] relative overflow-hidden">
         {/* Decorative Circles */}

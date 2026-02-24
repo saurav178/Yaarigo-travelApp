@@ -282,7 +282,7 @@ export default function SearchTripPage() {
      8️⃣ UI
   ---------------------------------- */
   return (
-    <div className="min-h-screen pt-16">
+    <div className="min-h-screen pt-16 ">
       <div className="sticky top-18 z-40 bg-white shadow-md">
         <SearchTripSection filters={draftFilters} updateFilter={updateFilter} />
 
@@ -292,19 +292,20 @@ export default function SearchTripPage() {
       </div>
 
       {/* Page Content */}
-      <div className="px-4 md:px-10 pt-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 max-w-7xl mx-auto gap-6 items-start">
-          <aside className="lg:col-span-3">
-            <div className="sticky top-[136px] max-h-[calc(100vh-150px)]">
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 mx-10 mt-5 gap-6 items-start">
+          <div className="lg:col-span-3">
+            <div className="top-[136px]">
               <FilterSidebar
                 filters={draftFilters}
                 updateFilter={updateFilter}
                 availableLanguages={availableLanguages}
               />
             </div>
-          </aside>
+          </div>
 
-          <main className="lg:col-span-9">
+          {/* <div className="lg:col-span-9 max-h-170 overflow-y-auto scrollbar-hide"> */}
+          <div className="lg:col-span-9 max-h-170 overflow-y-auto hide-scrollbar">
             {noResults ? (
               <div className="text-center py-20 text-gray-500 text-lg">
                 No trips or packages found. Try adjusting filters.
@@ -318,9 +319,8 @@ export default function SearchTripPage() {
                 canLoadMore={canLoadMore}
               />
             )}
-          </main>
-        </div>
+          </div>
       </div>
-    </div>
+      </div>
   );
 }

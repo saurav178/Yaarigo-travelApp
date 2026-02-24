@@ -735,7 +735,7 @@ export default function HeroSection() {
                           }}
                           className="flex items-center gap-3 px-5 py-3 hover:bg-[#F0F9FF] cursor-pointer transition-colors duration-150 border-b border-gray-50 last:border-0 group/item"
                         >
-                          <div className="w-7 h-7 rounded-full bg-[#EBF7FF] flex items-center justify-center shrink-0">
+                          {/* <div className="w-7 h-7 rounded-full bg-[#EBF7FF] flex items-center justify-center shrink-0">
                             <svg
                               className="w-3.5 h-3.5 text-[#008ECF]"
                               fill="none"
@@ -754,7 +754,7 @@ export default function HeroSection() {
                                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                               />
                             </svg>
-                          </div>
+                          </div> */}
                           <div className="flex flex-col min-w-0">
                             <span className="text-sm font-semibold text-gray-800 leading-tight">
                               {item.mainText}
