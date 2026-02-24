@@ -13,6 +13,11 @@ export interface Traveller {
   contact: string;
   gender: string;
   age: string | number;
+  dob?: string;
+  firstName?: string;
+  lastName?: string;
+  travelerType?: string;
+  isAddedToCart?: boolean;
 }
 
 export interface ItineraryItem {

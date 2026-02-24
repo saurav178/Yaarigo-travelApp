@@ -2,9 +2,8 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import Link from "next/link";
 import InlineLoader from "@/components/Loader/InlineLoader";
-import { ArrowLeft, Plus, UserPlus, X, Check, Trash2, User } from "lucide-react";
+import { ArrowLeft, Plus, UserPlus, Check, Trash2, User } from "lucide-react";
 import axiosClient from "@/lib/axios-client";
 import { APP_ROUTES } from "@/utils/constants";
 import { AddOnDetail, Traveller, ItineraryItem, CancellationPolicyItem, PlanData } from "./types";
@@ -18,11 +17,33 @@ import SuccessView from "./SuccessView";
 import { API_ENDPOINTS_CONFIG } from "@/utils/apiConfig";
 import { APP_CONSTANTS } from "@/utils/appConstants";
 
+interface UserProfile {
+  id: string;
+  firstName: string;
+  lastName: string;
+  gender: string;
+  dob: string;
+  travelerType?: string;
+  nationality?: string;
+  phone?: string;
+  email?: string;
+}
+
+const calculateAge = (dob: string) => {
+  const birthDate = new Date(dob);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age;
+};
+
 function BookPackageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [packageId, setPackageId] = useState<string>("");
   const [cartId, setCartId] = useState<string>("");
   const [packageTitle, setPackageTitle] = useState<string>("");
   const [planName, setPlanName] = useState<string>("");
@@ -65,10 +86,18 @@ function BookPackageContent() {
     nationality: "Indian",
   });
 
+  const [newTravellerErrors, setNewTravellerErrors] = useState({
+    firstName: "",
+    lastName: "",
+    dob: "",
+    email: "",
+    phone: "",
+  });
+
   // Modal States
   const [showNewTravellerModal, setShowNewTravellerModal] = useState(false);
   const [showExistingTravellerModal, setShowExistingTravellerModal] = useState(false);
-  const [existingProfiles, setExistingProfiles] = useState<any[]>([]);
+  const [existingProfiles, setExistingProfiles] = useState<UserProfile[]>([]);
   const [selectedProfileIds, setSelectedProfileIds] = useState<string[]>([]);
   const [isFetchingProfiles, setIsFetchingProfiles] = useState(false);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
@@ -83,20 +112,39 @@ function BookPackageContent() {
       setShowExistingTravellerModal(true);
     } catch (error) {
       console.error("Failed to fetch profiles", error);
-      alert("Failed to fetch existing travellers.");
     } finally {
       setIsFetchingProfiles(false);
     }
   };
 
   const handleSaveNewTraveller = async () => {
-    if (!newTraveller.firstName || !newTraveller.lastName || !newTraveller.dob) {
-      alert("Please fill all required fields");
-      return;
+    const errors = {
+      firstName: "",
+      lastName: "",
+      dob: "",
+      email: "",
+      phone: "",
+    };
+    let hasError = false;
+
+    if (!newTraveller.firstName.trim()) {
+      errors.firstName = "First name is required";
+      hasError = true;
     }
+    if (!newTraveller.lastName.trim()) {
+      errors.lastName = "Last name is required";
+      hasError = true;
+    }
+    if (!newTraveller.dob) {
+      errors.dob = "Date of birth is required";
+      hasError = true;
+    }
+
+    setNewTravellerErrors(errors);
+    if (hasError) return;
     
     if (!cartId) {
-      alert("Cart ID is missing. Please try again.");
+      console.error("Cart ID is missing.");
       return;
     }
 
@@ -123,7 +171,7 @@ function BookPackageContent() {
       const created = (response.data?.data || response.data)?.[0] || {};
       
       const newTravellerId = created.id || Date.now().toString();
-      const travellerToAdd: any = {
+      const travellerToAdd = {
         id: newTravellerId,
         name: `${newTraveller.firstName} ${newTraveller.lastName}`,
         gender: newTraveller.gender,
@@ -131,7 +179,10 @@ function BookPackageContent() {
         lastName: newTraveller.lastName,
         dob: newTraveller.dob,
         travelerType: created.travelerType || "ADULT",
-        isAddedToCart: true
+        isAddedToCart: true,
+        email: newTraveller.email,
+        contact: newTraveller.phone,
+        age: calculateAge(newTraveller.dob)
       };
 
       setTravellers([...travellers, travellerToAdd]);
@@ -152,10 +203,10 @@ function BookPackageContent() {
       ]);
       
       setNewTraveller({ firstName: "", lastName: "", gender: "MALE", dob: "", email: "", phone: "", nationality: "Indian" });
+      setNewTravellerErrors({ firstName: "", lastName: "", dob: "", email: "", phone: "" });
       setShowNewTravellerModal(false);
     } catch (error) {
       console.error("Failed to add traveler", error);
-      alert("Failed to add traveler.");
     } finally {
       setIsSavingProfile(false);
     }
@@ -169,7 +220,7 @@ function BookPackageContent() {
 
   const addSelectedProfiles = async () => {
     if (!cartId) {
-      alert("Cart ID is missing.");
+      console.error("Cart ID is missing.");
       return;
     }
 
@@ -197,7 +248,7 @@ function BookPackageContent() {
       const addedTravelers = response.data?.data || response.data || [];
       const travelersList = Array.isArray(addedTravelers) ? addedTravelers : [];
 
-      const newTravellers = (travelersList.length > 0 ? travelersList : selected).map((p: any, index: number) => ({
+      const newTravellers = (travelersList.length > 0 ? travelersList : selected).map((p: UserProfile, index: number) => ({
         id: p.id || selected[index]?.id || Date.now().toString(),
         name: `${p.firstName} ${p.lastName}`,
         gender: p.gender,
@@ -205,7 +256,10 @@ function BookPackageContent() {
         lastName: p.lastName,
         dob: p.dob,
         travelerType: p.travelerType || "ADULT",
-        isAddedToCart: true
+        isAddedToCart: true,
+        email: p.email || "",
+        contact: p.phone || "",
+        age: calculateAge(p.dob)
       }));
       
       setTravellers([...travellers, ...newTravellers]);
@@ -213,7 +267,6 @@ function BookPackageContent() {
       setShowExistingTravellerModal(false);
     } catch (error) {
       console.error("Failed to add existing travelers", error);
-      alert("Failed to add selected travelers.");
     } finally {
       setIsAddingExisting(false);
     }
@@ -248,7 +301,6 @@ function BookPackageContent() {
     const cancellationPolicyParam = searchParams.get("cancellationPolicy");
     const planDataParam = searchParams.get("planData");
 
-    setPackageId(pkgId);
     setCartId(cId);
     setPackageTitle(title);
     setPlanName(plan);
@@ -309,7 +361,7 @@ function BookPackageContent() {
   const travellerCount = travellers.length > 0 ? travellers.length : 1;
   const totalBasePrice = planPrice * travellerCount;
   const addOnsTotal = selectedAddOns.reduce((acc, addon) => acc + addon.price, 0);
-  const gstAmount = Math.round((totalBasePrice + addOnsTotal) * APP_CONSTANTS.GST_RATE);
+  const gstAmount = Math.round((totalBasePrice + addOnsTotal) * 0.18);
   const finalTotal = totalBasePrice + addOnsTotal + gstAmount;
   const advanceAmount = Math.round(finalTotal * APP_CONSTANTS.ADVANCE_PAYMENT_PERCENTAGE);
   const remainingAmount = finalTotal - advanceAmount;
@@ -382,10 +434,10 @@ function BookPackageContent() {
 
     try {
       if (cartId && travellers.length > 0) {
-        const travelersToSync = travellers.filter((t: any) => !t.isAddedToCart);
+        const travelersToSync = travellers.filter((t: Traveller & { isAddedToCart?: boolean }) => !t.isAddedToCart);
 
         if (travelersToSync.length > 0) {
-          const travelersPayload = travelersToSync.map((t: any) => ({
+          const travelersPayload = travelersToSync.map((t: Traveller & { firstName?: string; lastName?: string }) => ({
           firstName: t.firstName || t.name?.split(" ")[0] || "Guest",
           lastName: t.lastName || t.name?.split(" ").slice(1).join(" ") || "User",
           gender: t.gender?.toUpperCase() || "MALE",
@@ -529,20 +581,28 @@ function BookPackageContent() {
                       <input
                         type="text"
                         value={newTraveller.firstName}
-                        onChange={(e) => setNewTraveller({ ...newTraveller, firstName: e.target.value })}
-                        className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#276074] focus:border-transparent"
+                        onChange={(e) => {
+                          setNewTraveller({ ...newTraveller, firstName: e.target.value });
+                          if (newTravellerErrors.firstName) setNewTravellerErrors((prev) => ({ ...prev, firstName: "" }));
+                        }}
+                        className={`w-full p-3 border ${newTravellerErrors.firstName ? "border-red-500" : "border-gray-300"} rounded-xl focus:ring-2 focus:ring-[#276074] focus:border-transparent`}
                         placeholder="Enter first name"
                       />
+                      {newTravellerErrors.firstName && <p className="text-xs text-red-500 mt-1">{newTravellerErrors.firstName}</p>}
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
                       <input
                         type="text"
                         value={newTraveller.lastName}
-                        onChange={(e) => setNewTraveller({ ...newTraveller, lastName: e.target.value })}
-                        className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#276074] focus:border-transparent"
+                        onChange={(e) => {
+                          setNewTraveller({ ...newTraveller, lastName: e.target.value });
+                          if (newTravellerErrors.lastName) setNewTravellerErrors((prev) => ({ ...prev, lastName: "" }));
+                        }}
+                        className={`w-full p-3 border ${newTravellerErrors.lastName ? "border-red-500" : "border-gray-300"} rounded-xl focus:ring-2 focus:ring-[#276074] focus:border-transparent`}
                         placeholder="Enter last name"
                       />
+                      {newTravellerErrors.lastName && <p className="text-xs text-red-500 mt-1">{newTravellerErrors.lastName}</p>}
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Gender</label>
@@ -561,9 +621,13 @@ function BookPackageContent() {
                       <input
                         type="date"
                         value={newTraveller.dob}
-                        onChange={(e) => setNewTraveller({ ...newTraveller, dob: e.target.value })}
-                        className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#276074] focus:border-transparent"
+                        onChange={(e) => {
+                          setNewTraveller({ ...newTraveller, dob: e.target.value });
+                          if (newTravellerErrors.dob) setNewTravellerErrors((prev) => ({ ...prev, dob: "" }));
+                        }}
+                        className={`w-full p-3 border ${newTravellerErrors.dob ? "border-red-500" : "border-gray-300"} rounded-xl focus:ring-2 focus:ring-[#276074] focus:border-transparent`}
                       />
+                      {newTravellerErrors.dob && <p className="text-xs text-red-500 mt-1">{newTravellerErrors.dob}</p>}
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
