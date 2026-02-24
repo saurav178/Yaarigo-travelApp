@@ -261,6 +261,7 @@ type TripCardProps = {
 
 export default function TripCard({ trip }: TripCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
+  const [showChatbot, setShowChatbot] = useState(false); // Add state for chatbot
 
   // Extract trip data
   const title = trip.title || "Untitled Trip";

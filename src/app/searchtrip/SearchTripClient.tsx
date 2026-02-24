@@ -181,9 +181,16 @@ import { ApiTrip } from "./types/types";
 export default function SearchTripPage() {
   const searchParams = useSearchParams();
   const [isTyping, setIsTyping] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
   const [availableLanguages, setAvailableLanguages] = useState<string[]>([]);
   // 🔥 Remove unused state or use it if needed
   // const [availableTripStyles, setAvailableTripStyles] = useState<string[]>([]);
+
+  // 🔥 Move this effect to the top - it's fine
+  useEffect(() => {
+    const timer = setTimeout(() => setShowLoader(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   /* ----------------------------------
      1️⃣ INITIAL FILTERS FROM URL
