@@ -165,7 +165,6 @@
 //   );
 // }
 
-
 "use client";
 import { useEffect, useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
@@ -175,7 +174,7 @@ import CombinedContent from "./components/CombinedContent";
 import { useCombinedFilters } from "./hooks/useCombinedFilters";
 import { useSearchData } from "./hooks/useSearchData";
 import stringify from "fast-json-stable-stringify";
-import Loader from "@/components/Loader/Loader";
+// import Loader from "@/components/Loader/Loader";
 import { ApiTrip } from "./types/types";
 
 export default function SearchTripPage() {
@@ -183,8 +182,6 @@ export default function SearchTripPage() {
   const [isTyping, setIsTyping] = useState(false);
   const [showLoader, setShowLoader] = useState(true);
   const [availableLanguages, setAvailableLanguages] = useState<string[]>([]);
-  // 🔥 Remove unused state or use it if needed
-  // const [availableTripStyles, setAvailableTripStyles] = useState<string[]>([]);
 
   // 🔥 Move this effect to the top - it's fine
   useEffect(() => {
@@ -233,12 +230,15 @@ export default function SearchTripPage() {
      5️⃣ MEMOIZE FILTERS WITH STABLE STRINGIFY
   ---------------------------------- */
   // 🔥 FIXED: Proper useMemo dependency
-  const appliedFiltersKey = useMemo(() => stringify(appliedFilters), [appliedFilters]);
-  
+  const appliedFiltersKey = useMemo(
+    () => stringify(appliedFilters),
+    [appliedFilters],
+  );
+
   const stableFilters = useMemo(
     () => appliedFilters,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [appliedFiltersKey] // Use the stringified key as dependency
+    [appliedFiltersKey], // Use the stringified key as dependency
   );
 
   /* ----------------------------------
@@ -251,8 +251,6 @@ export default function SearchTripPage() {
     if (trips.length > 0) {
       // Extract unique languages from trips
       const languagesSet = new Set<string>();
-      // 🔥 FIXED: Replace 'any' with proper type
-      // const tripStylesSet = new Set<string>();
 
       trips.forEach((trip: ApiTrip) => {
         if (trip.partnerPreferences?.languages?.length) {
@@ -260,17 +258,9 @@ export default function SearchTripPage() {
             languagesSet.add(lang);
           });
         }
-        // 🔥 Comment out if not using tripStyles
-        // if (trip.partnerPreferences?.tripStyles?.length) {
-        //   trip.partnerPreferences.tripStyles.forEach((style: string) => {
-        //     tripStylesSet.add(style);
-        //   });
-        // }
       });
 
       setAvailableLanguages(Array.from(languagesSet).sort());
-      // 🔥 Comment out if not using tripStyles
-      // setAvailableTripStyles(Array.from(tripStylesSet).sort());
     }
   }, [trips]);
 
@@ -288,20 +278,11 @@ export default function SearchTripPage() {
   const noResults =
     hasFetched && !loading && trips.length === 0 && packages.length === 0;
 
-  // 🔥 Show loader AFTER all hooks, but before the main return
-  if (showLoader) {
-    return (
-      <div className="w-full h-screen flex items-center justify-center bg-white">
-        <Loader />
-      </div>
-    );
-  }
-
   /* ----------------------------------
      8️⃣ UI
   ---------------------------------- */
   return (
-    <div className="min-h-screen pt-16">
+    <div className="min-h-screen pt-16 ">
       <div className="sticky top-18 z-40 bg-white shadow-md">
         <SearchTripSection filters={draftFilters} updateFilter={updateFilter} />
 
@@ -313,17 +294,19 @@ export default function SearchTripPage() {
       {/* Page Content */}
       <div className="px-4 md:px-10 pt-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 max-w-7xl mx-auto gap-6">
-          <aside className="lg:col-span-3 sticky top-32 h-fit max-h-[calc(100vh-9rem)] overflow-y-auto">
-            <FilterSidebar
-              filters={draftFilters}
-              updateFilter={updateFilter}
-              availableLanguages={availableLanguages}
-              // 🔥 Remove tripStyles prop or uncomment if needed
-              // availableTripStyles={availableTripStyles}
-            />
-          </aside>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <div className="lg:col-span-3">
+            <div className="sticky top-32">
+              <FilterSidebar
+                filters={draftFilters}
+                updateFilter={updateFilter}
+                availableLanguages={availableLanguages}
+              />
+            </div>
+          </div>
 
-          <main className="lg:col-span-9">
+          {/* <div className="lg:col-span-9 max-h-170 overflow-y-auto scrollbar-hide"> */}
+          <div className="lg:col-span-9 max-h-170 overflow-y-auto hide-scrollbar">
             {noResults ? (
               <div className="text-center py-20 text-gray-500 text-lg">
                 No trips or packages found. Try adjusting filters.
@@ -337,7 +320,7 @@ export default function SearchTripPage() {
                 canLoadMore={canLoadMore}
               />
             )}
-          </main>
+          </div>
         </div>
       </div>
     </div>
