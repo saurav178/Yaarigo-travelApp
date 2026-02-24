@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import InlineLoader from "@/components/Loader/InlineLoader";
-import { ArrowLeft, Plus, UserPlus, Check, Trash2, User } from "lucide-react";
+import { ArrowLeft, Plus, UserPlus, Check, Trash2, User, Pencil } from "lucide-react";
 import axiosClient from "@/lib/axios-client";
 import { APP_ROUTES } from "@/utils/constants";
 import { AddOnDetail, Traveller, ItineraryItem, CancellationPolicyItem, PlanData } from "./types";
@@ -16,6 +16,7 @@ import PaymentSummaryCard from "./PaymentSummaryCard";
 import SuccessView from "./SuccessView";
 import { API_ENDPOINTS_CONFIG } from "@/utils/apiConfig";
 import { APP_CONSTANTS } from "@/utils/appConstants";
+import TravellersListCard from "./TravellersListCard";
 
 interface UserProfile {
   id: string;
@@ -102,6 +103,9 @@ function BookPackageContent() {
   const [isFetchingProfiles, setIsFetchingProfiles] = useState(false);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [isAddingExisting, setIsAddingExisting] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [profileToDelete, setProfileToDelete] = useState<string | null>(null);
+  const [editingTravellerId, setEditingTravellerId] = useState<string | null>(null);
 
   const fetchExistingTravellers = async () => {
     setIsFetchingProfiles(true);
@@ -114,6 +118,39 @@ function BookPackageContent() {
       console.error("Failed to fetch profiles", error);
     } finally {
       setIsFetchingProfiles(false);
+    }
+  };
+
+  const handleEditProfile = (profile: UserProfile) => {
+    setNewTraveller({
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      gender: profile.gender,
+      dob: profile.dob ? profile.dob.split("T")[0] : "",
+      email: profile.email || "",
+      phone: profile.phone || "",
+      nationality: profile.nationality || "Indian",
+    });
+    setEditingTravellerId(profile.id);
+    setShowNewTravellerModal(true);
+    setShowExistingTravellerModal(false);
+  };
+
+  const handleDeleteProfile = (id: string) => {
+    setProfileToDelete(id);
+    setShowDeleteConfirmation(true);
+  };
+
+  const executeDeleteProfile = async () => {
+    if (!profileToDelete) return;
+    try {
+      await axiosClient.delete(`${API_ENDPOINTS_CONFIG.BOOKING.TRAVELER_PROFILES}/${profileToDelete}`);
+      setExistingProfiles((prev) => prev.filter((p) => p.id !== profileToDelete));
+      setSelectedProfileIds((prev) => prev.filter((pId) => pId !== profileToDelete));
+      setShowDeleteConfirmation(false);
+      setProfileToDelete(null);
+    } catch (error) {
+      console.error("Failed to delete profile", error);
     }
   };
 
@@ -143,10 +180,6 @@ function BookPackageContent() {
     setNewTravellerErrors(errors);
     if (hasError) return;
     
-    if (!cartId) {
-      console.error("Cart ID is missing.");
-      return;
-    }
 
     setIsSavingProfile(true);
     try {
@@ -162,51 +195,71 @@ function BookPackageContent() {
         isDefault: true
       };
       
-      // Save traveler profile
-      await axiosClient.post(API_ENDPOINTS_CONFIG.BOOKING.TRAVELER_PROFILES, payload);
+      if (editingTravellerId) {
+        await axiosClient.patch(`${API_ENDPOINTS_CONFIG.BOOKING.TRAVELER_PROFILES}/${editingTravellerId}`, payload);
+        
+        setExistingProfiles(prev => prev.map(p => p.id === editingTravellerId ? {
+            ...p,
+            firstName: newTraveller.firstName,
+            lastName: newTraveller.lastName,
+            gender: newTraveller.gender,
+            dob: payload.dob,
+            nationality: newTraveller.nationality,
+            phone: newTraveller.phone,
+            email: newTraveller.email,
+        } : p));
+      } else {
+        // Save new traveler profile
+        const profileRes = await axiosClient.post(API_ENDPOINTS_CONFIG.BOOKING.TRAVELER_PROFILES, payload);
+        const profileData = profileRes.data?.data || profileRes.data;
+        const createdProfile = Array.isArray(profileData) ? profileData[0] : profileData;
+        const createdProfileId = createdProfile?.id;
 
-      const response = await axiosClient.post(API_ENDPOINTS_CONFIG.BOOKING.ADD_TRAVELERS(cartId), {
-        travelers: [payload]
-      });
-      const created = (response.data?.data || response.data)?.[0] || {};
-      
-      const newTravellerId = created.id || Date.now().toString();
-      const travellerToAdd = {
-        id: newTravellerId,
-        name: `${newTraveller.firstName} ${newTraveller.lastName}`,
-        gender: newTraveller.gender,
-        firstName: newTraveller.firstName,
-        lastName: newTraveller.lastName,
-        dob: newTraveller.dob,
-        travelerType: created.travelerType || "ADULT",
-        isAddedToCart: true,
-        email: newTraveller.email,
-        contact: newTraveller.phone,
-        age: calculateAge(newTraveller.dob)
-      };
-
-      setTravellers([...travellers, travellerToAdd]);
-
-      setExistingProfiles((prev) => [
-        ...prev,
-        {
+        const response = await axiosClient.post(API_ENDPOINTS_CONFIG.BOOKING.ADD_TRAVELERS(cartId), {
+          travelers: [payload]
+        });
+        const created = (response.data?.data || response.data)?.[0] || {};
+        
+        const newTravellerId = created.id || Date.now().toString();
+        const travellerToAdd = {
           id: newTravellerId,
+          profileId: createdProfileId,
+          name: `${newTraveller.firstName} ${newTraveller.lastName}`,
+          gender: newTraveller.gender,
           firstName: newTraveller.firstName,
           lastName: newTraveller.lastName,
-          gender: newTraveller.gender,
           dob: newTraveller.dob,
-          travelerType: "ADULT",
-          nationality: newTraveller.nationality,
-          phone: newTraveller.phone,
+          travelerType: created.travelerType || "ADULT",
+          isAddedToCart: true,
           email: newTraveller.email,
-        },
-      ]);
+          contact: newTraveller.phone,
+          age: calculateAge(newTraveller.dob)
+        };
+
+        setTravellers([...travellers, travellerToAdd]);
+
+        setExistingProfiles((prev) => [
+          ...prev,
+          {
+            id: createdProfileId || newTravellerId,
+            firstName: newTraveller.firstName,
+            lastName: newTraveller.lastName,
+            gender: newTraveller.gender,
+            dob: newTraveller.dob,
+            travelerType: "ADULT",
+            nationality: newTraveller.nationality,
+            phone: newTraveller.phone,
+            email: newTraveller.email,
+          },
+        ]);
+      }
       
       setNewTraveller({ firstName: "", lastName: "", gender: "MALE", dob: "", email: "", phone: "", nationality: "Indian" });
       setNewTravellerErrors({ firstName: "", lastName: "", dob: "", email: "", phone: "" });
+      setEditingTravellerId(null);
       setShowNewTravellerModal(false);
     } catch (error) {
-      console.error("Failed to add traveler", error);
+      console.error("Failed to save traveler", error);
     } finally {
       setIsSavingProfile(false);
     }
@@ -250,6 +303,7 @@ function BookPackageContent() {
 
       const newTravellers = (travelersList.length > 0 ? travelersList : selected).map((p: UserProfile, index: number) => ({
         id: p.id || selected[index]?.id || Date.now().toString(),
+        profileId: selected[index]?.id,
         name: `${p.firstName} ${p.lastName}`,
         gender: p.gender,
         firstName: p.firstName,
@@ -535,6 +589,11 @@ function BookPackageContent() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => {
+                    if (!showNewTravellerModal) {
+                      setEditingTravellerId(null);
+                      setNewTraveller({ firstName: "", lastName: "", gender: "MALE", dob: "", email: "", phone: "", nationality: "Indian" });
+                      setNewTravellerErrors({ firstName: "", lastName: "", dob: "", email: "", phone: "" });
+                    }
                     setShowNewTravellerModal(!showNewTravellerModal);
                     setShowExistingTravellerModal(false);
                   }}
@@ -545,7 +604,7 @@ function BookPackageContent() {
                   }`}
                 >
                   <Plus className="w-5 h-5" />
-                  {showNewTravellerModal ? "Cancel" : "Add New Traveller"}
+                  {showNewTravellerModal ? "Cancel" : (editingTravellerId ? "Edit Traveller" : "Add New Traveller")}
                 </button>
                 <button
                   onClick={() => {
@@ -572,7 +631,7 @@ function BookPackageContent() {
               {showNewTravellerModal && (
                 <div className="mt-6 pt-6 border-t border-gray-100">
                   <div className="flex justify-between items-center mb-4">
-                    <h4 className="font-semibold text-gray-900">New Traveller Details</h4>
+                    <h4 className="font-semibold text-gray-900">{editingTravellerId ? "Edit Traveller Details" : "New Traveller Details"}</h4>
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -666,7 +725,7 @@ function BookPackageContent() {
                     disabled={isSavingProfile}
                     className="w-full py-3 bg-[#276074] text-white font-semibold rounded-xl hover:opacity-90 transition-all mt-6 disabled:opacity-70"
                   >
-                    {isSavingProfile ? "Saving..." : "Save & Add Traveller"}
+                    {isSavingProfile ? "Saving..." : (editingTravellerId ? "Update Profile" : "Save & Add Traveller")}
                   </button>
                 </div>
               )}
@@ -696,11 +755,27 @@ function BookPackageContent() {
                             <p className="font-semibold text-gray-900">{profile.firstName} {profile.lastName}</p>
                             <p className="text-sm text-gray-500">{profile.gender} • {profile.dob}</p>
                           </div>
-                          {selectedProfileIds.includes(profile.id) && (
-                            <div className="w-6 h-6 bg-[#276074] rounded-full flex items-center justify-center">
-                              <Check className="w-4 h-4 text-white" />
-                            </div>
-                          )}
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={(e) => { e.stopPropagation(); handleEditProfile(profile); }}
+                              className="p-2 text-gray-400 hover:text-[#276074] hover:bg-[#276074]/5 rounded-lg transition-colors"
+                              title="Edit Profile"
+                            >
+                              <Pencil className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); handleDeleteProfile(profile.id); }}
+                              className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                              title="Delete Profile"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                            {selectedProfileIds.includes(profile.id) && (
+                              <div className="w-6 h-6 bg-[#276074] rounded-full flex items-center justify-center">
+                                <Check className="w-4 h-4 text-white" />
+                              </div>
+                            )}
+                          </div>
                         </div>
                       ))
                     )}
@@ -737,13 +812,15 @@ function BookPackageContent() {
                       </p>
                     </div>
                   </div>
-                  <button
-                    onClick={() => handleRemoveTraveller(traveller.id)}
-                    className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                    title="Remove Traveller"
-                  >
-                    <Trash2 className="w-5 h-5" />
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handleRemoveTraveller(traveller.id)}
+                      className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                      title="Remove Traveller"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  </div>
                 </div>
               ))}
               {travellers.length === 0 && (
@@ -795,6 +872,37 @@ function BookPackageContent() {
           </div>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirmation && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 animate-in fade-in zoom-in duration-200">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                <Trash2 className="w-6 h-6 text-red-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Delete Profile?</h3>
+              <p className="text-gray-500 mb-6">
+                Are you sure you want to delete this traveler profile? This action cannot be undone.
+              </p>
+              <div className="flex gap-3 w-full">
+                <button
+                  onClick={() => setShowDeleteConfirmation(false)}
+                  className="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={executeDeleteProfile}
+                  className="flex-1 px-4 py-2.5 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-colors"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -13,7 +13,8 @@ export default function CancellationPolicyCard({
   const sorted = [...cancellationPolicy].sort(
     (a, b) => b.beforeDays - a.beforeDays
   );
-  const first = sorted[0];
+  const first = sorted && sorted.length > 0 ? sorted[0] : null;
+  const { beforeDays, refundPercentage } = first || ({} as any);
 
   return (
     <div className="bg-white rounded-2xl shadow-md p-6">
@@ -22,7 +23,7 @@ export default function CancellationPolicyCard({
         Cancellation Policy
       </h2>
       <p className="text-green-600 mt-1 font-medium">
-        Cancellation Possible till {first.beforeDays} days before*
+        Cancellation Possible till {beforeDays} days before*
       </p>
       <p className="text-gray-500 text-sm">
         After that Package is{" "}
@@ -42,17 +43,17 @@ export default function CancellationPolicyCard({
       <div className="flex justify-between mt-6">
         <div>
           <p className="text-teal-700 font-semibold">
-            Till {first.beforeDays} days before
+            Till {beforeDays} days before
           </p>
           <p className="text-sm text-gray-500">
-            {first.refundPercentage === 100
+            {refundPercentage === 100
               ? "₹0 Cancellation Fee"
-              : `${first.refundPercentage}% Refund`}
+              : `${refundPercentage}% Refund`}
           </p>
         </div>
         <div className="text-right">
           <p className="text-orange-600 font-semibold">
-            After {first.beforeDays} days
+            After {beforeDays} days
           </p>
           <p className="text-sm text-gray-500">Non Refundable</p>
         </div>
