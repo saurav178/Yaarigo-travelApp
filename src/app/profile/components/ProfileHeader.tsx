@@ -31,7 +31,7 @@ export default function ProfileHeader({
   };
 
   return (
-   <div className="relative  pt-45 md:pt-18">
+   <div className="relative  pt-35 md:pt-18">
   {/* Cover Image Section */}
   <div className="w-full h-40 md:h-48 overflow-hidden relative">
     <Image
@@ -104,7 +104,7 @@ export default function ProfileHeader({
           </button>
         </div>
         {/* Avatar - positioned floating over cover image half */}
-        <div className="absolute left-10 -top-26 w-75 h-60 overflow-hidden shadow-md z-20">
+        <div className="absolute left-20 -top-26 w-82 h-70 overflow-hidden shadow-md z-20">
           <Image
             src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91"
             alt="Profile"

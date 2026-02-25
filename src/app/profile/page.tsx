@@ -38,6 +38,7 @@ export default function ProfilePage() {
   const handleChatClose = () => setIsChatOpen(false);
 
   return (
+    
 <div 
   className="min-h-screen w-screen bg-gray-50 flex flex-col overflow-x-hidden" 
   style={{ overflowY: 'hidden', width: '100%' }}
@@ -53,7 +54,7 @@ export default function ProfilePage() {
       </div>
 
       {/* Main Content */}
-      <div className="flex flex-1 overflow-hidden mt-8 w-full min-w-0">
+      <div className="flex flex-1  mt-8 w-full min-w-0">
 
   {/* Left Column */}
  <div className="hidden md:block md:w-1/3 md:ml-15 md:sticky  self-start h-fit">
