@@ -75,6 +75,8 @@ function BookPackageContent() {
   const [planData, setPlanData] = useState<PlanData | null>(null);
   const [inviteLink, setInviteLink] = useState("");
   const [isCopied, setIsCopied] = useState(false);
+  const [maxPeople, setMaxPeople] = useState<number>(Infinity);
+  const [travellerError, setTravellerError] = useState<string>("");
 
   // New Traveller State
   const [newTraveller, setNewTraveller] = useState({
@@ -106,6 +108,8 @@ function BookPackageContent() {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [profileToDelete, setProfileToDelete] = useState<string | null>(null);
   const [editingTravellerId, setEditingTravellerId] = useState<string | null>(null);
+  const [showDeleteTravellerConfirmation, setShowDeleteTravellerConfirmation] = useState(false);
+  const [travellerToDelete, setTravellerToDelete] = useState<string | null>(null);
 
   const fetchExistingTravellers = async () => {
     setIsFetchingProfiles(true);
@@ -179,6 +183,12 @@ function BookPackageContent() {
 
     setNewTravellerErrors(errors);
     if (hasError) return;
+
+    if (travellers.length >= maxPeople) {
+      setTravellerError(`You cannot add more than ${maxPeople} travellers.`);
+      return;
+    }
+    setTravellerError("");
     
 
     setIsSavingProfile(true);
@@ -280,6 +290,12 @@ function BookPackageContent() {
     const selected = existingProfiles.filter(p => selectedProfileIds.includes(p.id));
     if (selected.length === 0) return;
 
+    if (travellers.length + selected.length > maxPeople) {
+      setTravellerError(`You can only add ${maxPeople - travellers.length} more traveller(s).`);
+      return;
+    }
+    setTravellerError("");
+
     setIsAddingExisting(true);
     try {
       const travelersPayload = selected.map(p => ({
@@ -326,15 +342,29 @@ function BookPackageContent() {
     }
   };
 
-  const handleRemoveTraveller = async (id: string) => {
+  const handleRemoveTraveller = (id: string) => {
+    setTravellerToDelete(id);
+    setShowDeleteTravellerConfirmation(true);
+  };
+
+  const executeDeleteTraveller = async () => {
+    if (!travellerToDelete) return;
     if (cartId) {
       try {
-        await axiosClient.delete(API_ENDPOINTS_CONFIG.BOOKING.REMOVE_TRAVELERS(cartId, id));
+        await axiosClient.delete(
+          API_ENDPOINTS_CONFIG.BOOKING.REMOVE_TRAVELERS(cartId, travellerToDelete),
+          { data: { travelerIds: [travellerToDelete] } }
+        );
+        if (travellerError) {
+          setTravellerError("");
+        }
       } catch (error) {
         console.error("Failed to remove traveler", error);
       }
     }
-    setTravellers((prev) => prev.filter((t) => t.id !== id));
+    setTravellers((prev) => prev.filter((t) => t.id !== travellerToDelete));
+    setShowDeleteTravellerConfirmation(false);
+    setTravellerToDelete(null);
   };
 
   useEffect(() => {
@@ -354,6 +384,11 @@ function BookPackageContent() {
     const itineraryParam = searchParams.get("itineraryData");
     const cancellationPolicyParam = searchParams.get("cancellationPolicy");
     const planDataParam = searchParams.get("planData");
+    const maxPeopleParam = searchParams.get("maxPeople");
+
+    if (maxPeopleParam) {
+      setMaxPeople(parseInt(maxPeopleParam, 10));
+    }
 
     setCartId(cId);
     setPackageTitle(title);
@@ -597,11 +632,12 @@ function BookPackageContent() {
                     setShowNewTravellerModal(!showNewTravellerModal);
                     setShowExistingTravellerModal(false);
                   }}
+                  disabled={travellers.length >= maxPeople}
                   className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all ${
                     showNewTravellerModal 
                       ? "bg-gray-100 text-gray-700 border border-gray-200" 
                       : "bg-[#276074] text-white hover:opacity-90"
-                  }`}
+                  } disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
                   <Plus className="w-5 h-5" />
                   {showNewTravellerModal ? "Cancel" : (editingTravellerId ? "Edit Traveller" : "Add New Traveller")}
@@ -615,17 +651,23 @@ function BookPackageContent() {
                       fetchExistingTravellers();
                     }
                   }}
-                  disabled={isFetchingProfiles}
+                  disabled={isFetchingProfiles || travellers.length >= maxPeople}
                   className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 border-2 border-[#276074] rounded-xl transition-all ${
                     showExistingTravellerModal
                       ? "bg-[#276074] text-white"
                       : "text-[#276074] hover:bg-[#276074]/5"
-                  }`}
+                  } disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
                   <UserPlus className="w-5 h-5" />
                   {isFetchingProfiles ? "Loading..." : (showExistingTravellerModal ? "Close Selection" : "Select Existing")}
                 </button>
               </div>
+
+              {travellerError && (
+                <div className="mt-4 text-red-500 text-sm font-semibold bg-red-50 p-3 rounded-xl border border-red-200">
+                  {travellerError}
+                </div>
+              )}
 
               {/* Inline New Traveller Form */}
               {showNewTravellerModal && (
@@ -897,6 +939,37 @@ function BookPackageContent() {
                   className="flex-1 px-4 py-2.5 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-colors"
                 >
                   Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Traveller Confirmation Modal */}
+      {showDeleteTravellerConfirmation && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 animate-in fade-in zoom-in duration-200">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                <Trash2 className="w-6 h-6 text-red-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Remove Traveller?</h3>
+              <p className="text-gray-500 mb-6">
+                Are you sure you want to remove this traveller from the list?
+              </p>
+              <div className="flex gap-3 w-full">
+                <button
+                  onClick={() => setShowDeleteTravellerConfirmation(false)}
+                  className="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={executeDeleteTraveller}
+                  className="flex-1 px-4 py-2.5 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-colors"
+                >
+                  Remove
                 </button>
               </div>
             </div>

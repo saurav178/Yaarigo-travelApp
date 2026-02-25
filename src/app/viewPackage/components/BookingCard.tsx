@@ -73,6 +73,7 @@ export default function BookingCard({
     params.set("travelDate", travelDate);
 
     if (cartId) params.set("cartId", cartId);
+    if (selectedPlan.maxPeople) params.set("maxPeople", selectedPlan.maxPeople.toString());
 
     if (travellers && travellers.length > 0) {
       params.set("travellersData", JSON.stringify(travellers));
