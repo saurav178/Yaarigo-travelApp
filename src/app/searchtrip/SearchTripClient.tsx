@@ -166,7 +166,7 @@
 // }
 
 "use client";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import SearchTripSection from "./components/SearchSection";
 import FilterSidebar from "./components/filters/FilterSidebar";
@@ -175,19 +175,42 @@ import { useCombinedFilters } from "./hooks/useCombinedFilters";
 import { useSearchData } from "./hooks/useSearchData";
 import stringify from "fast-json-stable-stringify";
 // import Loader from "@/components/Loader/Loader";
-import { ApiTrip } from "./types/types";
+import { ApiPackage, ApiTrip } from "./types/types";
+
+const shimmerStyle = `
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+  
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      #f0f0f0 0%,
+      #e0e0e0 20%,
+      #f0f0f0 40%,
+      #f0f0f0 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite;
+  }
+`;
 
 export default function SearchTripPage() {
   const searchParams = useSearchParams();
   const [isTyping, setIsTyping] = useState(false);
-  const [showLoader, setShowLoader] = useState(true);
+  // const [showLoader, setShowLoader] = useState(true);
   const [availableLanguages, setAvailableLanguages] = useState<string[]>([]);
 
   // 🔥 Move this effect to the top - it's fine
-  useEffect(() => {
-    const timer = setTimeout(() => setShowLoader(false), 2000);
-    return () => clearTimeout(timer);
-  }, []);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => setShowLoader(false), 2000);
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   /* ----------------------------------
      1️⃣ INITIAL FILTERS FROM URL
@@ -203,17 +226,28 @@ export default function SearchTripPage() {
     fromCity,
     toCity,
     startDateFrom,
+    genderPreference: "ANY",
   });
 
   /* ----------------------------------
      3️⃣ APPLIED FILTERS - MEMOIZED
   ---------------------------------- */
   const [appliedFilters, setAppliedFilters] = useState(draftFilters);
+  const isFirstRenderRef = useRef(true);
 
   /* ----------------------------------
      4️⃣ DEBOUNCE APPLY - 500ms with typing indicator
+     BUT: Apply immediately on first render to show initial data
   ---------------------------------- */
   useEffect(() => {
+    if (isFirstRenderRef.current) {
+      // First render: apply immediately
+      isFirstRenderRef.current = false;
+      setAppliedFilters(draftFilters);
+      return;
+    }
+
+    // Subsequent renders: debounce
     setIsTyping(true);
     const t = setTimeout(() => {
       setAppliedFilters(draftFilters);
@@ -248,8 +282,8 @@ export default function SearchTripPage() {
     useSearchData(stableFilters);
 
   useEffect(() => {
-    if (trips.length > 0) {
-      // Extract unique languages from trips
+    if (trips.length > 0 || packages.length > 0) {
+      // Extract unique languages from trips and packages
       const languagesSet = new Set<string>();
 
       trips.forEach((trip: ApiTrip) => {
@@ -260,9 +294,17 @@ export default function SearchTripPage() {
         }
       });
 
+      packages.forEach((pkg: ApiPackage) => {
+        if (pkg.partnerPreferences?.languages?.length) {
+          pkg.partnerPreferences.languages.forEach((lang: string) => {
+            languagesSet.add(lang);
+          });
+        }
+      });
+
       setAvailableLanguages(Array.from(languagesSet).sort());
     }
-  }, [trips]);
+  }, [trips, packages]);
 
   /* ----------------------------------
      7️⃣ REAL SERVER ERROR ONLY
@@ -282,7 +324,9 @@ export default function SearchTripPage() {
      8️⃣ UI
   ---------------------------------- */
   return (
-    <div className="min-h-screen pt-16">
+    <>
+      <style>{shimmerStyle}</style>
+      <div className="min-h-screen pt-16 ">
       <div className="sticky top-18 z-40 bg-white shadow-md">
         <SearchTripSection filters={draftFilters} updateFilter={updateFilter} />
 
@@ -293,21 +337,59 @@ export default function SearchTripPage() {
 
       {/* Page Content */}
       <div className="px-4 md:px-10 pt-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 max-w-7xl mx-auto gap-6 items-start">
-          <aside className="lg:col-span-3">
-            <div className="sticky top-[136px] max-h-[calc(100vh-150px)]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 max-w-7xl mx-auto gap-6">
+          <div className="lg:col-span-3">
+            <div className="sticky top-52 z-30 max-h-[calc(100vh-14rem)] overflow-y-auto overscroll-contain [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               <FilterSidebar
                 filters={draftFilters}
                 updateFilter={updateFilter}
                 availableLanguages={availableLanguages}
               />
             </div>
-          </aside>
+          </div>
 
-          <main className="lg:col-span-9">
+          {/* <div className="lg:col-span-9 max-h-170 overflow-y-auto scrollbar-hide"> */}
+          <div className="lg:col-span-9">
             {noResults ? (
-              <div className="text-center py-20 text-gray-500 text-lg">
-                No trips or packages found. Try adjusting filters.
+              <div className="space-y-14">
+                {/* Trip Skeletons */}
+                <div className="space-y-4">
+                  {Array.from({ length: 2 }).map((_, i) => (
+                    <div key={`trip-${i}`} className="bg-white shadow-md flex rounded-lg overflow-hidden">
+                      <div className="w-80 h-64 shimmer" />
+                      <div className="flex-1 p-6 space-y-4">
+                        <div className="h-6 rounded w-3/4 shimmer" />
+                        <div className="h-4 rounded w-1/2 shimmer" />
+                        <div className="grid grid-cols-3 gap-3 pt-2">
+                          <div className="h-4 rounded shimmer" />
+                          <div className="h-4 rounded shimmer" />
+                          <div className="h-4 rounded shimmer" />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Package Skeletons */}
+                <div>
+                  <div className="mb-4">
+                    <div className="h-6 rounded w-40 mb-2 shimmer" />
+                    <div className="h-4 rounded w-56 shimmer" />
+                  </div>
+                  <div className="flex gap-4 overflow-x-auto pb-4">
+                    {Array.from({ length: 4 }).map((_, i) => (
+                      <div
+                        key={`pkg-${i}`}
+                        className="w-80 flex-shrink-0 bg-white shadow-md p-4 space-y-3 rounded-lg"
+                      >
+                        <div className="h-40 rounded shimmer" />
+                        <div className="h-4 rounded w-3/4 shimmer" />
+                        <div className="h-4 rounded w-1/2 shimmer" />
+                        <div className="h-4 rounded w-2/3 shimmer" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             ) : (
               <CombinedContent
@@ -318,9 +400,10 @@ export default function SearchTripPage() {
                 canLoadMore={canLoadMore}
               />
             )}
-          </main>
+          </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

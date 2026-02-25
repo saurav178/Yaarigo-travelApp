@@ -13,12 +13,12 @@ const INITIAL_FILTERS: CombinedFilters = {
   minPrice: undefined,
   maxPrice: undefined,
 
-  tripStyles: [],
 
   category: undefined,
   creatorType: undefined,
 
   travelMode: undefined,
+  genderPreference: "ANY",
   languages: [],
 
   minAge: undefined,
