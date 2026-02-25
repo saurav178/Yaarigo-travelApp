@@ -296,6 +296,10 @@ export interface PackagePlan {
   active: boolean;
 }
 export interface ApiPackage {
+  partnerPreferences?: {
+    languages?: string[];
+  };
+
   slug: string;
   coverImage: string;
   _id: string;

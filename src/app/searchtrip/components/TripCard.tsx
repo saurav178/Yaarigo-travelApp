@@ -261,7 +261,7 @@ type TripCardProps = {
 
 export default function TripCard({ trip }: TripCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
-  const [showChatbot, setShowChatbot] = useState(false); // Add state for chatbot
+  // const [showChatbot, setShowChatbot] = useState(false); // Add state for chatbot
 
   // Extract trip data
   const title = trip.title || "Untitled Trip";
@@ -316,7 +316,7 @@ export default function TripCard({ trip }: TripCardProps) {
   return (
     <div className="bg-white shadow-sm transition-all duration-300 overflow-hidden flex border border-[#e1e1e1]">
       {/* Image Section */}
-      <div className="relative w-80 h-66 bg-gradient-to-br from-teal-400 to-blue-500 flex-shrink-0">
+      <div className="relative w-80 h-66 bg-gradient-to-br from-teal-400 to-blue-00 flex-shrink-0">
         <Image
           src={imageUrl}
           alt={title}

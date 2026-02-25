@@ -1,15 +1,15 @@
 import type { PackageFilterPayload } from '../../types/types';
 
 export const mapPackageFiltersToQuery = (filters: PackageFilterPayload) => {
-  const q: Record<string, string> = {};
+  const q: Record<string, string | string[]> = {};
 
   if (filters.page) q.page = String(filters.page);
   if (filters.limit) q.limit = String(filters.limit);
   if (filters.keyword) q.keyword = filters.keyword;
   if (filters.fromCity) q.fromCity = filters.fromCity;
   if (filters.toCity) q.toCity = filters.toCity;
-  if (filters.creatorType) q.creatorType = filters.creatorType;
-  if (filters.tripStyles?.length) q.tripStyles = filters.tripStyles.join(",");
+  // ❌ creatorType NOT supported by packages API
+  // tripStyles removed from package query parameters per request
   if (filters.minPrice) q.minPrice = String(filters.minPrice);
   if (filters.maxPrice) q.maxPrice = String(filters.maxPrice);
   if (filters.minDays) q.minDays = String(filters.minDays);
