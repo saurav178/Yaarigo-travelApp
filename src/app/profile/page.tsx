@@ -38,7 +38,10 @@ export default function ProfilePage() {
   const handleChatClose = () => setIsChatOpen(false);
 
   return (
-<div className="min-h-screen w-screen bg-gray-50 flex flex-col overflow-x-hidden" style={{ overflowY: 'hidden' }}>
+<div 
+  className="min-h-screen w-screen bg-gray-50 flex flex-col overflow-x-hidden" 
+  style={{ overflowY: 'hidden', width: '100%' }}
+>
       {/* Sticky Header */}
       <div className="top-0 z-50">
         <ProfileHeader
@@ -50,19 +53,21 @@ export default function ProfilePage() {
       </div>
 
       {/* Main Content */}
-      <div className="flex flex-1 overflow-hidden mt-8 w-full">
-        {/* Left Column: Sticky About Section, shifted slightly right */}
-        <div className="hidden md:block md:w-1/3 md:sticky md:top-36 self-start md:ml-8 h-screen overflow-auto">
-          <AboutSection />
-        </div>
+      <div className="flex flex-1 overflow-hidden mt-8 w-full min-w-0">
 
-        {/* Right Column: Tabs Section (vertical scroll only) */}
-        <div className="flex-1 h-screen overflow-y-auto px-4 md:px-6">
+  {/* Left Column */}
+ <div className="hidden md:block md:w-1/3 md:ml-15 md:sticky  self-start h-fit">
+  <AboutSection />
+</div>
+
+  {/* Right Column */}
+ <div className="flex-1 min-w-0 px-4 md:px-6 overflow-y-auto overflow-x-hidden">
   <div className="w-full max-w-full overflow-x-hidden">
     <TabsSection />
   </div>
 </div>
-      </div>
+
+</div>
 
       <ChatWindow isOpen={isChatOpen} onClose={handleChatClose} />
     </div>
