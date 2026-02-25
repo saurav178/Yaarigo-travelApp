@@ -14,6 +14,29 @@ type Props = {
 };
 const PACKAGES_PER_BLOCK = 4; // 4 packages after each 2 trips
 
+const shimmerStyle = `
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+  
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      #f0f0f0 0%,
+      #e0e0e0 20%,
+      #f0f0f0 40%,
+      #f0f0f0 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite;
+  }
+`;
+
 export default function CombinedContent({
   trips,
   packages,
@@ -28,11 +51,8 @@ export default function CombinedContent({
     if (loading) {
       setShowSkeleton(true);
     } else {
-      const t = setTimeout(() => {
-        setShowSkeleton(false);
-      }, 800);
-
-      return () => clearTimeout(t);
+      // Hide skeleton immediately when loading completes
+      setShowSkeleton(false);
     }
   }, [loading]);
   /* ===============================
@@ -61,19 +81,35 @@ export default function CombinedContent({
   }, [loading, canLoadMore, loadMore]);
 
   /* ===============================
-     LAYOUT LOGIC
+     LAYOUT LOGIC - SORT BY RECENT
      2 trips per block
   ================================ */
-  const totalBlocks = Math.ceil(trips.length / 2);
+  // Sort trips by creation date (newest first)
+  const sortedTrips = [...trips].sort((a, b) => {
+    const dateA = new Date(a.createdAt || 0).getTime();
+    const dateB = new Date(b.createdAt || 0).getTime();
+    return dateB - dateA; // Newest first
+  });
+
+  // Sort packages by creation date (newest first)
+  const sortedPackages = [...packages].sort((a, b) => {
+    const dateA = new Date(a.createdAt || 0).getTime();
+    const dateB = new Date(b.createdAt || 0).getTime();
+    return dateB - dateA; // Newest first
+  });
+
+  const totalBlocks = Math.ceil(sortedTrips.length / 2);
 
   return (
-    <div className="space-y-14 ">
+    <>
+      <style>{shimmerStyle}</style>
+      <div className="space-y-14 ">
       {Array.from({ length: totalBlocks }).map((_, blockIndex) => {
         const tripStart = blockIndex * 2;
-        const tripSlice = trips.slice(tripStart, tripStart + 2);
+        const tripSlice = sortedTrips.slice(tripStart, tripStart + 2);
 
         const packageStart = blockIndex * PACKAGES_PER_BLOCK;
-        const packageSlice = packages.slice(
+        const packageSlice = sortedPackages.slice(
           packageStart,
           packageStart + PACKAGES_PER_BLOCK,
         );
@@ -84,8 +120,8 @@ export default function CombinedContent({
                 TRIPS (2 per block)
             ================================ */}
             <div className="space-y-4">
-              {tripSlice.map((trip) => (
-                <TripCard key={trip._id} trip={trip} />
+              {tripSlice.map((trip, tripIndex) => (
+                <TripCard key={`${blockIndex}-${tripIndex}`} trip={trip} />
               ))}
             </div>
 
@@ -105,8 +141,8 @@ export default function CombinedContent({
 
                 <div className="relative">
                   <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
-                    {packageSlice.map((pkg) => (
-                      <div key={pkg._id} className="w-80 flex-shrink-0">
+                    {packageSlice.map((pkg, pkgIndex) => (
+                      <div key={`${blockIndex}-pkg-${pkgIndex}`} className="w-80 flex-shrink-0">
                         <PackageCard pkg={pkg} />
                       </div>
                     ))}
@@ -143,7 +179,7 @@ export default function CombinedContent({
       {/* ===============================
           END STATE
       ================================ */}
-      {!canLoadMore && trips.length > 0 && (
+      {!canLoadMore && sortedTrips.length > 0 && (
         <div className="text-center py-8 border-t">
           <p className="text-gray-500">You&apos;ve seen all trips!</p>
         </div>
@@ -160,6 +196,7 @@ export default function CombinedContent({
         }
       `}</style>
     </div>
+    </>
   );
 }
 
@@ -170,19 +207,19 @@ function PackageCardSkeleton() {
   return (
     <div>
       <div className="mb-4">
-        <div className="h-6 bg-gray-200 rounded w-40 mb-2 animate-pulse" />
-        <div className="h-4 bg-gray-200 rounded w-56 animate-pulse" />
+        <div className="h-6 rounded w-40 mb-2 shimmer" />
+        <div className="h-4 rounded w-56 shimmer" />
       </div>
 
       <div className="flex gap-4 overflow-x-auto pb-4">
         {Array.from({ length: 4 }).map((_, i) => (
           <div
             key={i}
-            className="w-80 flex-shrink-0 bg-white shadow-md p-4 space-y-3 animate-pulse"
+            className="w-80 flex-shrink-0 bg-white shadow-md p-4 space-y-3"
           >
-            <div className="h-40 bg-gray-200 rounded" />
-            <div className="h-4 bg-gray-200 rounded w-3/4" />
-            <div className="h-4 bg-gray-200 rounded w-1/2" />
+            <div className="h-40 rounded shimmer" />
+            <div className="h-4 rounded w-3/4 shimmer" />
+            <div className="h-4 rounded w-1/2 shimmer" />
           </div>
         ))}
       </div>
@@ -192,14 +229,14 @@ function PackageCardSkeleton() {
 
 function TripCardSkeleton() {
   return (
-    <div className="bg-white shadow-md flex animate-pulse">
-      <div className="w-80 h-64 bg-gray-200" />
+    <div className="bg-white shadow-md flex">
+      <div className="w-80 h-64 shimmer rounded" />
       <div className="flex-1 p-4 space-y-3">
-        <div className="h-6 bg-gray-200 rounded w-3/4" />
-        <div className="h-4 bg-gray-200 rounded w-1/2" />
+        <div className="h-6 rounded w-3/4 shimmer" />
+        <div className="h-4 rounded w-1/2 shimmer" />
         <div className="grid grid-cols-2 gap-3">
-          <div className="h-4 bg-gray-200 rounded" />
-          <div className="h-4 bg-gray-200 rounded" />
+          <div className="h-4 rounded shimmer" />
+          <div className="h-4 rounded shimmer" />
         </div>
       </div>
     </div>

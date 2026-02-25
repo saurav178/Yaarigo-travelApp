@@ -8,6 +8,14 @@ import { FaIndianRupeeSign } from "react-icons/fa6";
 /* ===== STATIC OPTIONS ===== */
 // const TRIP_STYLES = ["adventure", "leisure", "spiritual", "wildlife"];
 const GENDERS = ["ANY", "MALE_ONLY", "FEMALE_ONLY"];
+const CREATOR_TYPES = [
+  { value: "AGENCY", label: "Agency" },
+  { value: "LEADER", label: "Trip Leader" },
+  { value: "HOST", label: "Host" },
+  { value: "GUIDE", label: "Guide" },
+  { value: "TRIP_LEADER", label: "Trip Leader" },
+  { value: "INDIVIDUAL", label: "Individual" },
+];
 const LANGUAGES = ["English", "Hindi", "Odia", "German", "Spanish", "Italian"];
 interface FilterSidebarProps {
   filters: CombinedFilters;
@@ -56,16 +64,11 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   }, [budget, updateFilter]);
 
   /* =============================== HELPERS =============================== */
-  type ArrayFilterKeys = "tripStyles" | "languages";
+  type ArrayFilterKeys = "languages";
 
-  const toggleArrayValue = <K extends ArrayFilterKeys>(
-    key: K,
-    value: string,
-  ) => {
+  const toggleArrayValue = <K extends ArrayFilterKeys>(key: K, value: string) => {
     const current = (filters[key] ?? []) as string[];
-    const updated = current.includes(value)
-      ? current.filter((v) => v !== value)
-      : [...current, value];
+    const updated = current.includes(value) ? current.filter((v) => v !== value) : [...current, value];
     updateFilter(key, updated as CombinedFilters[K]);
   };
 
@@ -74,7 +77,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
     setBudget(50000);
     updateFilter("keyword", undefined);
     updateFilter("maxPrice", 50000);
-    updateFilter("tripStyles", []);
+    // tripStyles removed
     updateFilter("creatorType", undefined);
     updateFilter("genderPreference", "ANY");
     updateFilter("languages", []);
@@ -102,7 +105,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
   /* =============================== UI =============================== */
   return (
-    <div className="relative bg-white shadow-lg  ">
+    <div className="relative bg-white rounded-3xl border border-gray-100 shadow-[0_40px_100px_rgba(0,0,0,0.25)]">
       {/* Header with decorative corner circles matching the image */}
       <div className="sticky top-0 z-10 px-6 pt-6 pb-5 bg-gradient-to-br from-[#245766] via-[#2d6878] to-[#3a7a8a] relative overflow-hidden">
         {/* Decorative Circles */}
@@ -252,6 +255,34 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
                 }`}
               >
                 {g === "ANY" ? "Any" : g.replace("_", " ")}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Creator Type */}
+        <div className="space-y-3">
+          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+            <Users className="w-4 h-4 text-gray-500" />
+            Creator Type
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            {CREATOR_TYPES.map((creator) => (
+              <button
+                key={creator.value}
+                onClick={() =>
+                  updateFilter(
+                    "creatorType",
+                    creator.value as CombinedFilters["creatorType"],
+                  )
+                }
+                className={`py-2.5 rounded-lg text-xs font-medium transition-all ${
+                  filters.creatorType === creator.value
+                    ? "bg-[#1d4350] text-white shadow-sm"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                {creator.label}
               </button>
             ))}
           </div>
