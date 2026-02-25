@@ -225,8 +225,13 @@ function BookPackageContent() {
         const createdProfile = Array.isArray(profileData) ? profileData[0] : profileData;
         const createdProfileId = createdProfile?.id;
 
+        const travelerPayloadForCart = {
+          ...payload,
+          travelerProfileId: createdProfileId,
+        };
+
         const response = await axiosClient.post(API_ENDPOINTS_CONFIG.BOOKING.ADD_TRAVELERS(cartId), {
-          travelers: [payload]
+          travelers: [travelerPayloadForCart]
         });
         const created = (response.data?.data || response.data)?.[0] || {};
         
@@ -307,7 +312,8 @@ function BookPackageContent() {
         nationality: p.nationality || "Indian",
         phone: p.phone || "",
         email: p.email || "",
-        isDefault: false
+        isDefault: false,
+        travelerProfileId: p.id,
       }));
 
       const response = await axiosClient.post(API_ENDPOINTS_CONFIG.BOOKING.ADD_TRAVELERS(cartId), {

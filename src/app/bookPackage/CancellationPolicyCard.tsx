@@ -14,7 +14,7 @@ export default function CancellationPolicyCard({
     (a, b) => b.beforeDays - a.beforeDays
   );
   const first = sorted && sorted.length > 0 ? sorted[0] : null;
-  const { beforeDays, refundPercentage } = first || ({} as any);
+  const { beforeDays, refundPercentage } = first || { beforeDays: 0, refundPercentage: 0 };
 
   return (
     <div className="bg-white rounded-2xl shadow-md p-6">
