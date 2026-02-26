@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FaMapMarkerAlt, FaHeart, FaShieldAlt } from "react-icons/fa";
-
+import { FaUserFriends, FaUserCheck, FaMapMarkedAlt } from "react-icons/fa";
 interface ProfileHeaderProps {
   isFollowing: boolean;
   followersCount: number;
@@ -152,20 +152,36 @@ export default function ProfileHeader({
           </div>
 
           {/* Stats - adjusted spacing and alignment */}
-          <div className="flex justify-start gap-4 mt-10 ml-101 text-center">
-            <div className="bg-gray-200 py-3 px-6 shadow-sm">
-              <p className="text-lg font-semibold">{followersCount}</p>
-              <p className="text-gray-500 text-sm">Followers</p>
-            </div>
-            <div className="bg-gray-200 py-3 px-6 shadow-sm">
-              <p className="text-lg font-semibold">567</p>
-              <p className="text-gray-500 text-sm">Following</p>
-            </div>
-            <div className="bg-gray-200 py-3 px-6 shadow-sm">
-              <p className="text-lg font-semibold">15</p>
-              <p className="text-gray-500 text-sm">Trips Completed</p>
-            </div>
-          </div>
+     <div className="flex justify-start p-4 gap-6 mt-4 ml-105 text-center">
+  {/* Followers */}
+  <div className="bg-gray-200 py-5 px-10 shadow-sm flex flex-col items-center justify-center gap-2 rounded-lg min-w-[120px] h-20 ">
+    {/* Icon + Number in a row */}
+    <div className="flex items-center gap-2">
+      <FaUserFriends className="text-gray-500 text-3xl" />
+      <p className="text-2xl font-semibold">{followersCount}</p>
+    </div>
+    {/* Label in next line */}
+    <p className="text-gray-500 text-sm">Followers</p>
+  </div>
+
+  {/* Following */}
+  <div className="bg-gray-200 py-5 px-10 shadow-sm flex flex-col items-center justify-center gap-2 rounded-lg min-w-[120px] h-20 ">
+    <div className="flex items-center gap-2">
+      <FaUserCheck className="text-gray-500 text-3xl" />
+      <p className="text-2xl font-semibold">567</p>
+    </div>
+    <p className="text-gray-500 text-sm">Following</p>
+  </div>
+
+  {/* Trips Completed */}
+  <div className="bg-gray-200 py-5 px-10 shadow-sm flex flex-col items-center justify-center gap-2 rounded-lg min-w-[120px] h-20 ">
+    <div className="flex items-center gap-2">
+      <FaMapMarkedAlt className="text-gray-500 text-3xl" />
+      <p className="text-2xl font-semibold">15</p>
+    </div>
+    <p className="text-gray-500 text-sm">Trips Completed</p>
+  </div>
+</div>
         </div>
 
       </div>
