@@ -15,7 +15,7 @@ import { useState } from "react";
 import { ApiTrip } from "../types/types";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/routes";
-import JoinTrip from "./JoinTrip";
+
 /* ================= TYPES ================= */
 
 type TripCardProps = {
@@ -76,7 +76,8 @@ export default function TripCard({ trip }: TripCardProps) {
       : "Date TBD";
 
   const router = useRouter();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  const [status, setStatus] = useState("idle");
   return (
     <div className="bg-white shadow-sm transition-all duration-300 overflow-hidden flex border border-[#e1e1e1]">
       {/* Image Section */}
@@ -214,13 +215,29 @@ export default function TripCard({ trip }: TripCardProps) {
     View Trip
   </button>
 </Link>
-          <button
+         <button
   type="button"
-  onClick={() => setIsModalOpen(true)}
-  className="py-2 text-white text-xs font-semibold"
-  style={{ backgroundColor: "#276074" }}
+  disabled={status === "success"}
+  onClick={() => {
+    // This changes the button text and color immediately
+    setStatus("success");
+    // If you still want the modal to open as well, keep the line below:
+    // setIsModalOpen(true); 
+  }}
+  className={`py-2 text-white text-xs font-semibold transition-all duration-300 flex items-center justify-center gap-1 ${
+    status === "success" ? "bg-green-600 cursor-default" : "hover:opacity-90"
+  }`}
+  style={{ 
+    backgroundColor: status === "success" ? "#16a34a" : "#276074" 
+  }}
 >
-  Join Trip
+  {status === "success" ? (
+    <>
+      <FaCheckCircle className="w-3 h-3" /> Request Sent
+    </>
+  ) : (
+    "Join Trip"
+  )}
 </button>
           <button
             onClick={() => router.push("/profile")}
@@ -231,13 +248,7 @@ export default function TripCard({ trip }: TripCardProps) {
           </button>
         </div>
       </div>
-    <JoinTrip
-  isOpen={isModalOpen}
-  onClose={() => setIsModalOpen(false)}
-  tripId={trip._id}
-  tripTitle={trip.title || "this trip"}
-  
-/>
+    
     </div>
   );
 }
