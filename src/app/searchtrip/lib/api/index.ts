@@ -19,10 +19,39 @@ async function fetchJson<T>(
   const res = await fetch(url, { signal });
 
   if (!res.ok) {
-    throw new Error(`API error: ${res.status}`);
+    // try to capture response body for easier debugging
+    let bodyText = "";
+    try {
+      bodyText = await res.text();
+    } catch (e) {
+      /* ignore */
+    }
+    // Log full info to the console to help debugging in dev
+    // eslint-disable-next-line no-console
+    console.error(`API error ${res.status} when fetching ${url}:`, bodyText);
+    throw new Error(`API error: ${res.status} ${url}`);
   }
 
   return res.json() as Promise<T>;
+}
+
+// Helper to build URLSearchParams with proper array handling
+function buildQueryString(params: Record<string, string | string[]>): string {
+  const query = new URLSearchParams();
+  
+  Object.entries(params).forEach(([key, value]) => {
+    if (Array.isArray(value)) {
+      // For arrays, append each element separately
+      if (value.length > 0) {
+        value.forEach(v => query.append(key, v));
+      }
+      // Skip empty arrays - don't append anything
+    } else if (value !== undefined && value !== '') {
+      query.append(key, value);
+    }
+  });
+  
+  return query.toString();
 }
 
 export const apiService = {
@@ -31,9 +60,8 @@ export const apiService = {
       filters: CombinedFilters,
       signal?: AbortSignal
     ): Promise<ApiTripResponse> => {
-      const params = new URLSearchParams(
-        mapTripFiltersToQuery(filters)
-      ).toString();
+      const paramsObj = mapTripFiltersToQuery(filters);
+      const params = buildQueryString(paramsObj);
 
       return fetchJson<ApiTripResponse>(
         `${API_BASE_URL}/trips/search?${params}`,
@@ -47,9 +75,8 @@ export const apiService = {
       filters: CombinedFilters,
       signal?: AbortSignal
     ): Promise<ApiPackageResponse> => {
-      const params = new URLSearchParams(
-        mapPackageFiltersToQuery(filters)
-      ).toString();
+      const paramsObj = mapPackageFiltersToQuery(filters);
+      const params = buildQueryString(paramsObj);
 
       return fetchJson<ApiPackageResponse>(
         `${API_BASE_URL}/packages/search?${params}`,

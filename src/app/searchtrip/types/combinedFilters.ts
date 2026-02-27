@@ -14,10 +14,10 @@ export interface CombinedFilters {
   maxPrice?: number;
 
   // Common
-  tripStyles?: string[];
+  
 
   // Package specific
-  creatorType?: "AGENCY" | "LEADER";
+  creatorType?: "AGENCY" | "LEADER" | "HOST" | "GUIDE" | "TRIP_LEADER" | "INDIVIDUAL";
   category?: string;
   minDays?: number;
   maxDays?: number;
@@ -25,7 +25,6 @@ export interface CombinedFilters {
 
   // Trip specific
   travelMode?: string;
-  gender?: string;
   languages?: string[];
   minAge?: number;
   maxAge?: number;
