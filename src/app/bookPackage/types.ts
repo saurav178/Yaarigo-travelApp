@@ -4,6 +4,8 @@ export interface AddOnDetail {
   desc: string;
   price: number;
   tag: string;
+  quantity?: number;
+  pricePerUnit?: number;
 }
 
 export interface Traveller {

@@ -23,6 +23,9 @@ export default function SelectedAddOnsCard({
             <div>
               <p className="font-semibold text-gray-800">{addon.title}</p>
               <p className="text-sm text-gray-500">{addon.desc}</p>
+              {addon.quantity && addon.quantity > 1 && (
+                <p className="text-xs text-gray-500 mt-1">Qty: {addon.quantity} × {currencySymbol}{(addon.pricePerUnit || addon.price).toLocaleString()}</p>
+              )}
             </div>
             <span className="font-bold text-[#276074]">
               {currencySymbol}

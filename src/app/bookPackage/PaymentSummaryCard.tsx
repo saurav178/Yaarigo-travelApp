@@ -6,8 +6,12 @@ import {
   Building,
   AlertCircle,
   Lock,
+  Tag,
+  X,
 } from "lucide-react";
 import InlineLoader from "@/components/Loader/InlineLoader";
+import { useState } from "react";
+import { bookingService } from "@/services/booking-service";
 
 interface PaymentSummaryCardProps {
   currencySymbol: string;
@@ -35,6 +39,11 @@ interface PaymentSummaryCardProps {
   isProcessing: boolean;
   handleConfirmPayment: (e: React.FormEvent) => void;
   selectedAddOnsLength: number;
+  cartId?: string;
+  appliedDiscount?: number;
+  onApplyCoupon?: (code: string) => void;
+  onRemoveCoupon?: () => void;
+  couponCode?: string;
 }
 
 export default function PaymentSummaryCard({
@@ -63,7 +72,50 @@ export default function PaymentSummaryCard({
   isProcessing,
   handleConfirmPayment,
   selectedAddOnsLength,
+  cartId,
+  appliedDiscount = 0,
+  onApplyCoupon,
+  onRemoveCoupon,
+  couponCode = "",
 }: PaymentSummaryCardProps) {
+  const [showCouponInput, setShowCouponInput] = useState(false);
+  const [couponInput, setCouponInput] = useState(couponCode);
+  const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
+  const [couponError, setCouponError] = useState("");
+
+  const handleApplyCoupon = async () => {
+    if (!couponInput.trim()) {
+      setCouponError("Please enter a coupon code");
+      return;
+    }
+
+    setIsApplyingCoupon(true);
+    setCouponError("");
+
+    try {
+      if (onApplyCoupon) {
+        await onApplyCoupon(couponInput);
+      }
+      setShowCouponInput(false);
+    } catch (error: any) {
+      setCouponError(error?.message || "Invalid coupon code");
+    } finally {
+      setIsApplyingCoupon(false);
+    }
+  };
+
+  const handleRemoveCoupon = async () => {
+    if (onRemoveCoupon && cartId) {
+      await onRemoveCoupon();
+    }
+    setCouponInput("");
+  };
+
+  // Calculate discounted amounts
+  const discountedTotal = finalTotal - appliedDiscount;
+  const discountedAdvance = Math.round(discountedTotal * 0.3);
+  const discountedRemaining = discountedTotal - discountedAdvance;
+
   return (
     <div className="bg-white rounded-2xl shadow-xl border border-gray-100 sticky top-24 overflow-hidden">
       {/* Price Summary */}
@@ -126,17 +178,90 @@ export default function PaymentSummaryCard({
             <span>Total Amount</span>
             <span>
               {currencySymbol}
-              {finalTotal.toLocaleString()}
+              {(appliedDiscount > 0 ? discountedTotal : finalTotal).toLocaleString()}
             </span>
           </div>
+          {appliedDiscount > 0 && (
+            <div className="flex justify-between text-green-600 text-xs mt-1">
+              <span>Discount Applied</span>
+              <span className="font-medium">
+                -{currencySymbol}
+                {appliedDiscount.toLocaleString()}
+              </span>
+            </div>
+          )}
           <div className="flex justify-between text-orange-600 text-xs mt-1">
             <span>Remaining (70%) due in 7 days</span>
             <span className="font-medium">
               {currencySymbol}
-              {remainingAmount.toLocaleString()}
+              {(appliedDiscount > 0 ? discountedRemaining : remainingAmount).toLocaleString()}
             </span>
           </div>
         </div>
+      </div>
+
+      {/* Coupon Section */}
+      <div className="p-4 border-b border-gray-100">
+        {appliedDiscount > 0 ? (
+          <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg px-3 py-2">
+            <div className="flex items-center gap-2">
+              <Tag className="w-4 h-4 text-green-600" />
+              <span className="text-sm font-medium text-green-700">{couponCode}</span>
+              <span className="text-xs text-green-600">
+                (-{currencySymbol}{appliedDiscount})
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={handleRemoveCoupon}
+              className="text-red-500 hover:text-red-700 p-1"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        ) : showCouponInput ? (
+          <div className="space-y-2">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={couponInput}
+                onChange={(e) => {
+                  setCouponInput(e.target.value.toUpperCase());
+                  setCouponError("");
+                }}
+                placeholder="Enter coupon code"
+                className="flex-1 p-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#276074] focus:border-transparent"
+              />
+              <button
+                type="button"
+                onClick={() => setShowCouponInput(false)}
+                className="px-3 py-2 text-gray-500 hover:text-gray-700"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            {couponError && (
+              <p className="text-xs text-red-500">{couponError}</p>
+            )}
+            <button
+              type="button"
+              onClick={handleApplyCoupon}
+              disabled={isApplyingCoupon}
+              className="w-full py-2 bg-[#276074] text-white text-sm font-medium rounded-lg hover:opacity-90 disabled:opacity-50"
+            >
+              {isApplyingCoupon ? "Applying..." : "Apply Coupon"}
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setShowCouponInput(true)}
+            className="flex items-center gap-2 text-[#276074] hover:text-[#1d4350] text-sm font-medium"
+          >
+            <Tag className="w-4 h-4" />
+            Apply Coupon
+          </button>
+        )}
       </div>
 
       {/* Payment Tabs */}
@@ -331,7 +456,7 @@ export default function PaymentSummaryCard({
               <CreditCard className="w-5 h-5" />
               <span>
                 Pay {currencySymbol}
-                {advanceAmount.toLocaleString()}
+                {(appliedDiscount > 0 ? discountedAdvance : advanceAmount).toLocaleString()}
               </span>
             </>
           )}
