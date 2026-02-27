@@ -134,7 +134,6 @@ function BookPackageContent() {
         throw new Error("Invalid coupon code");
       }
     } catch (error) {
-      console.error("Failed to apply coupon", error);
       setCouponError("Failed to apply coupon. Please check the code and try again.");
       throw error;
     }
@@ -151,7 +150,6 @@ function BookPackageContent() {
       setCouponCode("");
       setCouponError(""); 
     } catch (error) {
-      console.error("Failed to remove coupon", error);
       setCouponError("Failed to remove coupon. Please try again.");
     }
   };
@@ -172,7 +170,6 @@ function BookPackageContent() {
       setExistingProfiles(profiles);
       setShowExistingTravellerModal(true);
     } catch (error) {
-      console.error("Failed to fetch profiles", error);
     } finally {
       setIsFetchingProfiles(false);
     }
@@ -207,7 +204,6 @@ function BookPackageContent() {
       setShowDeleteConfirmation(false);
       setProfileToDelete(null);
     } catch (error) {
-      console.error("Failed to delete profile", error);
     }
   };
 
@@ -327,7 +323,6 @@ function BookPackageContent() {
       setEditingTravellerId(null);
       setShowNewTravellerModal(false);
     } catch (error) {
-      console.error("Failed to save traveler", error);
     } finally {
       setIsSavingProfile(false);
     }
@@ -341,7 +336,6 @@ function BookPackageContent() {
 
   const addSelectedProfiles = async () => {
     if (!cartId) {
-      console.error("Cart ID is missing.");
       return;
     }
 
@@ -395,7 +389,6 @@ function BookPackageContent() {
       setSelectedProfileIds([]);
       setShowExistingTravellerModal(false);
     } catch (error) {
-      console.error("Failed to add existing travelers", error);
     } finally {
       setIsAddingExisting(false);
     }
@@ -418,7 +411,6 @@ function BookPackageContent() {
           setTravellerError("");
         }
       } catch (error) {
-        console.error("Failed to remove traveler", error);
       }
     }
     setTravellers((prev) => prev.filter((t) => t.id !== travellerToDelete));
@@ -428,35 +420,26 @@ function BookPackageContent() {
 
   useEffect(() => {
     const fetchCartAndInitialize = async () => {
-      console.log("Attempting to fetch active cart...");
       let cart = await bookingService.getActiveCart();
 
       if (cart && cart.id) {
-        console.log('Active cart found:', cart);
       } else {
-        console.log("No active cart found. Attempting to create a new cart.");
         const packageId = searchParams.get("packageId");
         const planId = searchParams.get("planId");
         const organizationId = user?.organizations?.[0]?.id;
         const travelDate = new Date().toISOString().split('T')[0];
 
-        console.log("Create cart params:", { packageId, planId, organizationId, travelDate });
 
         if (packageId && planId && organizationId) {
-          console.log("Calling createCart service...");
           cart = await bookingService.createCart({ packageId, planId, organizationId, travelDate });
           if(cart) {
-            console.log("Cart created successfully:", cart);
           } else {
-            console.error("Cart creation failed.");
           }
         } else {
-          console.log("Not enough information to create a cart. Missing one of: packageId, planId, organizationId.");
         }
       }
       
       if (cart && cart.id) {
-        console.log('Populating page from active/created cart:', cart);
         setCartId(cart.id);
         
         if(cart.tripPackage) {
@@ -483,7 +466,6 @@ function BookPackageContent() {
           try {
             setItinerary(JSON.parse(itineraryParam));
           } catch (e) {
-            console.error("Error parsing itinerary:", e);
           }
         }
 
@@ -492,7 +474,6 @@ function BookPackageContent() {
           try {
             setCancellationPolicy(JSON.parse(cancellationPolicyParam));
           } catch (e) {
-            console.error("Error parsing cancellation policy:", e);
           }
         }
 
@@ -501,12 +482,10 @@ function BookPackageContent() {
             try {
                 setPlanData(JSON.parse(planDataParam));
             } catch (e) {
-                console.error("Error parsing plan data:", e);
             }
         }
 
       } else {
-        console.log("Falling back to URL query parameters to populate page.");
         // Fallback to query parameters if no active cart and creation failed
         const pkgId = searchParams.get("packageId") || "";
         const cId = searchParams.get("cartId") || "";
@@ -546,7 +525,6 @@ function BookPackageContent() {
           try {
             setTravellers(JSON.parse(travellersParam));
           } catch (e) {
-            console.error("Error parsing travellers:", e);
           }
         }
 
@@ -554,7 +532,6 @@ function BookPackageContent() {
           try {
             setItinerary(JSON.parse(itineraryParam));
           } catch (e) {
-            console.error("Error parsing itinerary:", e);
           }
         }
 
@@ -563,7 +540,6 @@ function BookPackageContent() {
             const parsed = JSON.parse(addOnsParam);
             setSelectedAddOns(parsed);
           } catch (e) {
-            console.error("Error parsing addons:", e);
           }
         }
 
@@ -571,7 +547,6 @@ function BookPackageContent() {
           try {
             setCancellationPolicy(JSON.parse(cancellationPolicyParam));
           } catch (e) {
-            console.error("Error parsing cancellation policy:", e);
           }
         }
 
@@ -579,16 +554,13 @@ function BookPackageContent() {
           try {
             setPlanData(JSON.parse(planDataParam));
           } catch (e) {
-            console.error("Error parsing plan data:", e);
           }
         }
       }
     };
     if (user) {
-        console.log("User object found, initializing cart logic.", user);
         fetchCartAndInitialize();
     } else {
-        console.log("User object not available yet.");
     }
   }, [searchParams, user]);
 
@@ -694,7 +666,6 @@ function BookPackageContent() {
     setIsProcessing(false);
     setIsSuccess(true);
     } catch (error) {
-      console.error("Booking failed:", error);
       setPaymentError("Failed to process booking. Please try again.");
       setIsProcessing(false);
     }

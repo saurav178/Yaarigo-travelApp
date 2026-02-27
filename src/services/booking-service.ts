@@ -19,7 +19,6 @@ export const bookingService = {
       const res = await bookingAxios.get(API_ENDPOINTS_CONFIG.BOOKING.CREATE_CART);
       return res.data;
     } catch (error) {
-      console.error('Failed to get active cart:', error);
       return null;
     }
   },
@@ -29,7 +28,6 @@ export const bookingService = {
       const res = await bookingAxios.post(API_ENDPOINTS_CONFIG.BOOKING.CREATE_CART, payload);
       return res.data;
     } catch (error) {
-      console.error('Failed to create cart:', error);
       return null;
     }
   },
@@ -39,7 +37,6 @@ export const bookingService = {
         const res = await bookingAxios.post(API_ENDPOINTS_CONFIG.BOOKING.ADD_ADDONS(cartId), payload);
         return res.data;
     } catch (error) {
-        console.error('Failed to add addons:', error);
         return null;
     }
   },
@@ -51,7 +48,6 @@ export const bookingService = {
         });
         return res.data;
     } catch (error) {
-        console.error('Failed to apply voucher:', error);
         return null;
     }
   },
@@ -61,7 +57,6 @@ export const bookingService = {
         const res = await bookingAxios.delete(API_ENDPOINTS_CONFIG.BOOKING.APPLY_VOUCHER(cartId));
         return res.data;
     } catch (error) {
-        console.error('Failed to remove voucher:', error);
         return null;
     }
   }
