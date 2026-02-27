@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 import InlineLoader from "@/components/Loader/InlineLoader";
 import { useState } from "react";
-import { bookingService } from "@/services/booking-service";
 
 interface PaymentSummaryCardProps {
   currencySymbol: string;
@@ -97,8 +96,12 @@ export default function PaymentSummaryCard({
         await onApplyCoupon(couponInput);
       }
       setShowCouponInput(false);
-    } catch (error: any) {
-      setCouponError(error?.message || "Invalid coupon code");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setCouponError(error.message || "Invalid coupon code");
+      } else {
+        setCouponError("An unexpected error occurred");
+      }
     } finally {
       setIsApplyingCoupon(false);
     }

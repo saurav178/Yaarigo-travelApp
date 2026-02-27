@@ -23,11 +23,10 @@ async function fetchJson<T>(
     let bodyText = "";
     try {
       bodyText = await res.text();
-    } catch (e) {
+    } catch {
       /* ignore */
     }
     // Log full info to the console to help debugging in dev
-    // eslint-disable-next-line no-console
     console.error(`API error ${res.status} when fetching ${url}:`, bodyText);
     throw new Error(`API error: ${res.status} ${url}`);
   }
