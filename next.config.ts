@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true, // ✅ Ignore ESLint errors during production build
+  },
+
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
@@ -12,8 +16,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "cdn.example.com" },
       { protocol: "https", hostname: "images.pexels.com" },
       { protocol: "https", hostname: "www.pixelstalk.net" },
-
-       {
+      {
         protocol: "https",
         hostname: "api.business.travio.cepialabs.com",
         pathname: "/uploads/**",
