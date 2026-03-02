@@ -42,6 +42,7 @@ jobs:
             echo ".env.production updated successfully"
 
             echo "Installing dependencies..."
+            npm cache clean --force
             npm ci || npm install
 
             echo "Building NextJS..."
