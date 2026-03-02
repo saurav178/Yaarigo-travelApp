@@ -80,7 +80,7 @@ export interface DayPlan {
   dayTitle?: string;
   summary?: string;
   activities?: string[];
-  blocks?: any[];
+  blocks?: Record<string, unknown>[]; // ✅ fixed
   location?: string | Location;
   startTime?: string;
 }
