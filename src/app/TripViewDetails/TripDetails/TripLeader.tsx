@@ -1,12 +1,14 @@
 "use client";
 import Image from "next/image";
 
+// Updated Leader interface based on API payload
 interface Leader {
-  photoUrl: string;
-  name: string;
-  rating: number;
-  reviewsCount: number;
-  bio: string;
+  avatar?: string;       // profile image from API
+  fullName?: string;     // full name of leader
+  rating?: number;       // rating
+  safetyScore?: number;  // optional extra info
+  description?: string;  // bio/description if available
+  contact?: string;      // optional contact info
 }
 
 interface LeaderProps {
@@ -20,21 +22,32 @@ export default function TripLeader({ leader }: LeaderProps) {
 
       <div className="flex items-center gap-3 mb-3">
         <Image
-          src={leader.photoUrl}
-          alt={leader.name}
+          src={leader.avatar || "/default-profile.png"} // API avatar or fallback
+          alt={leader.fullName || "Leader"}
           width={48}
           height={48}
           className="rounded-full object-cover"
         />
         <div>
-          <p className="font-medium">{leader.name}</p>
-          <p className="text-sm text-gray-500">
-            ⭐ {leader.rating} ({leader.reviewsCount} reviews)
-          </p>
+          <p className="font-medium">{leader.fullName || "Unknown Leader"}</p>
+          {(leader.rating !== undefined || leader.safetyScore !== undefined) && (
+            <p className="text-sm text-gray-500">
+              {leader.rating !== undefined && <>⭐ {leader.rating.toFixed(1)} </>}
+              {leader.safetyScore !== undefined && <>· Safety: {leader.safetyScore}%</>}
+            </p>
+          )}
         </div>
       </div>
 
-      <p className="text-sm text-gray-600">{leader.bio}</p>
+      <p className="text-sm text-gray-600">
+        {leader.description || "No bio available."}
+      </p>
+
+      {leader.contact && (
+        <p className="text-xs text-gray-400 mt-2">
+          Contact: {leader.contact}
+        </p>
+      )}
     </div>
   );
 }

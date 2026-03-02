@@ -11,5 +11,8 @@ export const ROUTES = {
   DASHBOARD : "/dashboard",
   USERPROFILE : "/userProfile",
   COMMUNITY_PAGE : "/community",
+   TRIP_DETAILS_WITH_ID: (tripId: string) => `/TripViewDetails/${tripId}`,
+
+};
   VIEW_PACKAGE: "/viewPackage"
 };

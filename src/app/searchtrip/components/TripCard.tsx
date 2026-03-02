@@ -235,6 +235,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link"; 
 import {
   FaHeart,
   FaMapMarkerAlt,
@@ -248,6 +249,7 @@ import { HiLocationMarker } from "react-icons/hi";
 import { useState } from "react";
 import { ApiTrip } from "../types/types";
 import { useRouter } from "next/navigation";
+import { ROUTES } from "@/lib/routes";
 import { APP_ROUTES } from "@/utils/constants";
 // import Chatbot from "../chatbot/Chatbot"; // 
 
@@ -461,18 +463,38 @@ export default function TripCard({ trip }: TripCardProps) {
 
         {/* BUTTON SECTION - ORIGINAL BUTTONS (unchanged) */}
         <div className="grid grid-cols-3 gap-2 mt-auto">
-          <button
-            className="py-2 text-white text-xs font-semibold"
-            style={{ backgroundColor: "#276074" }}
-          >
-            View Trip
-          </button>
-          <button
-            className="py-2 text-white text-xs font-semibold"
-            style={{ backgroundColor: "#276074" }}
-          >
-            Join Trip
-          </button>
+     <Link href={ROUTES.TRIP_DETAILS_WITH_ID(trip._id)}>
+  <button
+    className="py-2 text-white text-xs font-semibold w-full cursor-pointer"
+    style={{ backgroundColor: "#276074" }}
+  >
+    View Trip
+  </button>
+</Link>
+         <button
+  type="button"
+  disabled={status === "success"}
+  onClick={() => {
+    // This changes the button text and color immediately
+    setStatus("success");
+    // If you still want the modal to open as well, keep the line below:
+    // setIsModalOpen(true); 
+  }}
+  className={`py-2 text-white text-xs font-semibold transition-all duration-300 flex items-center justify-center gap-1 ${
+    status === "success" ? "bg-green-600 cursor-default" : "hover:opacity-90"
+  }`}
+  style={{ 
+    backgroundColor: status === "success" ? "#16a34a" : "#276074" 
+  }}
+>
+  {status === "success" ? (
+    <>
+      <FaCheckCircle className="w-3 h-3" /> Request Sent
+    </>
+  ) : (
+    "Join Trip"
+  )}
+</button>
           <button
             onClick={() => router.push(APP_ROUTES.PROFILE)}
             className="py-2 text-white text-xs font-semibold cursor-pointer"
@@ -482,6 +504,7 @@ export default function TripCard({ trip }: TripCardProps) {
           </button>
         </div>
       </div>
+    
     </div>
   );
 }

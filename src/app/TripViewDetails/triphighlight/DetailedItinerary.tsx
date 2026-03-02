@@ -1,143 +1,138 @@
 "use client";
-import Image from "next/image";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import RoundButton from "./RoundButton";
 
 interface DayPlan {
-  title?: string;
-  location?: string;
-  activities: string[];
-  image?: string;
+  _id?: string;
+  dayTitle?: string;
+  summary?: string;
+  activities?: string[];
+  location?: string | { [key: string]: any };
+  startTime?: string;
 }
 
 interface DetailedItineraryProps {
   itinerary?: DayPlan[];
 }
 
-const DetailedItinerary = ({
-  itinerary: propItinerary,
-}: DetailedItineraryProps) => {
-  // Default/fallback itinerary
-  const defaultItinerary: DayPlan[] = [
-    {
-      title: "Panaji",
-      image:
-        "https://asoulwindow.com/wp-content/uploads/2019/11/rocks-at-palolem-patnem-beach-south-goa-india-21.jpg",
-      activities: [
-        "Arrival & hotel check-in",
-        "Evening beach walk",
-        "Dinner by the sea",
-      ],
-    },
-    {
-      title: "Baga Beach",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPZZbcJXz08d0H3ikrnYg2C1_ZYw2t0Pg7Aw&s",
-      activities: ["Water sports", "Shopping", "Beach shack lunch"],
-    },
-    {
-      title: "Old Goa",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZIxl7RkH7ANBO7fW4y4CDLr4FjZq4-KscBA&s",
-      activities: [
-        "Visit Basilica of Bom Jesus",
-        "Explore old churches",
-        "Local market stroll",
-      ],
-    },
-  ];
+const DetailedItinerary: React.FC<DetailedItineraryProps> = ({ itinerary = [] }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  // Use prop itinerary if provided, otherwise use default
-  const itinerary =
-    propItinerary && propItinerary.length > 0
-      ? propItinerary
-      : defaultItinerary;
-
-  const [activeStep, setActiveStep] = useState(1);
-  const [imageSrc, setImageSrc] = useState("/placeholder.png");
-
-  const stepRefs = useRef<HTMLDivElement[]>([]);
-
-  useEffect(() => {
-    if (itinerary[0]?.image) {
-      setImageSrc(itinerary[0].image);
-    }
-  }, [itinerary]);
-
-  const handleStepClick = (index: number) => {
-    setActiveStep(index + 1);
-    if (itinerary[index]?.image) {
-      setImageSrc(itinerary[index].image);
-    }
+  // Helper to safely extract strings from object or string
+  const formatValue = (val: any) => {
+    if (!val) return "";
+    if (typeof val === "string") return val;
+    if (typeof val === "object") return Object.values(val).join(", ");
+    return "";
   };
 
+  if (!itinerary || itinerary.length === 0) {
+    return (
+      <section className="bg-white p-6 rounded-lg shadow-md h-full">
+        <h2 className="text-2xl font-bold mb-6">Detailed Itinerary</h2>
+        <p className="text-gray-500">No itinerary available for this trip.</p>
+      </section>
+    );
+  }
+
+  const activeDay = itinerary[activeIndex];
+
+  const getTitle = (day: DayPlan, index: number) =>
+    formatValue(day.dayTitle) || `Day ${index + 1}`;
+  const getDescription = (day: DayPlan) =>
+    formatValue(day.summary) || "No description available.";
+  const getLocation = (day: DayPlan) => formatValue(day.location);
+  const getStartTime = (day: DayPlan) => formatValue(day.startTime);
+
+  const visibleDaysCount = 3;
+  const visibleDays = itinerary.slice(0, visibleDaysCount);
+  const hiddenDays = itinerary.slice(visibleDaysCount);
+
   return (
-    <section className="py-10 bg-white my-6 shadow-lg hover:shadow-2xl transition-all duration-300">
-      <div className="max-w-6xl mx-auto px-6">
-        <h2 className="text-xl font-bold mb-6">Detailed Itinerary</h2>
+    <section className="bg-white p-6 rounded-lg shadow-md h-full">
+      <h2 className="text-2xl font-bold mb-6">Detailed Itinerary</h2>
 
-        <div className="grid md:grid-cols-2 gap-12 items-start relative">
-          {/* TIMELINE */}
-          <div className="relative mt-6 md:mt-10">
-            <div className="flex flex-col gap-12 ml-10 relative">
-              {itinerary.map((day, index) => (
-                <div
-                  key={index}
-                  ref={(el) => {
-                    if (el) stepRefs.current[index] = el;
-                  }}
-                  className="relative cursor-pointer z-10"
-                  onClick={() => handleStepClick(index)}
-                >
-                  {/* Connecting line starting from circle center */}
-                  {index < itinerary.length - 1 && (
-                    <div
-                      className="absolute left-[25px] bg-gray-300"
-                      style={{
-                        top: "50%",
-                        width: "2px",
-                        height: "190px",
-                        transform: "translateY(0%)",
-                      }}
-                    ></div>
-                  )}
+      <div className="flex flex-col gap-6">
+        {/* Timeline */}
+        <div className="flex flex-col gap-4">
+          {visibleDays.map((day, index) => (
+            <div
+              key={day._id || index}
+              className="flex items-start gap-4 cursor-pointer"
+              onClick={() => setActiveIndex(index)}
+            >
+              <RoundButton number={index + 1} active={activeIndex === index} />
 
-                  <div className="flex items-start gap-4 text-left w-full">
-                    {/* Circle button */}
-                    <RoundButton
-                      number={index + 1}
-                      active={activeStep === index + 1}
-                    />
-
-                    {/* Card */}
-                    <div className="bg-white shadow-lg p-4 w-full hover:shadow-2xl transition-shadow duration-300">
-                      <h3 className="text-lg font-semibold text-gray-900">
-                        Day {index + 1}:{" "}
-                        {day.title || day.location || "Destination"}
-                      </h3>
-                      <ul className="list-disc list-inside text-sm text-gray-700">
-                        {day.activities.map((activity, i) => (
-                          <li key={i}>{activity}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              ))}
+              <div
+                className={`p-4 w-full rounded-lg transition-all ${
+                  activeIndex === index ? "bg-blue-50 shadow-xl" : "bg-white shadow-md"
+                }`}
+              >
+                <h3 className="font-semibold text-gray-900">{getTitle(day, index)}</h3>
+                <p className="text-xs text-gray-500 mt-1">{getDescription(day)}</p>
+                {day.location && <p className="text-xs text-gray-400 mt-1">{getLocation(day)}</p>}
+                {day.startTime && <p className="text-xs text-gray-400 mt-1">{getStartTime(day)}</p>}
+              </div>
             </div>
-          </div>
+          ))}
 
-          {/* IMAGE SECTION */}
-          <div className="relative flex justify-center mt-14 overflow-hidden w-[350px] h-[350px]">
-            <Image
-              src={imageSrc}
-              alt="Day Image"
-              fill
-              className="object-cover transition-transform duration-500 ease-in-out hover:scale-105"
-              priority
-            />
-          </div>
+          {/* Dropdown for more days */}
+          {hiddenDays.length > 0 && (
+            <div className="relative">
+              <button
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="bg-white border px-3 py-1 rounded-md shadow hover:bg-gray-100 text-sm"
+              >
+                More Days ▾
+              </button>
+
+              {dropdownOpen && (
+                <div className="absolute left-0 mt-2 w-56 bg-white border rounded-md shadow-lg z-20">
+                  {hiddenDays.map((day, idx) => {
+                    const actualIndex = visibleDaysCount + idx;
+                    return (
+                      <div
+                        key={day._id || actualIndex}
+                        className="p-3 hover:bg-gray-100 cursor-pointer rounded-md"
+                        onClick={() => {
+                          setActiveIndex(actualIndex);
+                          setDropdownOpen(false);
+                        }}
+                      >
+                        <p className="font-medium">{getTitle(day, actualIndex)}</p>
+                        <p className="text-xs text-gray-500">{getDescription(day)}</p>
+                        {day.location && <p className="text-xs text-gray-400">{getLocation(day)}</p>}
+                        {day.startTime && <p className="text-xs text-gray-400">{getStartTime(day)}</p>}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Active Day Details */}
+        <div className="bg-gray-50 p-4 rounded-md shadow-md">
+          <h3 className="text-lg font-semibold mb-2">{getTitle(activeDay, activeIndex)}</h3>
+          <p className="text-sm text-gray-700 mb-2">{getDescription(activeDay)}</p>
+          {activeDay.location && <p className="text-xs text-gray-500 mb-1">{getLocation(activeDay)}</p>}
+          {activeDay.startTime && <p className="text-xs text-gray-500 mb-3">{getStartTime(activeDay)}</p>}
+
+          {activeDay.activities && activeDay.activities.length > 0 ? (
+            <div>
+              <h4 className="font-semibold mb-1">Activities</h4>
+              <ul className="list-disc pl-5 text-sm text-gray-700 space-y-1">
+                {activeDay.activities.map((act, idx) => (
+                  <li key={idx}>{formatValue(act)}</li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <p className="text-gray-400 text-sm">No activities listed.</p>
+          )}
         </div>
       </div>
     </section>
