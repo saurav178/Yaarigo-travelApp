@@ -7,8 +7,8 @@ import { ArrowLeft, Plus, UserPlus, Check, Trash2, User, Pencil } from "lucide-r
 import axiosClient from "@/lib/axios-client";
 import { APP_ROUTES } from "@/utils/constants";
 import { AddOnDetail, Traveller, ItineraryItem, CancellationPolicyItem, PlanData } from "./types";
+import { useAuth } from "@/context/AuthContext";
 import PackageDetailsCard from "./PackageDetailsCard";
-import SelectedAddOnsCard from "./SelectedAddOnsCard";
 import PlanDetailsCard from "./PlanDetailsCard";
 import ItineraryCard from "./ItineraryCard";
 import CancellationPolicyCard from "./CancellationPolicyCard";
@@ -17,6 +17,8 @@ import SuccessView from "./SuccessView";
 import { API_ENDPOINTS_CONFIG } from "@/utils/apiConfig";
 import { APP_CONSTANTS } from "@/utils/appConstants";
 import TravellersListCard from "./TravellersListCard";
+import AddOnsSelectionCard from "./AddOnsSelectionCard";
+import { bookingService } from "@/services/booking-service";
 
 interface UserProfile {
   id: string;
@@ -44,6 +46,7 @@ const calculateAge = (dob: string) => {
 function BookPackageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { user } = useAuth();
 
   const [cartId, setCartId] = useState<string>("");
   const [packageTitle, setPackageTitle] = useState<string>("");
@@ -110,6 +113,54 @@ function BookPackageContent() {
   const [editingTravellerId, setEditingTravellerId] = useState<string | null>(null);
   const [showDeleteTravellerConfirmation, setShowDeleteTravellerConfirmation] = useState(false);
   const [travellerToDelete, setTravellerToDelete] = useState<string | null>(null);
+  const [stagingAddons, setStagingAddons] = useState<AddOnDetail[]>([]);
+  const [appliedDiscount, setAppliedDiscount] = useState(0);
+  const [couponCode, setCouponCode] = useState("");
+  const [couponError, setCouponError] = useState('');
+
+  const handleApplyCoupon = async (code: string) => {
+    if (!cartId) {
+      setCouponError("Cart not found. Please try again.");
+      throw new Error("Cart not found");
+    }
+    try {
+      const response = await bookingService.applyVoucher(cartId, code);
+      if (response && response.discountAmount) {
+        setAppliedDiscount(response.discountAmount);
+        setCouponCode(code);
+        setCouponError(""); 
+      } else {
+        setCouponError("Invalid coupon code. Please try another one.");
+        throw new Error("Invalid coupon code");
+      }
+    } catch (error) {
+      setCouponError("Failed to apply coupon. Please check the code and try again.");
+      throw error;
+    }
+  };
+
+  const handleRemoveCoupon = async () => {
+    if (!cartId) {
+      setCouponError("Cart not found. Please try again.");
+      return;
+    }
+    try {
+      await bookingService.removeVoucher(cartId);
+      setAppliedDiscount(0);
+      setCouponCode("");
+      setCouponError(""); 
+    } catch (error) {
+      setCouponError("Failed to remove coupon. Please try again.");
+    }
+  };
+
+  const handleUpdateAddons = async (addons: AddOnDetail[]) => {
+    setStagingAddons(addons);
+    if (cartId) {
+        await bookingService.addAddons(cartId, { addons });
+        setSelectedAddOns(addons);
+    }
+  }
 
   const fetchExistingTravellers = async () => {
     setIsFetchingProfiles(true);
@@ -119,7 +170,6 @@ function BookPackageContent() {
       setExistingProfiles(profiles);
       setShowExistingTravellerModal(true);
     } catch (error) {
-      console.error("Failed to fetch profiles", error);
     } finally {
       setIsFetchingProfiles(false);
     }
@@ -154,7 +204,6 @@ function BookPackageContent() {
       setShowDeleteConfirmation(false);
       setProfileToDelete(null);
     } catch (error) {
-      console.error("Failed to delete profile", error);
     }
   };
 
@@ -274,7 +323,6 @@ function BookPackageContent() {
       setEditingTravellerId(null);
       setShowNewTravellerModal(false);
     } catch (error) {
-      console.error("Failed to save traveler", error);
     } finally {
       setIsSavingProfile(false);
     }
@@ -288,7 +336,6 @@ function BookPackageContent() {
 
   const addSelectedProfiles = async () => {
     if (!cartId) {
-      console.error("Cart ID is missing.");
       return;
     }
 
@@ -342,7 +389,6 @@ function BookPackageContent() {
       setSelectedProfileIds([]);
       setShowExistingTravellerModal(false);
     } catch (error) {
-      console.error("Failed to add existing travelers", error);
     } finally {
       setIsAddingExisting(false);
     }
@@ -365,7 +411,6 @@ function BookPackageContent() {
           setTravellerError("");
         }
       } catch (error) {
-        console.error("Failed to remove traveler", error);
       }
     }
     setTravellers((prev) => prev.filter((t) => t.id !== travellerToDelete));
@@ -374,82 +419,150 @@ function BookPackageContent() {
   };
 
   useEffect(() => {
-    // Get query parameters
-    const pkgId = searchParams.get("packageId") || "";
-    const cId = searchParams.get("cartId") || "";
-    const title = searchParams.get("packageTitle") || "";
-    const plan = searchParams.get("planName") || "";
-    const price = searchParams.get("planPrice") || "0";
-    const curr = searchParams.get("currency") || "INR";
-    const fromLoc = searchParams.get("fromLocation") || "";
-    const toLoc = searchParams.get("toLocation") || "";
-    const days = searchParams.get("totalDays") || "0";
-    const nights = searchParams.get("totalNights") || "0";
-    const addOnsParam = searchParams.get("addOnsData");
-    const travellersParam = searchParams.get("travellersData");
-    const itineraryParam = searchParams.get("itineraryData");
-    const cancellationPolicyParam = searchParams.get("cancellationPolicy");
-    const planDataParam = searchParams.get("planData");
-    const maxPeopleParam = searchParams.get("maxPeople");
+    const fetchCartAndInitialize = async () => {
+      let cart = await bookingService.getActiveCart();
 
-    if (maxPeopleParam) {
-      setMaxPeople(parseInt(maxPeopleParam, 10));
-    }
+      if (cart && cart.id) {
+      } else {
+        const packageId = searchParams.get("packageId");
+        const planId = searchParams.get("planId");
+        const organizationId = user?.organizations?.[0]?.id;
+        const travelDate = new Date().toISOString().split('T')[0];
 
-    setCartId(cId);
-    setPackageTitle(title);
-    setPlanName(plan);
-    setPlanPrice(parseFloat(price));
-    setCurrency(curr);
-    setFromLocation(fromLoc);
-    setToLocation(toLoc);
-    setDuration(`${days} Days / ${nights} Nights`);
 
-    if (typeof window !== 'undefined' && pkgId) {
-      setInviteLink(`${window.location.origin}/viewPackage?packageId=${pkgId}`);
-    }
-    
-    if (travellersParam) {
-      try {
-        setTravellers(JSON.parse(travellersParam));
-      } catch (e) {
-        console.error("Error parsing travellers:", e);
+        if (packageId && planId && organizationId) {
+          cart = await bookingService.createCart({ packageId, planId, organizationId, travelDate });
+          if(cart) {
+          } else {
+          }
+        } else {
+        }
       }
-    }
+      
+      if (cart && cart.id) {
+        setCartId(cart.id);
+        
+        if(cart.tripPackage) {
+            setPackageTitle(cart.tripPackage.title || "");
+            setFromLocation(cart.tripPackage.fromLocation || "");
+            setToLocation(cart.tripPackage.toLocation || "");
+            setDuration(`${cart.tripPackage.totalDays} Days / ${cart.tripPackage.totalNights} Nights`);
+            if (typeof window !== 'undefined' && cart.tripPackage.id) {
+                setInviteLink(`${window.location.origin}/viewPackage?packageId=${cart.tripPackage.id}`);
+            }
+        }
+        if(cart.packagePlan) {
+            setPlanName(cart.packagePlan.name || "");
+            setPlanPrice(cart.packagePlan.price || 0);
+            setCurrency(cart.packagePlan.currency || "INR");
+            setMaxPeople(cart.packagePlan.maxPeople || Infinity);
+        }
+        
+        setSelectedAddOns(cart.addOns || []);
+        setTravellers(cart.travellers || []);
 
-    if (itineraryParam) {
-      try {
-        setItinerary(JSON.parse(itineraryParam));
-      } catch (e) {
-        console.error("Error parsing itinerary:", e);
-      }
-    }
+        const itineraryParam = searchParams.get("itineraryData");
+        if (itineraryParam) {
+          try {
+            setItinerary(JSON.parse(itineraryParam));
+          } catch (e) {
+          }
+        }
 
-    if (addOnsParam) {
-      try {
-        const parsed = JSON.parse(addOnsParam);
-        setSelectedAddOns(parsed);
-      } catch (e) {
-        console.error("Error parsing addons:", e);
-      }
-    }
+        const cancellationPolicyParam = searchParams.get("cancellationPolicy");
+        if (cancellationPolicyParam) {
+          try {
+            setCancellationPolicy(JSON.parse(cancellationPolicyParam));
+          } catch (e) {
+          }
+        }
 
-    if (cancellationPolicyParam) {
-      try {
-        setCancellationPolicy(JSON.parse(cancellationPolicyParam));
-      } catch (e) {
-        console.error("Error parsing cancellation policy:", e);
-      }
-    }
+        const planDataParam = searchParams.get("planData");
+         if (planDataParam) {
+            try {
+                setPlanData(JSON.parse(planDataParam));
+            } catch (e) {
+            }
+        }
 
-    if (planDataParam) {
-      try {
-        setPlanData(JSON.parse(planDataParam));
-      } catch (e) {
-        console.error("Error parsing plan data:", e);
+      } else {
+        // Fallback to query parameters if no active cart and creation failed
+        const pkgId = searchParams.get("packageId") || "";
+        const cId = searchParams.get("cartId") || "";
+        const title = searchParams.get("packageTitle") || "";
+        const plan = searchParams.get("planName") || "";
+        const price = searchParams.get("planPrice") || "0";
+        const curr = searchParams.get("currency") || "INR";
+        const fromLoc = searchParams.get("fromLocation") || "";
+        const toLoc = searchParams.get("toLocation") || "";
+        const days = searchParams.get("totalDays") || "0";
+        const nights = searchParams.get("totalNights") || "0";
+        const addOnsParam = searchParams.get("addOnsData");
+        const travellersParam = searchParams.get("travellersData");
+        const itineraryParam = searchParams.get("itineraryData");
+        const cancellationPolicyParam = searchParams.get("cancellationPolicy");
+        const planDataParam = searchParams.get("planData");
+        const maxPeopleParam = searchParams.get("maxPeople");
+
+        if (maxPeopleParam) {
+          setMaxPeople(parseInt(maxPeopleParam, 10));
+        }
+
+        setCartId(cId);
+        setPackageTitle(title);
+        setPlanName(plan);
+        setPlanPrice(parseFloat(price));
+        setCurrency(curr);
+        setFromLocation(fromLoc);
+        setToLocation(toLoc);
+        setDuration(`${days} Days / ${nights} Nights`);
+
+        if (typeof window !== 'undefined' && pkgId) {
+          setInviteLink(`${window.location.origin}/viewPackage?packageId=${pkgId}`);
+        }
+        
+        if (travellersParam) {
+          try {
+            setTravellers(JSON.parse(travellersParam));
+          } catch (e) {
+          }
+        }
+
+        if (itineraryParam) {
+          try {
+            setItinerary(JSON.parse(itineraryParam));
+          } catch (e) {
+          }
+        }
+
+        if (addOnsParam) {
+          try {
+            const parsed = JSON.parse(addOnsParam);
+            setSelectedAddOns(parsed);
+          } catch (e) {
+          }
+        }
+
+        if (cancellationPolicyParam) {
+          try {
+            setCancellationPolicy(JSON.parse(cancellationPolicyParam));
+          } catch (e) {
+          }
+        }
+
+        if (planDataParam) {
+          try {
+            setPlanData(JSON.parse(planDataParam));
+          } catch (e) {
+          }
+        }
       }
+    };
+    if (user) {
+        fetchCartAndInitialize();
+    } else {
     }
-  }, [searchParams]);
+  }, [searchParams, user]);
 
   // Calculate totals
   const currencySymbol = currency === "INR" ? "₹" : currency;
@@ -553,7 +666,6 @@ function BookPackageContent() {
     setIsProcessing(false);
     setIsSuccess(true);
     } catch (error) {
-      console.error("Booking failed:", error);
       setPaymentError("Failed to process booking. Please try again.");
       setIsProcessing(false);
     }
@@ -613,12 +725,11 @@ function BookPackageContent() {
               planName={planName}
             />
 
-            {/* Selected Add-ons */}
-            <SelectedAddOnsCard
-              selectedAddOns={selectedAddOns}
+            {/* Add-ons Selection */}
+            <AddOnsSelectionCard
+              onAddonsChange={(addons) => handleUpdateAddons(addons)}
               currencySymbol={currencySymbol}
             />
-
             {/* Add Travellers Actions */}
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
               <div className="flex justify-between items-center mb-4">
@@ -891,6 +1002,7 @@ function BookPackageContent() {
           {/* Right Column - Payment Card */}
           <div className="lg:col-span-1">
             <PaymentSummaryCard
+              cartId={cartId}
               currencySymbol={currencySymbol}
               planPrice={planPrice}
               addOnsTotal={addOnsTotal}
@@ -916,6 +1028,10 @@ function BookPackageContent() {
               isProcessing={isProcessing}
               handleConfirmPayment={handleConfirmPayment}
               selectedAddOnsLength={selectedAddOns.length}
+              appliedDiscount={appliedDiscount}
+              onApplyCoupon={handleApplyCoupon}
+              onRemoveCoupon={handleRemoveCoupon}
+              couponCode={couponCode}
             />
           </div>
         </div>
