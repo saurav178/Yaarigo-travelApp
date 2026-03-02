@@ -5,6 +5,7 @@ import { CombinedFilters } from "../types/combinedFilters";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { format } from "date-fns";
+import { API_ENDPOINTS } from "@/utils/constants";
 
 interface CityOption {
   mainText: string;
@@ -89,7 +90,7 @@ interface PlacePrediction {
 
   const fetchSuggestions = useCallback(async (value: string, type: "from" | "to") => {
     try {
-      const res = await fetch(`/api/location?input=${value}`);
+      const res = await fetch(`${API_ENDPOINTS.LOCATION_SEARCH}?input=${value}`);
       const data = await res.json();
 
       if (!data?.predictions) return;
