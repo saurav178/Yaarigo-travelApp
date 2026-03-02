@@ -1,12 +1,47 @@
-name: Deploy YaariGo Frontend
+name: YaariGo Frontend CI/CD
 
 on:
+  pull_request:
+    branches:
+      - develop
+
   push:
     branches:
       - develop
 
 jobs:
+
+  # =========================
+  # 🧪 BUILD JOB (PR ONLY)
+  # =========================
+  build:
+    name: Build on PR
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Build Next.js app
+        run: npm run build
+
+
+  # =========================
+  # 🚀 DEPLOY JOB (MERGE)
+  # =========================
   deploy:
+    name: Deploy to VPS
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
     steps:
@@ -24,7 +59,7 @@ jobs:
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
-            echo "➡️ Installing & using Node 24 LTS..."
+            echo "➡️ Installing & using Node 24..."
             nvm install 24
             nvm use 24
             node -v
