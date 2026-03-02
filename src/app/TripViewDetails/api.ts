@@ -9,7 +9,7 @@ export const BASE_URL = config.BASE_URL;
 const handleResponse = async (res: Response) => {
   if (!res.ok) {
     const errorText = await res.text();
-    console.error("API Error:", errorText);
+    // console.error("API Error:", errorText);
     throw new Error("API request failed");
   }
   return res.json();

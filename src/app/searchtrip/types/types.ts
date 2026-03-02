@@ -167,6 +167,7 @@ export type Commitments = {
 
 
 export type ApiTrip = {
+  ogImage: string;
   _id: string;
   title: string;
   description: string;
@@ -203,7 +204,7 @@ export type ApiTrip = {
   videos: string[];
 
   seoKeywords: string[];
-  ogImage: string;
+  // ogImage: string;
   coverImage: string;
   seoTitle: string;
   seoDescription: string;
@@ -296,6 +297,10 @@ export interface PackagePlan {
   active: boolean;
 }
 export interface ApiPackage {
+  partnerPreferences?: {
+    languages?: string[];
+  };
+
   slug: string;
   coverImage: string;
   _id: string;
