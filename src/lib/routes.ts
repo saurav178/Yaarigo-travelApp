@@ -11,8 +11,7 @@ export const ROUTES = {
   DASHBOARD : "/dashboard",
   USERPROFILE : "/userProfile",
   COMMUNITY_PAGE : "/community",
+  VIEW_PACKAGE: "/viewPackage",
    TRIP_DETAILS_WITH_ID: (tripId: string) => `/TripViewDetails/${tripId}`,
+};
 
-};
-  VIEW_PACKAGE: "/viewPackage"
-};
