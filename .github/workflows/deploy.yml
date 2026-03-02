@@ -20,25 +20,18 @@ jobs:
           script: |
             set -e
 
-            echo "➡️ Loading NVM..."
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
-            echo "➡️ Installing & using Node 24 LTS..."
             nvm install 24
             nvm use 24
-            node -v
-            npm -v
 
-            echo "➡️ Navigating to project..."
             cd /var/www/yaarigo/yaarigo-fe
 
-            echo "➡️ Fetching latest code..."
             git fetch origin develop
             git reset --hard origin/develop
             git clean -fd
 
-            echo "➡️ Writing environment file..."
             cat > .env.production <<EOL
             NODE_ENV=production
             NEXT_PUBLIC_USER_SERVICE_URL=${{ secrets.NEXT_PUBLIC_USER_SERVICE_URL }}
@@ -49,19 +42,12 @@ jobs:
             EOL
 
             chmod 600 .env.production
-            echo "✅ .env.production updated"
 
-            echo "➡️ Installing dependencies..."
             npm ci --no-audit --no-fund
 
-            echo "➡️ Building Next.js..."
             export NEXT_TELEMETRY_DISABLED=1
-            export CI=1
             export NODE_OPTIONS="--max_old_space_size=4096"
             npm run build
 
-            echo "➡️ Restarting PM2..."
             pm2 reload yaarigo-dev-web --update-env || pm2 start npm --name "yaarigo-dev-web" -- start --env production
             pm2 save
-
-            echo "🎉 Deployment completed successfully"
