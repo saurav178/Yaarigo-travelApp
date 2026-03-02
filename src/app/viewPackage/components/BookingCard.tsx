@@ -1,32 +1,26 @@
-import { useState } from "react";
 import { Calendar, Heart, Share2, Users } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import axiosClient from "@/lib/axios-client";
-import { Package, Plan, Traveller } from "../types";
-import { API_ENDPOINTS_CONFIG } from "@/utils/apiConfig";
-import { APP_CONSTANTS } from "@/utils/appConstants";
+import { Package, Plan, StaticAddOn } from "../types";
 
 interface BookingCardProps {
   pkg: Package;
   selectedPlan: Plan | null;
   setSelectedPlan: (plan: Plan | null) => void;
+  selectedAddOns: string[];
+  addOnsData: StaticAddOn[];
   isFavorite: boolean;
   setIsFavorite: (isFavorite: boolean) => void;
-  travellers: Traveller[];
 }
 
 export default function BookingCard({
   pkg,
   selectedPlan,
   setSelectedPlan,
+  selectedAddOns,
+  addOnsData,
   isFavorite,
   setIsFavorite,
-  travellers,
 }: BookingCardProps) {
-  const router = useRouter();
-  const [travelDate, setTravelDate] = useState("");
-  const [isBooking, setIsBooking] = useState(false);
   const currencySymbol =
     selectedPlan?.currency === "INR" ? "₹" : selectedPlan?.currency || "₹";
   const originalPrice = selectedPlan?.pricePerPerson || 0;
@@ -35,75 +29,14 @@ export default function BookingCard({
     originalPrice > discountedPrice
       ? Math.round(((originalPrice - discountedPrice) / originalPrice) * 100)
       : 0;
-  const gstAmount = Math.round(discountedPrice * APP_CONSTANTS.GST_RATE);
-  const finalTotal = discountedPrice + gstAmount;
 
-  const handleBookNow = async () => {
-    if (!selectedPlan) return;
-    if (!travelDate) {
-      alert("Please select a travel date");
-      return;
-    }
+  const addOnsTotal = addOnsData
+    .filter((addon) => selectedAddOns.includes(addon.id))
+    .reduce((acc, addon) => acc + addon.price, 0);
 
-    setIsBooking(true);
-    try {
-      const response = await axiosClient.post(
-        API_ENDPOINTS_CONFIG.BOOKING.CREATE_CART,
-        {
-          packageId: pkg._id,
-          planId: selectedPlan._id,
-          organizationId: APP_CONSTANTS.ORGANIZATION_ID,
-          travelDate: travelDate,
-        }
-      );
-
-      const cartId = response.data?.data?.id || response.data?.id;
-
-    const params = new URLSearchParams();
-    params.set("packageTitle", pkg.title);
-    params.set("packageId", pkg._id || "");
-    params.set("planName", selectedPlan.name);
-    params.set("planPrice", selectedPlan.discountedPrice.toString());
-    params.set("currency", selectedPlan.currency || "INR");
-    
-    if (pkg.fromLocation) params.set("fromLocation", pkg.fromLocation.city || "");
-    if (pkg.toLocation) params.set("toLocation", pkg.toLocation.city || "");
-    params.set("totalDays", pkg.totalDays?.toString() || "0");
-    params.set("totalNights", pkg.totalNights?.toString() || "0");
-    params.set("travelDate", travelDate);
-
-    if (cartId) params.set("cartId", cartId);
-    if (selectedPlan.maxPeople) params.set("maxPeople", selectedPlan.maxPeople.toString());
-
-    if (travellers && travellers.length > 0) {
-      params.set("travellersData", JSON.stringify(travellers));
-    }
-
-    if (pkg.itineraryTemplate) {
-      params.set("itineraryData", JSON.stringify(pkg.itineraryTemplate));
-    }
-
-    if (selectedPlan.cancellationPolicy) {
-      params.set("cancellationPolicy", JSON.stringify(selectedPlan.cancellationPolicy));
-    }
-
-    const planData = {
-      name: selectedPlan.name,
-      category: selectedPlan.category,
-      description: selectedPlan.description,
-      inclusions: selectedPlan.inclusions,
-      exclusions: selectedPlan.exclusions,
-    };
-    params.set("planData", JSON.stringify(planData));
-
-    router.push(`/bookPackage?${params.toString()}`);
-    } catch (error) {
-      console.error("Booking failed:", error);
-      alert("Failed to initiate booking. Please try again.");
-    } finally {
-      setIsBooking(false);
-    }
-  };
+  const GST_RATE = 0.18;
+  const gstAmount = Math.round((discountedPrice + addOnsTotal) * GST_RATE);
+  const finalTotal = discountedPrice + addOnsTotal + gstAmount;
 
   return (
     <motion.div
@@ -169,22 +102,9 @@ export default function BookingCard({
         </span>
       </div>
 
-      {/* Travel Date Selection */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Select Travel Date
-        </label>
-        <input
-          type="date"
-          value={travelDate}
-          onChange={(e) => setTravelDate(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#276074] focus:border-transparent"
-          min={new Date().toISOString().split("T")[0]}
-        />
-      </div>
-
-      {/* Price Breakdown */}
-      <div className="mb-4 pt-3 border-t border-dashed border-gray-200">
+      {/* Add-ons Breakdown */}
+      {selectedAddOns.length > 0 && (
+        <div className="mb-4 pt-3 border-t border-dashed border-gray-200">
           <div className="text-base font-bold text-gray-800 mb-3">
             Price Breakdown
           </div>
@@ -195,8 +115,22 @@ export default function BookingCard({
               {discountedPrice.toLocaleString()}
             </span>
           </div>
+          {addOnsData
+            .filter((a) => selectedAddOns.includes(a.id))
+            .map((addon) => (
+              <div
+                key={addon.id}
+                className="flex justify-between text-sm font-medium text-gray-600 mb-2"
+              >
+                <span>{addon.title}</span>
+                <span>
+                  {currencySymbol}
+                  {addon.price.toLocaleString()}
+                </span>
+              </div>
+            ))}
           <div className="flex justify-between text-sm font-medium text-gray-600 mb-2">
-            <span>GST ({APP_CONSTANTS.GST_RATE * 100}%)</span>
+            <span>GST ({GST_RATE * 100}%)</span>
             <span>
               {currencySymbol}
               {gstAmount.toLocaleString()}
@@ -217,6 +151,7 @@ export default function BookingCard({
             </div>
           </div>
         </div>
+      )}
 
       {/* Slots Available */}
       <div className="flex items-center gap-2 mb-4 p-3 bg-blue-50 rounded-lg">
@@ -243,12 +178,8 @@ export default function BookingCard({
 
       {/* CTA Buttons */}
       <div className="space-y-3">
-        <button
-          onClick={handleBookNow}
-          disabled={isBooking}
-          className="w-full py-3 px-4 bg-[#276074] text-white font-semibold rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isBooking ? "Processing..." : "Book Now"}
+        <button className="w-full py-3 px-4 bg-[#276074] text-white font-semibold rounded-lg hover:opacity-90 transition-opacity">
+          Book Now
         </button>
         <button className="w-full py-3 px-4 border-2 border-[#276074] text-[#276074] font-semibold rounded-lg hover:bg-[#276074] hover:text-white transition-colors">
           Join Trip

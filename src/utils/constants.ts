@@ -11,5 +11,4 @@ export const APP_ROUTES = {
   SEARCH_TRIP: "/searchtrip",
   VIEW_PACKAGE: "/viewPackage",
   PROFILE: "/profile",
-  BOOK_PACKAGE: "/bookPackage",
 };
