@@ -9,7 +9,7 @@ jobs:
 deploy:
 runs-on: ubuntu-latest
 
-```
+
 steps:
   - name: Deploy via SSH
     uses: appleboy/ssh-action@v1.0.3
@@ -17,14 +17,13 @@ steps:
       host: ${{ secrets.VPS_HOST }}
       username: ${{ secrets.VPS_USER }}
       key: ${{ secrets.VPS_SSH_KEY }}
-      command_timeout: 30m
-
+      timeout: 30m
       script: |
         set -e
 
         echo "➡️ Loading NVM..."
         export NVM_DIR="$HOME/.nvm"
-        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
         echo "➡️ Installing & using Node 24 LTS..."
         nvm install 24
@@ -53,7 +52,7 @@ steps:
         chmod 600 .env.production
         echo "✅ .env.production updated"
 
-        echo "➡️ Installing dependencies (clean install)..."
+        echo "➡️ Installing dependencies..."
         npm ci --no-audit --no-fund
 
         echo "➡️ Building Next.js..."
@@ -67,4 +66,4 @@ steps:
         pm2 save
 
         echo "🎉 Deployment completed successfully"
-```
+
