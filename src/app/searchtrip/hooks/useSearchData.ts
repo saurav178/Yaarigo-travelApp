@@ -251,6 +251,7 @@ export function useSearchData(filters: CombinedFilters) {
           }
         } catch (pkgErr) {
           // Log package fetch failure but continue showing trips
+          // eslint-disable-next-line no-console
           console.error("Package fetch failed", pkgErr, { filters, page });
           if (!controller.signal.aborted) {
             setPackages([]);
@@ -261,6 +262,7 @@ export function useSearchData(filters: CombinedFilters) {
           return;
         }
         // Log error with filters for debugging
+        // eslint-disable-next-line no-console
         console.error("useSearchData fetch error", err, { filters, page });
 
         // If fetchJson threw an API status error like 'API error: 404' or 'API error: 204',
