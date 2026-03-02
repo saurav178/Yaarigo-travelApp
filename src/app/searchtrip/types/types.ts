@@ -167,6 +167,7 @@ export type Commitments = {
 
 
 export type ApiTrip = {
+  ogImage: string;
   _id: string;
   title: string;
   description: string;

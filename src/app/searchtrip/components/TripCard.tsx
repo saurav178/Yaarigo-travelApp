@@ -231,7 +231,6 @@
 // }
 
 
-
 "use client";
 
 import Image from "next/image";
@@ -243,15 +242,12 @@ import {
   FaMoneyBillWave,
   FaFlag,
   FaCheckCircle,
-  // FaRobot, // Add this import for chatbot
 } from "react-icons/fa";
 import { HiLocationMarker } from "react-icons/hi";
 import { useState } from "react";
 import { ApiTrip } from "../types/types";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/routes";
-import { APP_ROUTES } from "@/utils/constants";
-// import Chatbot from "../chatbot/Chatbot"; // 
 
 /* ================= TYPES ================= */
 
@@ -263,7 +259,6 @@ type TripCardProps = {
 
 export default function TripCard({ trip }: TripCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
-  // const [showChatbot, setShowChatbot] = useState(false); // Add state for chatbot
 
   // Extract trip data
   const title = trip.title || "Untitled Trip";
@@ -295,7 +290,7 @@ export default function TripCard({ trip }: TripCardProps) {
   const agencyInitials = agencyName.substring(0, 2).toUpperCase();
 
   // Image
-  const imageUrl =trip.coverImage;
+  const imageUrl = trip.ogImage || trip.coverImage;
 
   // Date formatting
   const formatDate = (date: string) => {
@@ -314,11 +309,30 @@ export default function TripCard({ trip }: TripCardProps) {
       : "Date TBD";
 
   const router = useRouter();
+  // const [isModalOpen, setIsModalOpen] = useState(false);
   
+  const [status, setStatus] = useState("idle");
+  const [message, setMessage] = useState("");
+const [showMessage, setShowMessage] = useState(false);
+
+const handleJoinClick = () => {
+  if (status === "idle") {
+    setStatus("success");
+    setMessage("Request sent to Jane Cooper");
+  } else {
+    setMessage("Request already sent. We will get back to you.");
+  }
+
+  setShowMessage(true);
+
+  setTimeout(() => {
+    setShowMessage(false);
+  }, 2500);
+};
   return (
     <div className="bg-white shadow-sm transition-all duration-300 overflow-hidden flex border border-[#e1e1e1]">
       {/* Image Section */}
-      <div className="relative w-80 h-66 bg-gradient-to-br from-teal-400 to-blue-00 flex-shrink-0">
+      <div className="relative w-80 h-66 bg-linear-to-br from-teal-400 to-blue-500 shrink-0">
         <Image
           src={imageUrl}
           alt={title}
@@ -443,25 +457,6 @@ export default function TripCard({ trip }: TripCardProps) {
           </div>
         </div>
 
-        {/* 🤖 CHATBOT TOGGLE BUTTON - ADDED ABOVE BUTTON SECTION */}
-        {/* <div className="mb-3">
-          <button
-            onClick={() => setShowChatbot(!showChatbot)}
-            className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg transition-colors text-sm font-medium border border-blue-200"
-          >
-            <FaRobot className="w-4 h-4" />
-            {showChatbot ? "Hide Chat Assistant" : "Ask Trip Assistant"}
-          </button> */}
-          
-          {/* Chatbot Component - appears when showChatbot is true */}
-          {/* {showChatbot && (
-            <div className="mt-3">
-              <Chatbot />
-            </div>
-          )}
-        </div> */}
-
-        {/* BUTTON SECTION - ORIGINAL BUTTONS (unchanged) */}
         <div className="grid grid-cols-3 gap-2 mt-auto">
      <Link href={ROUTES.TRIP_DETAILS_WITH_ID(trip._id)}>
   <button
@@ -471,32 +466,58 @@ export default function TripCard({ trip }: TripCardProps) {
     View Trip
   </button>
 </Link>
-         <button
-  type="button"
-  disabled={status === "success"}
-  onClick={() => {
-    // This changes the button text and color immediately
-    setStatus("success");
-    // If you still want the modal to open as well, keep the line below:
-    // setIsModalOpen(true); 
-  }}
-  className={`py-2 text-white text-xs font-semibold transition-all duration-300 flex items-center justify-center gap-1 ${
-    status === "success" ? "bg-green-600 cursor-default" : "hover:opacity-90"
-  }`}
-  style={{ 
-    backgroundColor: status === "success" ? "#16a34a" : "#276074" 
-  }}
->
-  {status === "success" ? (
-    <>
-      <FaCheckCircle className="w-3 h-3" /> Request Sent
-    </>
-  ) : (
-    "Join Trip"
+        <div className="relative w-full">
+
+  {showMessage && (
+    <div className="absolute -top-9 left-1/2 -translate-x-1/2 bg-black text-white text-[11px] px-3 py-1 rounded shadow-md whitespace-nowrap z-20">
+      {message}
+    </div>
   )}
-</button>
+
+  <button
+    type="button"
+    onClick={() => {
+      if (status === "success") {
+        setMessage("Request already sent. We will get back to you.");
+        setShowMessage(true);
+
+        setTimeout(() => {
+          setShowMessage(false);
+        }, 2000);
+      } else {
+        handleJoinClick();
+      }
+    }}
+    onMouseEnter={() => {
+      if (status === "success") {
+        setMessage("Request sent to Jane Cooper");
+        setShowMessage(true);
+      }
+    }}
+    onMouseLeave={() => {
+      setShowMessage(false);
+    }}
+    className={`py-2 text-white text-xs font-semibold w-full transition-all duration-300 flex items-center justify-center gap-1 ${
+      status === "success"
+        ? "cursor-default"
+        : "cursor-pointer hover:opacity-90"
+    }`}
+    style={{
+      backgroundColor: status === "success" ? "#16a34a" : "#276074",
+    }}
+  >
+    {status === "success" ? (
+      <>
+        <FaCheckCircle className="w-3 h-3" /> Request Sent
+      </>
+    ) : (
+      "Join Trip"
+    )}
+  </button>
+
+</div>
           <button
-            onClick={() => router.push(APP_ROUTES.PROFILE)}
+            onClick={() => router.push("/profile")}
             className="py-2 text-white text-xs font-semibold cursor-pointer"
             style={{ backgroundColor: "#276074" }}
           >

@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-import scrollbarHide from "tailwind-scrollbar-hide";
+// import scrollbarHide from "tailwind-scrollbar-hide";
 
 
 const config: Config = {
@@ -24,7 +24,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [scrollbarHide],
+  // plugins: [scrollbarHide],
 };
 
 export default config;
