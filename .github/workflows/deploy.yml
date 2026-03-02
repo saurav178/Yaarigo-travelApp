@@ -20,6 +20,14 @@ jobs:
           script: |
             set -e
 
+            # ✅ Load NVM and use Node 24
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm use 24
+
+            echo "➡️ Node version:"
+            node -v
+
             echo "➡️ Navigating to project..."
             cd /var/www/yaarigo/yaarigo-fe
 
@@ -41,8 +49,8 @@ jobs:
             chmod 600 .env.production
             echo "✅ .env.production updated"
 
-            echo "➡️ Installing dependencies (including dev for Next build)..."
-            npm install --no-audit --no-fund
+            echo "➡️ Installing dependencies..."
+            npm install --no-audit --no-fund --production=false
 
             echo "➡️ Building Next.js..."
             export NEXT_TELEMETRY_DISABLED=1
