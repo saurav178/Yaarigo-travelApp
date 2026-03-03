@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 import HeroSection from "../HeroSection";
 import TripOverview from "../TripDetails/TripOverview";
@@ -24,12 +24,13 @@ import {
 export default function TripDetailsPage() {
   const params = useParams();
 
-  const tripId =
-    typeof params?.tripId === "string"
-      ? params.tripId
-      : Array.isArray(params?.tripId)
-      ? params.tripId[0]
-      : undefined;
+  // 1. Optimized tripId extraction (Build-Safe)
+  // Check both 'tripId' and 'tripid' in case of folder naming mismatches
+  const tripId = useMemo(() => {
+    const rawId = params?.tripId || params?.tripid;
+    if (Array.isArray(rawId)) return rawId[0];
+    return rawId as string | undefined;
+  }, [params]);
 
   const [tripData, setTripData] = useState<TripData | null>(null);
   const [leaderData, setLeaderData] = useState<LeaderData | null>(null);
@@ -44,17 +45,20 @@ export default function TripDetailsPage() {
         setLoading(true);
         setError(null);
 
-        // Fetch Trip
         const trip = await fetchTripById(tripId);
+        if (!trip) {
+          setError("Trip not found.");
+          return;
+        }
         setTripData(trip);
 
-        // Fetch Leader (if exists)
-        if (trip?.createdBy) {
+        // Fetch Leader using optional chaining and fallback
+        const creatorId = trip.createdBy || trip.leaderId;
+        if (creatorId) {
           try {
-            const leader = await fetchLeaderById(trip.createdBy);
+            const leader = await fetchLeaderById(creatorId);
             setLeaderData(leader);
           } catch {
-            // If leader endpoint fails (404 etc.), ignore gracefully
             setLeaderData(null);
           }
         }
@@ -77,50 +81,38 @@ export default function TripDetailsPage() {
     );
   }
 
-  if (error) {
+  if (error || !tripData) {
     return (
       <div className="p-10 text-center text-red-500">
-        {error}
+        {error || "Trip not found."}
       </div>
     );
   }
 
-  if (!tripData) {
-    return (
-      <div className="p-10 text-center text-red-500">
-        Trip not found.
-      </div>
-    );
-  }
-
-  // Normalize itinerary location
+  // 2. Safe Itinerary Normalization (Prevents build crash on missing location names)
   const itineraryForDisplay =
     tripData.itinerary?.map((day) => ({
       ...day,
       location:
         typeof day.location === "string"
           ? day.location
-          : day.location?.name || "Unknown location",
+          : (day.location as any)?.name || "Unknown location",
     })) || [];
 
-  // Safety data (API only)
+  // 3. Strict Safety Props (Ensures non-null values for the component)
   const safetyProps = {
-    safetyRating: tripData.partnerPreferences?.safetyRating,
-    safetyInfo: tripData.partnerPreferences?.safetyInfo,
-    verifiedTravelers:
-      tripData.partnerPreferences?.verifiedTravelers,
+    safetyRating: tripData.partnerPreferences?.safetyRating ?? 0,
+    safetyInfo: tripData.partnerPreferences?.safetyInfo ?? "Information not available",
+    verifiedTravelers: !!tripData.partnerPreferences?.verifiedTravelers,
   };
 
-  // Cancellation policy (may be undefined)
-  const cancellationPolicy =
-    tripData.commitments?.cancellationPolicy;
+  const cancellationPolicy = tripData.commitments?.cancellationPolicy;
 
   return (
     <div className="bg-gray-50 min-h-screen">
       <HeroSection trip={tripData} />
 
       <div className="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* LEFT COLUMN */}
         <div className="lg:col-span-2 space-y-6">
           <TripOverview trip={tripData} />
 
@@ -135,7 +127,6 @@ export default function TripDetailsPage() {
 
           <SafetyInformation trip={safetyProps} />
 
-          {/* ✅ ALWAYS SHOW Cancellation Section */}
           <CancellationPolicy
             trip={{
               cancellationPolicy: cancellationPolicy,
@@ -143,13 +134,13 @@ export default function TripDetailsPage() {
           />
         </div>
 
-        {/* RIGHT COLUMN */}
         <div className="flex flex-col gap-6">
           <TripActions trip={tripData} />
 
           {leaderData && <TripLeader leader={leaderData} />}
 
           <div className="space-y-6">
+            {/* tripId is verified as string here for the build */}
             {tripId && <JoinedTravelers tripId={tripId} />}
             <ShareThisTrip trip={tripData} />
           </div>

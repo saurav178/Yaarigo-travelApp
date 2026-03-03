@@ -21,7 +21,7 @@ export default function JoinTrip({ tripId }: JoinTripProps) {
     } else {
       // Authenticated logic - This is where the Kafka/Socket flow starts
       console.log("Joining trip:", tripId);
-      alert(`Successfully joined Trip ${tripId}`);
+      alert(`Successfully requested for joining this Trip ${tripId}`);
     }
   };
 
