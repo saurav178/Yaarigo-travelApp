@@ -15,7 +15,7 @@ import { useState } from "react";
 import { ApiTrip } from "../types/types";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/routes";
-
+import JoinTrip from "./JoinTrip";
 /* ================= TYPES ================= */
 
 type TripCardProps = {
@@ -79,23 +79,8 @@ export default function TripCard({ trip }: TripCardProps) {
   // const [isModalOpen, setIsModalOpen] = useState(false);
   
   const [status, setStatus] = useState("idle");
-  const [message, setMessage] = useState("");
-const [showMessage, setShowMessage] = useState(false);
+  
 
-const handleJoinClick = () => {
-  if (status === "idle") {
-    setStatus("success");
-    setMessage("Request sent to Jane Cooper");
-  } else {
-    setMessage("Request already sent. We will get back to you.");
-  }
-
-  setShowMessage(true);
-
-  setTimeout(() => {
-    setShowMessage(false);
-  }, 2500);
-};
   return (
     <div className="bg-white shadow-sm transition-all duration-300 overflow-hidden flex border border-[#e1e1e1]">
       {/* Image Section */}
@@ -233,56 +218,14 @@ const handleJoinClick = () => {
     View Trip
   </button>
 </Link>
-        <div className="relative w-full">
-
-  {showMessage && (
-    <div className="absolute -top-9 left-1/2 -translate-x-1/2 bg-black text-white text-[11px] px-3 py-1 rounded shadow-md whitespace-nowrap z-20">
-      {message}
-    </div>
-  )}
-
-  <button
-    type="button"
-    onClick={() => {
-      if (status === "success") {
-        setMessage("Request already sent. We will get back to you.");
-        setShowMessage(true);
-
-        setTimeout(() => {
-          setShowMessage(false);
-        }, 2000);
-      } else {
-        handleJoinClick();
-      }
-    }}
-    onMouseEnter={() => {
-      if (status === "success") {
-        setMessage("Request sent to Jane Cooper");
-        setShowMessage(true);
-      }
-    }}
-    onMouseLeave={() => {
-      setShowMessage(false);
-    }}
-    className={`py-2 text-white text-xs font-semibold w-full transition-all duration-300 flex items-center justify-center gap-1 ${
-      status === "success"
-        ? "cursor-default"
-        : "cursor-pointer hover:opacity-90"
-    }`}
-    style={{
-      backgroundColor: status === "success" ? "#16a34a" : "#276074",
-    }}
-  >
-    {status === "success" ? (
-      <>
-        <FaCheckCircle className="w-3 h-3" /> Request Sent
-      </>
-    ) : (
-      "Join Trip"
-    )}
-  </button>
-
-</div>
+        
+          {/* <button
+            className="py-2 text-white text-xs font-semibold cursor-pointer"
+            style={{ backgroundColor: "#276074" }}
+          >
+           Join trip 
+          </button> */}
+          <JoinTrip tripId={trip._id} />
           <button
             onClick={() => router.push("/profile")}
             className="py-2 text-white text-xs font-semibold cursor-pointer"
