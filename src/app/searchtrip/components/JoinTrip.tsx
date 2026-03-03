@@ -13,18 +13,22 @@ export default function JoinTrip({ tripId }: JoinTripProps) {
 
   const handleJoin = () => {
     if (!isAuthenticated) {
-      // Redirect to login if not authenticated
+      // Notification message as discussed in the meeting
+      alert("Currently you are not logged in, first login");
+      
+      // Redirect to login after the user acknowledges the notification
       router.push("/login");
     } else {
-      // Authenticated logic
+      // Authenticated logic - This is where the Kafka/Socket flow starts
       console.log("Joining trip:", tripId);
+      alert(`Successfully joined Trip ${tripId}`);
     }
   };
 
   return (
     <button
       onClick={handleJoin}
-      // Exact CSS from your request
+      // Exact CSS preserved from your request
       className="py-2 text-white text-xs font-semibold cursor-pointer"
       style={{ backgroundColor: "#276074" }}
     >
