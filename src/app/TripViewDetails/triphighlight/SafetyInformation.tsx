@@ -12,7 +12,7 @@ const SafetyInformation: React.FC<SafetyInformationProps> = ({ trip }) => {
   if (!trip) return null;
 
   return (
-    <div className="p-6 bg-green-100 w-full shadow-lg hover:shadow-2xl transition-all duration-300">
+    <div className="p-2 bg-green-100 w-full shadow-lg hover:shadow-2xl transition-all duration-300">
       <div className="flex items-center gap-3">
         <Image
           src="/icon/mingcute_safety-certificate-fill.png"
@@ -21,7 +21,7 @@ const SafetyInformation: React.FC<SafetyInformationProps> = ({ trip }) => {
           height={36}
           className="object-contain filter brightness-150 hue-rotate-30 saturate-150"
         />
-        <h2 className="font-semibold text-green-800 text-lg">
+        <h2 className="font-semibold text-green-800 text-md">
           Safety Information
         </h2>
       </div>
