@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link"; 
+import Link from "next/link";
 import {
   FaHeart,
   FaMapMarkerAlt,
@@ -41,13 +41,12 @@ export default function TripCard({ trip }: TripCardProps) {
   const startDate = trip.startDate;
   const endDate = trip.endDate;
 
-  const minBudget = 10000;
-  const maxBudget = 50000;
+  const minBudget = trip.partnerPreferences?.budget?.min ?? 0;
+  const maxBudget = trip.partnerPreferences?.budget?.max ?? 0;
 
   const tripsCompleted = 30;
   const matchPercentage = "90%";
-  const spotsLeft = 1;
-
+  const spotsLeft = trip.totalSeats - trip.bookedSeats;
   // Agency info
   const agencyName = "Trip Agency";
   const agencyRating = 4.5;
@@ -77,9 +76,8 @@ export default function TripCard({ trip }: TripCardProps) {
 
   const router = useRouter();
   // const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   const [status, setStatus] = useState("idle");
-  
 
   return (
     <div className="bg-white shadow-sm transition-all duration-300 overflow-hidden flex border border-[#e1e1e1]">
@@ -210,21 +208,21 @@ export default function TripCard({ trip }: TripCardProps) {
         </div>
 
         <div className="grid grid-cols-3 gap-2 mt-auto">
-     <Link href={ROUTES.TRIP_DETAILS_WITH_ID(trip._id)}>
-  <button
-    className="py-2 text-white text-xs font-semibold w-full cursor-pointer"
-    style={{ backgroundColor: "#276074" }}
-  >
-    View Trip
-  </button>
-</Link>
-        
+          <Link href={ROUTES.TRIP_DETAILS_WITH_ID(trip._id)}>
+            <button
+              className="py-2 text-white text-xs font-semibold w-full cursor-pointer"
+              style={{ backgroundColor: "#276074" }}
+            >
+              View Trip
+            </button>
+          </Link>
+
           {/* <button
-            className="py-2 text-white text-xs font-semibold cursor-pointer"
-            style={{ backgroundColor: "#276074" }}
-          >
-           Join trip 
-          </button> */}
+              className="py-2 text-white text-xs font-semibold cursor-pointer"
+              style={{ backgroundColor: "#276074" }}
+            >
+            Join trip 
+            </button> */}
           <JoinTrip tripId={trip._id} />
           <button
             onClick={() => router.push("/profile")}
@@ -235,7 +233,6 @@ export default function TripCard({ trip }: TripCardProps) {
           </button>
         </div>
       </div>
-    
     </div>
   );
 }
