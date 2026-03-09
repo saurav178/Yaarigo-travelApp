@@ -62,10 +62,10 @@ export default function HeroSection({ trip }: HeroSectionProps) {
       {/* Back Button: FIXED TOP-LEFT */}
       <button
         onClick={() => router.back()}
-        className="absolute top-20  left-9 z-50 flex items-center gap-2 px-4 py-2 rounded-full bg-black text-white font-bold shadow-lg hover:bg-gray-800 transition-colors duration-300"
+        className="absolute top-20  left-9 z-50 flex items-center gap-2 px-4 py-2 text-black font-bold transition-colors duration-300 cursor-pointer"
       >
         {/* Bigger visible arrow */}
-        <span className="inline-block w-3 h-3 border-t-4 border-l-4 border-white rotate-[-45deg]"></span>
+        <span className="inline-block w-3 h-3 border-t-4 border-l-4 border-black rotate-[-45deg]"></span>
         Back
       </button>
 

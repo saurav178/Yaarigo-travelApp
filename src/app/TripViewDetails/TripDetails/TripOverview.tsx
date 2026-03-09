@@ -55,7 +55,7 @@ export default function TripOverview({ trip }: TripProps) {
 
   // ---------- UI ----------
   return (
-    <div className="p-6 bg-white w-full shadow-lg hover:shadow-2xl transition-all duration-300">
+    <div className="p-6 bg-white w-full transition-all duration-300 border border-gray-200">
       {/* Title & Description */}
       <h2 className="text-lg font-semibold mb-2">{trip?.title}</h2>
       <p className="text-sm text-gray-600 mb-6">{trip?.description}</p>
