@@ -49,17 +49,24 @@ export default function BookingCard({
 
     setIsBooking(true);
     try {
-      const response = await axiosClient.post(
-        API_ENDPOINTS_CONFIG.BOOKING.CREATE_CART,
-        {
-          packageId: pkg._id,
-          planId: selectedPlan._id,
-          organizationId: APP_CONSTANTS.ORGANIZATION_ID,
-          travelDate: travelDate,
-        }
-      );
+      // Parallel execution: Fire both createCart and getTraveller requests simultaneously
+      const [cartResponse, profilesResponse] = await Promise.all([
+        axiosClient.post(
+          API_ENDPOINTS_CONFIG.BOOKING.CREATE_CART,
+          {
+            packageId: pkg._id,
+            planId: selectedPlan._id,
+            organizationId: APP_CONSTANTS.ORGANIZATION_ID,
+            travelDate: travelDate,
+          }
+        ),
+        axiosClient.get(API_ENDPOINTS_CONFIG.BOOKING.TRAVELER_PROFILES)
+      ]);
 
-      const cartId = response.data?.data?.id || response.data?.id;
+      const cartId = cartResponse.data?.data?.id || cartResponse.data?.id;
+      
+      // Get existing traveller profiles from the parallel request
+      const existingProfiles = profilesResponse.data?.data || profilesResponse.data || [];
 
     const params = new URLSearchParams();
     params.set("packageTitle", pkg.title);
@@ -75,6 +82,11 @@ export default function BookingCard({
     params.set("travelDate", travelDate);
 
     if (cartId) params.set("cartId", cartId);
+
+    // Pass existing traveller profiles to bookPackage page
+    if (existingProfiles.length > 0) {
+      params.set("existingProfiles", JSON.stringify(existingProfiles));
+    }
 
     if (travellers && travellers.length > 0) {
       params.set("travellersData", JSON.stringify(travellers));

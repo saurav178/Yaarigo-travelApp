@@ -96,23 +96,21 @@ function BookPackageContent() {
   const [showExistingTravellerModal, setShowExistingTravellerModal] = useState(false);
   const [existingProfiles, setExistingProfiles] = useState<UserProfile[]>([]);
   const [selectedProfileIds, setSelectedProfileIds] = useState<string[]>([]);
-  const [isFetchingProfiles, setIsFetchingProfiles] = useState(false);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [isAddingExisting, setIsAddingExisting] = useState(false);
 
-  const fetchExistingTravellers = async () => {
-    setIsFetchingProfiles(true);
-    try {
-      const response = await axiosClient.get(API_ENDPOINTS_CONFIG.BOOKING.TRAVELER_PROFILES);
-      const profiles = Array.isArray(response.data) ? response.data : (response.data?.data || []);
-      setExistingProfiles(profiles);
-      setShowExistingTravellerModal(true);
-    } catch (error) {
-      console.error("Failed to fetch profiles", error);
-    } finally {
-      setIsFetchingProfiles(false);
+  // Initialize existingProfiles from URL params on page load
+  useEffect(() => {
+    const existingProfilesParam = searchParams.get("existingProfiles");
+    if (existingProfilesParam) {
+      try {
+        const profiles = JSON.parse(existingProfilesParam);
+        setExistingProfiles(profiles);
+      } catch (e) {
+        console.error("Error parsing existingProfiles:", e);
+      }
     }
-  };
+  }, [searchParams]);
 
   const handleSaveNewTraveller = async () => {
     const errors = {
@@ -571,10 +569,9 @@ function BookPackageContent() {
                         setShowExistingTravellerModal(false);
                       } else {
                         setShowNewTravellerModal(false);
-                        fetchExistingTravellers();
+                        setShowExistingTravellerModal(true);
                       }
                     }}
-                    disabled={isFetchingProfiles}
                     className={`w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-[#276074] rounded-xl transition-all ${
                       showExistingTravellerModal
                         ? "bg-[#276074] text-white"
@@ -582,7 +579,7 @@ function BookPackageContent() {
                     }`}
                   >
                     <UserPlus className="w-5 h-5" />
-                    {isFetchingProfiles ? "Loading..." : (showExistingTravellerModal ? "Close Selection" : "Select Existing")}
+                    {showExistingTravellerModal ? "Close Selection" : "Select Existing"}
                   </button>
 
                   {showExistingTravellerModal && (
@@ -736,7 +733,7 @@ function BookPackageContent() {
               {travellers.map((traveller, index) => (
                 <div
                   key={traveller.id || index}
-                  className="bg-white p-4 rounded-xl border border-gray-200 flex justify-between items-center"
+                  className="bg-white p-4 rounded-xl border border-gray-200 border-dashed flex justify-between items-center"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">
@@ -766,6 +763,20 @@ function BookPackageContent() {
                 </div>
               )}
             </div>
+
+            {/* Add More Travellers Button */}
+            {travellers.length > 0 && (
+              <button
+                onClick={() => {
+                  setShowNewTravellerModal(false);
+                  setShowExistingTravellerModal(true);
+                }}
+                className="mx-auto py-2 px-3 border-2 border-[#276074] text-[#276074] font-medium rounded-lg hover:bg-[#276074] hover:text-white transition-colors flex items-center justify-center gap-2 text-sm"
+              >
+                <UserPlus className="w-4 h-4" />
+                Add More Travellers
+              </button>
+            )}
 
             {/* Detailed Package Plan */}
             <PlanDetailsCard planData={planData} />
