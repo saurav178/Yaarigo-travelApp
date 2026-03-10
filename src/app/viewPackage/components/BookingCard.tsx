@@ -27,6 +27,8 @@ export default function BookingCard({
   const router = useRouter();
   const [travelDate, setTravelDate] = useState("");
   const [isBooking, setIsBooking] = useState(false);
+  const [showValidationModal, setShowValidationModal] = useState(false);
+
   const currencySymbol =
     selectedPlan?.currency === "INR" ? "₹" : selectedPlan?.currency || "₹";
   const originalPrice = selectedPlan?.pricePerPerson || 0;
@@ -41,7 +43,7 @@ export default function BookingCard({
   const handleBookNow = async () => {
     if (!selectedPlan) return;
     if (!travelDate) {
-      alert("Please select a travel date");
+      setShowValidationModal(true);
       return;
     }
 
@@ -157,17 +159,28 @@ export default function BookingCard({
         <p className="text-sm text-gray-500 mt-1">per person</p>
       </div>
 
-      {/* Coupons */}
-      <div className="mb-6 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center justify-between cursor-pointer hover:bg-green-100 transition-colors group">
-        <div className="flex items-center gap-2 text-green-700">
-          <span className="text-lg">🏷️</span>
-          <span className="font-bold">Apply Coupon</span>
-        </div>
-        <span className="text-sm text-green-600 font-bold group-hover:underline">
-          View Offers
-        </span>
-      </div>
+      {/* Validation Message */}
+      {showValidationModal && (
+        <motion.div
+          className="bg-red-50 border-l-4 border-red-500 p-4 mb-4 rounded-md"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+        >
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <Calendar className="h-5 w-5 text-red-400" aria-hidden="true" />
+            </div>
+            <div className="ml-3">
+              <p className="text-sm font-medium text-red-800">
+                Please select a travel date to proceed.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      )}
 
+      
       {/* Travel Date Selection */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -176,8 +189,12 @@ export default function BookingCard({
         <input
           type="date"
           value={travelDate}
-          onChange={(e) => setTravelDate(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#276074] focus:border-transparent"
+          onChange={(e) => {
+            const newDate = e.target.value;
+            setTravelDate(newDate);
+            if (newDate) setShowValidationModal(false);
+          }}
+          className={`w-full p-2 border ${showValidationModal ? "border-red-500 focus:ring-red-200" : "border-gray-300 focus:ring-[#276074]"} rounded-lg focus:ring-2 focus:border-transparent`}
           min={new Date().toISOString().split("T")[0]}
         />
       </div>
