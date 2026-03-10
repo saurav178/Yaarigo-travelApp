@@ -54,7 +54,7 @@ const [newTraveller, setNewTraveller] = useState({
   useEffect(() => {
     const fetchTripMode = async () => {
       try {
-        const res = await fetch("https://api.dev.yaarigo.com/tpm-service/api/public/trips/search");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/trips/search`);
         const data = await res.json();
         const selectedTrip = data?.results?.find((t: any) => t._id === trip?._id);
 
