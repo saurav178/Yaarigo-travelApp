@@ -12,29 +12,44 @@ import {
   submitJoinRequest,
   InitJoinPayload,
   TravellerProfile,
-  SelectedTraveller
+  SelectedTraveller,
+  NewTravellerPayload
   } from '../lib/api/joinTripApi';
 import { useAuth } from "../../../context/AuthContext";
 const JoinTripModal = ({ trip, user, onClose }: any) => {
-  const [step, setStep] = useState(1);
+ const [step, setStep] = useState(1);
   const [reservationType, setReservationType] = useState('SOLO');
   const [guests, setGuests] = useState<any[]>([]);
   const [showTravellerForm, setShowTravellerForm] = useState(false);
   const [customMessage, setCustomMessage] = useState("Hi, I'm really excited to join!");
   const [numberOfTravelers, setNumberOfTravelers] = useState<number | ''>('');
-  
-  // New states for group/couple flow
   const [joinId, setJoinId] = useState<string | null>(null);
-  const [travelerProfiles, setTravelerProfiles] = useState<any[]>([]);
   const [selectedTravellers, setSelectedTravellers] = useState<any[]>([]);
+  
+  // ✅ Removed duplicate declarations
+  const [isTravellersAdded, setIsTravellersAdded] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
 
+  const [showExistingList, setShowExistingList] = useState(false);
+  const [profiles, setProfiles] = useState<TravellerProfile[]>([]);
+  const [lockedTravellers, setLockedTravellers] = useState<any[]>([]);
+  const [travelerProfiles, setTravelerProfiles] = useState<TravellerProfile[]>([]);
+  
   const predefinedMessages = [
     "Super excited for this! 🔥", 
     "Count me in! Ready to explore.", 
     "Can't wait to meet the group!",
     "Is there a WhatsApp group yet?"
   ];
-
+const [newTraveller, setNewTraveller] = useState({
+  firstName: "",
+  lastName: "",
+  dob: "",
+  gender: "",
+  phone: "",
+  email: "",
+  nationality: ""
+});
   /* ================= FETCH TRIP MODE ================= */
   useEffect(() => {
     const fetchTripMode = async () => {
@@ -58,10 +73,7 @@ const JoinTripModal = ({ trip, user, onClose }: any) => {
   }, [trip]);
 
   const addGuest = () => setGuests([...guests, { name: '', age: '', gender: 'MALE' }]);
-// 1. Import useAuth at the top
 
-
-// ... inside your component
 const { user: authUser, isAuthenticated } = useAuth(); // Get auth state from context
   /* ================= SOLO JOIN ================= */
 /* ================= SOLO JOIN ================= */
@@ -86,8 +98,7 @@ const handleSoloSubmit = async () => {
       message: customMessage
     });
 
-    alert(data.message || "Join request sent!");
-    onClose();
+    setStep(3);
   } catch (error: any) {
     // This log is crucial for 500 errors to see the backend's internal message
     console.error("Join Trip Error:", error.response?.data);
@@ -97,7 +108,13 @@ const handleSoloSubmit = async () => {
   }
 };
   /* ================= INIT JOIN FOR GROUP/COUPLE ================= */
+/* ================= INIT JOIN FOR GROUP/COUPLE ================= */
 const handleInitJoin = async () => {
+  // Add this check before making API call
+  if (!numberOfTravelers || Number(numberOfTravelers) <= 0) {
+    return alert("Please enter the number of travelers to proceed.");
+  }
+
   try {
     // 1. Prepare data
     const currentTripId = trip?._id || trip?.id;
@@ -130,10 +147,16 @@ const handleInitJoin = async () => {
     alert(error.response?.data?.message || "Server Error (500)");
   }
 };
-  /* ================= ADD EXISTING TRAVELLER ================= */
+
+/* ================= BUTTON DISABLE LOGIC ================= */
+const isNextDisabled = 
+  (reservationType !== "SOLO" && (!numberOfTravelers || Number(numberOfTravelers) <= 0)) ||
+  isAdding; // also disable while adding
+
+
+ 
 /* ================= ADD EXISTING TRAVELLER ================= */
-const [showExistingList, setShowExistingList] = useState(false);
-const [profiles, setProfiles] = useState<TravellerProfile[]>([]);
+
 
 const handleFetchProfiles = async () => {
   try {
@@ -149,9 +172,31 @@ const handleFetchProfiles = async () => {
   }
 };
 
+
+
+useEffect(() => {
+  if (trip?.joinedTravelers?.length) {
+    setLockedTravellers(trip.joinedTravelers);
+  }
+}, [trip]);  
+
 const handleAddExistingTraveller = (traveller: any) => {
-  if (selectedTravellers.some(t => t.travellerProfileId === traveller.id)) {
-    alert("This traveler is already added.");
+  // Prevent adding more than the number entered
+  if (numberOfTravelers && selectedTravellers.length >= Number(numberOfTravelers)) {
+    alert(`You can only add ${numberOfTravelers} traveler(s)`);
+    return;
+  }
+
+  const alreadySelected = selectedTravellers.some(
+    (t) => t.travellerProfileId === traveller.id
+  );
+
+  const alreadyLocked = lockedTravellers.some(
+    (t) => t.travellerProfileId === traveller.id
+  );
+
+  if (alreadySelected || alreadyLocked) {
+    alert("This traveler is already part of this trip.");
     return;
   }
 
@@ -160,12 +205,11 @@ const handleAddExistingTraveller = (traveller: any) => {
     name: `${traveller.firstName} ${traveller.lastName}`,
     dob: traveller.dob,
     gender: traveller.gender,
-    nationality: "Indian", // Standard for local Indian context
+    nationality: "Indian",
     travellerType: "ADULT"
   };
 
-  setSelectedTravellers([...selectedTravellers, obj]);
-  
+  setSelectedTravellers((prev) => [...prev, obj]);
 };
 
 const handleRemoveSelected = (profileId: string) => {
@@ -205,22 +249,48 @@ const handleFinalAddToTrip = async () => {
   }
 
 };
-  /* ================= CREATE NEW TRAVELLER ================= */
-  const handleCreateTraveller = async (payload: any) => {
-    try {
-      await createTravelerProfile(payload);
-      alert("Traveller created successfully");
-      const profiles = await getTravelerProfiles();
-      setTravelerProfiles(profiles);
-    } catch (error) {
-      console.error("Traveller creation failed", error);
-    }
-  };
+ 
 
+
+
+/* ================= LOAD EXISTING TRAVELLERS ================= */
+
+const loadTravellerProfiles = async () => {
+  try {
+    const profiles = await getTravelerProfiles();
+    setTravelerProfiles(profiles);
+  } catch (error) {
+    console.error("Failed to fetch travellers", error);
+  }
+};
+
+
+/* ================= CREATE NEW TRAVELLER ================= */
+
+const handleCreateTraveller = async (payload: NewTravellerPayload) => {
+  try {
+
+    // create traveller
+    await createTravelerProfile(payload);
+
+    alert("Traveller created successfully");
+
+    // reload travellers so new traveller appears in Add Existing
+    await loadTravellerProfiles();
+
+    // close form if you are using a modal
+    setShowTravellerForm(false);
+
+  } catch (error) {
+
+    console.error("Traveller creation failed", error);
+    alert("Failed to create traveller");
+
+  }
+};
   /* ================= ADD TRAVELLERS TO TRIP ================= */
   /* ================= ADD TRAVELLERS TO TRIP ================= */
-const [isTravellersAdded, setIsTravellersAdded] = useState(false);
-const [isAdding, setIsAdding] = useState(false);
+
 const handleAddToTrip = async () => {
 
   if (!joinId) {
@@ -269,38 +339,71 @@ const handleAddToTrip = async () => {
 };
   /* ================= FINAL SUBMIT ================= */
 const handleSubmitJoinRequest = async () => {
+  if (!joinId) return alert("Join ID missing. Please restart the process.");
+  if (!customMessage.trim()) return alert("Please enter a message.");
 
-  if (!joinId) return alert("Join ID missing");
-
-  if (!customMessage.trim()) {
-    alert("Please enter or select a message");
-    return;
-  }
+  setIsAdding(true); // disable buttons
 
   try {
+    const response = await submitJoinRequest(joinId, customMessage);
 
-    await submitJoinRequest(joinId, customMessage);
+    // Only move to Step 3 if API call succeeds
+    if (response) {
+      console.log("Join request successfully submitted", response);
 
-    alert("Join request submitted successfully");
-
-  } catch (error) {
-
-    console.error("Submit failed", error);
-
+      // ✅ Move to Screen 3 only after success
+      setStep(3);
+    } else {
+      alert("Server error: Failed to submit join request.");
+    }
+  } catch (error: any) {
+    console.error("Submit request failed:", error?.response?.data || error);
+    alert(error?.response?.data?.message || "Failed to submit join request. Try again.");
+  } finally {
+    setIsAdding(false); // re-enable buttons
   }
-
 };
   /* ================= FOOTER BUTTON LOGIC ================= */
-  const handleNextOrSubmit = () => {
-    if (reservationType === 'SOLO') handleSoloSubmit();
-    else if (step === 1) handleInitJoin();
-   else if (step === 2) handleAddToTrip();
-  };
+  /* ================= BUTTON CLICK HANDLER ================= */
+const handleNextOrSubmit = async () => {
+  if (reservationType === 'SOLO') {
+    await handleSoloSubmit();
+  } else {
+    if (step === 1) {
+      await handleInitJoin(); // Initialize join, sets joinId and moves to step 2
+    } else if (step === 2) {
+      const added = await handleAddToTrip(); // Add travelers to trip
+      if (!added) return; // Stop if API failed or user canceled
 
+      // Submit join request only after travelers added
+      try {
+        await handleSubmitJoinRequest();
+      } catch (err) {
+        console.error("Final submit failed:", err);
+        return;
+      }
+    }
+  }
+};
+<button
+  onClick={handleNextOrSubmit}
+  disabled={isNextDisabled}
+  className={`btn-primary ${isNextDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+>
+  {step === 2 ? "Add & Continue" : "Next"}
+</button>
 
-  const availableProfiles = profiles.filter(
-  (profile) => !selectedTravellers.some((selected) => selected.travellerProfileId === profile.id)
-);
+  const availableProfiles = profiles.filter((profile) => {
+  const alreadySelected = selectedTravellers.some(
+    (t) => t.travellerProfileId === profile.id
+  );
+
+  const alreadyLocked = lockedTravellers.some(
+    (t) => t.travellerProfileId === profile.id
+  );
+
+  return !alreadySelected && !alreadyLocked;
+});
   return (
     <AnimatePresence>
       <div className="fixed inset-0 flex items-center justify-end z-[100] bg-black/60 backdrop-blur-sm">
@@ -559,13 +662,13 @@ const handleSubmitJoinRequest = async () => {
   
 )}
                 </motion.div>
-              ) : (
+              ) :   (
                 <motion.div
   key="step2"
   initial={{ opacity: 0 }}
   animate={{ opacity: 1 }}
   className="space-y-4"
-><div>
+>
 
   <div className="flex items-center justify-between">
     <h2 className="serif-title text-xl font-bold text-black">
@@ -600,6 +703,7 @@ const handleSubmitJoinRequest = async () => {
  {showExistingList && (
   <div className="w-full mt-4 animate-in fade-in slide-in-from-top-2 duration-300">
     <div className="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+       
       <table className="w-full text-left border-collapse">
         <thead>
           <tr className="bg-white border-b border-gray-200">
@@ -725,11 +829,12 @@ const handleSubmitJoinRequest = async () => {
     </div>
   </div>
 )}
-  {/* TRAVELLER FORM */}
-  {showTravellerForm && (
-    <div className="space-y-3 mt-3 relative">
+ {/* ================= TRAVELLER FORM ================= */}
+{showTravellerForm && !showExistingList && (
+  <div className="w-full mt-4 animate-in fade-in slide-in-from-top-2 duration-300">
+    <div className="border border-gray-200 rounded-lg shadow-sm relative p-4">
 
-      {/* CROSS BUTTON */}
+      {/* CLOSE BUTTON */}
       <button
         onClick={() => setShowTravellerForm(false)}
         className="absolute top-2 right-2 p-1 rounded-full hover:bg-gray-200 text-gray-500"
@@ -737,55 +842,117 @@ const handleSubmitJoinRequest = async () => {
         <X size={16} />
       </button>
 
-      {guests.length > 0 ? (
-        guests.map((guest, i) => (
-          <div
-            key={i}
-            className="bg-gray-50 p-3 rounded-lg border border-dashed border-gray-300 space-y-3 relative"
-          >
+      {/* FORM GRID */}
+      <div className="grid grid-cols-2 gap-3 text-[0.7rem]">
 
-            <div className="flex justify-between items-center">
-              <span className="text-[0.6rem] font-bold text-black uppercase">
-                Traveler {i + 1}
-              </span>
-
-              {reservationType === "GROUP" && guests.length > 1 && (
-                <button
-                  onClick={() =>
-                    setGuests(guests.filter((_, index) => index !== i))
-                  }
-                  className="text-red-500 hover:text-red-700 transition"
-                >
-                  <X size={14} />
-                </button>
-              )}
-            </div>
-
-            <input
-              className="input-field text-black"
-              placeholder="Full Name"
-            />
-
-            <div className="flex gap-2">
-              <input
-                className="input-field text-black"
-                placeholder="Age"
-              />
-
-              <select className="input-field bg-white text-black">
-                <option>Male</option>
-                <option>Female</option>
-                <option>Other</option>
-              </select>
-            </div>
-
-          </div>
-        ))
-      ) : (
-        <div className="text-center py-4 text-gray-500 text-xs italic">
-          No additional travelers needed for Solo mode.
+        {/* First Name */}
+        <div>
+          <label className="text-gray-400 font-bold uppercase">First Name</label>
+          <input
+            className="w-full border rounded px-2 py-1 mt-1"
+            placeholder="First Name"
+            onChange={(e) =>
+              setNewTraveller({ ...newTraveller, firstName: e.target.value })
+            }
+          />
         </div>
-      )}
+
+        {/* Last Name */}
+        <div>
+          <label className="text-gray-400 font-bold uppercase">Last Name</label>
+          <input
+            className="w-full border rounded px-2 py-1 mt-1"
+            placeholder="Last Name"
+            onChange={(e) =>
+              setNewTraveller({ ...newTraveller, lastName: e.target.value })
+            }
+          />
+        </div>
+
+        {/* Gender */}
+        <div>
+          <label className="text-gray-400 font-bold uppercase">Gender</label>
+          <select
+            className="w-full border rounded px-2 py-1 mt-1"
+            onChange={(e) =>
+              setNewTraveller({ ...newTraveller, gender: e.target.value })
+            }
+          >
+            <option value="">Select</option>
+            <option>MALE</option>
+            <option>FEMALE</option>
+            <option>OTHER</option>
+          </select>
+        </div>
+
+        {/* DOB */}
+        <div>
+          <label className="text-gray-400 font-bold uppercase">DOB</label>
+          <input
+            type="date"
+            className="w-full border rounded px-2 py-1 mt-1"
+            onChange={(e) =>
+              setNewTraveller({ ...newTraveller, dob: e.target.value })
+            }
+          />
+        </div>
+
+        {/* Phone */}
+        <div>
+          <label className="text-gray-400 font-bold uppercase">Phone</label>
+          <input
+            className="w-full border rounded px-2 py-1 mt-1"
+            placeholder="Phone"
+            onChange={(e) =>
+              setNewTraveller({ ...newTraveller, phone: e.target.value })
+            }
+          />
+        </div>
+
+        {/* Email */}
+        <div>
+          <label className="text-gray-400 font-bold uppercase">Email</label>
+          <input
+            className="w-full border rounded px-2 py-1 mt-1"
+            placeholder="Email"
+            onChange={(e) =>
+              setNewTraveller({ ...newTraveller, email: e.target.value })
+            }
+          />
+        </div>
+
+        {/* Nationality */}
+        <div>
+          <label className="text-gray-400 font-bold uppercase">Nationality</label>
+          <input
+            className="w-full border rounded px-2 py-1 mt-1"
+            placeholder="Nationality"
+            onChange={(e) =>
+              setNewTraveller({ ...newTraveller, nationality: e.target.value })
+            }
+          />
+        </div>
+
+      </div>
+
+      {/* SAVE BUTTON */}
+      <div className="flex justify-end mt-4">
+        <button
+          onClick={() =>
+            handleCreateTraveller({
+              ...newTraveller,
+              travellerType: "ADULT",
+              isDefault: false,
+            })
+          }
+          className="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded text-[0.7rem] font-bold"
+        >
+          SAVE
+        </button>
+      </div>
+
+    </div>
+  
 
       {(reservationType === "GROUP" || reservationType === "COUPLE") && (
         <button
@@ -830,7 +997,7 @@ const handleSubmitJoinRequest = async () => {
     </div>
   </div>
 </div>
-  </div>
+  
 
   
 {/* Review Policy */}
@@ -855,42 +1022,89 @@ const handleSubmitJoinRequest = async () => {
 
   </div>
 </div>
-</motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-{/* Quick Replies */}
+</motion.div> 
+ )}
 
+             
+         </AnimatePresence>
+         </div>
+{step === 3 && (
+  <motion.div
+    key="step3"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    className="absolute inset-0 z-[110] bg-white flex flex-col items-center justify-center p-8 space-y-6"
+  >
+    {/* ✅ Updated Checkmark Background to match #276074 (at low opacity) */}
+    <motion.div 
+      initial={{ scale: 0.5, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ delay: 0.2, type: "spring" }}
+      className="bg-[#276074]/10 rounded-full p-6"
+    >
+      <svg
+        className="w-14 h-14 text-[#276074]"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="3"
+        viewBox="0 0 24 24"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+      </svg>
+    </motion.div>
 
-          {/* Persistent Footer - Tightened */}
+    {/* Confirmation Title with matching underline */}
+    <div className="text-center">
+      <h2 className="serif-title text-2xl font-bold text-gray-800">
+        Join Request Sent!
+      </h2>
+      <div className="h-1 w-12 bg-[#276074] mx-auto mt-2 rounded-full opacity-60" />
+    </div>
+
+    {/* Message with matching text highlight */}
+    <p className="text-center text-gray-600 text-[0.85rem] leading-relaxed max-w-[280px]">
+      Your request to join <span className="font-semibold text-[#276074]">{trip?.title || "this trip"}</span> has been successfully sent.
+      <br />
+      <span className="text-[0.7rem] text-gray-400 mt-2 block uppercase tracking-[0.15em] font-bold">
+        Verification Pending
+      </span>
+    </p>
+
+    {/* Close Button - Using your specific color & darker hover */}
+    <button
+      onClick={onClose}
+      className="w-full mt-4 px-6 py-3 bg-[#276074] text-white font-bold rounded-xl hover:bg-[#1e4a5a] transition-all shadow-lg shadow-[#276074]/20 active:scale-95 text-[0.7rem] uppercase tracking-widest"
+    >
+      Back to trips
+    </button>
+  </motion.div>
+)}     {/* Persistent Footer - Tightened */}
          <div className="p-6 py-2 border-t border-black-100 bg-white">
-  <button 
-  // Disable if in Step 2 but travelers haven't been added to the backend yet
+  <button
   disabled={(step === 2 && !isTravellersAdded) || isAdding}
-  onClick={() => {
+  onClick={async () => {
     if (reservationType === 'SOLO') {
-      handleSoloSubmit(); 
+      await handleSoloSubmit(); 
     } else if (step === 1) {
-      handleInitJoin(); 
-    } else {
-      // Step 2: Final Submission
-      handleSubmitJoinRequest();
+      await handleInitJoin(); 
+    } else if (step === 2) {
+      await handleSubmitJoinRequest(); // ✅ Wait for success before updating step
     }
   }}
   className={`w-full py-2 font-bold flex items-center justify-center gap-2 text-[0.65rem] uppercase tracking-widest rounded-lg transition-all
-    ${(step === 2 && !isTravellersAdded) 
-      ? 'bg-gray-300 cursor-not-allowed text-gray-500' 
-      : 'bg-emerald-600 text-white hover:bg-emerald-700 active:scale-95 shadow-lg shadow-emerald-900/10'
-    }`}
+  ${(step === 2 && !isTravellersAdded) 
+    ? 'bg-gray-300 cursor-not-allowed text-gray-500' 
+    : 'bg-[#276074] text-white hover:bg-[#1e4a5a] active:scale-95 shadow-lg shadow-[#276074]/20'
+  }`}
 >
   {isAdding ? 'Syncing...' : (
     <>
-      {reservationType === 'SOLO' ? 'Submit Join Request' : (step === 2 ? 'Confirm & Join' : 'Next Step')}
+      {reservationType === 'SOLO' ? 'Submit Join Request' : (step === 2 ? 'Submit Join Request' : 'Next Step')}
       <ArrowRight size={14} />
     </>
   )}
-</button>
-  
+</button>  
   <p className="text-center text-[0.55rem] font-bold text-black-300 uppercase mt-4 tracking-widest">
     Secure Booking • 24h Response
   </p>
