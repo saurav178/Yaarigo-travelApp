@@ -29,6 +29,12 @@ interface UserProfile {
   email?: string;
 }
 
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
+
 const calculateAge = (dob: string) => {
   const birthDate = new Date(dob);
   const today = new Date();
@@ -56,16 +62,7 @@ function BookPackageContent() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // Payment method state
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'upi' | 'netbanking'>('card');
-  const [upiId, setUpiId] = useState("");
-
-  // Payment form state
-  const [cardNumber, setCardNumber] = useState("");
-  const [cardExpiry, setCardExpiry] = useState("");
-  const [cardCvv, setCardCvv] = useState("");
-  const [cardHolderName, setCardHolderName] = useState("");
-  const [paymentError, setPaymentError] = useState("");
+  const [bookingNumber, setBookingNumber] = useState("");
 
   // Traveller state
   const [travellers, setTravellers] = useState<Traveller[]>([]);
@@ -356,6 +353,17 @@ function BookPackageContent() {
     }
   }, [searchParams]);
 
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   // Calculate totals
   const currencySymbol = currency === "INR" ? "₹" : currency;
   const travellerCount = travellers.length > 0 ? travellers.length : 1;
@@ -366,100 +374,108 @@ function BookPackageContent() {
   const advanceAmount = Math.round(finalTotal * APP_CONSTANTS.ADVANCE_PAYMENT_PERCENTAGE);
   const remainingAmount = finalTotal - advanceAmount;
 
-  // Format card number with spaces
-  const formatCardNumber = (value: string) => {
-    const cleaned = value.replace(/\D/g, "");
-    const formatted = cleaned.replace(/(\d{4})(?=\d)/g, "$1 ");
-    return formatted.slice(0, 19);
-  };
-
-  // Format expiry date
-  const formatExpiry = (value: string) => {
-    const cleaned = value.replace(/\D/g, "");
-    if (cleaned.length >= 2) {
-      return cleaned.slice(0, 2) + "/" + cleaned.slice(2, 4);
-    }
-    return cleaned;
-  };
-
-  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCardNumber(formatCardNumber(e.target.value));
-  };
-
-  const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCardExpiry(formatExpiry(e.target.value));
-  };
-
-  const handleCvvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const cleaned = e.target.value.replace(/\D/g, "");
-    setCardCvv(cleaned.slice(0, 4));
-  };
-
-  const handleConfirmPayment = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setPaymentError("");
-
+  const handleProceedToCheckout = async () => {
     if (travellers.length === 0) {
-      setPaymentError("Please add at least one traveller to proceed.");
+      console.error("Please add at least one traveller to proceed.");
       return;
     }
 
-    if (paymentMethod === 'card') {
-      // Validate card details
-      if (cardNumber.replace(/\s/g, "").length !== 16) {
-        setPaymentError("Please enter a valid 16-digit card number");
-        return;
-      }
-      if (cardExpiry.length !== 5) {
-        setPaymentError("Please enter a valid expiry date (MM/YY)");
-        return;
-      }
-      if (cardCvv.length < 3) {
-        setPaymentError("Please enter a valid CVV");
-        return;
-      }
-      if (!cardHolderName.trim()) {
-        setPaymentError("Please enter the cardholder name");
-        return;
-      }
-    } else if (paymentMethod === 'upi') {
-      if (!upiId.trim() || !upiId.includes('@')) {
-        setPaymentError("Please enter a valid UPI ID");
-        return;
-      }
-    }
-
-    // Process payment
     setIsProcessing(true);
 
     try {
-      if (cartId && travellers.length > 0) {
+      if (cartId) {
         const travelersToSync = travellers.filter((t: Traveller & { isAddedToCart?: boolean }) => !t.isAddedToCart);
 
         if (travelersToSync.length > 0) {
-          const travelersPayload = travelersToSync.map((t: Traveller & { firstName?: string; lastName?: string }) => ({
-          firstName: t.firstName || t.name?.split(" ")[0] || "Guest",
-          lastName: t.lastName || t.name?.split(" ").slice(1).join(" ") || "User",
-          gender: t.gender?.toUpperCase() || "MALE",
-          dob: t.dob || "2000-01-01",
-          travelerType: t.travelerType || "ADULT",
-        }));
+          const travelersPayload = travelersToSync.map((t: Traveller) => ({
+            firstName: t.firstName || t.name?.split(" ")[0] || "Guest",
+            lastName: t.lastName || t.name?.split(" ").slice(1).join(" ") || "User",
+            gender: t.gender?.toUpperCase() || "MALE",
+            dob: t.dob || "2000-01-01",
+            travelerType: t.travelerType || "ADULT",
+          }));
 
-        await axiosClient.post(
-          API_ENDPOINTS_CONFIG.BOOKING.ADD_TRAVELERS(cartId),
-          { travelers: travelersPayload }
-        );
+          await axiosClient.post(
+            API_ENDPOINTS_CONFIG.BOOKING.ADD_TRAVELERS(cartId),
+            { travelers: travelersPayload }
+          );
         }
       }
-    
-    // Simulate payment processing
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsProcessing(false);
-    setIsSuccess(true);
+
+      // Step 1: Call Checkout API to get booking details
+      const checkoutResponse = await axiosClient.post(`${API_ENDPOINTS_CONFIG.BOOKING.CHECKOUT_CART(cartId)}`, {
+        paymentMethod: "RAZORPAY"
+      });
+
+      const bookingData = checkoutResponse.data.data || checkoutResponse.data;
+      const bookingId = bookingData.booking?.id;
+
+      if (!bookingId) {
+        throw new Error("Booking ID not found in checkout response.");
+      }
+
+      if (bookingData.booking?.bookingNumber) {
+        setBookingNumber(bookingData.booking.bookingNumber);
+      }
+
+      // Step 2: Call Pay API to get Razorpay order details
+      const payResponse = await axiosClient.post(`${API_ENDPOINTS_CONFIG.BOOKING.PAYMENT(bookingId)}/pay`);
+      const paymentData = payResponse.data.data || payResponse.data;
+
+      if (!window.Razorpay) {
+        console.error("Razorpay SDK failed to load.");
+        setIsProcessing(false);
+        return;
+      }
+
+      const options = {
+        key: paymentData.key || process.env.NEXT_PUBLIC_RAZORPAY_KEY,
+        amount: paymentData.amount,
+        currency: paymentData.currency || currency,
+        name: "Yaarigo",
+        description: `Payment for ${packageTitle}`,
+        order_id: paymentData.orderId,
+        handler: async (response: any) => {
+          console.log("Payment successful", response);
+          try {
+            // Step 3: Verify Payment
+            await axiosClient.post(API_ENDPOINTS_CONFIG.BOOKING.VERIFY_PAYMENT, {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature
+            });
+            setIsSuccess(true);
+            setIsProcessing(false);
+          } catch (error) {
+            console.error("Payment verification failed", error);
+            alert("Payment verification failed. Please contact support.");
+            setIsProcessing(false);
+          }
+        },
+        prefill: {
+          name: travellers[0]?.name || "Yaarigo User",
+          email: travellers[0]?.email || "",
+          contact: travellers[0]?.contact || "",
+        },
+        theme: {
+          color: "#276074",
+        },
+        modal: {
+          ondismiss: function () {
+            setIsProcessing(false);
+          },
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.on('payment.failed', function (response: any) {
+        console.error('Payment Failed:', response.error.description);
+        setIsProcessing(false);
+        alert(`Payment Failed: ${response.error.description}`);
+      });
+      rzp.open();
     } catch (error) {
-      console.error("Booking failed:", error);
-      setPaymentError("Failed to process booking. Please try again.");
+      console.error("Checkout failed:", error);
       setIsProcessing(false);
     }
   };
@@ -480,11 +496,12 @@ function BookPackageContent() {
       <SuccessView
         packageTitle={packageTitle}
         currencySymbol={currencySymbol}
-        finalTotal={finalTotal}
+        amountPaid={advanceAmount}
         inviteLink={inviteLink}
         isCopied={isCopied}
         handleCopyInvite={handleCopyInvite}
         handleGoToHome={handleGoToHome}
+        bookingNumber={bookingNumber}
       />
     );
   }
@@ -775,21 +792,8 @@ function BookPackageContent() {
               totalBasePrice={totalBasePrice}
               advanceAmount={advanceAmount}
               remainingAmount={remainingAmount}
-              paymentMethod={paymentMethod}
-              setPaymentMethod={setPaymentMethod}
-              paymentError={paymentError}
-              cardNumber={cardNumber}
-              handleCardNumberChange={handleCardNumberChange}
-              cardExpiry={cardExpiry}
-              handleExpiryChange={handleExpiryChange}
-              cardCvv={cardCvv}
-              handleCvvChange={handleCvvChange}
-              cardHolderName={cardHolderName}
-              setCardHolderName={setCardHolderName}
-              upiId={upiId}
-              setUpiId={setUpiId}
               isProcessing={isProcessing}
-              handleConfirmPayment={handleConfirmPayment}
+              handleProceedToCheckout={handleProceedToCheckout}
               selectedAddOnsLength={selectedAddOns.length}
             />
           </div>
@@ -798,6 +802,7 @@ function BookPackageContent() {
     </div>
   );
 }
+
 
 function LoadingFallback() {
   return (

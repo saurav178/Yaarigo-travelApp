@@ -3,9 +3,10 @@ import { CheckCircle, Users, Copy } from "lucide-react";
 interface SuccessViewProps {
   packageTitle: string;
   currencySymbol: string;
-  finalTotal: number;
+  amountPaid: number;
   inviteLink: string;
   isCopied: boolean;
+  bookingNumber: string;
   handleCopyInvite: () => void;
   handleGoToHome: () => void;
 }
@@ -13,9 +14,10 @@ interface SuccessViewProps {
 export default function SuccessView({
   packageTitle,
   currencySymbol,
-  finalTotal,
+  amountPaid,
   inviteLink,
   isCopied,
+  bookingNumber,
   handleCopyInvite,
   handleGoToHome,
 }: SuccessViewProps) {
@@ -36,15 +38,15 @@ export default function SuccessView({
           <div className="bg-gray-50 rounded-xl p-6 mb-6">
             <div className="flex justify-between items-center mb-2">
               <span className="text-gray-600">Booking Reference:</span>
-              <span className="font-bold text-[#276074]">
-                YGR-{Date.now().toString().slice(-8)}
+              <span className="font-bold text-[#276074] uppercase">
+                {bookingNumber}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-600">Amount Paid:</span>
               <span className="font-bold text-xl text-[#276074]">
                 {currencySymbol}
-                {finalTotal.toLocaleString()}
+                {amountPaid.toLocaleString()}
               </span>
             </div>
           </div>
