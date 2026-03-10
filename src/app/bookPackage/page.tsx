@@ -2,8 +2,9 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import InlineLoader from "@/components/Loader/InlineLoader";
-import { ArrowLeft, Plus, UserPlus, Check, Trash2, User } from "lucide-react";
+import { ArrowLeft, Plus, UserPlus, Check, Trash2, User, Plane } from "lucide-react";
 import axiosClient from "@/lib/axios-client";
 import { APP_ROUTES } from "@/utils/constants";
 import { AddOnDetail, Traveller, ItineraryItem, CancellationPolicyItem, PlanData } from "./types";
@@ -525,16 +526,25 @@ function BookPackageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 mt-12">
+    <div className="min-h-screen bg-gray-50 mt-16">
       <div className="max-w-[1600px] mx-auto px-4 md:px-8 py-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Complete Your Booking</h1>
+            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+              Complete Your Booking
+              <motion.div
+                initial={{ x: -20, opacity: 0, rotate: -45 }}
+                animate={{ x: 0, opacity: 1, rotate: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+              >
+                <Plane className="w-8 h-8 text-[#276074]" />
+              </motion.div>
+            </h1>
             <p className="text-gray-500 mt-1">Review your details and pay securely</p>
           </div>
           <button
             onClick={() => router.back()}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-xl hover:bg-gray-50 hover:text-[#276074] hover:border-[#276074]/30 transition-all shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50 hover:text-[#276074] hover:border-[#276074]/30 transition-all shadow-sm"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Package
@@ -543,24 +553,28 @@ function BookPackageContent() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Package Preview & Add-ons */}
-          <div className="lg:col-span-2 space-y-6">
+          <motion.div className="lg:col-span-2 space-y-6" initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.1 } } }}>
             {/* Package Details Card */}
-            <PackageDetailsCard
-              packageTitle={packageTitle}
-              fromLocation={fromLocation}
-              toLocation={toLocation}
-              duration={duration}
-              planName={planName}
-            />
+            <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="bg-white p-6 rounded-lg shadow-md border border-gray-100 border-t-4 border-t-[#276074]">
+              <PackageDetailsCard
+                packageTitle={packageTitle}
+                fromLocation={fromLocation}
+                toLocation={toLocation}
+                duration={duration}
+                planName={planName}
+              />
+            </motion.div>
 
             {/* Selected Add-ons */}
-            <SelectedAddOnsCard
-              selectedAddOns={selectedAddOns}
-              currencySymbol={currencySymbol}
-            />
+            <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+              <SelectedAddOnsCard
+                selectedAddOns={selectedAddOns}
+                currencySymbol={currencySymbol}
+              />
+            </motion.div>
 
             {/* Add Travellers Actions */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="bg-white p-6 rounded-lg shadow-md border border-gray-100 border-t-4 border-t-[#276074]">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-semibold text-gray-900">
                   Travellers
@@ -573,7 +587,7 @@ function BookPackageContent() {
                     setShowNewTravellerModal(!showNewTravellerModal);
                     setShowExistingTravellerModal(false);
                   }}
-                  className={`w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all ${
+                  className={`w-full flex items-center justify-center gap-2 px-4 py-3 rounded-md transition-all ${
                     showNewTravellerModal 
                       ? "bg-gray-100 text-gray-700 border border-gray-200" 
                       : "bg-[#276074] text-white hover:opacity-90"
@@ -592,7 +606,7 @@ function BookPackageContent() {
                         setShowExistingTravellerModal(true);
                       }
                     }}
-                    className={`w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-[#276074] rounded-xl transition-all ${
+                    className={`w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-[#276074] rounded-md transition-all ${
                       showExistingTravellerModal
                         ? "bg-[#276074] text-white"
                         : "text-[#276074] hover:bg-[#276074]/5"
@@ -602,8 +616,13 @@ function BookPackageContent() {
                     {showExistingTravellerModal ? "Close Selection" : "Select Existing"}
                   </button>
 
-                  {showExistingTravellerModal && (
-                    <div className="absolute z-10 top-full mt-2 w-full bg-white rounded-xl shadow-lg border border-gray-200 animate-in fade-in-5 duration-200">
+                  <AnimatePresence>
+                    {showExistingTravellerModal && (
+                      <motion.div 
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="absolute z-10 top-full mt-2 w-full bg-white rounded-md shadow-lg border border-gray-200">
                       <div className="p-2 max-h-80 overflow-y-auto space-y-2">
                         {existingProfiles.length === 0 ? (
                           <p className="text-center text-gray-500 py-4">No saved profiles found.</p>
@@ -611,7 +630,7 @@ function BookPackageContent() {
                           existingProfiles.map((profile) => (
                             <label 
                               key={profile.id}
-                              className="p-3 rounded-lg flex items-center gap-4 cursor-pointer hover:bg-gray-50 transition-colors"
+                              className="p-3 rounded-md flex items-center gap-4 cursor-pointer hover:bg-gray-50 transition-colors"
                             >
                               <input
                                 type="checkbox"
@@ -632,20 +651,26 @@ function BookPackageContent() {
                           <button
                             onClick={addSelectedProfiles}
                             disabled={selectedProfileIds.length === 0 || isAddingExisting}
-                            className="w-full py-2.5 bg-[#276074] text-white font-semibold rounded-lg hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full py-2.5 bg-[#276074] text-white font-semibold rounded-md hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             {isAddingExisting ? "Adding..." : `Add Selected (${selectedProfileIds.length})`}
                           </button>
                         </div>
                       )}
-                    </div>
-                  )}
+                    </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
 
               {/* Inline New Traveller Form */}
-              {showNewTravellerModal && (
-                <div className="mt-6 pt-6 border-t border-gray-100">
+              <AnimatePresence>
+                {showNewTravellerModal && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="mt-6 pt-6 border-t border-gray-100 overflow-hidden">
                   <div className="flex justify-between items-center mb-4">
                     <h4 className="font-semibold text-gray-900">New Traveller Details</h4>
                   </div>
@@ -660,7 +685,7 @@ function BookPackageContent() {
                           setNewTraveller({ ...newTraveller, firstName: e.target.value });
                           if (newTravellerErrors.firstName) setNewTravellerErrors((prev) => ({ ...prev, firstName: "" }));
                         }}
-                        className={`w-full p-3 border ${newTravellerErrors.firstName ? "border-red-500" : "border-gray-300"} rounded-xl focus:ring-2 focus:ring-[#276074] focus:border-transparent`}
+                        className={`w-full p-3 border ${newTravellerErrors.firstName ? "border-red-500" : "border-gray-300"} rounded-md focus:ring-2 focus:ring-[#276074] focus:border-transparent transition-colors`}
                         placeholder="Enter first name"
                       />
                       {newTravellerErrors.firstName && <p className="text-xs text-red-500 mt-1">{newTravellerErrors.firstName}</p>}
@@ -674,7 +699,7 @@ function BookPackageContent() {
                           setNewTraveller({ ...newTraveller, lastName: e.target.value });
                           if (newTravellerErrors.lastName) setNewTravellerErrors((prev) => ({ ...prev, lastName: "" }));
                         }}
-                        className={`w-full p-3 border ${newTravellerErrors.lastName ? "border-red-500" : "border-gray-300"} rounded-xl focus:ring-2 focus:ring-[#276074] focus:border-transparent`}
+                        className={`w-full p-3 border ${newTravellerErrors.lastName ? "border-red-500" : "border-gray-300"} rounded-md focus:ring-2 focus:ring-[#276074] focus:border-transparent transition-colors`}
                         placeholder="Enter last name"
                       />
                       {newTravellerErrors.lastName && <p className="text-xs text-red-500 mt-1">{newTravellerErrors.lastName}</p>}
@@ -684,7 +709,7 @@ function BookPackageContent() {
                       <select
                         value={newTraveller.gender}
                         onChange={(e) => setNewTraveller({ ...newTraveller, gender: e.target.value })}
-                        className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#276074] focus:border-transparent"
+                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#276074] focus:border-transparent transition-colors"
                       >
                         <option value="MALE">Male</option>
                         <option value="FEMALE">Female</option>
@@ -700,7 +725,7 @@ function BookPackageContent() {
                           setNewTraveller({ ...newTraveller, dob: e.target.value });
                           if (newTravellerErrors.dob) setNewTravellerErrors((prev) => ({ ...prev, dob: "" }));
                         }}
-                        className={`w-full p-3 border ${newTravellerErrors.dob ? "border-red-500" : "border-gray-300"} rounded-xl focus:ring-2 focus:ring-[#276074] focus:border-transparent`}
+                        className={`w-full p-3 border ${newTravellerErrors.dob ? "border-red-500" : "border-gray-300"} rounded-md focus:ring-2 focus:ring-[#276074] focus:border-transparent transition-colors`}
                       />
                       {newTravellerErrors.dob && <p className="text-xs text-red-500 mt-1">{newTravellerErrors.dob}</p>}
                     </div>
@@ -710,7 +735,7 @@ function BookPackageContent() {
                         type="email"
                         value={newTraveller.email}
                         onChange={(e) => setNewTraveller({ ...newTraveller, email: e.target.value })}
-                        className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#276074] focus:border-transparent"
+                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#276074] focus:border-transparent transition-colors"
                         placeholder="Enter email"
                       />
                     </div>
@@ -720,7 +745,7 @@ function BookPackageContent() {
                         type="tel"
                         value={newTraveller.phone}
                         onChange={(e) => setNewTraveller({ ...newTraveller, phone: e.target.value })}
-                        className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#276074] focus:border-transparent"
+                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#276074] focus:border-transparent transition-colors"
                         placeholder="Enter phone number"
                       />
                     </div>
@@ -730,7 +755,7 @@ function BookPackageContent() {
                         type="text"
                         value={newTraveller.nationality}
                         onChange={(e) => setNewTraveller({ ...newTraveller, nationality: e.target.value })}
-                        className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#276074] focus:border-transparent"
+                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#276074] focus:border-transparent transition-colors"
                         placeholder="Enter nationality"
                       />
                     </div>
@@ -739,24 +764,31 @@ function BookPackageContent() {
                   <button
                     onClick={handleSaveNewTraveller}
                     disabled={isSavingProfile}
-                    className="w-full py-3 bg-[#276074] text-white font-semibold rounded-xl hover:opacity-90 transition-all mt-6 disabled:opacity-70"
+                    className="w-full py-3 bg-[#276074] text-white font-semibold rounded-md hover:opacity-90 transition-all mt-6 disabled:opacity-70"
                   >
                     {isSavingProfile ? "Saving..." : "Save & Add Traveller"}
                   </button>
-                </div>
-              )}
+                </motion.div>
+                )}
+              </AnimatePresence>
 
-            </div>
+            </motion.div>
 
             {/* Travellers List */}
             <div className="space-y-3">
-              {travellers.map((traveller, index) => (
-                <div
-                  key={traveller.id || index}
-                  className="bg-white p-4 rounded-xl border border-gray-200 border-dashed flex justify-between items-center"
-                >
+              <AnimatePresence>
+                {travellers.map((traveller, index) => (
+                  <motion.div
+                    key={traveller.id || index}
+                    layout
+                    initial={{ opacity: 0, y: -10, scale: 0.9 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
+                    transition={{ duration: 0.3 }}
+                    className="bg-white p-4 border-l-4 border-l-[#276074] flex justify-between items-center shadow-sm rounded-r-lg"
+                  >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">
+                      <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#276074]">
                       <User className="w-5 h-5" />
                     </div>
                     <div>
@@ -770,15 +802,16 @@ function BookPackageContent() {
                   </div>
                   <button
                     onClick={() => handleRemoveTraveller(traveller.id)}
-                    className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                    className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
                     title="Remove Traveller"
                   >
                     <Trash2 className="w-5 h-5" />
                   </button>
-                </div>
-              ))}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
               {travellers.length === 0 && (
-                <div className="text-center py-8 bg-white rounded-xl border border-dashed border-gray-300">
+                <div className="text-center py-8 bg-white rounded-lg border border-dashed border-gray-300">
                   <p className="text-gray-500">No travellers added yet</p>
                 </div>
               )}
@@ -791,7 +824,7 @@ function BookPackageContent() {
                   setShowNewTravellerModal(false);
                   setShowExistingTravellerModal(true);
                 }}
-                className="mx-auto py-2 px-3 border-2 border-[#276074] text-[#276074] font-medium rounded-lg hover:bg-[#276074] hover:text-white transition-colors flex items-center justify-center gap-2 text-sm"
+                className="mx-auto py-2 px-3 border-2 border-[#276074] text-[#276074] font-medium rounded-md hover:bg-[#276074] hover:text-white transition-colors flex items-center justify-center gap-2 text-sm"
               >
                 <UserPlus className="w-4 h-4" />
                 Add More Travellers
@@ -799,31 +832,39 @@ function BookPackageContent() {
             )}
 
             {/* Detailed Package Plan */}
-            <PlanDetailsCard planData={planData} />
+            <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+              <PlanDetailsCard planData={planData} />
+            </motion.div>
 
             {/* Detailed Itinerary */}
-            <ItineraryCard itinerary={itinerary} />
+            <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+              <ItineraryCard itinerary={itinerary} />
+            </motion.div>
 
             {/* Cancellation Policy */}
-            <CancellationPolicyCard cancellationPolicy={cancellationPolicy} />
-          </div>
+            <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+              <CancellationPolicyCard cancellationPolicy={cancellationPolicy} />
+            </motion.div>
+          </motion.div>
 
           {/* Right Column - Payment Card */}
           <div className="lg:col-span-1">
-            <PaymentSummaryCard
-              currencySymbol={currencySymbol}
-              planPrice={planPrice}
-              addOnsTotal={addOnsTotal}
-              gstAmount={gstAmount}
-              finalTotal={finalTotal}
-              travellerCount={travellerCount}
-              totalBasePrice={totalBasePrice}
-              advanceAmount={advanceAmount}
-              remainingAmount={remainingAmount}
-              isProcessing={isProcessing}
-              handleProceedToCheckout={handleProceedToCheckout}
-              selectedAddOnsLength={selectedAddOns.length}
-            />
+            <motion.div className="sticky top-24" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
+              <PaymentSummaryCard
+                currencySymbol={currencySymbol}
+                planPrice={planPrice}
+                addOnsTotal={addOnsTotal}
+                gstAmount={gstAmount}
+                finalTotal={finalTotal}
+                travellerCount={travellerCount}
+                totalBasePrice={totalBasePrice}
+                advanceAmount={advanceAmount}
+                remainingAmount={remainingAmount}
+                isProcessing={isProcessing}
+                handleProceedToCheckout={handleProceedToCheckout}
+                selectedAddOnsLength={selectedAddOns.length}
+              />
+            </motion.div>
           </div>
         </div>
       </div>
