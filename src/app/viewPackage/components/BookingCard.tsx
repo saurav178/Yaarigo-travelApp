@@ -68,12 +68,27 @@ export default function BookingCard({
       // Get existing traveller profiles from the parallel request
       const existingProfiles = profilesResponse.data?.data || profilesResponse.data || [];
 
+      // Get pricing data from cart response
+      const cartData = cartResponse.data?.data || cartResponse.data || {};
+      const cartPricing = {
+        basePrice: cartData.basePrice || cartData.baseAmount || selectedPlan.discountedPrice,
+        totalPrice: cartData.totalPrice || cartData.totalAmount || (selectedPlan.discountedPrice + Math.round(selectedPlan.discountedPrice * APP_CONSTANTS.GST_RATE)),
+        gstAmount: cartData.gstAmount || cartData.taxAmount || Math.round(selectedPlan.discountedPrice * APP_CONSTANTS.GST_RATE),
+        discountedPrice: cartData.discountedPrice || selectedPlan.discountedPrice,
+        originalPrice: cartData.originalPrice || selectedPlan.pricePerPerson || selectedPlan.discountedPrice,
+        currency: cartData.currency || selectedPlan.currency || "INR"
+      };
+
     const params = new URLSearchParams();
     params.set("packageTitle", pkg.title);
     params.set("packageId", pkg._id || "");
     params.set("planName", selectedPlan.name);
-    params.set("planPrice", selectedPlan.discountedPrice.toString());
-    params.set("currency", selectedPlan.currency || "INR");
+    params.set("planPrice", cartPricing.discountedPrice.toString());
+    params.set("currency", cartPricing.currency);
+    params.set("cartBasePrice", cartPricing.basePrice.toString());
+    params.set("cartTotalPrice", cartPricing.totalPrice.toString());
+    params.set("cartGstAmount", cartPricing.gstAmount.toString());
+    params.set("cartOriginalPrice", cartPricing.originalPrice.toString());
     
     if (pkg.fromLocation) params.set("fromLocation", pkg.fromLocation.city || "");
     if (pkg.toLocation) params.set("toLocation", pkg.toLocation.city || "");

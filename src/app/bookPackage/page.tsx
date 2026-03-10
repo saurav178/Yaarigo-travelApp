@@ -64,6 +64,12 @@ function BookPackageContent() {
 
   const [bookingNumber, setBookingNumber] = useState("");
 
+  // Cart pricing from API
+  const [cartBasePrice, setCartBasePrice] = useState<number>(0);
+  const [cartTotalPrice, setCartTotalPrice] = useState<number>(0);
+  const [cartGstAmount, setCartGstAmount] = useState<number>(0);
+  const [cartOriginalPrice, setCartOriginalPrice] = useState<number>(0);
+
   // Traveller state
   const [travellers, setTravellers] = useState<Traveller[]>([]);
   const [itinerary, setItinerary] = useState<ItineraryItem[]>([]);
@@ -295,6 +301,12 @@ function BookPackageContent() {
     const itineraryParam = searchParams.get("itineraryData");
     const cancellationPolicyParam = searchParams.get("cancellationPolicy");
     const planDataParam = searchParams.get("planData");
+    
+    // Cart pricing from API
+    const basePriceParam = searchParams.get("cartBasePrice") || "0";
+    const totalPriceParam = searchParams.get("cartTotalPrice") || "0";
+    const gstAmountParam = searchParams.get("cartGstAmount") || "0";
+    const originalPriceParam = searchParams.get("cartOriginalPrice") || "0";
 
     setCartId(cId);
     setPackageTitle(title);
@@ -304,6 +316,12 @@ function BookPackageContent() {
     setFromLocation(fromLoc);
     setToLocation(toLoc);
     setDuration(`${days} Days / ${nights} Nights`);
+    
+    // Set cart pricing from API
+    setCartBasePrice(parseFloat(basePriceParam));
+    setCartTotalPrice(parseFloat(totalPriceParam));
+    setCartGstAmount(parseFloat(gstAmountParam));
+    setCartOriginalPrice(parseFloat(originalPriceParam));
 
     if (typeof window !== 'undefined' && pkgId) {
       setInviteLink(`${window.location.origin}/viewPackage?packageId=${pkgId}`);
@@ -362,13 +380,15 @@ function BookPackageContent() {
     };
   }, []);
 
-  // Calculate totals
+  // Calculate totals - Use API cart pricing when available, otherwise calculate locally
   const currencySymbol = currency === "INR" ? "₹" : currency;
   const travellerCount = travellers.length > 0 ? travellers.length : 1;
-  const totalBasePrice = planPrice * travellerCount;
+  
+  // Use cart pricing from API if available (for 1 person), otherwise calculate locally
+  const totalBasePrice = cartBasePrice > 0 ? cartBasePrice * travellerCount : planPrice * travellerCount;
   const addOnsTotal = selectedAddOns.reduce((acc, addon) => acc + addon.price, 0);
-  const gstAmount = Math.round((totalBasePrice + addOnsTotal) * 0.18);
-  const finalTotal = totalBasePrice + addOnsTotal + gstAmount;
+  const gstAmount = cartGstAmount > 0 ? cartGstAmount * travellerCount : Math.round((totalBasePrice + addOnsTotal) * 0.18);
+  const finalTotal = cartTotalPrice > 0 ? cartTotalPrice * travellerCount + addOnsTotal : totalBasePrice + addOnsTotal + (cartGstAmount > 0 ? cartGstAmount * travellerCount : Math.round((totalBasePrice + addOnsTotal) * 0.18));
   const advanceAmount = Math.round(finalTotal * APP_CONSTANTS.ADVANCE_PAYMENT_PERCENTAGE);
   const remainingAmount = finalTotal - advanceAmount;
 
