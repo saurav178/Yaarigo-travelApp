@@ -549,13 +549,13 @@ function BookPackageContent() {
                 </h3>
               </div>
               
-              <div className="flex flex-col sm:flex-row gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button
                   onClick={() => {
                     setShowNewTravellerModal(!showNewTravellerModal);
                     setShowExistingTravellerModal(false);
                   }}
-                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all ${
+                  className={`w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all ${
                     showNewTravellerModal 
                       ? "bg-gray-100 text-gray-700 border border-gray-200" 
                       : "bg-[#276074] text-white hover:opacity-90"
@@ -564,25 +564,66 @@ function BookPackageContent() {
                   <Plus className="w-5 h-5" />
                   {showNewTravellerModal ? "Cancel" : "Add New Traveller"}
                 </button>
-                <button
-                  onClick={() => {
-                    if (showExistingTravellerModal) {
-                      setShowExistingTravellerModal(false);
-                    } else {
-                      setShowNewTravellerModal(false);
-                      fetchExistingTravellers();
-                    }
-                  }}
-                  disabled={isFetchingProfiles}
-                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 border-2 border-[#276074] rounded-xl transition-all ${
-                    showExistingTravellerModal
-                      ? "bg-[#276074] text-white"
-                      : "text-[#276074] hover:bg-[#276074]/5"
-                  }`}
-                >
-                  <UserPlus className="w-5 h-5" />
-                  {isFetchingProfiles ? "Loading..." : (showExistingTravellerModal ? "Close Selection" : "Select Existing")}
-                </button>
+                <div className="relative">
+                  <button
+                    onClick={() => {
+                      if (showExistingTravellerModal) {
+                        setShowExistingTravellerModal(false);
+                      } else {
+                        setShowNewTravellerModal(false);
+                        fetchExistingTravellers();
+                      }
+                    }}
+                    disabled={isFetchingProfiles}
+                    className={`w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-[#276074] rounded-xl transition-all ${
+                      showExistingTravellerModal
+                        ? "bg-[#276074] text-white"
+                        : "text-[#276074] hover:bg-[#276074]/5"
+                    }`}
+                  >
+                    <UserPlus className="w-5 h-5" />
+                    {isFetchingProfiles ? "Loading..." : (showExistingTravellerModal ? "Close Selection" : "Select Existing")}
+                  </button>
+
+                  {showExistingTravellerModal && (
+                    <div className="absolute z-10 top-full mt-2 w-full bg-white rounded-xl shadow-lg border border-gray-200 animate-in fade-in-5 duration-200">
+                      <div className="p-2 max-h-80 overflow-y-auto space-y-2">
+                        {existingProfiles.length === 0 ? (
+                          <p className="text-center text-gray-500 py-4">No saved profiles found.</p>
+                        ) : (
+                          existingProfiles.map((profile) => (
+                            <label 
+                              key={profile.id}
+                              className="p-3 rounded-lg flex items-center gap-4 cursor-pointer hover:bg-gray-50 transition-colors"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={selectedProfileIds.includes(profile.id)}
+                                onChange={() => toggleProfileSelection(profile.id)}
+                                className="h-5 w-5 rounded border-gray-300 text-[#276074] focus:ring-[#276074]/50"
+                              />
+                              <div>
+                                <p className="font-semibold text-gray-800">{profile.firstName} {profile.lastName}</p>
+                                <p className="text-sm text-gray-500">{profile.gender} • {profile.dob}</p>
+                              </div>
+                            </label>
+                          ))
+                        )}
+                      </div>
+                      {existingProfiles.length > 0 && (
+                        <div className="p-2 border-t border-gray-100">
+                          <button
+                            onClick={addSelectedProfiles}
+                            disabled={selectedProfileIds.length === 0 || isAddingExisting}
+                            className="w-full py-2.5 bg-[#276074] text-white font-semibold rounded-lg hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {isAddingExisting ? "Adding..." : `Add Selected (${selectedProfileIds.length})`}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Inline New Traveller Form */}
@@ -688,50 +729,6 @@ function BookPackageContent() {
                 </div>
               )}
 
-              {/* Inline Existing Travellers List */}
-              {showExistingTravellerModal && (
-                <div className="mt-6 pt-6 border-t border-gray-100">
-                  <div className="flex justify-between items-center mb-4">
-                    <h4 className="font-semibold text-gray-900">Select from Saved Profiles</h4>
-                  </div>
-                  
-                  <div className="max-h-96 overflow-y-auto space-y-3 mb-4 pr-2">
-                    {existingProfiles.length === 0 ? (
-                      <p className="text-center text-gray-500 py-8">No existing travellers found.</p>
-                    ) : (
-                      existingProfiles.map((profile) => (
-                        <div 
-                          key={profile.id}
-                          onClick={() => toggleProfileSelection(profile.id)}
-                          className={`p-4 rounded-xl border cursor-pointer flex items-center justify-between transition-all ${
-                            selectedProfileIds.includes(profile.id) 
-                              ? "border-[#276074] bg-[#276074]/5" 
-                              : "border-gray-200 hover:border-gray-300"
-                          }`}
-                        >
-                          <div>
-                            <p className="font-semibold text-gray-900">{profile.firstName} {profile.lastName}</p>
-                            <p className="text-sm text-gray-500">{profile.gender} • {profile.dob}</p>
-                          </div>
-                          {selectedProfileIds.includes(profile.id) && (
-                            <div className="w-6 h-6 bg-[#276074] rounded-full flex items-center justify-center">
-                              <Check className="w-4 h-4 text-white" />
-                            </div>
-                          )}
-                        </div>
-                      ))
-                    )}
-                  </div>
-                  
-                  <button
-                    onClick={addSelectedProfiles}
-                    disabled={selectedProfileIds.length === 0 || isAddingExisting}
-                    className="w-full py-3 bg-[#276074] text-white font-semibold rounded-xl hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {isAddingExisting ? "Adding..." : `Add Selected (${selectedProfileIds.length})`}
-                  </button>
-                </div>
-              )}
             </div>
 
             {/* Travellers List */}
