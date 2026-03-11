@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { User, Heart, Users, Plus, X, ArrowRight, ArrowLeft, Info, MapPin, Calendar, Signal } from "lucide-react";
 import { 
@@ -29,7 +29,7 @@ const JoinTripModal = ({ trip, user, onClose }: any) => {
   // ✅ Removed duplicate declarations
   const [isTravellersAdded, setIsTravellersAdded] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
-
+  const [existingProfiles, setExistingProfiles] = useState<TravellerProfile[]>([]);
   const [showExistingList, setShowExistingList] = useState(false);
   const [profiles, setProfiles] = useState<TravellerProfile[]>([]);
   const [lockedTravellers, setLockedTravellers] = useState<any[]>([]);
@@ -50,33 +50,65 @@ const [newTraveller, setNewTraveller] = useState({
   email: "",
   nationality: ""
 });
-  /* ================= FETCH TRIP MODE ================= */
-  useEffect(() => {
-    const fetchTripMode = async () => {
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/trips/search`);
-        const data = await res.json();
-        const selectedTrip = data?.results?.find((t: any) => t._id === trip?._id);
+const { user: authUser, isAuthenticated } = useAuth(); 
+  const hasAlreadyJoined = () => {
+  const userId = user?.id || authUser?.id;
+  const joinedTrips = JSON.parse(localStorage.getItem("joinedTrips") || "{}");
+  return userId && joinedTrips[userId]?.includes(trip?._id);
+};
+  //* ================= FETCH TRIP MODE & CHECK JOIN ================= */
+const hasFetchedTrip = useRef(false);
+useEffect(() => {
+  const fetchTripMode = async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/trips/search`);
+      const data = await res.json();
 
-        const mode = (selectedTrip?.partnerPreferences?.travelMode || selectedTrip?.category || "SOLO").toUpperCase();
-        setReservationType(mode);
+      const selectedTrip = data?.results?.find(
+        (t: any) => t._id === trip?._id
+      );
 
-        if (mode === "COUPLE") setGuests([{ name: "", age: "", gender: "FEMALE" }]);
-        else if (mode === "GROUP") setGuests([{ name: "", age: "", gender: "MALE" }]);
-        else setGuests([]);
-      } catch (error) {
-        console.error("Error fetching trip:", error);
+      // Determine reservation type
+      const mode = (
+        selectedTrip?.partnerPreferences?.travelMode ||
+        selectedTrip?.category ||
+        "SOLO"
+      ).toUpperCase();
+      setReservationType(mode);
+
+      // Set default guests array based on trip type
+      if (mode === "COUPLE") {
+        setGuests([{ name: "", age: "", gender: "FEMALE" }]);
+      } else if (mode === "GROUP") {
+        setGuests([{ name: "", age: "", gender: "MALE" }]);
+      } else {
+        setGuests([]);
       }
-    };
 
-    if (trip?._id) fetchTripMode();
-  }, [trip]);
+      // ================= CHECK IF USER ALREADY JOINED =================
+      const userId = user?.id || authUser?.id;
+      const joinedTrips = JSON.parse(localStorage.getItem("joinedTrips") || "{}");
 
+      if (userId && joinedTrips[userId]?.includes(trip?._id)) {
+        // Already joined → go directly to Step 3
+        setStep(3);
+        alert("You have already sent a join request for this trip.");
+      }
+
+    } catch (error) {
+      console.error("Error fetching trip:", error);
+    }
+  };
+
+  // prevent double API call
+  if (trip?._id && !hasFetchedTrip.current) {
+    hasFetchedTrip.current = true;
+    fetchTripMode();
+  }
+
+}, [trip, user]);
   const addGuest = () => setGuests([...guests, { name: '', age: '', gender: 'MALE' }]);
 
-const { user: authUser, isAuthenticated } = useAuth(); // Get auth state from context
-  /* ================= SOLO JOIN ================= */
-/* ================= SOLO JOIN ================= */
 const handleSoloSubmit = async () => {
   if (!isAuthenticated) {
     alert("Please log in to join this trip.");
@@ -85,66 +117,74 @@ const handleSoloSubmit = async () => {
 
   if (!customMessage.trim()) return alert("Please enter a message.");
 
-  // Debug: Check if IDs are actually present
-  console.log("Trip Object from Search:", trip);
-
   try {
-    const data = await joinSoloTrip({
-      // Ensure we are using the correct field names from your search API
-      tripId: trip._id || trip.id, 
-      ownerId: trip.organizationId, 
+    const response = await joinSoloTrip({
+      tripId: trip._id || trip.id,
+      ownerId: trip.organizationId,
       tripName: trip.title || "Trip",
-      requesterName: user?.firstName || user?.name || "Traveler", 
+      requesterName: user?.firstName || user?.name || "Traveler",
       message: customMessage
     });
 
+    // Check if API says join request already exists
+    if (response?.message?.includes("already have a pending")) {
+      alert(response.message); // show API message
+      setStep(3); // go to final screen
+      return;
+    }
+
+    // Save to localStorage after successful join
+    const userId = user?.id || authUser?.id;
+    const joinedTrips = JSON.parse(localStorage.getItem("joinedTrips") || "{}");
+    if (!joinedTrips[userId]) joinedTrips[userId] = [];
+    joinedTrips[userId].push(trip._id);
+    localStorage.setItem("joinedTrips", JSON.stringify(joinedTrips));
+
     setStep(3);
+    alert("Join request sent successfully!");
   } catch (error: any) {
-    // This log is crucial for 500 errors to see the backend's internal message
     console.error("Join Trip Error:", error.response?.data);
-    
     const serverMessage = error.response?.data?.message;
     alert(serverMessage || "Server error occurred while joining. Please try again.");
   }
 };
-  /* ================= INIT JOIN FOR GROUP/COUPLE ================= */
+  
+/* ================= INIT JOIN FOR GROUP/COUPLE ================= */
 /* ================= INIT JOIN FOR GROUP/COUPLE ================= */
 const handleInitJoin = async () => {
-  // Add this check before making API call
+
   if (!numberOfTravelers || Number(numberOfTravelers) <= 0) {
     return alert("Please enter the number of travelers to proceed.");
   }
 
   try {
-    // 1. Prepare data
-    const currentTripId = trip?._id || trip?.id;
-    const currentUserId = user?._id || user?.id;
 
-    // 2. Construct the payload matching the NEW interface
+    // Prepare data
+    const currentTripId = trip?._id || trip?.id;
+
     const payload: InitJoinPayload = {
       tripId: currentTripId,
       requesterName: user?.name || "Traveler",
-      ownerId: trip.organizationId || trip.ownerId || "default-owner-id", 
+      ownerId: trip.organizationId || trip.ownerId || "default-owner-id",
       tripName: trip.title || "Untitled Trip",
       travellerCount: Number(numberOfTravelers) || 1
     };
 
     console.log("Attempting Init with Payload:", payload);
 
-    // 3. Fire the request
+    // Call INIT API only
     const res = await initTripJoin(payload);
-    
+
     if (res?.id) {
       setJoinId(res.id);
-      setStep(2); // Move to the traveler details step
-      
-      // Now that we have a joinId, we fetch profiles for the next step
-      const profiles = await getTravelerProfiles();
-      setTravelerProfiles(profiles);
+
+      // Move to Step 2 only
+      setStep(2);
     }
+
   } catch (error: any) {
-    console.error("Initialization Failed:", error.response?.data);
-    alert(error.response?.data?.message || "Server Error (500)");
+    console.error("Initialization Failed:", error?.response?.data);
+    alert(error?.response?.data?.message || "Server Error (500)");
   }
 };
 
@@ -436,6 +476,11 @@ const handleNextOrSubmit = async () => {
 
   return !alreadySelected && !alreadyLocked;
 });
+
+
+
+
+
   return (
     <AnimatePresence>
       <div className="fixed inset-0 flex items-center justify-end z-[100] bg-black/60 backdrop-blur-sm">
@@ -715,22 +760,17 @@ const handleNextOrSubmit = async () => {
   {/* ADD BUTTONS */}
 <div className="flex justify-between w-full mt-6 px-4 gap-2">
   <button
-    onClick={() => setShowTravellerForm(true)}
-    className=" bg-gray-100 flex items-center gap-1.5 px-2 py-1 text-[0.65rem] font-medium border border-gray-300 rounded-lg hover:bg-gray-100 transition shadow-sm"
+    onClick={() => setShowTravellerForm(prev => !prev)} // toggle form open/close
+    className="bg-gray-100 flex items-center gap-1.5 px-2 py-1 text-[0.65rem] font-medium border border-gray-300 rounded-lg hover:bg-gray-100 transition shadow-sm"
   >
     <Plus size={16} />
     Add New
   </button>
 
  {/* Button Container */}
+ 
+<button onClick={handleFetchProfiles} className="bg-gray-100 flex items-center gap-1.5 px-2 py-1 text-[0.65rem] font-medium border border-gray-300 rounded-lg hover:bg-gray-200 transition shadow-sm" > <User size={16} /> Add Existing </button>
 
-  <button
-    onClick={handleFetchProfiles}
-    className="bg-gray-100 flex items-center gap-1.5 px-2 py-1 text-[0.65rem] font-medium border border-gray-300 rounded-lg hover:bg-gray-200 transition shadow-sm"
-  >
-    <User size={16} />
-    Add Existing
-  </button>
   </div>
  {showExistingList && (
   <div className="w-full mt-4 animate-in fade-in  duration-300">
@@ -1151,4 +1191,4 @@ const handleNextOrSubmit = async () => {
   );
 };
 
-export default JoinTripModal;
+export default JoinTripModal;                                         
