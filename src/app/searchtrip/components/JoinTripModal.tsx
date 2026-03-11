@@ -34,7 +34,7 @@ const JoinTripModal = ({ trip, user, onClose }: any) => {
   const [profiles, setProfiles] = useState<TravellerProfile[]>([]);
   const [lockedTravellers, setLockedTravellers] = useState<any[]>([]);
   const [travelerProfiles, setTravelerProfiles] = useState<TravellerProfile[]>([]);
-  
+  const [isCreatingTraveller, setIsCreatingTraveller] = useState(false);
   const predefinedMessages = [
     "Super excited for this! 🔥", 
     "Count me in! Ready to explore.", 
@@ -186,7 +186,16 @@ const handleAddExistingTraveller = (traveller: any) => {
     alert(`You can only add ${numberOfTravelers} traveler(s)`);
     return;
   }
+const sameNameSelected = selectedTravellers.some(
+  (t) =>
+    t.name.toLowerCase() ===
+    `${traveller.firstName} ${traveller.lastName}`.toLowerCase()
+);
 
+if (sameNameSelected) {
+  alert("This traveler is already selected.");
+  return;
+}
   const alreadySelected = selectedTravellers.some(
     (t) => t.travellerProfileId === traveller.id
   );
@@ -268,23 +277,46 @@ const loadTravellerProfiles = async () => {
 /* ================= CREATE NEW TRAVELLER ================= */
 
 const handleCreateTraveller = async (payload: NewTravellerPayload) => {
+
+  // Prevent duplicate travellers
+  const isDuplicateTraveller = travelerProfiles.some((profile) => {
+  return (
+    profile.firstName?.toLowerCase() === newTraveller.firstName?.toLowerCase() &&
+    profile.lastName?.toLowerCase() === newTraveller.lastName?.toLowerCase() &&
+    profile.dob === newTraveller.dob &&
+    profile.gender === newTraveller.gender
+  );
+});
+
+  if (isDuplicateTraveller) {
+    alert("This traveller profile already exists.");
+    return;
+  }
+
+  // Prevent multiple clicks
+  if (isCreatingTraveller) return;
+
+  setIsCreatingTraveller(true);
+
   try {
 
-    // create traveller
     await createTravelerProfile(payload);
 
     alert("Traveller created successfully");
 
-    // reload travellers so new traveller appears in Add Existing
+    // reload travellers
     await loadTravellerProfiles();
 
-    // close form if you are using a modal
     setShowTravellerForm(false);
 
   } catch (error) {
 
     console.error("Traveller creation failed", error);
     alert("Failed to create traveller");
+
+  } finally {
+
+    setIsCreatingTraveller(false);
 
   }
 };
@@ -701,10 +733,19 @@ const handleNextOrSubmit = async () => {
   </button>
   </div>
  {showExistingList && (
-  <div className="w-full mt-4 animate-in fade-in slide-in-from-top-2 duration-300">
+  <div className="w-full mt-4 animate-in fade-in  duration-300">
+    <div className="flex justify-end">
+  <button
+    onClick={() => setShowExistingList(false)}
+    className="text-gray-400 hover:text-red-500 px-1 py-1 text-[1.3rem] font-bold"
+  >
+    X
+  </button>
+</div>
     <div className="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
        
       <table className="w-full text-left border-collapse">
+         
         <thead>
           <tr className="bg-white border-b border-gray-200">
             <th className="px-4 py-2 text-[0.65rem] font-bold text-gray-400 uppercase tracking-wider border-r border-gray-100">Name</th>
@@ -739,12 +780,7 @@ const handleNextOrSubmit = async () => {
                     >
                       ADD
                     </button>
-                    <button
-                      onClick={() => setShowExistingList(false)}
-                      className="text-gray-400 hover:text-red-500 px-2 py-1 text-[0.6rem] font-bold"
-                    >
-                      X
-                    </button>
+                   
                   </div>
                 </td>
               </tr>
@@ -938,18 +974,18 @@ const handleNextOrSubmit = async () => {
       {/* SAVE BUTTON */}
       <div className="flex justify-end mt-4">
         <button
-          onClick={() =>
-            handleCreateTraveller({
-              ...newTraveller,
-              travellerType: "ADULT",
-              isDefault: false,
-            })
-          }
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded text-[0.7rem] font-bold"
-        >
-          SAVE
-        </button>
-      </div>
+  disabled={isCreatingTraveller}
+  onClick={() =>
+    handleCreateTraveller({
+      ...newTraveller,
+      travellerType: "ADULT",
+      isDefault: false,
+    })
+  }
+  className="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded text-[0.7rem] font-bold disabled:bg-gray-400"
+>
+  {isCreatingTraveller ? "Saving..." : "SAVE"}
+</button>      </div>
 
     </div>
   
