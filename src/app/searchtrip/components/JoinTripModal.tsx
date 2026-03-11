@@ -152,18 +152,25 @@ const handleSoloSubmit = async () => {
 /* ================= INIT JOIN FOR GROUP/COUPLE ================= */
 /* ================= INIT JOIN FOR GROUP/COUPLE ================= */
 const handleInitJoin = async () => {
-
   if (!numberOfTravelers || Number(numberOfTravelers) <= 0) {
     return alert("Please enter the number of travelers to proceed.");
   }
 
+  // ✅ Check if user already initiated joining this trip
+  const userId = user?.id || authUser?.id;
+  const existingJoin = JSON.parse(localStorage.getItem("tripJoinIds") || "{}");
+
+  if (existingJoin[userId]?.[trip._id]) {
+    alert("You have already initiated joining this trip.");
+    setJoinId(existingJoin[userId][trip._id]); // restore joinId
+       onClose(); //setStep(2); // move directly to traveler details step
+    return; // block duplicate API call
+  }
+
   try {
-
-    // Prepare data
-    const currentTripId = trip?._id || trip?.id;
-
+    // Prepare payload
     const payload: InitJoinPayload = {
-      tripId: currentTripId,
+      tripId: trip._id || trip?.id,
       requesterName: user?.name || "Traveler",
       ownerId: trip.organizationId || trip.ownerId || "default-owner-id",
       tripName: trip.title || "Untitled Trip",
@@ -172,22 +179,26 @@ const handleInitJoin = async () => {
 
     console.log("Attempting Init with Payload:", payload);
 
-    // Call INIT API only
+    // Call INIT API
     const res = await initTripJoin(payload);
 
     if (res?.id) {
       setJoinId(res.id);
+      setStep(2); // move to traveler details
 
-      // Move to Step 2 only
-      setStep(2);
+      // ✅ Save joinId in localStorage to prevent duplicate init
+      if (!existingJoin[userId]) existingJoin[userId] = {};
+      existingJoin[userId][trip._id] = res.id;
+      localStorage.setItem("tripJoinIds", JSON.stringify(existingJoin));
+
+      console.log("Init successful, joinId saved:", res.id);
     }
 
   } catch (error: any) {
-    console.error("Initialization Failed:", error?.response?.data);
+    console.error("Initialization Failed:", error?.response?.data || error);
     alert(error?.response?.data?.message || "Server Error (500)");
   }
 };
-
 /* ================= BUTTON DISABLE LOGIC ================= */
 const isNextDisabled = 
   (reservationType !== "SOLO" && (!numberOfTravelers || Number(numberOfTravelers) <= 0)) ||
