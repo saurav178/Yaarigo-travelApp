@@ -5,7 +5,8 @@ interface PackageDetailsCardProps {
   fromLocation: string;
   toLocation: string;
   duration: string;
-  planName: string;
+  planName?: string;
+  showPlan?: boolean;
 }
 
 export default function PackageDetailsCard({
@@ -13,7 +14,6 @@ export default function PackageDetailsCard({
   fromLocation,
   toLocation,
   duration,
-  planName,
 }: PackageDetailsCardProps) {
   return (
     <div className="bg-white rounded-2xl shadow-md p-6">
@@ -47,13 +47,6 @@ export default function PackageDetailsCard({
             </div>
             <p className="font-semibold text-gray-800 text-sm">{duration}</p>
           </div>
-        </div>
-
-        <div className="pt-3 mt-2 border-t border-gray-100 flex justify-between items-center">
-          <span className="text-gray-600 text-sm">Selected Plan</span>
-          <span className="font-bold text-[#276074] bg-blue-50 px-3 py-1 rounded-full text-sm border border-blue-100">
-            {planName}
-          </span>
         </div>
       </div>
     </div>

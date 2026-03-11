@@ -6,10 +6,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import InlineLoader from "@/components/Loader/InlineLoader";
 import { ArrowLeft, Plus, UserPlus, Check, Trash2, User, Plane } from "lucide-react";
 import axiosClient from "@/lib/axios-client";
-import { APP_ROUTES } from "@/utils/constants";
-import { AddOnDetail, Traveller, ItineraryItem, CancellationPolicyItem, PlanData } from "./types";
+import { APP_ROUTES, API_ENDPOINTS } from "@/utils/constants";
+import { AddOnDetail, Traveller, ItineraryItem, CancellationPolicyItem, PlanData, CartPricing } from "./types";
 import PackageDetailsCard from "./PackageDetailsCard";
-import SelectedAddOnsCard from "./SelectedAddOnsCard";
+import SelectedPlanCard from "./SelectedPlanCard";
 import PlanDetailsCard from "./PlanDetailsCard";
 import ItineraryCard from "./ItineraryCard";
 import CancellationPolicyCard from "./CancellationPolicyCard";
@@ -28,6 +28,34 @@ interface UserProfile {
   nationality?: string;
   phone?: string;
   email?: string;
+}
+
+// Package types for fetching from API
+interface Location {
+  name: string;
+  city: string;
+  country: string;
+  lat?: number;
+  lng?: number;
+}
+
+interface ItineraryDay {
+  dayTitle: string;
+  summary: string;
+  activities?: { name?: string; title?: string }[];
+  blocks?: unknown[];
+  _id?: string;
+}
+
+interface PackageData {
+  _id: string;
+  title: string;
+  description: string;
+  fromLocation?: Location;
+  toLocation?: Location;
+  totalDays?: number;
+  totalNights?: number;
+  itineraryTemplate?: ItineraryDay[];
 }
 
 declare global {
@@ -71,6 +99,9 @@ function BookPackageContent() {
   const [cartGstAmount, setCartGstAmount] = useState<number>(0);
   const [cartOriginalPrice, setCartOriginalPrice] = useState<number>(0);
 
+  // Full cart pricing from API (for detailed display)
+  const [cartPricing, setCartPricing] = useState<CartPricing | null>(null);
+
   // Traveller state
   const [travellers, setTravellers] = useState<Traveller[]>([]);
   const [itinerary, setItinerary] = useState<ItineraryItem[]>([]);
@@ -105,6 +136,10 @@ function BookPackageContent() {
   const [selectedProfileIds, setSelectedProfileIds] = useState<string[]>([]);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [isAddingExisting, setIsAddingExisting] = useState(false);
+
+  // Package data from API
+  const [pkgLoading, setPkgLoading] = useState(false);
+  const [packageData, setPackageData] = useState<PackageData | null>(null);
 
   // Initialize existingProfiles from URL params on page load
   useEffect(() => {
@@ -320,6 +355,17 @@ function BookPackageContent() {
     
     // Set cart pricing from API
     setCartBasePrice(parseFloat(basePriceParam));
+    
+    // Cart pricing from API (full object for detailed display)
+    const cartPricingParam = searchParams.get("cartPricing");
+    if (cartPricingParam) {
+      try {
+        const parsed = JSON.parse(cartPricingParam);
+        setCartPricing(parsed);
+      } catch (e) {
+        console.error("Error parsing cartPricing:", e);
+      }
+    }
     setCartTotalPrice(parseFloat(totalPriceParam));
     setCartGstAmount(parseFloat(gstAmountParam));
     setCartOriginalPrice(parseFloat(originalPriceParam));
@@ -368,6 +414,51 @@ function BookPackageContent() {
         console.error("Error parsing plan data:", e);
       }
     }
+  }, [searchParams]);
+
+  // Fetch package data from API to get itinerary (avoids URL length limitations)
+  useEffect(() => {
+    const pkgId = searchParams.get("packageId");
+    
+    if (!pkgId) return;
+    
+    // Only fetch if we don't have itinerary data from URL params
+    const itineraryParam = searchParams.get("itineraryData");
+    if (itineraryParam) return;
+    
+    const fetchPackageData = async () => {
+      setPkgLoading(true);
+      try {
+        const response = await axiosClient.get(`${API_ENDPOINTS.PACKAGES}/${pkgId}`);
+        const pkgData = response.data;
+        setPackageData(pkgData);
+        
+        // Set itinerary from API response
+        if (pkgData.itineraryTemplate && pkgData.itineraryTemplate.length > 0) {
+          setItinerary(pkgData.itineraryTemplate);
+        }
+        
+        // Also fill in missing package details if not available
+        if (!packageTitle && pkgData.title) {
+          setPackageTitle(pkgData.title);
+        }
+        if (pkgData.fromLocation) {
+          setFromLocation(prev => prev || pkgData.fromLocation.city || "");
+        }
+        if (pkgData.toLocation) {
+          setToLocation(prev => prev || pkgData.toLocation.city || "");
+        }
+        if (pkgData.totalDays || pkgData.totalNights) {
+          setDuration(prev => prev || `${pkgData.totalDays || 0} Days / ${pkgData.totalNights || 0} Nights`);
+        }
+      } catch (error) {
+        console.error("Error fetching package data:", error);
+      } finally {
+        setPkgLoading(false);
+      }
+    };
+    
+    fetchPackageData();
   }, [searchParams]);
 
   useEffect(() => {
@@ -561,18 +652,26 @@ function BookPackageContent() {
                 fromLocation={fromLocation}
                 toLocation={toLocation}
                 duration={duration}
+              />
+            </motion.div>
+
+            {/* Selected Plan Card */}
+            <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
+              <SelectedPlanCard
                 planName={planName}
-              />
-            </motion.div>
-
-            {/* Selected Add-ons */}
-            <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
-              <SelectedAddOnsCard
-                selectedAddOns={selectedAddOns}
                 currencySymbol={currencySymbol}
+                planPrice={planPrice}
+                category={planData?.category}
+                minPeople={planData?.minPeople}
+                maxPeople={planData?.maxPeople}
+                totalSlots={planData?.totalSlots}
+                bookedSlots={planData?.bookedSlots}
+                exclusions={planData?.exclusions}
+                inclusions={planData?.inclusions}
               />
             </motion.div>
 
+            
             {/* Add Travellers Actions */}
             <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="bg-white p-6 rounded-lg shadow-md border border-gray-100 border-t-4 border-t-[#276074]">
               <div className="flex justify-between items-center mb-4">
@@ -819,22 +918,19 @@ function BookPackageContent() {
 
             {/* Add More Travellers Button */}
             {travellers.length > 0 && (
-              <button
-                onClick={() => {
-                  setShowNewTravellerModal(false);
-                  setShowExistingTravellerModal(true);
-                }}
-                className="mx-auto py-2 px-3 border-2 border-[#276074] text-[#276074] font-medium rounded-md hover:bg-[#276074] hover:text-white transition-colors flex items-center justify-center gap-2 text-sm"
-              >
-                <UserPlus className="w-4 h-4" />
-                Add More Travellers
-              </button>
+              <div className="flex justify-end">
+                <button
+                  onClick={() => {
+                    setShowNewTravellerModal(false);
+                    setShowExistingTravellerModal(true);
+                  }}
+                  className="py-2 px-3 border-2 border-[#276074] text-[#276074] font-medium rounded-md hover:bg-[#276074] hover:text-white transition-colors flex items-center justify-center gap-2 text-sm"
+                >
+                  <UserPlus className="w-4 h-4" />
+                  Add More Travellers
+                </button>
+              </div>
             )}
-
-            {/* Detailed Package Plan */}
-            <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
-              <PlanDetailsCard planData={planData} />
-            </motion.div>
 
             {/* Detailed Itinerary */}
             <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
@@ -863,6 +959,7 @@ function BookPackageContent() {
                 isProcessing={isProcessing}
                 handleProceedToCheckout={handleProceedToCheckout}
                 selectedAddOnsLength={selectedAddOns.length}
+                cartPricing={cartPricing}
               />
             </motion.div>
           </div>

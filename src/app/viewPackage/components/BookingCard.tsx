@@ -70,25 +70,44 @@ export default function BookingCard({
 
       // Get pricing data from cart response
       const cartData = cartResponse.data?.data || cartResponse.data || {};
+      
+      // Build complete cart pricing object for PaymentSummaryCard
       const cartPricing = {
-        basePrice: cartData.basePrice || cartData.baseAmount || selectedPlan.discountedPrice,
-        totalPrice: cartData.totalPrice || cartData.totalAmount || (selectedPlan.discountedPrice + Math.round(selectedPlan.discountedPrice * APP_CONSTANTS.GST_RATE)),
-        gstAmount: cartData.gstAmount || cartData.taxAmount || Math.round(selectedPlan.discountedPrice * APP_CONSTANTS.GST_RATE),
-        discountedPrice: cartData.discountedPrice || selectedPlan.discountedPrice,
-        originalPrice: cartData.originalPrice || selectedPlan.pricePerPerson || selectedPlan.discountedPrice,
-        currency: cartData.currency || selectedPlan.currency || "INR"
+        baseAmount: cartData.baseAmount || cartData.basePrice || selectedPlan.discountedPrice,
+        planPricePerPerson: selectedPlan.discountedPrice.toString(),
+        addonAmount: 0,
+        taxAmount: cartData.taxAmount || cartData.gstAmount || Math.round(selectedPlan.discountedPrice * APP_CONSTANTS.GST_RATE),
+        totalAmount: cartData.totalAmount || cartData.totalPrice || (selectedPlan.discountedPrice + Math.round(selectedPlan.discountedPrice * APP_CONSTANTS.GST_RATE)),
+        payableNow: cartData.payableNow || Math.round((selectedPlan.discountedPrice + Math.round(selectedPlan.discountedPrice * APP_CONSTANTS.GST_RATE)) * APP_CONSTANTS.ADVANCE_PAYMENT_PERCENTAGE),
+        taxComponents: cartData.taxComponents || [
+          {
+            code: 'GST',
+            name: 'Goods and Services Tax',
+            percentage: APP_CONSTANTS.GST_RATE * 100,
+            amount: Math.round(selectedPlan.discountedPrice * APP_CONSTANTS.GST_RATE)
+          }
+        ],
+        paymentTerms: cartData.paymentTerms || selectedPlan.paymentTerms || [
+          {
+            trigger: 'ON_BOOKING',
+            percentage: APP_CONSTANTS.ADVANCE_PAYMENT_PERCENTAGE * 100
+          }
+        ]
       };
 
     const params = new URLSearchParams();
     params.set("packageTitle", pkg.title);
     params.set("packageId", pkg._id || "");
     params.set("planName", selectedPlan.name);
-    params.set("planPrice", cartPricing.discountedPrice.toString());
-    params.set("currency", cartPricing.currency);
-    params.set("cartBasePrice", cartPricing.basePrice.toString());
-    params.set("cartTotalPrice", cartPricing.totalPrice.toString());
-    params.set("cartGstAmount", cartPricing.gstAmount.toString());
-    params.set("cartOriginalPrice", cartPricing.originalPrice.toString());
+    params.set("planPrice", cartPricing.baseAmount.toString());
+    params.set("currency", cartData.currency || selectedPlan.currency || "INR");
+    params.set("cartBasePrice", cartPricing.baseAmount.toString());
+    params.set("cartTotalPrice", cartPricing.totalAmount.toString());
+    params.set("cartGstAmount", cartPricing.taxAmount.toString());
+    params.set("cartOriginalPrice", cartData.originalPrice || selectedPlan.pricePerPerson || selectedPlan.discountedPrice);
+    
+    // Pass the full cart pricing object for detailed display
+    params.set("cartPricing", JSON.stringify(cartPricing));
     
     if (pkg.fromLocation) params.set("fromLocation", pkg.fromLocation.city || "");
     if (pkg.toLocation) params.set("toLocation", pkg.toLocation.city || "");
@@ -121,6 +140,10 @@ export default function BookingCard({
       description: selectedPlan.description,
       inclusions: selectedPlan.inclusions,
       exclusions: selectedPlan.exclusions,
+      minPeople: selectedPlan.minPeople,
+      maxPeople: selectedPlan.maxPeople,
+      totalSlots: selectedPlan.totalSlots,
+      bookedSlots: selectedPlan.bookedSlots,
     };
     params.set("planData", JSON.stringify(planData));
 

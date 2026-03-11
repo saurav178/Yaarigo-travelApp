@@ -6,9 +6,11 @@ import {
   Lock,
   Zap,
   TicketPercent,
+  Info,
 } from "lucide-react";
 import InlineLoader from "@/components/Loader/InlineLoader";
 import { motion, AnimatePresence } from "framer-motion";
+import { TaxComponent, PaymentTerm } from "./types";
 
 interface PaymentSummaryCardProps {
   currencySymbol: string;
@@ -23,6 +25,17 @@ interface PaymentSummaryCardProps {
   isProcessing: boolean;
   handleProceedToCheckout: () => void;
   selectedAddOnsLength: number;
+  // New API response props
+  cartPricing?: {
+    baseAmount: number;
+    planPricePerPerson: string;
+    addonAmount: number;
+    taxAmount: number;
+    totalAmount: number;
+    payableNow: number;
+    taxComponents: TaxComponent[];
+    paymentTerms: PaymentTerm[];
+  };
 }
 
 export default function PaymentSummaryCard({
@@ -38,20 +51,35 @@ export default function PaymentSummaryCard({
   isProcessing,
   handleProceedToCheckout,
   selectedAddOnsLength,
+  cartPricing,
 }: PaymentSummaryCardProps) {
   const [couponCode, setCouponCode] = useState("");
   const [couponApplied, setCouponApplied] = useState(false);
 
+  // Use API data if available, otherwise use calculated values
+  const hasApiData = cartPricing && cartPricing.totalAmount > 0;
+  
+  const displayBaseAmount = hasApiData ? cartPricing!.baseAmount : totalBasePrice;
+  const displayAddonAmount = hasApiData ? cartPricing!.addonAmount : addOnsTotal;
+  const displayTaxAmount = hasApiData ? cartPricing!.taxAmount : gstAmount;
+  const displayTotalAmount = hasApiData ? cartPricing!.totalAmount : finalTotal;
+  const displayPayableNow = hasApiData ? cartPricing!.payableNow : advanceAmount;
+  
+  const taxComponents = hasApiData ? cartPricing!.taxComponents : [];
+  const paymentTerms = hasApiData ? cartPricing!.paymentTerms : [];
+
   const handleApplyCoupon = () => {
     if (couponCode.toUpperCase() === "YAARI10") {
       setCouponApplied(true);
-      // In a real app, you'd trigger a price recalculation here
     } else {
-      // Simple feedback for demo
       alert("Invalid coupon code.");
       setCouponCode("");
     }
   };
+
+  // Get the first payment term (usually the advance payment)
+  const firstPaymentTerm = paymentTerms[0];
+  const remainingPaymentTerm = paymentTerms[1];
 
   return (
     <div className="bg-white shadow-xl border border-gray-100 sticky top-24 overflow-hidden">
@@ -82,12 +110,12 @@ export default function PaymentSummaryCard({
           <div className="flex justify-between items-start mb-4">
             <div>
               <p className="text-blue-100 text-xs font-medium uppercase tracking-wider mb-1">
-                Payable Now (30%)
+                {firstPaymentTerm ? `Payable Now (${firstPaymentTerm.percentage}%)` : 'Payable Now'}
               </p>
               <div className="flex items-baseline gap-2">
                 <span className="text-4xl font-extrabold">
                   {currencySymbol}
-                  {advanceAmount.toLocaleString()}
+                  {displayPayableNow.toLocaleString()}
                 </span>
               </div>
             </div>
@@ -104,46 +132,99 @@ export default function PaymentSummaryCard({
 
       <div className="p-6 bg-gray-50/50">
         <div className="space-y-3 text-sm">
+          {/* Base Price */}
           <div className="flex justify-between text-gray-700">
             <span className="text-gray-600">
               Base Price ({currencySymbol}
-              {planPrice.toLocaleString()} x {travellerCount})
+              {planPrice.toLocaleString()} x {travellerCount} {travellerCount > 1 ? 'travellers' : 'traveller'})
             </span>
             <span className="font-semibold text-gray-900">
               {currencySymbol}
-              {totalBasePrice.toLocaleString()}
+              {displayBaseAmount.toLocaleString()}
             </span>
           </div>
+
+          {/* Add-ons */}
           {selectedAddOnsLength > 0 && (
             <div className="flex justify-between text-gray-700">
               <span className="text-gray-600">Add-ons</span>
               <span className="font-semibold text-gray-900">
                 {currencySymbol}
-                {addOnsTotal.toLocaleString()}
+                {displayAddonAmount.toLocaleString()}
               </span>
             </div>
           )}
-          <div className="flex justify-between text-gray-700">
-            <span className="text-gray-600">GST (18%)</span>
-            <span className="font-semibold text-gray-900">
-              {currencySymbol}
-              {gstAmount.toLocaleString()}
-            </span>
-          </div>
+
+          {/* Tax Components - from API */}
+          {taxComponents.length > 0 ? (
+            taxComponents.map((tax, index) => (
+              <div key={index} className="flex justify-between text-gray-700">
+                <span className="text-gray-600 flex items-center gap-1">
+                  {tax.name} ({tax.percentage}%)
+                  <span className="group relative">
+                    <Info className="w-3 h-3 text-gray-400 cursor-help" />
+                    <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                      {tax.code}
+                    </span>
+                  </span>
+                </span>
+                <span className="font-semibold text-gray-900">
+                  {currencySymbol}
+                  {tax.amount.toLocaleString()}
+                </span>
+              </div>
+            ))
+          ) : (
+            /* Fallback GST display if no API data */
+            <div className="flex justify-between text-gray-700">
+              <span className="text-gray-600">GST (18%)</span>
+              <span className="font-semibold text-gray-900">
+                {currencySymbol}
+                {displayTaxAmount.toLocaleString()}
+              </span>
+            </div>
+          )}
+
+          {/* Total Amount */}
           <div className="pt-3 mt-3 border-t-2 border-dashed border-gray-200 flex justify-between font-bold text-gray-800 text-lg">
             <span>Total Amount</span>
             <span>
               {currencySymbol}
-              {finalTotal.toLocaleString()}
+              {displayTotalAmount.toLocaleString()}
             </span>
           </div>
-          <div className="flex justify-between text-orange-600 text-xs mt-1 bg-orange-50 p-2 rounded-md">
-            <span>Remaining (70%) due in 7 days</span>
-            <span className="font-medium">
-              {currencySymbol}
-              {remainingAmount.toLocaleString()}
-            </span>
-          </div>
+
+          {/* Payment Terms from API */}
+          {paymentTerms.length > 0 ? (
+            <div className="space-y-2 mt-2">
+              {paymentTerms.map((term, index) => (
+                <div 
+                  key={index} 
+                  className={`flex justify-between text-xs p-2 rounded-md ${
+                    index === 0 ? 'bg-orange-50 text-orange-700' : 'bg-gray-50 text-gray-600'
+                  }`}
+                >
+                  <span className="font-medium">
+                    {term.trigger === 'ON_BOOKING' && 'On Booking'}
+                    {term.trigger === 'BEFORE_DAYS' && `Due ${term.beforeDays} days before travel`}
+                    {term.trigger === 'AFTER_BOOKING' && 'After Booking'}
+                  </span>
+                  <span className="font-semibold">
+                    {term.percentage}% ({currencySymbol}{((displayTotalAmount * term.percentage) / 100).toLocaleString()})
+                  </span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            /* Fallback remaining payment display */
+            <div className="flex justify-between text-orange-600 text-xs mt-1 bg-orange-50 p-2 rounded-md">
+              <span>Remaining (70%) due in 7 days</span>
+              <span className="font-medium">
+                {currencySymbol}
+                {remainingAmount.toLocaleString()}
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -222,3 +303,4 @@ export default function PaymentSummaryCard({
     </div>
   );
 }
+
