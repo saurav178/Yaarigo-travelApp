@@ -1,0 +1,111 @@
+name: YaariGo Frontend CI/CD
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+  push:
+    branches:
+      - develop
+
+jobs:
+
+  # =========================
+  # 🧪 BUILD JOB (PR ONLY)
+  # =========================
+  build:
+    name: Build on PR
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      # - name: Build Next.js app
+      #   run: npm run build
+
+      - name: Build Next.js app
+        run: npm run build
+        env:
+          NEXT_PUBLIC_USER_SERVICE_URL: ${{ secrets.NEXT_PUBLIC_USER_SERVICE_URL }}
+          NEXT_PUBLIC_AUTH_SERVICE_URL: ${{ secrets.NEXT_PUBLIC_AUTH_SERVICE_URL }}
+          NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
+          NEXT_PUBLIC_API_BOOKING_URL: ${{ secrets.NEXT_PUBLIC_API_BOOKING_URL }}
+          GMAP_LOC: ${{ secrets.GMAP_LOC }}
+
+
+  # =========================
+  # 🚀 DEPLOY JOB (MERGE)
+  # =========================
+  deploy:
+    name: Deploy to VPS
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          timeout: 30m
+          script: |
+            set -e
+
+            echo "➡️ Loading NVM..."
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+            echo "➡️ Installing & using Node 24..."
+            nvm install 24
+            nvm use 24
+            node -v
+            npm -v
+
+            echo "➡️ Navigating to project..."
+            cd /var/www/yaarigo/yaarigo-fe
+
+            echo "➡️ Fetching latest code..."
+            git fetch origin develop
+            git reset --hard origin/develop
+            git clean -fd
+
+            echo "➡️ Writing environment file..."
+            cat > .env.production <<EOL
+            NODE_ENV=production
+            NEXT_PUBLIC_USER_SERVICE_URL=${{ secrets.NEXT_PUBLIC_USER_SERVICE_URL }}
+            NEXT_PUBLIC_AUTH_SERVICE_URL=${{ secrets.NEXT_PUBLIC_AUTH_SERVICE_URL }}
+            NEXT_PUBLIC_API_BASE_URL=${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
+            NEXT_PUBLIC_API_BOOKING_URL=${{ secrets.NEXT_PUBLIC_API_BOOKING_URL }}
+            GMAP_LOC=${{ secrets.GMAP_LOC }}
+            EOL
+
+            chmod 600 .env.production
+            echo "✅ .env.production updated"
+
+            echo "➡️ Installing dependencies..."
+            npm ci --no-audit --no-fund
+
+            echo "➡️ Building Next.js..."
+            export NEXT_TELEMETRY_DISABLED=1
+            export CI=1
+            export NODE_OPTIONS="--max_old_space_size=4096"
+            npm run build
+
+            echo "➡️ Restarting PM2..."
+            pm2 reload yaarigo-dev-web --update-env || pm2 start npm --name "yaarigo-dev-web" -- start --env production
+            pm2 save
+
+            echo "🎉 Deployment completed successfully"

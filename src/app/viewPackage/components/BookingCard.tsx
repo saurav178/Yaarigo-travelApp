@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Calendar, Heart, Share2, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Calendar, Heart, Share2, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import axiosClient from "@/lib/axios-client";
-import { Package, Plan, Traveller } from "../types";
+import { Package, Plan, Traveller, StaticAddOn } from "../types";
 import { API_ENDPOINTS_CONFIG } from "@/utils/apiConfig";
 import { APP_CONSTANTS } from "@/utils/appConstants";
 import { useAuth } from "@/context/AuthContext";
@@ -12,6 +12,8 @@ interface BookingCardProps {
   pkg: Package;
   selectedPlan: Plan | null;
   setSelectedPlan: (plan: Plan | null) => void;
+  selectedAddOns: string[];
+  addOnsData: StaticAddOn[];
   isFavorite: boolean;
   setIsFavorite: (isFavorite: boolean) => void;
   travellers: Traveller[];
@@ -21,6 +23,8 @@ export default function BookingCard({
   pkg,
   selectedPlan,
   setSelectedPlan,
+  selectedAddOns,
+  addOnsData,
   isFavorite,
   setIsFavorite,
   travellers,
@@ -39,8 +43,15 @@ export default function BookingCard({
     originalPrice > discountedPrice
       ? Math.round(((originalPrice - discountedPrice) / originalPrice) * 100)
       : 0;
-  const gstAmount = Math.round(discountedPrice * APP_CONSTANTS.GST_RATE);
-  const finalTotal = discountedPrice + gstAmount;
+
+  const addOnsTotal = addOnsData
+    .filter((a) => selectedAddOns.includes(a.id))
+    .reduce((total, addon) => total + addon.price, 0);
+
+  const gstAmount = Math.round(
+    (discountedPrice + addOnsTotal) * APP_CONSTANTS.GST_RATE
+  );
+  const finalTotal = discountedPrice + addOnsTotal + gstAmount;
 
   const handleBookNow = async () => {
     if (!selectedPlan) return;
@@ -115,7 +126,7 @@ export default function BookingCard({
     params.set("cartBasePrice", cartPricing.baseAmount.toString());
     params.set("cartTotalPrice", cartPricing.totalAmount.toString());
     params.set("cartGstAmount", cartPricing.taxAmount.toString());
-    params.set("cartOriginalPrice", cartData.originalPrice || selectedPlan.pricePerPerson || selectedPlan.discountedPrice);
+    params.set("cartOriginalPrice", (cartData.originalPrice || selectedPlan.pricePerPerson || selectedPlan.discountedPrice).toString());
     
     // Pass the full cart pricing object for detailed display
     params.set("cartPricing", JSON.stringify(cartPricing));
@@ -262,7 +273,7 @@ export default function BookingCard({
 
       {/* Price Breakdown */}
       <div className="mb-4 pt-3 border-t border-dashed border-gray-200">
-          <div className="text-base font-bold text-gray-800 mb-3">
+        <div className="text-base font-bold text-gray-800 mb-3">
             Price Breakdown
           </div>
           <div className="flex justify-between text-sm font-medium text-gray-600 mb-2">
@@ -272,6 +283,20 @@ export default function BookingCard({
               {discountedPrice.toLocaleString()}
             </span>
           </div>
+          {addOnsData
+            .filter((a) => selectedAddOns.includes(a.id))
+            .map((addon) => (
+              <div
+                key={addon.id}
+                className="flex justify-between text-sm font-medium text-gray-600 mb-2"
+              >
+                <span>{addon.title}</span>
+                <span>
+                  {currencySymbol}
+                  {addon.price.toLocaleString()}
+                </span>
+              </div>
+            ))}
           <div className="flex justify-between text-sm font-medium text-gray-600 mb-2">
             <span>GST ({APP_CONSTANTS.GST_RATE * 100}%)</span>
             <span>

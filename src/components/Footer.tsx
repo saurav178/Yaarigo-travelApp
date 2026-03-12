@@ -10,7 +10,7 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="bg-[#1D4350] text-white py-6">
+    <footer className="bg-[#1D4350] text-white py-6 ">
       {/* Newsletter */}
       <div className="text-center mb-6">
         <div className="flex flex-col items-center">
@@ -143,6 +143,11 @@ export default function Footer() {
         <div className="md:pl-12 text-left md:ml-auto">
           <h4 className="font-semibold mb-3">Legal</h4>
           <ul className="space-y-2 text-white/80">
+          <li>
+            <a>
+              Cancellation Policy
+            </a>
+          </li>
             <li>
               <a>Privacy Policy</a>
             </li>

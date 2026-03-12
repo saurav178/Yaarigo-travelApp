@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FaMapMarkerAlt, FaHeart, FaShieldAlt } from "react-icons/fa";
-
+import { FaUserFriends, FaUserCheck, FaMapMarkedAlt } from "react-icons/fa";
 interface ProfileHeaderProps {
   isFollowing: boolean;
   followersCount: number;
@@ -31,22 +31,22 @@ export default function ProfileHeader({
   };
 
   return (
-    <div className="relative mx-6">
-      {/* Cover Image Section */}
-      <div className="w-full h-64 overflow-hidden relative">
-        <Image
-          src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
-          alt="Cover"
-          fill
-          className="object-cover"
-        />
-        <button
-          onClick={() => router.back()}
-          className="absolute top-4 left-4 text-white bg-black/40 px-3 py-1 hover:bg-black/60 transition z-10"
-        >
-          ← Back
-        </button>
-      </div>
+   <div className="relative  pt-35 md:pt-18">
+  {/* Cover Image Section */}
+  <div className="w-full h-40 md:h-48 overflow-hidden relative">
+    <Image
+      src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
+      alt="Cover"
+      fill
+      className="object-cover"
+    />
+    <button
+      onClick={() => router.back()}
+      className="absolute top-4 left-4 text-white bg-black/40 px-3 py-1 hover:bg-black/60 transition z-10"
+    >
+      ← Back
+    </button>
+    </div>
 
       {/* Profile Section */}
       <div
@@ -104,7 +104,7 @@ export default function ProfileHeader({
           </button>
         </div>
         {/* Avatar - positioned floating over cover image half */}
-        <div className="absolute left-16 -top-26 w-75 h-70 overflow-hidden shadow-md z-20">
+        <div className="absolute left-20 -top-26 w-82 h-70 overflow-hidden shadow-md z-20">
           <Image
             src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91"
             alt="Profile"
@@ -113,10 +113,10 @@ export default function ProfileHeader({
           />
         </div>
         {/* Info */}
-        <div className="flex-1 mt-0 text-center ml-0 mr-86">
+        <div className="flex-1 mt-0  h-48 text-center ml-0 mr-86">
 
-          <div className="flex items-center justify-center ml-0 mr-10">
-            <h2 className="text-2xl font-semibold flex items-center gap-2">
+          <div className="flex items-center  justify-center ml-0 mr-10">
+            <h2 className="text-2xl  font-semibold flex items-center gap-2">
               Jane Cooper
               <span className="bg-emerald-500 text-white text-xs px-2 py-1 rounded-full  flex items-center gap-1">
                 <Image
@@ -129,7 +129,7 @@ export default function ProfileHeader({
               </span>
             </h2>
           </div>
-          <p className="text-gray-600 flex items-center ml-92 gap-1 mt-1">
+          <p className="text-gray-600 flex items-center ml-101 gap-1 mt-1">
             <FaMapMarkerAlt className="text-black" /> Kiev, Ukraine
           </p>
           <div className="text-sm text-gray-500 mt-1 ml-0 mr-20">
@@ -152,20 +152,36 @@ export default function ProfileHeader({
           </div>
 
           {/* Stats - adjusted spacing and alignment */}
-          <div className="flex justify-start gap-4 mt-10 ml-94 text-center">
-            <div className="bg-gray-200 py-3 px-6 shadow-sm">
-              <p className="text-lg font-semibold">{followersCount}</p>
-              <p className="text-gray-500 text-sm">Followers</p>
-            </div>
-            <div className="bg-gray-200 py-3 px-6 shadow-sm">
-              <p className="text-lg font-semibold">567</p>
-              <p className="text-gray-500 text-sm">Following</p>
-            </div>
-            <div className="bg-gray-200 py-3 px-6 shadow-sm">
-              <p className="text-lg font-semibold">15</p>
-              <p className="text-gray-500 text-sm">Trips Completed</p>
-            </div>
-          </div>
+     <div className="flex justify-start p-4 gap-6 mt-4 ml-105 text-center">
+  {/* Followers */}
+  <div className="bg-gray-200 py-5 px-10 shadow-sm flex flex-col items-center justify-center gap-2 rounded-lg min-w-[120px] h-20 ">
+    {/* Icon + Number in a row */}
+    <div className="flex items-center gap-2">
+      <FaUserFriends className="text-gray-500 text-3xl" />
+      <p className="text-2xl font-semibold">{followersCount}</p>
+    </div>
+    {/* Label in next line */}
+    <p className="text-gray-500 text-sm">Followers</p>
+  </div>
+
+  {/* Following */}
+  <div className="bg-gray-200 py-5 px-10 shadow-sm flex flex-col items-center justify-center gap-2 rounded-lg min-w-[120px] h-20 ">
+    <div className="flex items-center gap-2">
+      <FaUserCheck className="text-gray-500 text-3xl" />
+      <p className="text-2xl font-semibold">567</p>
+    </div>
+    <p className="text-gray-500 text-sm">Following</p>
+  </div>
+
+  {/* Trips Completed */}
+  <div className="bg-gray-200 py-5 px-10 shadow-sm flex flex-col items-center justify-center gap-2 rounded-lg min-w-[120px] h-20 ">
+    <div className="flex items-center gap-2">
+      <FaMapMarkedAlt className="text-gray-500 text-3xl" />
+      <p className="text-2xl font-semibold">15</p>
+    </div>
+    <p className="text-gray-500 text-sm">Trips Completed</p>
+  </div>
+</div>
         </div>
 
       </div>

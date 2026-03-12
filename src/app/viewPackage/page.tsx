@@ -10,9 +10,10 @@ import {
 import Loader from "@/components/Loader/Loader";
 import axios from "axios";
 import { API_ENDPOINTS, APP_ROUTES } from "@/utils/constants";
-import { Package, Plan } from "./types";
+import { Package, Plan, Traveller, StaticAddOn } from "./types";
 import HeroSection from "./components/HeroSection";
 import AboutSection from "./components/AboutSection";
+import TravellersSection from "./components/TravellersSection";
 import ItinerarySection from "./components/ItinerarySection";
 import InclusionsSection from "./components/InclusionsSection";
 import CancellationPolicySection from "./components/CancellationPolicySection";
@@ -29,6 +30,17 @@ function ViewPackageContent() {
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const [expandedDays, setExpandedDays] = useState<number[]>([0]);
+  const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
+  const [isTravellerModalOpen, setIsTravellerModalOpen] = useState(false);
+  const [travellers, setTravellers] = useState<Traveller[]>([]);
+  const [currentTraveller, setCurrentTraveller] = useState<Traveller>({
+    id: "",
+    name: "",
+    email: "",
+    contact: "",
+    gender: "",
+    age: "",
+  });
 
   useEffect(() => {
     const fetchPackage = async () => {
@@ -68,6 +80,20 @@ function ViewPackageContent() {
     );
   };
 
+  const toggleAddOn = (id: string) => {
+    setSelectedAddOns((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
+
+  const handleAddTraveller = () => {
+    if (currentTraveller.name && currentTraveller.email) {
+      setTravellers([...travellers, { ...currentTraveller, id: Date.now().toString() }]);
+      setIsTravellerModalOpen(false);
+      setCurrentTraveller({ id: "", name: "", email: "", contact: "", gender: "", age: "" });
+    }
+  };
+
   // Show loader
   if (loading) {
     return (
@@ -97,6 +123,9 @@ function ViewPackageContent() {
     );
   }
 
+  // ---------------- ADD ONS DATA ----------------
+  
+
   return (
     <div className="min-h-screen bg-gray-50 mt-12">
       {/* Hero Section */}
@@ -110,6 +139,7 @@ function ViewPackageContent() {
             {/* Description */}
             <AboutSection pkg={pkg} selectedPlan={selectedPlan} />
             
+           
             {/* Itinerary */}
             <ItinerarySection
               pkg={pkg}
@@ -122,6 +152,8 @@ function ViewPackageContent() {
               pkg={pkg}
               selectedPlan={selectedPlan}
               setSelectedPlan={setSelectedPlan}
+              selectedAddOns={selectedAddOns}
+              toggleAddOn={toggleAddOn} addOnsData={[]}            
             />
 
             {/* Cancellation Policy */}
@@ -137,10 +169,10 @@ function ViewPackageContent() {
               pkg={pkg}
               selectedPlan={selectedPlan}
               setSelectedPlan={setSelectedPlan}
+              selectedAddOns={selectedAddOns}
+
               isFavorite={isFavorite}
-              setIsFavorite={setIsFavorite}
-              travellers={[]}
-            />
+              setIsFavorite={setIsFavorite} travellers={[]} addOnsData={[]}            />
           </div>
         </div>
       </div>

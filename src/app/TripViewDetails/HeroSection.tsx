@@ -1,51 +1,98 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowLeft, MapPin, CalendarDays } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { FaMapMarkerAlt, FaCalendarAlt } from "react-icons/fa";
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  trip: any;
+}
+
+export default function HeroSection({ trip }: HeroSectionProps) {
+  const router = useRouter();
+
+  if (!trip) return null;
+
+  // -------- Extract Data From Payload --------
+  const title = trip?.title ?? "N/A";
+
+  const fromCity = trip?.fromLocation?.city ?? "";
+  const toCity = trip?.toLocation?.city ?? "";
+
+  const locationText =
+    fromCity && toCity
+      ? `${fromCity} → ${toCity}`
+      : fromCity || toCity || "N/A";
+
+  const startDate = trip?.startDate ? new Date(trip.startDate) : null;
+  const endDate = trip?.endDate ? new Date(trip.endDate) : null;
+
+  const duration =
+    startDate && endDate
+      ? Math.ceil(
+          (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
+        ) + " days"
+      : "N/A";
+
+  const coverImage =
+    trip?.coverImage ||
+    trip?.images?.[0] ||
+    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80";
+
+  const category =
+    trip?.partnerPreferences?.tripStyles?.length > 0
+      ? trip.partnerPreferences.tripStyles[0]
+      : "Trip";
+
   return (
     <div className="relative w-full h-[70vh] overflow-hidden shadow-lg hover:shadow-2xl">
       {/* Background Image */}
       <Image
-        src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80"
-        alt="Bali Beach"
+        src={coverImage}
+        alt={title}
         fill
         className="object-cover"
         priority
+        sizes="100vw"
       />
 
-      {/* Dark Overlay */}
+      {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 
-      {/* Content Wrapper */}
-      <div className="absolute inset-0 flex flex-col justify-between px-20 py-6 text-white">
-        {/* Top Navigation */}
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 px-4 py-2 text-xl md:text-1xl text-black">
-            <ArrowLeft size={28} className="text-black" />
-            <span className="font-semibold">Back</span>
-          </div>
-        </div>
+      {/* Back Button: FIXED TOP-LEFT */}
+      <button
+        onClick={() => router.back()}
+        className="absolute top-20  left-9 z-50 flex items-center gap-2 px-4 py-2 rounded-full bg-black text-white font-bold shadow-lg hover:bg-gray-800 transition-colors duration-300"
+      >
+        {/* Bigger visible arrow */}
+        <span className="inline-block w-3 h-3 border-t-4 border-l-4 border-white rotate-[-45deg]"></span>
+        Back
+      </button>
 
-        {/* Bottom Info Section */}
+      {/* Content */}
+      <div className="absolute inset-0 flex flex-col justify-end px-6 md:px-20 pb-6 text-white">
+        {/* Bottom Info */}
         <div>
-          <div className="bg-[#1D4350] text-white font-semibold px-4 py-1 rounded-full inline-block mb-2">
-            Beach & Culture
+          {/* Category */}
+          <div className="bg-[#1D4350] font-semibold px-4 py-1 rounded-full inline-block mb-2">
+            {category}
           </div>
 
-          <h2 className="text-lg md:text-xl font-medium leading-snug mb-2">
-            Bali Beach & Culture Adventure
+          {/* Title */}
+          <h2 className="text-xl md:text-3xl font-bold leading-snug mb-2">
+            {title}
           </h2>
 
-          <div className="flex items-center gap-6 text-sm opacity-90">
+          {/* Location & Duration */}
+          <div className="flex flex-wrap items-center gap-6 text-sm md:text-base opacity-90">
             <div className="flex items-center gap-2">
-              <MapPin size={16} className="text-[#FFFFFF]" />
-              <span>Bali, Indonesia</span>
+              <FaMapMarkerAlt className="text-white text-sm opacity-90" />
+              <span>{locationText}</span>
             </div>
+
             <div className="flex items-center gap-2">
-              <CalendarDays size={16} className="text-[#FFFFFF]" />
-              <span>10 days</span>
+              <FaCalendarAlt className="text-white text-sm opacity-90" />
+              <span>{duration}</span>
             </div>
           </div>
         </div>

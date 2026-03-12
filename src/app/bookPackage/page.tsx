@@ -11,7 +11,7 @@ import { AddOnDetail, Traveller, ItineraryItem, CancellationPolicyItem, PlanData
 import PackageDetailsCard from "./PackageDetailsCard";
 import SelectedPlanCard from "./SelectedPlanCard";
 import ItineraryCard from "./ItineraryCard";
-import CancellationPolicyCard from "./CancellationPolicyCard";
+import CancellationPolicyCard from "../viewPackage/components/CancellationPolicyCard";
 import PaymentSummaryCard from "./PaymentSummaryCard";
 import SuccessView from "./SuccessView";
 import { API_ENDPOINTS_CONFIG } from "@/utils/apiConfig";

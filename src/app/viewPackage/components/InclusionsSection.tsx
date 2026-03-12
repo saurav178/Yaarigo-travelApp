@@ -1,17 +1,23 @@
 import { CheckCircle, XCircle } from "lucide-react";
 import { motion } from "framer-motion";
-import { Package, Plan } from "../types";
+import { Package, Plan, StaticAddOn } from "../types";
 
 interface InclusionsSectionProps {
   pkg: Package;
   selectedPlan: Plan | null;
   setSelectedPlan: (plan: Plan) => void;
+  selectedAddOns: string[];
+  toggleAddOn: (id: string) => void;
+  addOnsData: StaticAddOn[];
 }
 
 export default function InclusionsSection({
   pkg,
   selectedPlan,
   setSelectedPlan,
+  selectedAddOns,
+  toggleAddOn,
+  addOnsData,
 }: InclusionsSectionProps) {
   return (
     <motion.div
@@ -111,6 +117,36 @@ export default function InclusionsSection({
             ))}
           </ul>
         </div>
+      </div>
+
+      <div className="grid md:grid-cols-3 gap-4">
+          {addOnsData.map((addon) => {
+            const isSelected = selectedAddOns.includes(addon.id);
+
+            return (
+              <div
+                key={addon.id}
+                onClick={() => toggleAddOn(addon.id)}
+                className={`p-5 rounded-xl border cursor-pointer transition-all ${
+                  isSelected
+                    ? "border-blue-500 ring-2 ring-blue-500/20 bg-blue-50"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+              >
+                <div className="flex justify-between mb-2">
+                  <span className="text-xs text-gray-500">{addon.tag}</span>
+                  {isSelected && (
+                    <span className="text-blue-600 font-bold text-lg">✓</span>
+                  )}
+                </div>
+
+                <h4 className="font-semibold text-gray-800">{addon.title}</h4>
+                <p className="text-sm text-gray-500 mb-3">{addon.desc}</p>
+
+                <div className="font-bold text-[#1d4350]">+₹{addon.price}</div>
+              </div>
+            );
+          })}
       </div>
     </motion.div>
   );
