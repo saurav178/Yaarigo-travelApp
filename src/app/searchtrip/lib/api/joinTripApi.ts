@@ -1,6 +1,6 @@
 import axios from "axios";
 
-/* ================= TYPES ================= */
+
 
 export interface SoloJoinPayload {
   tripId: string;

@@ -26,7 +26,7 @@ const JoinTripModal = ({ trip, user, onClose }: any) => {
   const [joinId, setJoinId] = useState<string | null>(null);
   const [selectedTravellers, setSelectedTravellers] = useState<any[]>([]);
   
-  // ✅ Removed duplicate declarations
+ 
   const [isTravellersAdded, setIsTravellersAdded] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [existingProfiles, setExistingProfiles] = useState<TravellerProfile[]>([]);
