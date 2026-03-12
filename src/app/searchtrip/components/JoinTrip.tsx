@@ -23,7 +23,8 @@ export default function JoinTrip({ tripId }: JoinTripProps) {
     setIsLoading(true);
     try {
       // Fetching the specific trip details from your TPM service
-      const response = await fetch(`https://api.dev.yaarigo.com/tpm-service/api/public/trips/${tripId}`);
+      const BASE_API = process.env.NEXT_PUBLIC_API_BASE_URL;
+      const response = await fetch(`${BASE_API}/trips/${tripId}`);
       const data = await response.json();
 
       if (data) {
