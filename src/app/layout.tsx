@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Travio",
+  title: "Yaarigo",
   description: "Find your perfect travel companions",
 };
 export default function RootLayout({
