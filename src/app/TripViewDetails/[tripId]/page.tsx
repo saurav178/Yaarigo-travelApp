@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 import HeroSection from "../HeroSection";
 import TripOverview from "../TripDetails/TripOverview";
@@ -41,17 +41,20 @@ export default function TripDetailsPage() {
         setLoading(true);
         setError(null);
 
-        // Fetch Trip
         const trip = await fetchTripById(tripId);
+        if (!trip) {
+          setError("Trip not found.");
+          return;
+        }
         setTripData(trip);
 
-        // Fetch Leader (if exists)
-        if (trip?.createdBy) {
+        // Fetch Leader using optional chaining and fallback
+        const creatorId = trip.createdBy || trip.leaderId;
+        if (creatorId) {
           try {
-            const leader = await fetchLeaderById(trip.createdBy);
+            const leader = await fetchLeaderById(creatorId);
             setLeaderData(leader);
           } catch {
-            // If leader endpoint fails (404 etc.), ignore gracefully
             setLeaderData(null);
           }
         }
@@ -82,17 +85,17 @@ export default function TripDetailsPage() {
     return <div className="p-10 text-center text-red-500">Trip not found.</div>;
   }
 
-  // Normalize itinerary location
+  // 2. Safe Itinerary Normalization (Prevents build crash on missing location names)
   const itineraryForDisplay =
     tripData.itinerary?.map((day) => ({
       ...day,
       location:
         typeof day.location === "string"
           ? day.location
-          : day.location?.name || "Unknown location",
+          : (day.location as any)?.name || "Unknown location",
     })) || [];
 
-  // Safety data (API only)
+  // 3. Strict Safety Props (Ensures non-null values for the component)
   const safetyProps = {
     safetyRating: tripData.partnerPreferences?.safetyRating,
     safetyInfo: tripData.partnerPreferences?.safetyInfo,
@@ -107,7 +110,6 @@ export default function TripDetailsPage() {
       <HeroSection trip={tripData} />
 
       <div className="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* LEFT COLUMN */}
         <div className="lg:col-span-2 space-y-6">
           <TripOverview trip={tripData} />
 
@@ -126,7 +128,6 @@ export default function TripDetailsPage() {
           <Similartrip />
         </div>
 
-        {/* RIGHT COLUMN */}
         <div className="flex flex-col gap-6">
           <TripActions trip={tripData} />
 
