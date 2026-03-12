@@ -6,6 +6,7 @@ import axiosClient from "@/lib/axios-client";
 import { Package, Plan, Traveller } from "../types";
 import { API_ENDPOINTS_CONFIG } from "@/utils/apiConfig";
 import { APP_CONSTANTS } from "@/utils/appConstants";
+import { useAuth } from "@/context/AuthContext";
 
 interface BookingCardProps {
   pkg: Package;
@@ -25,6 +26,7 @@ export default function BookingCard({
   travellers,
 }: BookingCardProps) {
   const router = useRouter();
+  const { getActiveOrganizationId } = useAuth();
   const [travelDate, setTravelDate] = useState("");
   const [isBooking, setIsBooking] = useState(false);
   const [showValidationModal, setShowValidationModal] = useState(false);
@@ -49,6 +51,15 @@ export default function BookingCard({
 
     setIsBooking(true);
     try {
+      // Get the active organization ID from AuthContext
+      const organizationId = getActiveOrganizationId();
+      
+      if (!organizationId) {
+        alert("No organization found. Please log in or select an organization.");
+        setIsBooking(false);
+        return;
+      }
+
       // Parallel execution: Fire both createCart and getTraveller requests simultaneously
       const [cartResponse, profilesResponse] = await Promise.all([
         axiosClient.post(
@@ -56,7 +67,7 @@ export default function BookingCard({
           {
             packageId: pkg._id,
             planId: selectedPlan._id,
-            organizationId: APP_CONSTANTS.ORGANIZATION_ID,
+            organizationId: organizationId,
             travelDate: travelDate,
           }
         ),
