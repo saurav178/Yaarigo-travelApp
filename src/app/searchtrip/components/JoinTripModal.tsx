@@ -1033,7 +1033,7 @@ const handleNextOrSubmit = async () => {
       isDefault: false,
     })
   }
-  className="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded text-[0.7rem] font-bold disabled:bg-gray-400"
+  className="bg-[#276074] hover:bg-[#276074] text-white px-4 py-1 rounded text-[0.7rem] font-bold disabled:bg-gray-400"
 >
   {isCreatingTraveller ? "Saving..." : "SAVE"}
 </button>      </div>
