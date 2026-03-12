@@ -1,0 +1,982 @@
+"use client";
+
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import InlineLoader from "@/components/Loader/InlineLoader";
+import { ArrowLeft, Plus, UserPlus, Trash2, User, Plane } from "lucide-react";
+import axiosClient from "@/lib/axios-client";
+import { APP_ROUTES, API_ENDPOINTS } from "@/utils/constants";
+import { AddOnDetail, Traveller, ItineraryItem, CancellationPolicyItem, PlanData, CartPricing } from "./types";
+import PackageDetailsCard from "./PackageDetailsCard";
+import SelectedPlanCard from "./SelectedPlanCard";
+import ItineraryCard from "./ItineraryCard";
+import CancellationPolicyCard from "../viewPackage/components/CancellationPolicyCard";
+import PaymentSummaryCard from "./PaymentSummaryCard";
+import SuccessView from "./SuccessView";
+import { API_ENDPOINTS_CONFIG } from "@/utils/apiConfig";
+import { APP_CONSTANTS } from "@/utils/appConstants";
+
+interface UserProfile {
+  id: string;
+  firstName: string;
+  lastName: string;
+  gender: string;
+  dob: string;
+  travelerType?: string;
+  nationality?: string;
+  phone?: string;
+  email?: string;
+}
+
+// Package types for fetching from API
+interface Location {
+  name: string;
+  city: string;
+  country: string;
+  lat?: number;
+  lng?: number;
+}
+
+interface ItineraryDay {
+  dayTitle: string;
+  summary: string;
+  activities?: { name?: string; title?: string }[];
+  blocks?: unknown[];
+  _id?: string;
+}
+
+interface PackageData {
+  _id: string;
+  title: string;
+  description: string;
+  fromLocation?: Location;
+  toLocation?: Location;
+  totalDays?: number;
+  totalNights?: number;
+  itineraryTemplate?: ItineraryDay[];
+}
+
+declare global {
+  interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Razorpay: any;
+  }
+}
+
+const calculateAge = (dob: string) => {
+  const birthDate = new Date(dob);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age;
+};
+
+function BookPackageContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const [cartId, setCartId] = useState<string>("");
+  const [packageTitle, setPackageTitle] = useState<string>("");
+  const [planName, setPlanName] = useState<string>("");
+  const [planPrice, setPlanPrice] = useState<number>(0);
+  const [currency, setCurrency] = useState<string>("INR");
+  const [fromLocation, setFromLocation] = useState<string>("");
+  const [toLocation, setToLocation] = useState<string>("");
+  const [duration, setDuration] = useState<string>("");
+  const [selectedAddOns, setSelectedAddOns] = useState<AddOnDetail[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const [bookingNumber, setBookingNumber] = useState("");
+
+  // Cart pricing from API
+  const [cartBasePrice, setCartBasePrice] = useState<number>(0);
+  const [cartTotalPrice, setCartTotalPrice] = useState<number>(0);
+  const [cartGstAmount, setCartGstAmount] = useState<number>(0);
+
+  // Full cart pricing from API (for detailed display)
+  const [cartPricing, setCartPricing] = useState<CartPricing | null>(null);
+
+  // Traveller state
+  const [travellers, setTravellers] = useState<Traveller[]>([]);
+  const [itinerary, setItinerary] = useState<ItineraryItem[]>([]);
+  const [cancellationPolicy, setCancellationPolicy] = useState<CancellationPolicyItem[]>([]);
+  const [planData, setPlanData] = useState<PlanData | null>(null);
+  const [inviteLink, setInviteLink] = useState("");
+  const [isCopied, setIsCopied] = useState(false);
+
+  // New Traveller State
+  const [newTraveller, setNewTraveller] = useState({
+    firstName: "",
+    lastName: "",
+    gender: "MALE",
+    dob: "",
+    email: "",
+    phone: "",
+    nationality: "Indian",
+  });
+
+  const [newTravellerErrors, setNewTravellerErrors] = useState({
+    firstName: "",
+    lastName: "",
+    dob: "",
+    email: "",
+    phone: "",
+  });
+
+  // Modal States
+  const [showNewTravellerModal, setShowNewTravellerModal] = useState(false);
+  const [showExistingTravellerModal, setShowExistingTravellerModal] = useState(false);
+  const [existingProfiles, setExistingProfiles] = useState<UserProfile[]>([]);
+  const [selectedProfileIds, setSelectedProfileIds] = useState<string[]>([]);
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
+  const [isAddingExisting, setIsAddingExisting] = useState(false);
+
+  // Package data from API
+
+  // Initialize existingProfiles from URL params on page load
+  useEffect(() => {
+    const existingProfilesParam = searchParams.get("existingProfiles");
+    if (existingProfilesParam) {
+      try {
+        const profiles = JSON.parse(existingProfilesParam);
+        setExistingProfiles(profiles);
+      } catch (e) {
+        console.error("Error parsing existingProfiles:", e);
+      }
+    }
+  }, [searchParams]);
+
+  const handleSaveNewTraveller = async () => {
+    const errors = {
+      firstName: "",
+      lastName: "",
+      dob: "",
+      email: "",
+      phone: "",
+    };
+    let hasError = false;
+
+    if (!newTraveller.firstName.trim()) {
+      errors.firstName = "First name is required";
+      hasError = true;
+    }
+    if (!newTraveller.lastName.trim()) {
+      errors.lastName = "Last name is required";
+      hasError = true;
+    }
+    if (!newTraveller.dob) {
+      errors.dob = "Date of birth is required";
+      hasError = true;
+    }
+
+    setNewTravellerErrors(errors);
+    if (hasError) return;
+    
+    if (!cartId) {
+      console.error("Cart ID is missing.");
+      return;
+    }
+
+    setIsSavingProfile(true);
+    try {
+      const payload = {
+        firstName: newTraveller.firstName,
+        lastName: newTraveller.lastName,
+        gender: newTraveller.gender,
+        dob: new Date(newTraveller.dob).toISOString(),
+        travelerType: "ADULT",
+        nationality: newTraveller.nationality,
+        phone: newTraveller.phone,
+        email: newTraveller.email,
+        isDefault: true
+      };
+      
+      // Save traveler profile
+      await axiosClient.post(API_ENDPOINTS_CONFIG.BOOKING.TRAVELER_PROFILES, payload);
+
+      const response = await axiosClient.post(API_ENDPOINTS_CONFIG.BOOKING.ADD_TRAVELERS(cartId), {
+        travelers: [payload]
+      });
+      const created = (response.data?.data || response.data)?.[0] || {};
+      
+      const newTravellerId = created.id || Date.now().toString();
+      const travellerToAdd = {
+        id: newTravellerId,
+        name: `${newTraveller.firstName} ${newTraveller.lastName}`,
+        gender: newTraveller.gender,
+        firstName: newTraveller.firstName,
+        lastName: newTraveller.lastName,
+        dob: newTraveller.dob,
+        travelerType: created.travelerType || "ADULT",
+        isAddedToCart: true,
+        email: newTraveller.email,
+        contact: newTraveller.phone,
+        age: calculateAge(newTraveller.dob)
+      };
+
+      setTravellers([...travellers, travellerToAdd]);
+
+      setExistingProfiles((prev) => [
+        ...prev,
+        {
+          id: newTravellerId,
+          firstName: newTraveller.firstName,
+          lastName: newTraveller.lastName,
+          gender: newTraveller.gender,
+          dob: newTraveller.dob,
+          travelerType: "ADULT",
+          nationality: newTraveller.nationality,
+          phone: newTraveller.phone,
+          email: newTraveller.email,
+        },
+      ]);
+      
+      setNewTraveller({ firstName: "", lastName: "", gender: "MALE", dob: "", email: "", phone: "", nationality: "Indian" });
+      setNewTravellerErrors({ firstName: "", lastName: "", dob: "", email: "", phone: "" });
+      setShowNewTravellerModal(false);
+    } catch (error) {
+      console.error("Failed to add traveler", error);
+    } finally {
+      setIsSavingProfile(false);
+    }
+  };
+
+  const toggleProfileSelection = (id: string) => {
+    setSelectedProfileIds(prev => 
+      prev.includes(id) ? prev.filter(pId => pId !== id) : [...prev, id]
+    );
+  };
+
+  const addSelectedProfiles = async () => {
+    if (!cartId) {
+      console.error("Cart ID is missing.");
+      return;
+    }
+
+    const selected = existingProfiles.filter(p => selectedProfileIds.includes(p.id));
+    if (selected.length === 0) return;
+
+    setIsAddingExisting(true);
+    try {
+      const travelersPayload = selected.map(p => ({
+        firstName: p.firstName,
+        lastName: p.lastName,
+        gender: p.gender,
+        dob: p.dob,
+        travelerType: p.travelerType || "ADULT",
+        nationality: p.nationality || "Indian",
+        phone: p.phone || "",
+        email: p.email || "",
+        isDefault: false
+      }));
+
+      const response = await axiosClient.post(API_ENDPOINTS_CONFIG.BOOKING.ADD_TRAVELERS(cartId), {
+        travelers: travelersPayload
+      });
+
+      const addedTravelers = response.data?.data || response.data || [];
+      const travelersList = Array.isArray(addedTravelers) ? addedTravelers : [];
+
+      const newTravellers = (travelersList.length > 0 ? travelersList : selected).map((p: UserProfile, index: number) => ({
+        id: p.id || selected[index]?.id || Date.now().toString(),
+        name: `${p.firstName} ${p.lastName}`,
+        gender: p.gender,
+        firstName: p.firstName,
+        lastName: p.lastName,
+        dob: p.dob,
+        travelerType: p.travelerType || "ADULT",
+        isAddedToCart: true,
+        email: p.email || "",
+        contact: p.phone || "",
+        age: calculateAge(p.dob)
+      }));
+      
+      setTravellers([...travellers, ...newTravellers]);
+      setSelectedProfileIds([]);
+      setShowExistingTravellerModal(false);
+    } catch (error) {
+      console.error("Failed to add existing travelers", error);
+    } finally {
+      setIsAddingExisting(false);
+    }
+  };
+
+  const handleRemoveTraveller = async (id: string) => {
+    if (cartId) {
+      try {
+        await axiosClient.delete(API_ENDPOINTS_CONFIG.BOOKING.REMOVE_TRAVELERS(cartId, id));
+      } catch (error) {
+        console.error("Failed to remove traveler", error);
+      }
+    }
+    setTravellers((prev) => prev.filter((t) => t.id !== id));
+  };
+
+  useEffect(() => {
+    // Get query parameters
+    const pkgId = searchParams.get("packageId") || "";
+    const cId = searchParams.get("cartId") || "";
+    const title = searchParams.get("packageTitle") || "";
+    const plan = searchParams.get("planName") || "";
+    const price = searchParams.get("planPrice") || "0";
+    const curr = searchParams.get("currency") || "INR";
+    const fromLoc = searchParams.get("fromLocation") || "";
+    const toLoc = searchParams.get("toLocation") || "";
+    const days = searchParams.get("totalDays") || "0";
+    const nights = searchParams.get("totalNights") || "0";
+    const addOnsParam = searchParams.get("addOnsData");
+    const travellersParam = searchParams.get("travellersData");
+    const itineraryParam = searchParams.get("itineraryData");
+    const cancellationPolicyParam = searchParams.get("cancellationPolicy");
+    const planDataParam = searchParams.get("planData");
+    
+    // Cart pricing from API
+    const basePriceParam = searchParams.get("cartBasePrice") || "0";
+    const totalPriceParam = searchParams.get("cartTotalPrice") || "0";
+    const gstAmountParam = searchParams.get("cartGstAmount") || "0";
+
+    setCartId(cId);
+    setPackageTitle(title);
+    setPlanName(plan);
+    setPlanPrice(parseFloat(price));
+    setCurrency(curr);
+    setFromLocation(fromLoc);
+    setToLocation(toLoc);
+    setDuration(`${days} Days / ${nights} Nights`);
+    
+    // Set cart pricing from API
+    setCartBasePrice(parseFloat(basePriceParam));
+    
+    // Cart pricing from API (full object for detailed display)
+    const cartPricingParam = searchParams.get("cartPricing");
+    if (cartPricingParam) {
+      try {
+        const parsed = JSON.parse(cartPricingParam);
+        setCartPricing(parsed);
+      } catch (e) {
+        console.error("Error parsing cartPricing:", e);
+      }
+    }
+    setCartTotalPrice(parseFloat(totalPriceParam));
+    setCartGstAmount(parseFloat(gstAmountParam));
+
+    if (typeof window !== 'undefined' && pkgId) {
+      setInviteLink(`${window.location.origin}/viewPackage?packageId=${pkgId}`);
+    }
+    
+    if (travellersParam) {
+      try {
+        setTravellers(JSON.parse(travellersParam));
+      } catch (e) {
+        console.error("Error parsing travellers:", e);
+      }
+    }
+
+    if (itineraryParam) {
+      try {
+        setItinerary(JSON.parse(itineraryParam));
+      } catch (e) {
+        console.error("Error parsing itinerary:", e);
+      }
+    }
+
+    if (addOnsParam) {
+      try {
+        const parsed = JSON.parse(addOnsParam);
+        setSelectedAddOns(parsed);
+      } catch (e) {
+        console.error("Error parsing addons:", e);
+      }
+    }
+
+    if (cancellationPolicyParam) {
+      try {
+        setCancellationPolicy(JSON.parse(cancellationPolicyParam));
+      } catch (e) {
+        console.error("Error parsing cancellation policy:", e);
+      }
+    }
+
+    if (planDataParam) {
+      try {
+        setPlanData(JSON.parse(planDataParam));
+      } catch (e) {
+        console.error("Error parsing plan data:", e);
+      }
+    }
+  }, [searchParams]);
+
+  // Fetch package data from API to get itinerary (avoids URL length limitations)
+  useEffect(() => {
+    const pkgId = searchParams.get("packageId");
+    
+    if (!pkgId) return;
+    
+    // Only fetch if we don't have itinerary data from URL params
+    const itineraryParam = searchParams.get("itineraryData");
+    if (itineraryParam) return;
+    
+    const fetchPackageData = async () => {
+      try {
+        const response = await axiosClient.get(`${API_ENDPOINTS.PACKAGES}/${pkgId}`);
+        const pkgData = response.data;
+        
+        // Set itinerary from API response
+        if (pkgData.itineraryTemplate && pkgData.itineraryTemplate.length > 0) {
+          setItinerary(pkgData.itineraryTemplate);
+        }
+        
+        // Also fill in missing package details if not available
+        if (!packageTitle && pkgData.title) {
+          setPackageTitle(pkgData.title);
+        }
+        if (pkgData.fromLocation) {
+          setFromLocation(prev => prev || pkgData.fromLocation.city || "");
+        }
+        if (pkgData.toLocation) {
+          setToLocation(prev => prev || pkgData.toLocation.city || "");
+        }
+        if (pkgData.totalDays || pkgData.totalNights) {
+          setDuration(prev => prev || `${pkgData.totalDays || 0} Days / ${pkgData.totalNights || 0} Nights`);
+        }
+      } catch (error) {
+        console.error("Error fetching package data:", error);
+      }
+    };
+    
+    fetchPackageData();
+  }, [searchParams, packageTitle]);
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  // Calculate totals - Use API cart pricing when available, otherwise calculate locally
+  const currencySymbol = currency === "INR" ? "₹" : currency;
+  const travellerCount = travellers.length > 0 ? travellers.length : 1;
+  
+  // Use cart pricing from API if available (for 1 person), otherwise calculate locally
+  const totalBasePrice = cartBasePrice > 0 ? cartBasePrice * travellerCount : planPrice * travellerCount;
+  const addOnsTotal = selectedAddOns.reduce((acc, addon) => acc + addon.price, 0);
+  const gstAmount = cartGstAmount > 0 ? cartGstAmount * travellerCount : Math.round((totalBasePrice + addOnsTotal) * 0.18);
+  const finalTotal = cartTotalPrice > 0 ? cartTotalPrice * travellerCount + addOnsTotal : totalBasePrice + addOnsTotal + (cartGstAmount > 0 ? cartGstAmount * travellerCount : Math.round((totalBasePrice + addOnsTotal) * 0.18));
+  const advanceAmount = Math.round(finalTotal * APP_CONSTANTS.ADVANCE_PAYMENT_PERCENTAGE);
+  const remainingAmount = finalTotal - advanceAmount;
+
+  const handleProceedToCheckout = async () => {
+    if (travellers.length === 0) {
+      console.error("Please add at least one traveller to proceed.");
+      return;
+    }
+
+    setIsProcessing(true);
+
+    try {
+      if (cartId) {
+        const travelersToSync = travellers.filter((t: Traveller & { isAddedToCart?: boolean }) => !t.isAddedToCart);
+
+        if (travelersToSync.length > 0) {
+          const travelersPayload = travelersToSync.map((t: Traveller) => ({
+            firstName: t.firstName || t.name?.split(" ")[0] || "Guest",
+            lastName: t.lastName || t.name?.split(" ").slice(1).join(" ") || "User",
+            gender: t.gender?.toUpperCase() || "MALE",
+            dob: t.dob || "2000-01-01",
+            travelerType: t.travelerType || "ADULT",
+          }));
+
+          await axiosClient.post(
+            API_ENDPOINTS_CONFIG.BOOKING.ADD_TRAVELERS(cartId),
+            { travelers: travelersPayload }
+          );
+        }
+      }
+
+      // Step 1: Call Checkout API to get booking details
+      const checkoutResponse = await axiosClient.post(`${API_ENDPOINTS_CONFIG.BOOKING.CHECKOUT_CART(cartId)}`, {
+        paymentMethod: "RAZORPAY"
+      });
+
+      const bookingData = checkoutResponse.data.data || checkoutResponse.data;
+      const bookingId = bookingData.booking?.id;
+
+      if (!bookingId) {
+        throw new Error("Booking ID not found in checkout response.");
+      }
+
+      if (bookingData.booking?.bookingNumber) {
+        setBookingNumber(bookingData.booking.bookingNumber);
+      }
+
+      // Step 2: Call Pay API to get Razorpay order details
+      const payResponse = await axiosClient.post(`${API_ENDPOINTS_CONFIG.BOOKING.PAYMENT(bookingId)}/pay`);
+      const paymentData = payResponse.data.data || payResponse.data;
+
+      if (!window.Razorpay) {
+        console.error("Razorpay SDK failed to load.");
+        setIsProcessing(false);
+        return;
+      }
+
+      const options = {
+        key: paymentData.key || process.env.NEXT_PUBLIC_RAZORPAY_KEY,
+        amount: paymentData.amount,
+        currency: paymentData.currency || currency,
+        name: "Yaarigo",
+        description: `Payment for ${packageTitle}`,
+        order_id: paymentData.orderId,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        handler: async (response: any) => {
+          console.log("Payment successful", response);
+          try {
+            // Step 3: Verify Payment
+            await axiosClient.post(API_ENDPOINTS_CONFIG.BOOKING.VERIFY_PAYMENT, {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature
+            });
+            // Show success view directly
+            setIsSuccess(true);
+            setIsProcessing(false);
+          } catch (error) {
+            console.error("Payment verification failed", error);
+            alert("Payment verification failed. Please contact support.");
+            setIsProcessing(false);
+          }
+        },
+        prefill: {
+          name: travellers[0]?.name || "Yaarigo User",
+          email: travellers[0]?.email || "",
+          contact: travellers[0]?.contact || "",
+        },
+        theme: {
+          color: "#276074",
+        },
+        modal: {
+          ondismiss: function () {
+            setIsProcessing(false);
+          },
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      rzp.on('payment.failed', function (response: any) {
+        console.error('Payment Failed:', response.error.description);
+        setIsProcessing(false);
+        alert(`Payment Failed: ${response.error.description}`);
+      });
+      rzp.open();
+    } catch (error) {
+      console.error("Checkout failed:", error);
+      setIsProcessing(false);
+    }
+  };
+
+  const handleGoToHome = () => {
+    router.push(APP_ROUTES.SEARCH_TRIP);
+  };
+
+  const handleCopyInvite = () => {
+    navigator.clipboard.writeText(inviteLink);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
+  };
+
+  // Success State
+  if (isSuccess) {
+    return (
+      <SuccessView
+        packageTitle={packageTitle}
+        currencySymbol={currencySymbol}
+        amountPaid={advanceAmount}
+        inviteLink={inviteLink}
+        isCopied={isCopied}
+        handleCopyInvite={handleCopyInvite}
+        handleGoToHome={handleGoToHome}
+        bookingNumber={bookingNumber}
+      />
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 mt-16">
+      <div className="max-w-[1600px] mx-auto px-4 md:px-8 py-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+              Complete Your Booking
+              <motion.div
+                initial={{ x: -20, opacity: 0, rotate: -45 }}
+                animate={{ x: 0, opacity: 1, rotate: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+              >
+                <Plane className="w-8 h-8 text-[#276074]" />
+              </motion.div>
+            </h1>
+            <p className="text-gray-500 mt-1">Review your details and pay securely</p>
+          </div>
+          <button
+            onClick={() => router.back()}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50 hover:text-[#276074] hover:border-[#276074]/30 transition-all shadow-sm"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Package
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column - Package Preview & Add-ons */}
+          <motion.div className="lg:col-span-2 space-y-6" initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.1 } } }}>
+            {/* Package Details Card */}
+            <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="bg-white p-6 rounded-lg shadow-md border border-gray-100 border-t-4 border-t-[#276074]">
+              <PackageDetailsCard
+                packageTitle={packageTitle}
+                fromLocation={fromLocation}
+                toLocation={toLocation}
+                duration={duration}
+              />
+            </motion.div>
+
+            {/* Selected Plan Card */}
+            <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
+              <SelectedPlanCard
+                planName={planName}
+                currencySymbol={currencySymbol}
+                planPrice={planPrice}
+                category={planData?.category}
+                minPeople={planData?.minPeople}
+                maxPeople={planData?.maxPeople}
+                totalSlots={planData?.totalSlots}
+                bookedSlots={planData?.bookedSlots}
+                exclusions={planData?.exclusions}
+                inclusions={planData?.inclusions}
+              />
+            </motion.div>
+
+            
+            {/* Add Travellers Actions */}
+            <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="bg-white p-6 rounded-lg shadow-md border border-gray-100 border-t-4 border-t-[#276074]">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Travellers
+                </h3>
+              </div>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <button
+                  onClick={() => {
+                    setShowNewTravellerModal(!showNewTravellerModal);
+                    setShowExistingTravellerModal(false);
+                  }}
+                  className={`w-full flex items-center justify-center gap-2 px-4 py-3 rounded-md transition-all ${
+                    showNewTravellerModal 
+                      ? "bg-gray-100 text-gray-700 border border-gray-200" 
+                      : "bg-[#276074] text-white hover:opacity-90"
+                  }`}
+                >
+                  <Plus className="w-5 h-5" />
+                  {showNewTravellerModal ? "Cancel" : "Add New Traveller"}
+                </button>
+                <div className="relative">
+                  <button
+                    onClick={() => {
+                      if (showExistingTravellerModal) {
+                        setShowExistingTravellerModal(false);
+                      } else {
+                        setShowNewTravellerModal(false);
+                        setShowExistingTravellerModal(true);
+                      }
+                    }}
+                    className={`w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-[#276074] rounded-md transition-all ${
+                      showExistingTravellerModal
+                        ? "bg-[#276074] text-white"
+                        : "text-[#276074] hover:bg-[#276074]/5"
+                    }`}
+                  >
+                    <UserPlus className="w-5 h-5" />
+                    {showExistingTravellerModal ? "Close Selection" : "Select Existing"}
+                  </button>
+
+                  <AnimatePresence>
+                    {showExistingTravellerModal && (
+                      <motion.div 
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="absolute z-10 top-full mt-2 w-full bg-white rounded-md shadow-lg border border-gray-200">
+                      <div className="p-2 max-h-80 overflow-y-auto space-y-2">
+                        {existingProfiles.length === 0 ? (
+                          <p className="text-center text-gray-500 py-4">No saved profiles found.</p>
+                        ) : (
+                          existingProfiles.map((profile) => (
+                            <label 
+                              key={profile.id}
+                              className="p-3 rounded-md flex items-center gap-4 cursor-pointer hover:bg-gray-50 transition-colors"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={selectedProfileIds.includes(profile.id)}
+                                onChange={() => toggleProfileSelection(profile.id)}
+                                className="h-5 w-5 rounded border-gray-300 text-[#276074] focus:ring-[#276074]/50"
+                              />
+                              <div>
+                                <p className="font-semibold text-gray-800">{profile.firstName} {profile.lastName}</p>
+                                <p className="text-sm text-gray-500">{profile.gender} • {profile.dob}</p>
+                              </div>
+                            </label>
+                          ))
+                        )}
+                      </div>
+                      {existingProfiles.length > 0 && (
+                        <div className="p-2 border-t border-gray-100">
+                          <button
+                            onClick={addSelectedProfiles}
+                            disabled={selectedProfileIds.length === 0 || isAddingExisting}
+                            className="w-full py-2.5 bg-[#276074] text-white font-semibold rounded-md hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {isAddingExisting ? "Adding..." : `Add Selected (${selectedProfileIds.length})`}
+                          </button>
+                        </div>
+                      )}
+                    </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </div>
+
+              {/* Inline New Traveller Form */}
+              <AnimatePresence>
+                {showNewTravellerModal && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="mt-6 pt-6 border-t border-gray-100 overflow-hidden">
+                  <div className="flex justify-between items-center mb-4">
+                    <h4 className="font-semibold text-gray-900">New Traveller Details</h4>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                      <input
+                        type="text"
+                        value={newTraveller.firstName}
+                        onChange={(e) => {
+                          setNewTraveller({ ...newTraveller, firstName: e.target.value });
+                          if (newTravellerErrors.firstName) setNewTravellerErrors((prev) => ({ ...prev, firstName: "" }));
+                        }}
+                        className={`w-full p-3 border ${newTravellerErrors.firstName ? "border-red-500" : "border-gray-300"} rounded-md focus:ring-2 focus:ring-[#276074] focus:border-transparent transition-colors`}
+                        placeholder="Enter first name"
+                      />
+                      {newTravellerErrors.firstName && <p className="text-xs text-red-500 mt-1">{newTravellerErrors.firstName}</p>}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                      <input
+                        type="text"
+                        value={newTraveller.lastName}
+                        onChange={(e) => {
+                          setNewTraveller({ ...newTraveller, lastName: e.target.value });
+                          if (newTravellerErrors.lastName) setNewTravellerErrors((prev) => ({ ...prev, lastName: "" }));
+                        }}
+                        className={`w-full p-3 border ${newTravellerErrors.lastName ? "border-red-500" : "border-gray-300"} rounded-md focus:ring-2 focus:ring-[#276074] focus:border-transparent transition-colors`}
+                        placeholder="Enter last name"
+                      />
+                      {newTravellerErrors.lastName && <p className="text-xs text-red-500 mt-1">{newTravellerErrors.lastName}</p>}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+                      <select
+                        value={newTraveller.gender}
+                        onChange={(e) => setNewTraveller({ ...newTraveller, gender: e.target.value })}
+                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#276074] focus:border-transparent transition-colors"
+                      >
+                        <option value="MALE">Male</option>
+                        <option value="FEMALE">Female</option>
+                        <option value="OTHER">Other</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
+                      <input
+                        type="date"
+                        value={newTraveller.dob}
+                        onChange={(e) => {
+                          setNewTraveller({ ...newTraveller, dob: e.target.value });
+                          if (newTravellerErrors.dob) setNewTravellerErrors((prev) => ({ ...prev, dob: "" }));
+                        }}
+                        className={`w-full p-3 border ${newTravellerErrors.dob ? "border-red-500" : "border-gray-300"} rounded-md focus:ring-2 focus:ring-[#276074] focus:border-transparent transition-colors`}
+                      />
+                      {newTravellerErrors.dob && <p className="text-xs text-red-500 mt-1">{newTravellerErrors.dob}</p>}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                      <input
+                        type="email"
+                        value={newTraveller.email}
+                        onChange={(e) => setNewTraveller({ ...newTraveller, email: e.target.value })}
+                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#276074] focus:border-transparent transition-colors"
+                        placeholder="Enter email"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                      <input
+                        type="tel"
+                        value={newTraveller.phone}
+                        onChange={(e) => setNewTraveller({ ...newTraveller, phone: e.target.value })}
+                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#276074] focus:border-transparent transition-colors"
+                        placeholder="Enter phone number"
+                      />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Nationality</label>
+                      <input
+                        type="text"
+                        value={newTraveller.nationality}
+                        onChange={(e) => setNewTraveller({ ...newTraveller, nationality: e.target.value })}
+                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#276074] focus:border-transparent transition-colors"
+                        placeholder="Enter nationality"
+                      />
+                    </div>
+                  </div>
+                  
+                  <button
+                    onClick={handleSaveNewTraveller}
+                    disabled={isSavingProfile}
+                    className="w-full py-3 bg-[#276074] text-white font-semibold rounded-md hover:opacity-90 transition-all mt-6 disabled:opacity-70"
+                  >
+                    {isSavingProfile ? "Saving..." : "Save & Add Traveller"}
+                  </button>
+                </motion.div>
+                )}
+              </AnimatePresence>
+
+            </motion.div>
+
+            {/* Travellers List */}
+            <div className="space-y-3">
+              <AnimatePresence>
+                {travellers.map((traveller, index) => (
+                  <motion.div
+                    key={traveller.id || index}
+                    layout
+                    initial={{ opacity: 0, y: -10, scale: 0.9 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
+                    transition={{ duration: 0.3 }}
+                    className="bg-white p-4 border-l-4 border-l-[#276074] flex justify-between items-center shadow-sm rounded-r-lg"
+                  >
+                  <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#276074]">
+                      <User className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900">
+                        {traveller.name || `${traveller.firstName} ${traveller.lastName}`}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        {traveller.gender} {traveller.dob ? `• ${traveller.dob}` : ""}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleRemoveTraveller(traveller.id)}
+                    className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
+                    title="Remove Traveller"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </button>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+              {travellers.length === 0 && (
+                <div className="text-center py-8 bg-white rounded-lg border border-dashed border-gray-300">
+                  <p className="text-gray-500">No travellers added yet</p>
+                </div>
+              )}
+            </div>
+
+            {/* Add More Travellers Button */}
+            {travellers.length > 0 && (
+              <div className="flex justify-end">
+                <button
+                  onClick={() => {
+                    setShowNewTravellerModal(false);
+                    setShowExistingTravellerModal(true);
+                  }}
+                  className="py-2 px-3 border-2 border-[#276074] text-[#276074] font-medium rounded-md hover:bg-[#276074] hover:text-white transition-colors flex items-center justify-center gap-2 text-sm"
+                >
+                  <UserPlus className="w-4 h-4" />
+                  Add More Travellers
+                </button>
+              </div>
+            )}
+
+            {/* Detailed Itinerary */}
+            <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+              <ItineraryCard itinerary={itinerary} />
+            </motion.div>
+
+            {/* Cancellation Policy */}
+            <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+              {/* Cancelation policy handled in viewPackage, not bookPackage */}
+
+            </motion.div>
+          </motion.div>
+
+          {/* Right Column - Payment Card */}
+          <div className="lg:col-span-1">
+            <motion.div className="sticky top-24" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
+              <PaymentSummaryCard
+                currencySymbol={currencySymbol}
+                planPrice={planPrice}
+                addOnsTotal={addOnsTotal}
+                gstAmount={gstAmount}
+                finalTotal={finalTotal}
+                travellerCount={travellerCount}
+                totalBasePrice={totalBasePrice}
+                advanceAmount={advanceAmount}
+                remainingAmount={remainingAmount}
+                isProcessing={isProcessing}
+                handleProceedToCheckout={handleProceedToCheckout}
+                selectedAddOnsLength={selectedAddOns.length}
+                cartPricing={cartPricing ?? undefined}
+              />
+            </motion.div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+function LoadingFallback() {
+  return (
+    <div className="w-full h-screen flex items-center justify-center bg-white">
+      <InlineLoader />
+    </div>
+  );
+}
+
+export default function BookPackagePage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <BookPackageContent />
+    </Suspense>
+  );
+}
