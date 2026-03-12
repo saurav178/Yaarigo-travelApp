@@ -71,10 +71,10 @@ export default function TripRoadmap({ itinerary = [] }: TripRoadmapProps) {
   }
 
   return (
-    <section className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-4">Trip Roadmap</h2>
+    <section className="bg-white p-2 shadow-md w-[390px]">
+      <h2 className="text-xl font-bold mb-4">Trip Roadmap</h2>
 
-      <div className="sticky top-24 h-[400px] w-full border rounded-md overflow-hidden">
+      <div className="sticky top-20 h-[340px] w-[350px] border overflow-hidden ml-3">
         <MapContainer
           center={routePoints[0] || [15.4909, 73.8278]}
           zoom={8}

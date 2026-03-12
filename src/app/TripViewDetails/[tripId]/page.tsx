@@ -11,26 +11,22 @@ import DetailedItinerary from "../triphighlight/DetailedItinerary";
 import TripRoadmap from "../triphighlight/TripRoadmap";
 import JoinedTravelers from "../triphighlight/JoinedTravelers";
 import SafetyInformation from "../triphighlight/SafetyInformation";
-import ShareThisTrip from "../triphighlight/ShareThisTrip";
-import CancellationPolicy from "../triphighlight/CancellationPolicy";
+// import ShareThisTrip from "../triphighlight/ShareThisTrip";
+// import CancellationPolicy from "../triphighlight/CancellationPolicy";
+import Similartrip from "../TripDetails/SimilarTrip";
 
-import {
-  fetchTripById,
-  fetchLeaderById,
-  TripData,
-  LeaderData,
-} from "../api";
+import { fetchTripById, fetchLeaderById, TripData, LeaderData } from "../api";
+import TripOrganizer from "../TripDetails/TripOrganizer";
 
 export default function TripDetailsPage() {
   const params = useParams();
 
-  // 1. Optimized tripId extraction (Build-Safe)
-  // Check both 'tripId' and 'tripid' in case of folder naming mismatches
-  const tripId = useMemo(() => {
-    const rawId = params?.tripId || params?.tripid;
-    if (Array.isArray(rawId)) return rawId[0];
-    return rawId as string | undefined;
-  }, [params]);
+  const tripId =
+    typeof params?.tripId === "string"
+      ? params.tripId
+      : Array.isArray(params?.tripId)
+        ? params.tripId[0]
+        : undefined;
 
   const [tripData, setTripData] = useState<TripData | null>(null);
   const [leaderData, setLeaderData] = useState<LeaderData | null>(null);
@@ -81,12 +77,12 @@ export default function TripDetailsPage() {
     );
   }
 
-  if (error || !tripData) {
-    return (
-      <div className="p-10 text-center text-red-500">
-        {error || "Trip not found."}
-      </div>
-    );
+  if (error) {
+    return <div className="p-10 text-center text-red-500">{error}</div>;
+  }
+
+  if (!tripData) {
+    return <div className="p-10 text-center text-red-500">Trip not found.</div>;
   }
 
   // 2. Safe Itinerary Normalization (Prevents build crash on missing location names)
@@ -101,11 +97,12 @@ export default function TripDetailsPage() {
 
   // 3. Strict Safety Props (Ensures non-null values for the component)
   const safetyProps = {
-    safetyRating: tripData.partnerPreferences?.safetyRating ?? 0,
-    safetyInfo: tripData.partnerPreferences?.safetyInfo ?? "Information not available",
-    verifiedTravelers: !!tripData.partnerPreferences?.verifiedTravelers,
+    safetyRating: tripData.partnerPreferences?.safetyRating,
+    safetyInfo: tripData.partnerPreferences?.safetyInfo,
+    verifiedTravelers: tripData.partnerPreferences?.verifiedTravelers,
   };
 
+  // Cancellation policy (may be undefined)
   const cancellationPolicy = tripData.commitments?.cancellationPolicy;
 
   return (
@@ -117,21 +114,18 @@ export default function TripDetailsPage() {
           <TripOverview trip={tripData} />
 
           <div className="flex flex-col md:flex-row gap-6">
-            <div className="md:w-1/2">
+            <div className="w-full">
               <DetailedItinerary itinerary={itineraryForDisplay} />
-            </div>
-            <div className="md:w-1/2">
-              <TripRoadmap itinerary={itineraryForDisplay} />
             </div>
           </div>
 
-          <SafetyInformation trip={safetyProps} />
-
-          <CancellationPolicy
+          {/* ✅ ALWAYS SHOW Cancellation Section */}
+          {/* <CancellationPolicy
             trip={{
               cancellationPolicy: cancellationPolicy,
             }}
-          />
+          /> */}
+          <Similartrip />
         </div>
 
         <div className="flex flex-col gap-6">
@@ -140,10 +134,14 @@ export default function TripDetailsPage() {
           {leaderData && <TripLeader leader={leaderData} />}
 
           <div className="space-y-6">
-            {/* tripId is verified as string here for the build */}
+            <TripOrganizer />
+
             {tripId && <JoinedTravelers tripId={tripId} />}
-            <ShareThisTrip trip={tripData} />
+            {/* <ShareThisTrip trip={tripData} /> */}
           </div>
+
+          <TripRoadmap itinerary={itineraryForDisplay} />
+          <SafetyInformation trip={safetyProps} />
         </div>
       </div>
     </div>
