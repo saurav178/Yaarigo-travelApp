@@ -4,7 +4,6 @@ import {
   CheckCircle,
   CreditCard,
   Lock,
-  Zap,
   TicketPercent,
   Info,
 } from "lucide-react";
@@ -79,7 +78,6 @@ export default function PaymentSummaryCard({
 
   // Get the first payment term (usually the advance payment)
   const firstPaymentTerm = paymentTerms[0];
-  const remainingPaymentTerm = paymentTerms[1];
 
   return (
     <div className="bg-white shadow-xl border border-gray-100 sticky top-24 overflow-hidden">
@@ -303,4 +301,3 @@ export default function PaymentSummaryCard({
     </div>
   );
 }
-

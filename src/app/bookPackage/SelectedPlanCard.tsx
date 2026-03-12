@@ -1,4 +1,4 @@
-import { CheckCircle, Tag, Users, Calendar, Clock, MapPin, XCircle } from "lucide-react";
+import { CheckCircle, Users, Calendar, Clock, MapPin, XCircle } from "lucide-react";
 
 interface SelectedPlanCardProps {
   // Package Details

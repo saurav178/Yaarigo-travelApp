@@ -4,13 +4,12 @@ import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import InlineLoader from "@/components/Loader/InlineLoader";
-import { ArrowLeft, Plus, UserPlus, Check, Trash2, User, Plane } from "lucide-react";
+import { ArrowLeft, Plus, UserPlus, Trash2, User, Plane } from "lucide-react";
 import axiosClient from "@/lib/axios-client";
 import { APP_ROUTES, API_ENDPOINTS } from "@/utils/constants";
 import { AddOnDetail, Traveller, ItineraryItem, CancellationPolicyItem, PlanData, CartPricing } from "./types";
 import PackageDetailsCard from "./PackageDetailsCard";
 import SelectedPlanCard from "./SelectedPlanCard";
-import PlanDetailsCard from "./PlanDetailsCard";
 import ItineraryCard from "./ItineraryCard";
 import CancellationPolicyCard from "./CancellationPolicyCard";
 import PaymentSummaryCard from "./PaymentSummaryCard";
@@ -60,6 +59,7 @@ interface PackageData {
 
 declare global {
   interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Razorpay: any;
   }
 }
@@ -97,7 +97,6 @@ function BookPackageContent() {
   const [cartBasePrice, setCartBasePrice] = useState<number>(0);
   const [cartTotalPrice, setCartTotalPrice] = useState<number>(0);
   const [cartGstAmount, setCartGstAmount] = useState<number>(0);
-  const [cartOriginalPrice, setCartOriginalPrice] = useState<number>(0);
 
   // Full cart pricing from API (for detailed display)
   const [cartPricing, setCartPricing] = useState<CartPricing | null>(null);
@@ -138,8 +137,6 @@ function BookPackageContent() {
   const [isAddingExisting, setIsAddingExisting] = useState(false);
 
   // Package data from API
-  const [pkgLoading, setPkgLoading] = useState(false);
-  const [packageData, setPackageData] = useState<PackageData | null>(null);
 
   // Initialize existingProfiles from URL params on page load
   useEffect(() => {
@@ -342,7 +339,6 @@ function BookPackageContent() {
     const basePriceParam = searchParams.get("cartBasePrice") || "0";
     const totalPriceParam = searchParams.get("cartTotalPrice") || "0";
     const gstAmountParam = searchParams.get("cartGstAmount") || "0";
-    const originalPriceParam = searchParams.get("cartOriginalPrice") || "0";
 
     setCartId(cId);
     setPackageTitle(title);
@@ -368,7 +364,6 @@ function BookPackageContent() {
     }
     setCartTotalPrice(parseFloat(totalPriceParam));
     setCartGstAmount(parseFloat(gstAmountParam));
-    setCartOriginalPrice(parseFloat(originalPriceParam));
 
     if (typeof window !== 'undefined' && pkgId) {
       setInviteLink(`${window.location.origin}/viewPackage?packageId=${pkgId}`);
@@ -427,11 +422,9 @@ function BookPackageContent() {
     if (itineraryParam) return;
     
     const fetchPackageData = async () => {
-      setPkgLoading(true);
       try {
         const response = await axiosClient.get(`${API_ENDPOINTS.PACKAGES}/${pkgId}`);
         const pkgData = response.data;
-        setPackageData(pkgData);
         
         // Set itinerary from API response
         if (pkgData.itineraryTemplate && pkgData.itineraryTemplate.length > 0) {
@@ -453,13 +446,11 @@ function BookPackageContent() {
         }
       } catch (error) {
         console.error("Error fetching package data:", error);
-      } finally {
-        setPkgLoading(false);
       }
     };
     
     fetchPackageData();
-  }, [searchParams]);
+  }, [searchParams, packageTitle]);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -545,6 +536,7 @@ function BookPackageContent() {
         name: "Yaarigo",
         description: `Payment for ${packageTitle}`,
         order_id: paymentData.orderId,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         handler: async (response: any) => {
           console.log("Payment successful", response);
           try {
@@ -579,6 +571,7 @@ function BookPackageContent() {
       };
 
       const rzp = new window.Razorpay(options);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       rzp.on('payment.failed', function (response: any) {
         console.error('Payment Failed:', response.error.description);
         setIsProcessing(false);
@@ -960,7 +953,7 @@ function BookPackageContent() {
                 isProcessing={isProcessing}
                 handleProceedToCheckout={handleProceedToCheckout}
                 selectedAddOnsLength={selectedAddOns.length}
-                cartPricing={cartPricing}
+                cartPricing={cartPricing ?? undefined}
               />
             </motion.div>
           </div>
