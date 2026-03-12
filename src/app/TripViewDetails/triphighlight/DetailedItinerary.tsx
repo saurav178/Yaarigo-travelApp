@@ -356,10 +356,9 @@
 // };
 
 // export default DetailedItinerary;
-
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 interface DayPlan {
   _id?: string;
@@ -453,9 +452,6 @@ const DetailedItinerary: React.FC<DetailedItineraryProps> = ({
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Playfair+Display:wght@600;700&display=swap');
 
-        .itin-item { transition: all 0.2s ease; }
-        .itin-item:hover .itin-title { color: #7c5cbf !important; }
-
         .itin-body {
           display: grid;
           grid-template-rows: 0fr;
@@ -465,13 +461,10 @@ const DetailedItinerary: React.FC<DetailedItineraryProps> = ({
           grid-template-rows: 1fr;
         }
         .itin-body-inner { overflow: hidden; }
-
-        .activity-row { transition: background 0.15s ease; }
-        .activity-row:hover { background: #f3f0fa !important; }
       `}</style>
 
       <section
-        className="bg-white border border-gray-100 shadow-sm overflow-hidden w-full"
+        className="bg-white border border-gray-300 overflow-hidden w-full"
         style={{ fontFamily: "'DM Sans', sans-serif" }}
       >
         {/* Header */}
@@ -504,7 +497,7 @@ const DetailedItinerary: React.FC<DetailedItineraryProps> = ({
               }}
             />
 
-            <div className="space-y-1">
+            <div className="space-y-5">
               {itinerary.map((day, i) => {
                 const isOpen = expandedIndex === i;
                 const title = getTitle(day, i);
@@ -513,21 +506,21 @@ const DetailedItinerary: React.FC<DetailedItineraryProps> = ({
                 const activities = day.activities || [];
 
                 return (
-                  <div key={day._id || i} className="itin-item relative pl-10">
+                  <div key={day._id || i} className="relative pl-10">
                     {/* Circle node */}
                     <div
                       className="absolute flex items-center justify-center rounded-full text-white text-[11px] font-bold"
                       style={{
                         left: 2,
-                        top: 14,
+                        top: 2,
                         width: 28,
                         height: 28,
                         background: isOpen
-                          ? "linear-gradient(135deg, #2d3a3a, #3d5a5a)"
-                          : "linear-gradient(135deg, #344444, #4a6060)",
+                          ? "linear-gradient(135deg, #1D4350, #1D4350)"
+                          : "linear-gradient(135deg, #1D4350, #1D4350)",
                         boxShadow: isOpen
-                          ? "0 0 0 4px rgba(124,92,191,0.12), 0 2px 8px rgba(124,92,191,0.3)"
-                          : "0 0 0 3px rgba(200,185,230,0.3)",
+                          ? "0 0 0 4px rgba(45,58,58,0.15), 0 2px 8px rgba(45,58,58,0.3)"
+                          : "0 0 0 3px rgba(52,68,68,0.15)",
                         transition: "all 0.2s ease",
                         fontFamily: "'Playfair Display', serif",
                         zIndex: 1,
@@ -536,127 +529,114 @@ const DetailedItinerary: React.FC<DetailedItineraryProps> = ({
                       {i + 1}
                     </div>
 
-                    {/* Card */}
+                    {/* Row: title + chevron — clickable */}
                     <div
-                      className="rounded-xl mb-3 overflow-hidden cursor-pointer"
-                      style={{
-                        background: isOpen ? "#faf8ff" : "#fdfcff",
-                        border: `1.5px solid ${isOpen ? "#d4c8ee" : "#ede8f7"}`,
-                        transition: "all 0.2s ease",
-                      }}
+                      className="flex items-start justify-between gap-3 cursor-pointer"
                       onClick={() => toggle(i)}
                     >
-                      {/* Card header */}
-                      <div className="flex items-start justify-between px-4 py-3.5 gap-3">
-                        <div className="flex-1 min-w-0">
-                          <h3
-                            className="itin-title text-sm font-semibold leading-tight transition-colors"
-                            style={{
-                              color: isOpen ? "#7c5cbf" : "#1a1a2e",
-                              fontFamily: "'Playfair Display', serif",
-                            }}
-                          >
-                            {title}
-                          </h3>
-
-                          {/* Meta row */}
-                          <div className="flex items-center flex-wrap gap-2 mt-1.5">
-                            {description && (
-                              <p className="text-[11px] text-gray-400 leading-snug">
-                                {description}
-                              </p>
-                            )}
-                            {location && (
-                              <span
-                                className="inline-flex items-center gap-1 text-[10px] font-medium rounded-full px-2 py-0.5"
-                                style={{
-                                  background: "#f0ebfc",
-                                  color: "#7c5cbf",
-                                }}
-                              >
-                                <svg
-                                  width="8"
-                                  height="8"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2.5"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                >
-                                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-                                  <circle cx="12" cy="10" r="3" />
-                                </svg>
-                                {location}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Chevron */}
-                        <svg
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke={isOpen ? "#7c5cbf" : "#c4b5e0"}
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="flex-shrink-0 mt-1"
+                      <div className="flex-1 min-w-0">
+                        <h3
+                          className="text-sm font-semibold leading-tight"
                           style={{
-                            transform: isOpen
-                              ? "rotate(180deg)"
-                              : "rotate(0deg)",
-                            transition: "transform 0.25s ease",
+                            color: isOpen ? "#7c5cbf" : "#1a1a2e",
+                            fontFamily: "'Playfair Display', serif",
+                            transition: "color 0.2s ease",
                           }}
                         >
-                          <path d="M6 9l6 6 6-6" />
-                        </svg>
+                          {title}
+                        </h3>
+
+                        {/* Meta */}
+                        <div className="flex items-center flex-wrap gap-2 mt-1">
+                          {description && (
+                            <p className="text-[11px] text-gray-400 leading-snug">
+                              {description}
+                            </p>
+                          )}
+                          {location && (
+                            <span
+                              className="inline-flex items-center gap-1 text-[10px] font-medium rounded-full px-2 py-0.5"
+                              style={{
+                                background: "#f0ebfc",
+                                color: "#7c5cbf",
+                              }}
+                            >
+                              <svg
+                                width="8"
+                                height="8"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                                <circle cx="12" cy="10" r="3" />
+                              </svg>
+                              {location}
+                            </span>
+                          )}
+                        </div>
                       </div>
 
-                      {/* Expandable activities */}
-                      <div className={`itin-body ${isOpen ? "open" : ""}`}>
-                        <div className="itin-body-inner">
-                          <div
-                            className="px-4 pb-3 pt-0"
-                            style={{ borderTop: "1px solid #ede8f7" }}
-                          >
-                            {activities.length > 0 ? (
-                              <ul className="mt-2.5 space-y-1.5">
-                                {activities.map((act, idx) => {
-                                  const label = formatValue(act);
-                                  const icon = getActivityIcon(label);
-                                  return (
-                                    <li
-                                      key={idx}
-                                      className="activity-row flex items-start gap-2.5 rounded-lg px-2.5 py-2"
-                                      style={{ background: "#f8f5ff" }}
-                                    >
-                                      <span className="flex-shrink-0 text-sm leading-none mt-0.5">
-                                        {icon === "•" ? (
-                                          <span
-                                            className="block w-1.5 h-1.5 rounded-full mt-1.5"
-                                            style={{ background: "#120922" }}
-                                          />
-                                        ) : (
-                                          icon
-                                        )}
+                      {/* Chevron */}
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke={isOpen ? "#7c5cbf" : "#c4b5e0"}
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="flex-shrink-0 mt-1"
+                        style={{
+                          transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                          transition: "transform 0.25s ease",
+                        }}
+                      >
+                        <path d="M6 9l6 6 6-6" />
+                      </svg>
+                    </div>
+
+                    {/* Expandable activities — plain bullet list, no box */}
+                    <div className={`itin-body ${isOpen ? "open" : ""}`}>
+                      <div className="itin-body-inner">
+                        {activities.length > 0 ? (
+                          <ul className="mt-2 space-y-1.5 pb-1">
+                            {activities.map((act, idx) => {
+                              const label = formatValue(act);
+                              const icon = getActivityIcon(label);
+                              return (
+                                <li
+                                  key={idx}
+                                  className="flex items-start gap-2"
+                                >
+                                  <span className="flex-shrink-0 mt-[6px]">
+                                    {icon === "•" ? (
+                                      <span
+                                        className="block w-1.5 h-1.5 rounded-full"
+                                        style={{ background: "#b8a5d8" }}
+                                      />
+                                    ) : (
+                                      <span className="text-sm leading-none">
+                                        {icon}
                                       </span>
-                                      <span className="text-[12px] text-gray-600 leading-snug font-medium">
-                                        {label}
-                                      </span>
-                                    </li>
-                                  );
-                                })}
-                              </ul>
-                            ) : (
-                              <p className="text-[11px] text-gray-400 italic mt-2">
-                                No activities listed.
-                              </p>
-                            )}
-                          </div>
-                        </div>
+                                    )}
+                                  </span>
+                                  <span className="text-[12px] text-gray-500 leading-snug">
+                                    {label}
+                                  </span>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        ) : (
+                          <p className="text-[11px] text-gray-400 italic mt-2 pb-1">
+                            No activities listed.
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -664,31 +644,6 @@ const DetailedItinerary: React.FC<DetailedItineraryProps> = ({
               })}
             </div>
           </div>
-        </div>
-
-        {/* Footer progress */}
-        <div
-          className="px-6 py-3 flex items-center gap-3"
-          style={{ borderTop: "1px solid #f3f0fa" }}
-        >
-          <div
-            className="flex-1 h-1 rounded-full overflow-hidden"
-            style={{ background: "#ede8f7" }}
-          >
-            <div
-              className="h-full rounded-full transition-all duration-500"
-              style={{
-                width: `${((expandedIndex !== null ? expandedIndex + 1 : 1) / itinerary.length) * 100}%`,
-                background: "linear-gradient(90deg, #2d3a3a, #4a6060)",
-              }}
-            />
-          </div>
-          <span
-            className="text-[10px] font-semibold flex-shrink-0"
-            style={{ color: "#b8a5d8" }}
-          >
-            {itinerary.length} days
-          </span>
         </div>
       </section>
     </>

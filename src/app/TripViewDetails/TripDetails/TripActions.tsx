@@ -50,7 +50,7 @@ export default function TripActions({ trip }: TripActionsProps) {
   const maxBudget = trip.partnerPreferences?.budget?.max ?? 0;
 
   return (
-    <div className="p-6 bg-white w-full shadow-lg hover:shadow-2xl transition-all duration-300 mt-2">
+    <div className="p-6 bg-white w-full transition-all duration-300 px-4 border border-gray-200">
       {/* Budget */}
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-xl font-bold">
@@ -76,7 +76,7 @@ export default function TripActions({ trip }: TripActionsProps) {
           <span>{durationDays} days</span>
         </p>
 
-        <p className="flex justify-between text-green-600 font-medium">
+        <p className="flex justify-between text-#1D4350 font-medium">
           <span>Remaining Spots:</span>
           <span>{remainingSpots}</span>
         </p>
