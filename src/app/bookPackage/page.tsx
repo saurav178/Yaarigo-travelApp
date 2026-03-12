@@ -933,7 +933,8 @@ function BookPackageContent() {
 
             {/* Cancellation Policy */}
             <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
-              <CancellationPolicyCard cancellationPolicy={cancellationPolicy} />
+              {/* Cancelation policy handled in viewPackage, not bookPackage */}
+
             </motion.div>
           </motion.div>
 
