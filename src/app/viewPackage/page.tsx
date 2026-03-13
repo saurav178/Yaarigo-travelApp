@@ -124,29 +124,7 @@ function ViewPackageContent() {
   }
 
   // ---------------- ADD ONS DATA ----------------
-  const ADD_ONS: StaticAddOn[] = [
-    {
-      id: "porter",
-      title: "Private Porter",
-      desc: "Personal assistant for carrying luggage",
-      price: 150,
-      tag: "Recommended",
-    },
-    {
-      id: "gear",
-      title: "Extreme Gear Kit",
-      desc: "Boots, jacket & thermal liner",
-      price: 85,
-      tag: "Per Person",
-    },
-    {
-      id: "insurance",
-      title: "Premium Insurance",
-      desc: "High-altitude evacuation & cover",
-      price: 115,
-      tag: "Essential",
-    },
-  ];
+  
 
   return (
     <div className="min-h-screen bg-gray-50 mt-12">
@@ -161,17 +139,7 @@ function ViewPackageContent() {
             {/* Description */}
             <AboutSection pkg={pkg} selectedPlan={selectedPlan} />
             
-            {/* Add Travellers Section */}
-            <TravellersSection
-              isTravellerModalOpen={isTravellerModalOpen}
-              setIsTravellerModalOpen={setIsTravellerModalOpen}
-              travellers={travellers}
-              setTravellers={setTravellers}
-              currentTraveller={currentTraveller}
-              setCurrentTraveller={setCurrentTraveller}
-              handleAddTraveller={handleAddTraveller}
-            />
-
+           
             {/* Itinerary */}
             <ItinerarySection
               pkg={pkg}
@@ -185,8 +153,7 @@ function ViewPackageContent() {
               selectedPlan={selectedPlan}
               setSelectedPlan={setSelectedPlan}
               selectedAddOns={selectedAddOns}
-              toggleAddOn={toggleAddOn}
-              addOnsData={ADD_ONS}
+              toggleAddOn={toggleAddOn} addOnsData={[]}            
             />
 
             {/* Cancellation Policy */}
@@ -203,10 +170,9 @@ function ViewPackageContent() {
               selectedPlan={selectedPlan}
               setSelectedPlan={setSelectedPlan}
               selectedAddOns={selectedAddOns}
-              addOnsData={ADD_ONS}
+
               isFavorite={isFavorite}
-              setIsFavorite={setIsFavorite}
-            />
+              setIsFavorite={setIsFavorite} travellers={[]} addOnsData={[]}            />
           </div>
         </div>
       </div>

@@ -119,11 +119,7 @@ export default function InclusionsSection({
         </div>
       </div>
 
-      {/* ---------------- ADD ONS ---------------- */}
-      <div>
-        <h3 className="text-lg font-semibold text-gray-700 mb-4">Package Add-Ons</h3>
-
-        <div className="grid md:grid-cols-3 gap-4">
+      <div className="grid md:grid-cols-3 gap-4">
           {addOnsData.map((addon) => {
             const isSelected = selectedAddOns.includes(addon.id);
 
@@ -151,7 +147,6 @@ export default function InclusionsSection({
               </div>
             );
           })}
-        </div>
       </div>
     </motion.div>
   );

@@ -1,6 +1,12 @@
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Calendar, Heart, Share2, Users } from "lucide-react";
 import { motion } from "framer-motion";
-import { Package, Plan, StaticAddOn } from "../types";
+import axiosClient from "@/lib/axios-client";
+import { Package, Plan, Traveller, StaticAddOn } from "../types";
+import { API_ENDPOINTS_CONFIG } from "@/utils/apiConfig";
+import { APP_CONSTANTS } from "@/utils/appConstants";
+import { useAuth } from "@/context/AuthContext";
 
 interface BookingCardProps {
   pkg: Package;
@@ -10,6 +16,7 @@ interface BookingCardProps {
   addOnsData: StaticAddOn[];
   isFavorite: boolean;
   setIsFavorite: (isFavorite: boolean) => void;
+  travellers: Traveller[];
 }
 
 export default function BookingCard({
@@ -20,7 +27,14 @@ export default function BookingCard({
   addOnsData,
   isFavorite,
   setIsFavorite,
+  travellers,
 }: BookingCardProps) {
+  const router = useRouter();
+  const { getActiveOrganizationId } = useAuth();
+  const [travelDate, setTravelDate] = useState("");
+  const [isBooking, setIsBooking] = useState(false);
+  const [showValidationModal, setShowValidationModal] = useState(false);
+
   const currencySymbol =
     selectedPlan?.currency === "INR" ? "₹" : selectedPlan?.currency || "₹";
   const originalPrice = selectedPlan?.pricePerPerson || 0;
@@ -31,12 +45,138 @@ export default function BookingCard({
       : 0;
 
   const addOnsTotal = addOnsData
-    .filter((addon) => selectedAddOns.includes(addon.id))
-    .reduce((acc, addon) => acc + addon.price, 0);
+    .filter((a) => selectedAddOns.includes(a.id))
+    .reduce((total, addon) => total + addon.price, 0);
 
-  const GST_RATE = 0.18;
-  const gstAmount = Math.round((discountedPrice + addOnsTotal) * GST_RATE);
+  const gstAmount = Math.round(
+    (discountedPrice + addOnsTotal) * APP_CONSTANTS.GST_RATE
+  );
   const finalTotal = discountedPrice + addOnsTotal + gstAmount;
+
+  const handleBookNow = async () => {
+    if (!selectedPlan) return;
+    if (!travelDate) {
+      setShowValidationModal(true);
+      return;
+    }
+
+    setIsBooking(true);
+    try {
+      // Get the active organization ID from AuthContext
+      const organizationId = getActiveOrganizationId();
+      
+      if (!organizationId) {
+        alert("No organization found. Please log in or select an organization.");
+        setIsBooking(false);
+        return;
+      }
+
+      // Parallel execution: Fire both createCart and getTraveller requests simultaneously
+      const [cartResponse, profilesResponse] = await Promise.all([
+        axiosClient.post(
+          API_ENDPOINTS_CONFIG.BOOKING.CREATE_CART,
+          {
+            packageId: pkg._id,
+            planId: selectedPlan._id,
+            organizationId: organizationId,
+            travelDate: travelDate,
+          }
+        ),
+        axiosClient.get(API_ENDPOINTS_CONFIG.BOOKING.TRAVELER_PROFILES)
+      ]);
+
+      const cartId = cartResponse.data?.data?.id || cartResponse.data?.id;
+      
+      // Get existing traveller profiles from the parallel request
+      const existingProfiles = profilesResponse.data?.data || profilesResponse.data || [];
+
+      // Get pricing data from cart response
+      const cartData = cartResponse.data?.data || cartResponse.data || {};
+      
+      // Build complete cart pricing object for PaymentSummaryCard
+      const cartPricing = {
+        baseAmount: cartData.baseAmount || cartData.basePrice || selectedPlan.discountedPrice,
+        planPricePerPerson: selectedPlan.discountedPrice.toString(),
+        addonAmount: 0,
+        taxAmount: cartData.taxAmount || cartData.gstAmount || Math.round(selectedPlan.discountedPrice * APP_CONSTANTS.GST_RATE),
+        totalAmount: cartData.totalAmount || cartData.totalPrice || (selectedPlan.discountedPrice + Math.round(selectedPlan.discountedPrice * APP_CONSTANTS.GST_RATE)),
+        payableNow: cartData.payableNow || Math.round((selectedPlan.discountedPrice + Math.round(selectedPlan.discountedPrice * APP_CONSTANTS.GST_RATE)) * APP_CONSTANTS.ADVANCE_PAYMENT_PERCENTAGE),
+        taxComponents: cartData.taxComponents || [
+          {
+            code: 'GST',
+            name: 'Goods and Services Tax',
+            percentage: APP_CONSTANTS.GST_RATE * 100,
+            amount: Math.round(selectedPlan.discountedPrice * APP_CONSTANTS.GST_RATE)
+          }
+        ],
+        paymentTerms: cartData.paymentTerms || selectedPlan.paymentTerms || [
+          {
+            trigger: 'ON_BOOKING',
+            percentage: APP_CONSTANTS.ADVANCE_PAYMENT_PERCENTAGE * 100
+          }
+        ]
+      };
+
+    const params = new URLSearchParams();
+    params.set("packageTitle", pkg.title);
+    params.set("packageId", pkg._id || "");
+    params.set("planName", selectedPlan.name);
+    params.set("planPrice", cartPricing.baseAmount.toString());
+    params.set("currency", cartData.currency || selectedPlan.currency || "INR");
+    params.set("cartBasePrice", cartPricing.baseAmount.toString());
+    params.set("cartTotalPrice", cartPricing.totalAmount.toString());
+    params.set("cartGstAmount", cartPricing.taxAmount.toString());
+    params.set("cartOriginalPrice", (cartData.originalPrice || selectedPlan.pricePerPerson || selectedPlan.discountedPrice).toString());
+    
+    // Pass the full cart pricing object for detailed display
+    params.set("cartPricing", JSON.stringify(cartPricing));
+    
+    if (pkg.fromLocation) params.set("fromLocation", pkg.fromLocation.city || "");
+    if (pkg.toLocation) params.set("toLocation", pkg.toLocation.city || "");
+    params.set("totalDays", pkg.totalDays?.toString() || "0");
+    params.set("totalNights", pkg.totalNights?.toString() || "0");
+    params.set("travelDate", travelDate);
+
+    if (cartId) params.set("cartId", cartId);
+
+    // Pass existing traveller profiles to bookPackage page
+    if (existingProfiles.length > 0) {
+      params.set("existingProfiles", JSON.stringify(existingProfiles));
+    }
+
+    if (travellers && travellers.length > 0) {
+      params.set("travellersData", JSON.stringify(travellers));
+    }
+
+    if (pkg.itineraryTemplate) {
+      params.set("itineraryData", JSON.stringify(pkg.itineraryTemplate));
+    }
+
+    if (selectedPlan.cancellationPolicy) {
+      params.set("cancellationPolicy", JSON.stringify(selectedPlan.cancellationPolicy));
+    }
+
+    const planData = {
+      name: selectedPlan.name,
+      category: selectedPlan.category,
+      description: selectedPlan.description,
+      inclusions: selectedPlan.inclusions,
+      exclusions: selectedPlan.exclusions,
+      minPeople: selectedPlan.minPeople,
+      maxPeople: selectedPlan.maxPeople,
+      totalSlots: selectedPlan.totalSlots,
+      bookedSlots: selectedPlan.bookedSlots,
+    };
+    params.set("planData", JSON.stringify(planData));
+
+    router.push(`/bookPackage?${params.toString()}`);
+    } catch (error) {
+      console.error("Booking failed:", error);
+      alert("Failed to initiate booking. Please try again.");
+    } finally {
+      setIsBooking(false);
+    }
+  };
 
   return (
     <motion.div
@@ -91,21 +231,49 @@ export default function BookingCard({
         <p className="text-sm text-gray-500 mt-1">per person</p>
       </div>
 
-      {/* Coupons */}
-      <div className="mb-6 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center justify-between cursor-pointer hover:bg-green-100 transition-colors group">
-        <div className="flex items-center gap-2 text-green-700">
-          <span className="text-lg">🏷️</span>
-          <span className="font-bold">Apply Coupon</span>
-        </div>
-        <span className="text-sm text-green-600 font-bold group-hover:underline">
-          View Offers
-        </span>
+      {/* Validation Message */}
+      {showValidationModal && (
+        <motion.div
+          className="bg-red-50 border-l-4 border-red-500 p-4 mb-4 rounded-md"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+        >
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <Calendar className="h-5 w-5 text-red-400" aria-hidden="true" />
+            </div>
+            <div className="ml-3">
+              <p className="text-sm font-medium text-red-800">
+                Please select a travel date to proceed.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      
+      {/* Travel Date Selection */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Select Travel Date
+        </label>
+        <input
+          type="date"
+          value={travelDate}
+          onChange={(e) => {
+            const newDate = e.target.value;
+            setTravelDate(newDate);
+            if (newDate) setShowValidationModal(false);
+          }}
+          className={`w-full p-2 border ${showValidationModal ? "border-red-500 focus:ring-red-200" : "border-gray-300 focus:ring-[#276074]"} rounded-lg focus:ring-2 focus:border-transparent`}
+          min={new Date().toISOString().split("T")[0]}
+        />
       </div>
 
-      {/* Add-ons Breakdown */}
-      {selectedAddOns.length > 0 && (
-        <div className="mb-4 pt-3 border-t border-dashed border-gray-200">
-          <div className="text-base font-bold text-gray-800 mb-3">
+      {/* Price Breakdown */}
+      <div className="mb-4 pt-3 border-t border-dashed border-gray-200">
+        <div className="text-base font-bold text-gray-800 mb-3">
             Price Breakdown
           </div>
           <div className="flex justify-between text-sm font-medium text-gray-600 mb-2">
@@ -130,7 +298,7 @@ export default function BookingCard({
               </div>
             ))}
           <div className="flex justify-between text-sm font-medium text-gray-600 mb-2">
-            <span>GST ({GST_RATE * 100}%)</span>
+            <span>GST ({APP_CONSTANTS.GST_RATE * 100}%)</span>
             <span>
               {currencySymbol}
               {gstAmount.toLocaleString()}
@@ -151,7 +319,6 @@ export default function BookingCard({
             </div>
           </div>
         </div>
-      )}
 
       {/* Slots Available */}
       <div className="flex items-center gap-2 mb-4 p-3 bg-blue-50 rounded-lg">
@@ -178,8 +345,12 @@ export default function BookingCard({
 
       {/* CTA Buttons */}
       <div className="space-y-3">
-        <button className="w-full py-3 px-4 bg-[#276074] text-white font-semibold rounded-lg hover:opacity-90 transition-opacity">
-          Book Now
+        <button
+          onClick={handleBookNow}
+          disabled={isBooking}
+          className="w-full py-3 px-4 bg-[#276074] text-white font-semibold rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isBooking ? "Processing..." : "Book Now"}
         </button>
         <button className="w-full py-3 px-4 border-2 border-[#276074] text-[#276074] font-semibold rounded-lg hover:bg-[#276074] hover:text-white transition-colors">
           Join Trip

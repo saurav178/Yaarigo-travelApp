@@ -8,9 +8,8 @@ import {
   RegisterOrgResponse ,
 
 } from '../types/auth';
-
-const USER_API = process.env.NEXT_PUBLIC_USER_SERVICE_URL || 'http://localhost:3017/api';
-const AUTH_API = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || 'http://localhost:3016/api';
+const USER_API = process.env.NEXT_PUBLIC_USER_SERVICE_URL;
+const AUTH_API = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL;
 
 // Axios Instance for common config (optional but recommended)
 const apiClient = axios.create({

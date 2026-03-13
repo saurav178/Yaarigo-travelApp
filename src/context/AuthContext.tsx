@@ -27,6 +27,7 @@ interface AuthContextType extends AuthState {
     data: RegisterOrgPayload
   ) => Promise<RegisterOrgResponse>;
   switchOrganization: (orgId: string) => Promise<void>;
+  getActiveOrganizationId: () => string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -139,6 +140,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     await refreshUser();
   };
 
+  /**
+   * Get the active organization ID
+   * Returns the first organization's ID if available, otherwise null
+   */
+  const getActiveOrganizationId = (): string | null => {
+    if (state.organization && state.organization.length > 0) {
+      return state.organization[0].id;
+    }
+    return null;
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -149,6 +161,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         logout,
         registerOrganization,
         switchOrganization,
+        getActiveOrganizationId,
       }}
     >
       {children}

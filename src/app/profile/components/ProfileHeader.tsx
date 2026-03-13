@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { FaMapMarkerAlt, FaHeart, FaShieldAlt } from "react-icons/fa";
-import { FaUserFriends, FaUserCheck, FaMapMarkedAlt } from "react-icons/fa";
+import { FaMapMarkerAlt, FaHeart, FaShieldAlt, FaUserFriends, FaUserCheck, FaMapMarkedAlt } from "react-icons/fa";
+
 interface ProfileHeaderProps {
   isFollowing: boolean;
   followersCount: number;
@@ -31,80 +31,53 @@ export default function ProfileHeader({
   };
 
   return (
-   <div className="relative  pt-35 md:pt-18">
-  {/* Cover Image Section */}
-  <div className="w-full h-40 md:h-48 overflow-hidden relative">
-    <Image
-      src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
-      alt="Cover"
-      fill
-      className="object-cover"
-    />
-    <button
-      onClick={() => router.back()}
-      className="absolute top-4 left-4 text-white bg-black/40 px-3 py-1 hover:bg-black/60 transition z-10"
-    >
-      ← Back
-    </button>
-    </div>
+    <div className="relative pt-15">
+      {/* Cover Image Section */}
+      <div className="w-full h-40 md:h-48 overflow-hidden relative">
+        <Image
+          src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
+          alt="Cover"
+          fill
+          className="object-cover"
+        />
+        <button
+          onClick={() => router.back()}
+          className="absolute top-4 left-4 text-white bg-black/40 px-3 py-1 hover:bg-black/60 transition z-10"
+        >
+          ← Back
+        </button>
+      </div>
 
       {/* Profile Section */}
       <div
-        className="relative bg-white shadow-lg p-8 w-full mx-auto mt-0 flex flex-col md:flex-row gap-6 items-center"
+        className="relative bg-white shadow-lg p-6 md:p-8 w-full mx-auto flex flex-col items-center md:items-start"
         style={{ marginTop: "-2rem" }}
       >
         {/* Buttons positioned at top right */}
-        <div className="absolute top-4 right-4 flex gap-4 mt-4">
+        <div className="flex flex-wrap justify-center md:absolute md:top-4 md:right-4 gap-4 mt-4 md:mt-0">
           <button
             onClick={onFollowToggle}
-            className={`flex items-center justify-center gap-2 px-5 py-2 hover:scale-105 transition-all duration-200 ${
-              isFollowing
-                ? "bg-[#1D4350] text-white hover:bg-[#0f2a35]"
-                : "bg-[#1D4350] text-white hover:bg-[#0f2a35]"
-            }`}
+            className="flex items-center justify-center gap-2 px-5 py-2 bg-[#1D4350] text-white hover:bg-[#0f2a35] transition-all duration-200"
           >
             {!isFollowing && (
-              <Image
-                src="/join-trip.png"
-                alt="Follow"
-                width={20}
-                height={20}
-                className="filter invert"
-              />
+              <Image src="/join-trip.png" alt="Follow" width={20} height={20} className="filter invert" />
             )}
             {isFollowing ? "Following" : "Follow"}
           </button>
-          <button className="flex items-center justify-center gap-2 bg-[#1D4350] hover:bg-[#0f2a35] text-white px-5 py-2 hover:scale-105 transition-all duration-200">
-            <Image
-              src="/view-trip.png"
-              alt="View Trip"
-              width={20}
-              height={20}
-              className="filter invert"
-            />{" "}
+          <button className="flex items-center justify-center gap-2 bg-[#1D4350] hover:bg-[#0f2a35] text-white px-5 py-2 transition-all duration-200">
+            <Image src="/view-trip.png" alt="View Trip" width={20} height={20} className="filter invert" />
             Join Trip
           </button>
-          <button
-            onClick={onChatOpen}
-            className="flex items-center justify-center bg-[#1D4350] text-white p-3 rounded-full hover:bg-[#0f2a35] hover:scale-110 transition-all duration-200 shadow-md"
-          >
-            <Image
-              src="/chat-icon.png"
-              alt="Chat"
-              width={22}
-              height={22}
-              className="filter invert"
-            />
+          <button onClick={onChatOpen} className="p-3 bg-[#1D4350] text-white rounded-full hover:bg-[#0f2a35] shadow-md transition-all">
+            <Image src="/chat-icon.png" alt="Chat" width={22} height={22} className="filter invert" />
           </button>
-          <button
-            onClick={handleFavouriteToggle}
-            className="flex items-center justify-center bg-[#1D4350] text-white p-3 rounded-full hover:bg-[#0f2a35] hover:scale-110 transition-all duration-200 shadow-md"
-          >
+          <button onClick={handleFavouriteToggle} className="p-3 bg-[#1D4350] text-white rounded-full hover:bg-[#0f2a35] shadow-md transition-all">
             <FaHeart className={isFavourite ? "text-red-500" : "text-white"} size={22} />
           </button>
         </div>
-        {/* Avatar - positioned floating over cover image half */}
-        <div className="absolute left-20 -top-26 w-82 h-70 overflow-hidden shadow-md z-20">
+
+        {/* Avatar - Floating partially over cover */}
+        <div className="absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:left-10 -top-20 md:-top-24 w-40 h-40 md:w-72 md:h-64 overflow-hidden shadow-md z-20 border-4 border-white bg-white">
           <Image
             src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91"
             alt="Profile"
@@ -112,78 +85,54 @@ export default function ProfileHeader({
             className="object-cover"
           />
         </div>
-        {/* Info */}
-        <div className="flex-1 mt-0  h-48 text-center ml-0 mr-86">
 
-          <div className="flex items-center  justify-center ml-0 mr-10">
-            <h2 className="text-2xl  font-semibold flex items-center gap-2">
+        {/* Info Container - Shifted Right on Desktop */}
+        <div className="w-full flex flex-col items-center md:items-start md:pl-[340px] mt-24 md:mt-0">
+          
+          <div className="flex flex-col items-center md:items-start w-full">
+            <h2 className="text-2xl md:text-3xl font-semibold flex flex-wrap items-center justify-center md:justify-start gap-2 text-gray-800">
               Jane Cooper
-              <span className="bg-emerald-500 text-white text-xs px-2 py-1 rounded-full  flex items-center gap-1">
-                <Image
-                  src="/ic_baseline-check-circle-outline.png"
-                  alt="Verified"
-                  width={16}
-                  height={16}
-                />{" "}
+              <span className="bg-emerald-500 text-white text-[10px] md:text-xs px-2 py-1 rounded-full flex items-center gap-1">
+                <Image src="/ic_baseline-check-circle-outline.png" alt="Verified" width={14} height={14} className="filter brightness-0 invert" />
                 Verified Traveler
               </span>
             </h2>
-          </div>
-          <p className="text-gray-600 flex items-center ml-101 gap-1 mt-1">
-            <FaMapMarkerAlt className="text-black" /> Kiev, Ukraine
-          </p>
-          <div className="text-sm text-gray-500 mt-1 ml-0 mr-20">
-            <Image
-              src="/star-icon.png"
-              alt="Star"
-              width={16}
-              height={16}
-              className="inline mr-1"
-              style={{
-                filter:
-                  "invert(0%) sepia(100%) saturate(10000%) hue-rotate(45deg) brightness(500%) contrast(100%)",
-              }}
-            />
-            4.1 (410 reviews){" "}
-            <span className="font-medium bg-green-100 text-green-700 rounded-full px-2 py-1 inline-flex items-center ml-4">
-              <FaShieldAlt className="text-green-600 mr-1" size={16} />
-              88% Safe
-            </span>
+
+            <p className="text-gray-600 flex items-center gap-1 mt-2">
+              <FaMapMarkerAlt className="text-black" /> Kiev, Ukraine
+            </p>
+
+            <div className="text-sm text-gray-500 mt-2 flex flex-wrap items-center justify-center md:justify-start gap-4">
+              <div className="flex items-center">
+                <Image src="/star-icon.png" alt="Star" width={16} height={16} className="inline mr-1" 
+                  style={{ filter: "invert(0%) sepia(100%) saturate(10000%) hue-rotate(45deg) brightness(500%) contrast(100%)" }} 
+                />
+                4.1 (410 reviews)
+              </div>
+              <span className="font-medium bg-green-100 text-green-700 rounded-full px-2 py-1 inline-flex items-center">
+                <FaShieldAlt className="text-green-600 mr-1" size={16} />
+                88% Safe
+              </span>
+            </div>
           </div>
 
-          {/* Stats - adjusted spacing and alignment */}
-     <div className="flex justify-start p-4 gap-6 mt-4 ml-105 text-center">
-  {/* Followers */}
-  <div className="bg-gray-200 py-5 px-10 shadow-sm flex flex-col items-center justify-center gap-2 rounded-lg min-w-[120px] h-20 ">
-    {/* Icon + Number in a row */}
-    <div className="flex items-center gap-2">
-      <FaUserFriends className="text-gray-500 text-3xl" />
-      <p className="text-2xl font-semibold">{followersCount}</p>
-    </div>
-    {/* Label in next line */}
-    <p className="text-gray-500 text-sm">Followers</p>
-  </div>
-
-  {/* Following */}
-  <div className="bg-gray-200 py-5 px-10 shadow-sm flex flex-col items-center justify-center gap-2 rounded-lg min-w-[120px] h-20 ">
-    <div className="flex items-center gap-2">
-      <FaUserCheck className="text-gray-500 text-3xl" />
-      <p className="text-2xl font-semibold">567</p>
-    </div>
-    <p className="text-gray-500 text-sm">Following</p>
-  </div>
-
-  {/* Trips Completed */}
-  <div className="bg-gray-200 py-5 px-10 shadow-sm flex flex-col items-center justify-center gap-2 rounded-lg min-w-[120px] h-20 ">
-    <div className="flex items-center gap-2">
-      <FaMapMarkedAlt className="text-gray-500 text-3xl" />
-      <p className="text-2xl font-semibold">15</p>
-    </div>
-    <p className="text-gray-500 text-sm">Trips Completed</p>
-  </div>
-</div>
+          {/* Stats Section */}
+          <div className="flex flex-wrap justify-center md:justify-start gap-4 mt-8 w-full">
+            {[
+              { label: "Followers", value: followersCount, icon: <FaUserFriends /> },
+              { label: "Following", value: "567", icon: <FaUserCheck /> },
+              { label: "Trips Done", value: "15", icon: <FaMapMarkedAlt /> },
+            ].map((stat, index) => (
+              <div key={index} className="bg-gray-100 py-3 px-6 shadow-sm flex flex-col items-center justify-center gap-1 rounded-lg min-w-[130px]">
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-500 text-2xl">{stat.icon}</span>
+                  <p className="text-xl font-semibold text-gray-800">{stat.value}</p>
+                </div>
+                <p className="text-gray-500 text-xs font-medium uppercase">{stat.label}</p>
+              </div>
+            ))}
+          </div>
         </div>
-
       </div>
 
       {/* Popup */}
@@ -194,4 +143,4 @@ export default function ProfileHeader({
       )}
     </div>
   );
-} 
+}
