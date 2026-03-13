@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 
@@ -7,15 +7,17 @@ export default function Banner() {
     <div className="relative overflow-hidden text-white shadow-2xl mb-8 h-[200px] md:h-[400px]">
       {/* Full Background Image */}
       <div className="absolute inset-0">
-        <Image 
-          src="/banner.jpg" 
-          alt="Travel Banner" 
+        <Image
+          src="/banner.jpg"
+          alt="Travel Banner"
+          fill
+          priority
           className="w-full h-full object-cover"
         />
-        
+
         {/* Gradient overlay for text readability */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent" />
-        
+
         {/* Dot pattern overlay */}
         <div
           className="absolute inset-0 opacity-20"
