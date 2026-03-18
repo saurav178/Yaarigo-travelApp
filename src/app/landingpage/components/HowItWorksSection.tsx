@@ -9,7 +9,10 @@ interface HowItWorksSectionProps {
   setIsVisible: (visible: boolean) => void;
 }
 
-export default function HowItWorksSection({ isVisible, setIsVisible }: HowItWorksSectionProps) {
+export default function HowItWorksSection({
+  isVisible,
+  setIsVisible,
+}: HowItWorksSectionProps) {
   const [activeStep, setActiveStep] = useState<number>(1);
   const [imageSrc, setImageSrc] = useState<string>(howItWorksSteps[0].image);
   const titleRef = useRef(null);

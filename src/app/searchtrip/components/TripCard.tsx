@@ -56,7 +56,7 @@ export default function TripCard({ trip }: TripCardProps) {
   const agencyInitials = agencyName.substring(0, 2).toUpperCase();
 
   // Image
-  const imageUrl = trip.ogImage || trip.coverImage;
+  const imageUrl = trip.ogImage || trip.coverImage || "/fallback.jpg";
 
   // Date formatting
   const formatDate = (date: string) => {

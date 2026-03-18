@@ -25,7 +25,7 @@ const { isAuthenticated ,isLoading} = useAuth();
     : "bg-white text-gray-800 shadow-md border-b border-gray-100";
 
   return (
-    <header className={`w-full fixed top-0 z-50 transition-all duration-300 ${headerStyles}`}>
+    <header className={`w-full fixed top-0 z-50 ${headerStyles}`}>
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         
         <Link href="/" className="text-xl font-bold tracking-tight">
